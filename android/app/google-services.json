@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "193789014248",
+    "project_id": "musiq-107d8",
+    "storage_bucket": "musiq-107d8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:193789014248:android:d5323bd32288122f80595d",
+        "android_client_info": {
+          "package_name": "com.example.musiq"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAEPdHPY5uL0uBX4igXTmpya-I5qQNHc98"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
