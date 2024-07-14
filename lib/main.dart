@@ -9,16 +9,21 @@ import 'package:musiq/screen/homeScreen/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
 
-  await FirebaseAuth.instance.signInWithEmailAndPassword(
-    email: "anandhu@gmail.com",
-    password: "1234567890",
-  );
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: "anandhu@gmail.com",
+      password: "1234567890",
+    );
 
-  runApp(const MyApp());
+    runApp(const MyApp());
+  } catch (e) {
+    print('Error initializing Firebase or signing in: $e');
+    // Handle the error appropriately (e.g., show an error message, retry initialization)
+  }
 }
 
 class MyApp extends StatelessWidget {

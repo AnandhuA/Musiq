@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/FeatchSongsBloc/featch_songs_bloc.dart';
+import 'package:musiq/screen/player_screen/player_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -35,19 +38,23 @@ class _HomeScreenState extends State<HomeScreen> {
               itemCount: state.songList.length,
               itemBuilder: (context, index) {
                 final song = state.songList[index];
-                if (song.imgFile == null) {
-                  return ListTile(
-                    leading: const CircleAvatar(),
-                    title: Text(song.album),
-                    subtitle: Text(song.artist),
-                  );
-                }
 
                 return ListTile(
+                  onTap: () {
+                    log("message");
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PlayerScreen(song: song),
+                        ));
+                  },
                   leading: song.imgFile == null
-                      ? const CircleAvatar()
+                      ? Image.asset(
+                          "assets/images/music.jpg",
+                          width: 50,
+                        )
                       : Image.memory(song.imgFile!),
-                  title: Text(song.album),
+                  title: Text(song.songName),
                   subtitle: Text(song.artist),
                 );
               },
