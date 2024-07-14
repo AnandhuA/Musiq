@@ -39,6 +39,12 @@ dependencies:
   firebase_core: ^3.2.0
   firebase_auth: ^5.1.2
   firebase_storage: ^12.1.1
+  audioplayers: ^6.0.0
+  http: ^1.2.1
+  audio_metadata_reader: ^0.0.6
+  just_audio: ^0.9.39
+  just_audio_windows: ^0.2.1
+  bloc: ^8.1.4
 
 dev_dependencies:
   flutter_test:

@@ -1,16 +1,23 @@
-import 'dart:developer';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:musiq/FeatchSongsBloc/featch_songs_bloc.dart';
+
 import 'package:musiq/firebase_options.dart';
+import 'package:musiq/screen/homeScreen/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await getuploadfile();
+
+  await FirebaseAuth.instance.signInWithEmailAndPassword(
+    email: "anandhu@gmail.com",
+    password: "1234567890",
+  );
+
   runApp(const MyApp());
 }
 
@@ -19,37 +26,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Home(),
-    );
-  }
-}
-
-class Home extends StatelessWidget {
-  const Home({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text("data"),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => FeatchSongsBloc(),
+        ),
+      ],
+      child: const MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: HomeScreen(),
       ),
     );
-  }
-}
-
-getuploadfile() async {
-  try {
-    final storageRef = FirebaseStorage.instance.ref();
-    final listResult = await storageRef.listAll();
-
-    listResult.items.forEach((Reference ref) {
-      log('Found file: ${ref.name}');
-      ref.getDownloadURL().then((url) {
-        log('File URL: $url');
-      });
-    });
-  } catch (e) {
-    log('Error: $e');
   }
 }
