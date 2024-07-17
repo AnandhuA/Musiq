@@ -17,8 +17,8 @@ This is a Flutter-based music app that fetches and plays music files stored in F
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/music-app.git
-   cd music-app
+   git clone https://github.com/AnandhuA/Musiq.git
+   cd Musiq
 
 2. Install dependencies:
    ```bash
