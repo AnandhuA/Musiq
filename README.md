@@ -8,7 +8,7 @@ This is a Flutter-based music app that fetches and plays music files stored in F
 - **Music Playback**: Supports playing and pausing
 ## Getting Started
 
-### Prerequisites
+### Requirements
 
 - Flutter SDK
 - Dart
