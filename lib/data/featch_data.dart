@@ -4,22 +4,22 @@ import 'dart:typed_data';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:audio_metadata_reader/audio_metadata_reader.dart';
 import 'package:musiq/models/song_model.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 Future<List<SongModel>?> fetchAllMusicFilesAndPrintMetadata() async {
   List<SongModel> musicModels = [];
 
   try {
-    if (Platform.isWindows) {
-      log("message");
-      var status = await Permission.storage.request();
-      print(status);
-      if (!status.isGranted) {
-        throw Exception('Storage permission is required to access files');
-      }
-    }
+    // if (Platform.isWindows) {
+    //   log("message");
+    //   var status = await Permission.storage.request();
+    //   print(status);
+    //   if (!status.isGranted) {
+    //     throw Exception('Storage permission is required to access files');
+    //   }
+    // }
 
     FirebaseStorage storage = FirebaseStorage.instance;
+
     Reference storageRef = storage.ref().child('musiq');
 
     ListResult result = await storageRef.listAll();
@@ -70,6 +70,7 @@ Future<List<SongModel>?> fetchAllMusicFilesAndPrintMetadata() async {
       musicModels.add(model);
       log(musicModels.toString());
     });
+
     log(musicModels.toString());
     return musicModels;
   } catch (e) {

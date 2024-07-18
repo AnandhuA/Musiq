@@ -11,6 +11,7 @@ part 'featch_songs_state.dart';
 class FeatchSongsBloc extends Bloc<FeatchSongsEvent, FeatchSongsState> {
   FeatchSongsBloc() : super(FeatchSongsInitial()) {
     on<FeatchSongsEvent>((event, emit) async {
+      // return emit(FeatchSongsFailure());
       emit(FeatchSongsLoading());
       final List<SongModel>? songList =
           await fetchAllMusicFilesAndPrintMetadata();

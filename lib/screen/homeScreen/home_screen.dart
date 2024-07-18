@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:musiq/FeatchSongsBloc/featch_songs_bloc.dart';
+import 'package:musiq/bloc/FeatchSongsBloc/featch_songs_bloc.dart';
 import 'package:musiq/screen/player_screen/player_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -30,8 +30,10 @@ class _HomeScreenState extends State<HomeScreen> {
               child: CircularProgressIndicator(),
             );
           } else if (state is FeatchSongsFailure) {
-            return const Center(
-              child: Text("Error:"),
+            return Center(
+              child: Image.network(
+                "https://image.tmdb.org/t/p/w500/1E5baAaEse26fej7uHcjOgEE2t2.jpg",
+              ),
             );
           } else if (state is FeatchSongsSuccess) {
             return ListView.builder(
@@ -45,7 +47,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => PlayerScreen(song: song),
+                          builder: (context) => PlayerScreen(
+                            songList: state.songList,
+                            currentIndex: index,
+                          ),
                         ));
                   },
                   leading: song.imgFile == null
