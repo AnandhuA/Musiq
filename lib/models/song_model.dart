@@ -8,7 +8,7 @@ class SongModel {
   final String language;
   final Duration duration;
   final String artist;
-  final Uint8List? imgFile;
+   Uint8List? imgFile;
 
   SongModel({
     required this.songUrls,

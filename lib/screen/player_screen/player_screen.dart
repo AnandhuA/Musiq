@@ -62,8 +62,11 @@ class _PlayerScreenState extends State<PlayerScreen> {
     if (_isPlaying) {
       _audioPlayer.pause();
     } else {
-      _audioPlayer
-          .play(UrlSource(widget.songList[widget.currentIndex].songUrls));
+      _audioPlayer.play(
+        UrlSource(
+          widget.songList[widget.currentIndex].songUrls,
+        ),
+      );
     }
   }
 
@@ -84,7 +87,8 @@ class _PlayerScreenState extends State<PlayerScreen> {
                 width: double.infinity,
                 child: widget.songList[widget.currentIndex].imgFile != null
                     ? Image.memory(
-                        widget.songList[widget.currentIndex].imgFile!)
+                        widget.songList[widget.currentIndex].imgFile!,
+                      )
                     : Image.asset("assets/images/music.jpg"),
               ),
               const SizedBox(height: 25),

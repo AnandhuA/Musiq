@@ -14,3 +14,5 @@ final class FeatchSongsSuccess extends FeatchSongsState {
 }
 
 final class FeatchSongsFailure extends FeatchSongsState {}
+
+final class ImageLoadedState extends FeatchSongsState {}
