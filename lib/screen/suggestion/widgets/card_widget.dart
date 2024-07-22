@@ -8,26 +8,23 @@ class CardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(2),
-      decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey),
-          borderRadius: BorderRadius.circular(10)),
+      width: 200,
       child: Column(
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: Image.network(
-              song.image[2].url,
-              fit: BoxFit.fitHeight,
+              song.image.last.url,
+              fit: BoxFit.fitWidth,
+              height: 180,
             ),
           ),
           Expanded(
             child: Text(
               song.name,
-              overflow: TextOverflow.fade,
+              overflow: TextOverflow.clip,
             ),
           ),
-          Text(song.language)
         ],
       ),
     );

@@ -27,7 +27,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/foundation.dart';
 import 'package:musiq/data/featch_data.dart';
 import 'package:musiq/models/song_model.dart';
 

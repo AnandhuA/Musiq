@@ -1,15 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:musiq/models/song_model.dart';
+import 'dart:ui';
+
+import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/material.dart';
+import 'package:musiq/models/song.dart';
 
 class PlayerScreen extends StatefulWidget {
-  final List<SongModel> songList;
-  final int currentIndex;
-  const PlayerScreen({
-    super.key,
-    required this.songList,
-    required this.currentIndex,
-  });
+  final Song song;
+  const PlayerScreen({super.key, required this.song});
 
   @override
   State<PlayerScreen> createState() => _PlayerScreenState();
@@ -17,36 +15,43 @@ class PlayerScreen extends StatefulWidget {
 
 class _PlayerScreenState extends State<PlayerScreen> {
   late AudioPlayer _audioPlayer;
-  bool _isPlaying = false;
-  Duration _duration = Duration.zero;
-  Duration _position = Duration.zero;
+  Duration _currentPosition = Duration.zero;
+  PlayerState _playerState = PlayerState.paused;
+  bool _hasPlayed = false;
 
   @override
   void initState() {
     super.initState();
-
     _audioPlayer = AudioPlayer();
-    _audioPlayer.play(UrlSource(widget.songList[widget.currentIndex].songUrls));
-    _audioPlayer.onDurationChanged.listen((Duration d) {
-      if (mounted) {
+
+    _audioPlayer
+        .setSource(UrlSource(widget.song.downloadUrl.last.url))
+        .then((_) {
+      _audioPlayer.getDuration().then((duration) {});
+      if (!_hasPlayed) {
+        _audioPlayer.play(
+          UrlSource(
+            widget.song.downloadUrl.last.url,
+          ),
+        );
         setState(() {
-          _duration = d;
+          _hasPlayed = true;
         });
       }
     });
 
-    _audioPlayer.onPositionChanged.listen((Duration p) {
+    _audioPlayer.onPlayerStateChanged.listen((state) {
       if (mounted) {
         setState(() {
-          _position = p;
+          _playerState = state;
         });
       }
     });
 
-    _audioPlayer.onPlayerStateChanged.listen((PlayerState state) {
+    _audioPlayer.onPositionChanged.listen((position) {
       if (mounted) {
         setState(() {
-          _isPlaying = state == PlayerState.playing;
+          _currentPosition = position;
         });
       }
     });
@@ -58,88 +63,125 @@ class _PlayerScreenState extends State<PlayerScreen> {
     super.dispose();
   }
 
-  void _playPause() {
-    if (_isPlaying) {
+  void _togglePlayPause() {
+    if (_playerState == PlayerState.playing) {
       _audioPlayer.pause();
     } else {
-      _audioPlayer.play(
-        UrlSource(
-          widget.songList[widget.currentIndex].songUrls,
-        ),
-      );
+      _audioPlayer.resume();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.songList[widget.currentIndex].movie),
+        title: Text(widget.song.album.name),
+        backgroundColor: Colors.transparent,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(15),
-          child: Column(
-            children: [
-              SizedBox(
-                height: size.height * 0.4,
-                width: double.infinity,
-                child: widget.songList[widget.currentIndex].imgFile != null
-                    ? Image.memory(
-                        widget.songList[widget.currentIndex].imgFile!,
-                      )
-                    : Image.asset("assets/images/music.jpg"),
-              ),
-              const SizedBox(height: 25),
-              Text(
-                widget.songList[widget.currentIndex].songName,
-                style: const TextStyle(fontSize: 30),
-              ),
-              const SizedBox(height: 5),
-              Text(
-                widget.songList[widget.currentIndex].artist,
-              ),
-              const SizedBox(height: 20),
-              Slider(
-                min: 0.0,
-                max: _duration.inSeconds.toDouble(),
-                value: _position.inSeconds.toDouble(),
-                onChanged: (double value) {
-                  setState(() {
-                    _audioPlayer.seek(Duration(seconds: value.toInt()));
-                  });
-                },
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '${_position.inMinutes}:${(_position.inSeconds.remainder(60)).toString().padLeft(2, '0')}',
-                      style: const TextStyle(fontSize: 12),
-                    ),
-                    Text(
-                      '${_duration.inMinutes}:${(_duration.inSeconds.remainder(60)).toString().padLeft(2, '0')}',
-                      style: const TextStyle(fontSize: 12),
-                    ),
-                  ],
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+      body: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: NetworkImage(widget.song.image[2].url),
+            fit: BoxFit.fitWidth,
+          ),
+        ),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(
+            sigmaX: 100,
+            sigmaY: 100,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: SingleChildScrollView(
+              child: Column(
                 children: [
-                  IconButton(
-                    icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow),
-                    onPressed: _playPause,
+                  Container(
+                    height: 400,
+                    width: 500,
+                    margin: const EdgeInsets.all(30),
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: NetworkImage(
+                          widget.song.image[2].url,
+                        ),
+                        fit: BoxFit.fill,
+                      ),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
                   ),
+                  Text(
+                    widget.song.name,
+                    style: const TextStyle(fontSize: 30),
+                    maxLines: 1,
+                    overflow: TextOverflow.fade,
+                    softWrap: false,
+                  ),
+                  Text(
+                    widget.song.artists.all
+                        .map((artist) => artist.name)
+                        .join(' | '),
+                    maxLines: 1,
+                    overflow: TextOverflow.fade,
+                    softWrap: false,
+                  ),
+                  const SizedBox(height: 30),
+                  ProgressBar(
+                    progress: _currentPosition,
+                    total: Duration(seconds: widget.song.duration),
+                    onSeek: (duration) {
+                      _audioPlayer.seek(duration);
+                    },
+                  ),
+                  const SizedBox(height: 30),
+                  Row(
+                    children: [
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(
+                          Icons.favorite_sharp,
+                        ),
+                      ),
+                      const Spacer(),
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(
+                          Icons.first_page,
+                          size: 40,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: _togglePlayPause,
+                        icon: Icon(
+                          _playerState == PlayerState.playing
+                              ? Icons.pause_circle_outline_outlined
+                              : Icons.play_circle_outline_outlined,
+                          size: 40,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(
+                          Icons.last_page,
+                          size: 40,
+                        ),
+                      ),
+                      const Spacer(),
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(
+                          Icons.download,
+                        ),
+                      )
+                    ],
+                  )
                 ],
               ),
-            ],
+            ),
           ),
         ),
       ),
     );
   }
 }
+//9745108597

@@ -49,7 +49,7 @@ Future<List<SongModel>?> fetchBasicSongMetadata() async {
 Future<void> loadSong(SongModel song) async {
   try {
     // Simulating some delay to load song details
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 1));
   } catch (e) {
     log('Error loading song details: $e');
   }
