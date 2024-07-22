@@ -6,6 +6,7 @@ import 'package:musiq/screen/suggestion/bloc/MalayalamSongs/mal_songs_bloc.dart'
 import 'package:musiq/screen/suggestion/bloc/TamilSongs/tamil_song_bloc.dart';
 
 import 'package:musiq/screen/suggestion/suggestion.dart';
+import 'package:musiq/screen/suggestion/widgets/shimmer_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -39,6 +40,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     title: "Malayalam",
                     suggetionSongs: state.songs,
                   );
+                } else if (state is MalSongsLoading) {
+                  return const SuggetionShimmerWidget(
+                    title: "Malayalam",
+                  );
+                } else if (state is MalSongsError) {
+                  return const Center(child: Text('Somthig Wrong'));
                 } else {
                   return const Center(child: Text('Error'));
                 }
@@ -53,6 +60,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     title: "Tamil",
                     suggetionSongs: state.songs,
                   );
+                } else if (state is TamilSongLoading) {
+                  return const SuggetionShimmerWidget(
+                    title: "Tamil",
+                  );
+                } else if (state is TamilSongError) {
+                  return const Center(child: Text('Somthig Wrong'));
                 } else {
                   return const Center(child: Text('Error'));
                 }
@@ -67,6 +80,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     title: "Hindi",
                     suggetionSongs: state.songs,
                   );
+                } else if (state is HindiSongLoading) {
+                  return const SuggetionShimmerWidget(
+                    title: "Hindi",
+                  );
+                } else if (state is HindiSongError) {
+                  return const Center(child: Text('Somthig Wrong'));
                 } else {
                   return const Center(child: Text('Error'));
                 }
@@ -81,6 +100,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     title: "English",
                     suggetionSongs: state.engSongs,
                   );
+                } else if (state is EnglishSongSuggestionLoading) {
+                  return const SuggetionShimmerWidget(
+                    title: "English",
+                  );
+                } else if (state is EnglishSongSuggestionError) {
+                  return const Center(child: Text('Somthig Wrong'));
                 } else {
                   return const Center(child: Text('Error'));
                 }
