@@ -1,6 +1,6 @@
 # Music App 🎵
 
-This Flutter-based music app utilizes BLoC for state management and integrates with the JioSaavn API to fetch and display music content and play music 
+This Flutter-based music app utilizes BLoC for state management and integrates with the JioSaavn API to fetch and play music 
 ## Features
 
 - API Integration: Fetch and display music content from the JioSaavn API.
