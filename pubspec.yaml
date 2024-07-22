@@ -40,7 +40,7 @@ dependencies:
   firebase_auth: ^5.1.2
   firebase_storage: ^12.1.1
   audioplayers: ^6.0.0
-  http: ^1.2.1
+  http: ^1.2.2
   audio_metadata_reader: ^0.0.6
   
   bloc: ^8.1.4
