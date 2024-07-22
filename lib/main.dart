@@ -2,10 +2,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/bloc/FeatchSongsBloc/featch_songs_bloc.dart';
-import 'package:musiq/bloc/Suggetions/suggestions_bloc.dart';
+import 'package:musiq/screen/suggestion/bloc/EngSong/english_song_suggestion_bloc.dart';
 
 import 'package:musiq/firebase_options.dart';
 import 'package:musiq/screen/homeScreen/home_screen.dart';
+import 'package:musiq/screen/suggestion/bloc/HindiSong/hindi_song_bloc.dart';
+import 'package:musiq/screen/suggestion/bloc/MalayalamSongs/mal_songs_bloc.dart';
+import 'package:musiq/screen/suggestion/bloc/TamilSongs/tamil_song_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,7 +33,10 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => FeatchSongsBloc()),
-        BlocProvider(create: (context) => SuggestionsBloc()),
+        BlocProvider(create: (context) => EnglishSongSuggestionBloc()),
+        BlocProvider(create: (context) => MalSongsBloc()),
+        BlocProvider(create: (context) => TamilSongBloc()),
+        BlocProvider(create: (context) => HindiSongBloc()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

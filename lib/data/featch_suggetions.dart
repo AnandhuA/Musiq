@@ -3,10 +3,10 @@ import 'dart:developer';
 import 'package:http/http.dart' as http;
 
 class FeatchSuggetions {
-  static Future<http.Response?> featchSuggetions() async {
+  static Future<http.Response?> featchSuggetions({required String url}) async {
     try {
       final response = await http
-          .get(Uri.parse('https://saavn.dev/api/songs/wBgCQQ_6/suggestions'));
+          .get(Uri.parse(url));
       return response;
     } catch (e) {
       log(e.toString());
