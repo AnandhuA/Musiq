@@ -1,11 +1,11 @@
 # Music App 🎵
 
-This is a Flutter-based music app that fetches and plays music files stored in Firebase Storage. The app utilizes BLoC state management
+This Flutter-based music app utilizes BLoC for state management and integrates with the JioSaavn API to fetch and display music content and play music 
 ## Features
 
-- **Firebase Integration**: The app connects to Firebase Storage to fetch and stream music files.
-- **BLoC State Management**: Uses BLoC (Business Logic Component) for efficient state management and separation of concerns.
-- **Music Playback**: Supports playing and pausing
+- API Integration: Fetch and display music content from the JioSaavn API.
+- BLoC State Management: Uses BLoC (Business Logic Component) for efficient state management and separation of concerns.
+- Music Playback: Supports playing and pausing
 ## Getting Started
 
 ### Requirements
