@@ -8,45 +8,42 @@ class Suggestion extends StatelessWidget {
   final String title;
   final List<Song> suggetionSongs;
   const Suggestion({
-    super.key, required this.title, required this.suggetionSongs,
+    super.key,
+    required this.title,
+    required this.suggetionSongs,
   });
 
   @override
   Widget build(BuildContext context) {
-   
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-//---------------Malayalam-------------------
-             Text(
-              "   $title Songs",
-              style: const TextStyle(fontSize: 20),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "   $title Songs",
+          style: const TextStyle(fontSize: 20),
+        ),
+        const SizedBox(height: 10),
+        SizedBox(
+          height: 200,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) => InkWell(
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PlayerScreen(
+                    song: suggetionSongs[index],
+                  ),
+                ),
+              ),
+              child: CardWidget(
+                song: suggetionSongs[index],
+              ),
             ),
-            const SizedBox(height: 10),
-           SizedBox(
-                    height: 200,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) => InkWell(
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PlayerScreen(
-                              song: suggetionSongs[index],
-                            ),
-                          ),
-                        ),
-                        child: CardWidget(
-                          song: suggetionSongs[index],
-                        ),
-                      ),
-                      itemCount: suggetionSongs.length,
-                    ),
-                  )
-              
-
-          ],
-        );
-  
+            itemCount: suggetionSongs.length,
+          ),
+        )
+      ],
+    );
   }
 }

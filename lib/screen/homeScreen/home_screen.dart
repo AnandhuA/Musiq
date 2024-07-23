@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:musiq/screen/settings/setting_screen.dart';
 import 'package:musiq/screen/suggestion/bloc/EngSong/english_song_suggestion_bloc.dart';
 import 'package:musiq/screen/suggestion/bloc/HindiSong/hindi_song_bloc.dart';
 import 'package:musiq/screen/suggestion/bloc/MalayalamSongs/mal_songs_bloc.dart';
@@ -29,10 +30,20 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Music Library')),
+      drawer: Drawer(
+        child: ListTile(
+          title: const Text("Settings"),
+          onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const SettingsScreen(),
+              )),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            //---------------malayalam-------------------------------------------
+            //---------------malayalam-------------------------
             BlocBuilder<MalSongsBloc, MalSongsState>(
               builder: (context, state) {
                 if (state is MalSongsLoaded) {
@@ -52,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
             const SizedBox(height: 25),
-            //----------------Tamil-------------------------------------------
+            //----------------Tamil-------------------------
             BlocBuilder<TamilSongBloc, TamilSongState>(
               builder: (context, state) {
                 if (state is TamilSongLoaded) {
@@ -72,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
             const SizedBox(height: 25),
-            //---------------------Hindi-----------------------
+            //---------------------Hindi-------------
             BlocBuilder<HindiSongBloc, HindiSongState>(
               builder: (context, state) {
                 if (state is HindiSongLoaded) {
@@ -92,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
             const SizedBox(height: 25),
-            //-------------------------English-------------------------------------------
+            //-------------------------English-------------------------------
             BlocBuilder<EnglishSongSuggestionBloc, EnglishSongSuggestionState>(
               builder: (context, state) {
                 if (state is EnglishSongSuggestionLoaded) {
