@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:musiq/core/colors.dart';
+import 'package:musiq/main.dart';
 
 import 'package:musiq/models/song.dart';
 import 'package:musiq/screen/player_screen/player_screen.dart';
@@ -20,7 +22,7 @@ class Suggestion extends StatelessWidget {
       children: [
         Text(
           "   $title Songs",
-          style: const TextStyle(fontSize: 20),
+          style: TextStyle(fontSize: 20, color: accentColors[colorIndex]),
         ),
         const SizedBox(height: 10),
         SizedBox(

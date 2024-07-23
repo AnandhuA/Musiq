@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+
 import 'package:musiq/models/song.dart';
 
 class PlayerScreen extends StatefulWidget {
@@ -112,7 +113,9 @@ class _PlayerScreenState extends State<PlayerScreen> {
                   ),
                   Text(
                     widget.song.name,
-                    style: const TextStyle(fontSize: 30),
+                    style: TextStyle(
+                      fontSize: 30,
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.fade,
                     softWrap: false,

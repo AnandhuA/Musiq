@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/main.dart';
 import 'package:musiq/screen/settings/ThemeCubit/theme_cubit.dart';
@@ -79,6 +80,43 @@ class _ThemeScreenState extends State<ThemeScreen> {
                   )
                 : const SizedBox(),
           ),
+          constHeight30,
+          const Text("Chose your accent color"),
+          constHeight20,
+          Expanded(
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 5,
+                childAspectRatio: 1.5,
+                mainAxisSpacing: 12.0,
+                crossAxisSpacing: 8.0,
+              ),
+              itemCount: accentColors.length,
+              itemBuilder: (context, index) {
+                return InkWell(
+                  onTap: () {
+                    SharedPreference.setAccentColorIndex(
+                      accentColorIndex: index,
+                    );
+                    setState(() {
+                      colorIndex = index;
+                    });
+                    context.read<ThemeCubit>().chanheTheme(theme: theme);
+                  },
+                  child: CircleAvatar(
+                    backgroundColor: accentColors[index],
+                    child: colorIndex == index
+                        ? const Icon(
+                            Icons.check,
+                            color: Colors.black,
+                            size: 35,
+                          )
+                        : const SizedBox(),
+                  ),
+                );
+              },
+            ),
+          )
         ],
       ),
     );

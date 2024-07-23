@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:musiq/core/colors.dart';
+import 'package:musiq/main.dart';
+import 'package:musiq/screen/settings/ThemeCubit/theme_cubit.dart';
 import 'package:musiq/screen/settings/setting_screen.dart';
 import 'package:musiq/screen/suggestion/bloc/EngSong/english_song_suggestion_bloc.dart';
 import 'package:musiq/screen/suggestion/bloc/HindiSong/hindi_song_bloc.dart';
@@ -28,105 +31,117 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Music Library')),
-      drawer: Drawer(
-        child: SafeArea(
-          child: ListTile(
-            title: const Text("Settings"),
-            onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const SettingsScreen(),
-                )),
+    return BlocConsumer<ThemeCubit, ThemeState>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(
+              title: Text(
+            'Music Library',
+            style: TextStyle(
+              color: accentColors[colorIndex],
+            ),
+          )),
+          drawer: Drawer(
+            child: SafeArea(
+              child: ListTile(
+                title: const Text("Settings"),
+                onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SettingsScreen(),
+                    )),
+              ),
+            ),
           ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            //---------------malayalam-------------------------
-            BlocBuilder<MalSongsBloc, MalSongsState>(
-              builder: (context, state) {
-                if (state is MalSongsLoaded) {
-                  return Suggestion(
-                    title: "Malayalam",
-                    suggetionSongs: state.songs,
-                  );
-                } else if (state is MalSongsLoading) {
-                  return const SuggetionShimmerWidget(
-                    title: "Malayalam",
-                  );
-                } else if (state is MalSongsError) {
-                  return const Center(child: Text('Somthig Wrong'));
-                } else {
-                  return const Center(child: Text('Error'));
-                }
-              },
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                //---------------malayalam-------------------------
+                BlocBuilder<MalSongsBloc, MalSongsState>(
+                  builder: (context, state) {
+                    if (state is MalSongsLoaded) {
+                      return Suggestion(
+                        title: "Malayalam",
+                        suggetionSongs: state.songs,
+                      );
+                    } else if (state is MalSongsLoading) {
+                      return const SuggetionShimmerWidget(
+                        title: "Malayalam",
+                      );
+                    } else if (state is MalSongsError) {
+                      return const Center(child: Text('Somthig Wrong'));
+                    } else {
+                      return const Center(child: Text('Error'));
+                    }
+                  },
+                ),
+                const SizedBox(height: 25),
+                //----------------Tamil-------------------------
+                BlocBuilder<TamilSongBloc, TamilSongState>(
+                  builder: (context, state) {
+                    if (state is TamilSongLoaded) {
+                      return Suggestion(
+                        title: "Tamil",
+                        suggetionSongs: state.songs,
+                      );
+                    } else if (state is TamilSongLoading) {
+                      return const SuggetionShimmerWidget(
+                        title: "Tamil",
+                      );
+                    } else if (state is TamilSongError) {
+                      return const Center(child: Text('Somthig Wrong'));
+                    } else {
+                      return const Center(child: Text('Error'));
+                    }
+                  },
+                ),
+                const SizedBox(height: 25),
+                //---------------------Hindi-------------
+                BlocBuilder<HindiSongBloc, HindiSongState>(
+                  builder: (context, state) {
+                    if (state is HindiSongLoaded) {
+                      return Suggestion(
+                        title: "Hindi",
+                        suggetionSongs: state.songs,
+                      );
+                    } else if (state is HindiSongLoading) {
+                      return const SuggetionShimmerWidget(
+                        title: "Hindi",
+                      );
+                    } else if (state is HindiSongError) {
+                      return const Center(child: Text('Somthig Wrong'));
+                    } else {
+                      return const Center(child: Text('Error'));
+                    }
+                  },
+                ),
+                const SizedBox(height: 25),
+                //-------------------------English-------------------------------
+                BlocBuilder<EnglishSongSuggestionBloc,
+                    EnglishSongSuggestionState>(
+                  builder: (context, state) {
+                    if (state is EnglishSongSuggestionLoaded) {
+                      return Suggestion(
+                        title: "English",
+                        suggetionSongs: state.engSongs,
+                      );
+                    } else if (state is EnglishSongSuggestionLoading) {
+                      return const SuggetionShimmerWidget(
+                        title: "English",
+                      );
+                    } else if (state is EnglishSongSuggestionError) {
+                      return const Center(child: Text('Somthig Wrong'));
+                    } else {
+                      return const Center(child: Text('Error'));
+                    }
+                  },
+                ),
+              ],
             ),
-            const SizedBox(height: 25),
-            //----------------Tamil-------------------------
-            BlocBuilder<TamilSongBloc, TamilSongState>(
-              builder: (context, state) {
-                if (state is TamilSongLoaded) {
-                  return Suggestion(
-                    title: "Tamil",
-                    suggetionSongs: state.songs,
-                  );
-                } else if (state is TamilSongLoading) {
-                  return const SuggetionShimmerWidget(
-                    title: "Tamil",
-                  );
-                } else if (state is TamilSongError) {
-                  return const Center(child: Text('Somthig Wrong'));
-                } else {
-                  return const Center(child: Text('Error'));
-                }
-              },
-            ),
-            const SizedBox(height: 25),
-            //---------------------Hindi-------------
-            BlocBuilder<HindiSongBloc, HindiSongState>(
-              builder: (context, state) {
-                if (state is HindiSongLoaded) {
-                  return Suggestion(
-                    title: "Hindi",
-                    suggetionSongs: state.songs,
-                  );
-                } else if (state is HindiSongLoading) {
-                  return const SuggetionShimmerWidget(
-                    title: "Hindi",
-                  );
-                } else if (state is HindiSongError) {
-                  return const Center(child: Text('Somthig Wrong'));
-                } else {
-                  return const Center(child: Text('Error'));
-                }
-              },
-            ),
-            const SizedBox(height: 25),
-            //-------------------------English-------------------------------
-            BlocBuilder<EnglishSongSuggestionBloc, EnglishSongSuggestionState>(
-              builder: (context, state) {
-                if (state is EnglishSongSuggestionLoaded) {
-                  return Suggestion(
-                    title: "English",
-                    suggetionSongs: state.engSongs,
-                  );
-                } else if (state is EnglishSongSuggestionLoading) {
-                  return const SuggetionShimmerWidget(
-                    title: "English",
-                  );
-                } else if (state is EnglishSongSuggestionError) {
-                  return const Center(child: Text('Somthig Wrong'));
-                } else {
-                  return const Center(child: Text('Error'));
-                }
-              },
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
