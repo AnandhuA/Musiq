@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/core/sized.dart';
+import 'package:musiq/main.dart';
+import 'package:musiq/screen/settings/ThemeCubit/theme_cubit.dart';
 import 'package:musiq/screen/settings/widgets/list_tile_widget.dart';
+import 'package:musiq/utils/sharedPreference/shared_preference.dart';
 
 class ThemeScreen extends StatefulWidget {
   const ThemeScreen({super.key});
@@ -10,7 +14,6 @@ class ThemeScreen extends StatefulWidget {
 }
 
 class _ThemeScreenState extends State<ThemeScreen> {
-  String theme = "System";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,10 +25,12 @@ class _ThemeScreenState extends State<ThemeScreen> {
             title: "System",
             onTap: () {
               setState(() {
+                SharedPreference.setTheme(theme: "System");
                 theme = "System";
+                context.read<ThemeCubit>().chanheTheme(theme: theme);
               });
             },
-            endWidget: theme == "System"
+            endWidget: theme == "System" || theme == null
                 ? const CircleAvatar(
                     radius: 12,
                     child: Icon(
@@ -43,12 +48,16 @@ class _ThemeScreenState extends State<ThemeScreen> {
             title2: "Light Mode",
             onTap1: () {
               setState(() {
+                SharedPreference.setTheme(theme: "Dark");
                 theme = "Dark";
+                context.read<ThemeCubit>().chanheTheme(theme: theme);
               });
             },
             onTap2: () {
               setState(() {
+                SharedPreference.setTheme(theme: "Light");
                 theme = "Light";
+                context.read<ThemeCubit>().chanheTheme(theme: theme);
               });
             },
             endWidget1: theme == "Dark"

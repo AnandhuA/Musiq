@@ -31,13 +31,15 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(title: const Text('Music Library')),
       drawer: Drawer(
-        child: ListTile(
-          title: const Text("Settings"),
-          onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const SettingsScreen(),
-              )),
+        child: SafeArea(
+          child: ListTile(
+            title: const Text("Settings"),
+            onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SettingsScreen(),
+                )),
+          ),
         ),
       ),
       body: SingleChildScrollView(

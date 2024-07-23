@@ -50,6 +50,7 @@ dependencies:
   just_audio_background: ^0.0.1-beta.13
   just_audio_windows: ^0.2.1
   shimmer: ^3.0.0
+  shared_preferences: ^2.2.3
   
 
 dev_dependencies:
