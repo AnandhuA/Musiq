@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:musiq/screen/homeScreen/home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -17,13 +18,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
-        child: Text(
-          "mq.",
-          style: TextStyle(fontSize: 40),
-        ),
-      ),
+          child:
+              Lottie.asset("assets/animations/Animation - 1721731246317.json")),
     );
   }
 

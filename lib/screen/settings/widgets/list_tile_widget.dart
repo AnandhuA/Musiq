@@ -25,7 +25,7 @@ class ListTileWidget extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 15),
       width: double.infinity,
       decoration: BoxDecoration(
-        color: const Color.fromARGB(171, 0, 0, 0),
+        color: const Color.fromARGB(62, 95, 95, 95),
         borderRadius: BorderRadius.circular(10),
       ),
       child: InkWell(
@@ -83,7 +83,7 @@ class MultiListTileWidget extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 15),
       width: double.infinity,
       decoration: BoxDecoration(
-        color: const Color.fromARGB(171, 0, 0, 0),
+        color: const Color.fromARGB(62, 95, 95, 95),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(

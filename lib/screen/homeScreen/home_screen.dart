@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 import 'package:musiq/core/colors.dart';
+import 'package:musiq/core/sized.dart';
 import 'package:musiq/main.dart';
+import 'package:musiq/screen/homeScreen/widgets/drawer_widget.dart';
 import 'package:musiq/screen/settings/ThemeCubit/theme_cubit.dart';
-import 'package:musiq/screen/settings/setting_screen.dart';
 import 'package:musiq/screen/suggestion/bloc/EngSong/english_song_suggestion_bloc.dart';
 import 'package:musiq/screen/suggestion/bloc/HindiSong/hindi_song_bloc.dart';
 import 'package:musiq/screen/suggestion/bloc/MalayalamSongs/mal_songs_bloc.dart';
@@ -36,27 +38,41 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-              title: Text(
-            'Music Library',
-            style: TextStyle(
-              color: accentColors[colorIndex],
+            title: Text(
+              'Music Library',
+              style: TextStyle(
+                color: accentColors[colorIndex],
+              ),
             ),
-          )),
-          drawer: Drawer(
-            child: SafeArea(
-              child: ListTile(
-                title: const Text("Settings"),
-                onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const SettingsScreen(),
-                    )),
+            actions: [
+              Lottie.asset("assets/animations/Animation1.json"),
+            ],
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(60),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: TextField(
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.search),
+                    hintText: "Search",
+                    filled: true,
+                    fillColor: Theme.of(context).brightness == Brightness.dark
+                        ? const Color.fromARGB(255, 32, 32, 32)
+                        : const Color.fromARGB(255, 196, 196, 196),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                  ),
+                ),
               ),
             ),
           ),
+          drawer: const DrawerWidget(),
           body: SingleChildScrollView(
             child: Column(
               children: [
+                constHeight20,
                 //---------------malayalam-------------------------
                 BlocBuilder<MalSongsBloc, MalSongsState>(
                   builder: (context, state) {

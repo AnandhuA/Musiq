@@ -9,3 +9,7 @@ const String suggestionEnglishUrl =
 
 const String suggestionHindiUrl =
     'https://saavn.dev/api/songs/FB8WBiWv/suggestions';
+
+    
+
+const String palyListUrl = "https://saavn.dev/api/playlists?id=82914609";

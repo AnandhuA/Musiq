@@ -3,6 +3,8 @@ import 'dart:ui';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:musiq/core/colors.dart';
+import 'package:musiq/main.dart';
 
 import 'package:musiq/models/song.dart';
 
@@ -113,7 +115,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                   ),
                   Text(
                     widget.song.name,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 30,
                     ),
                     maxLines: 1,
@@ -135,6 +137,8 @@ class _PlayerScreenState extends State<PlayerScreen> {
                     onSeek: (duration) {
                       _audioPlayer.seek(duration);
                     },
+                    progressBarColor: accentColors[colorIndex],
+                    thumbColor: accentColors[colorIndex],
                   ),
                   const SizedBox(height: 30),
                   Row(
@@ -143,6 +147,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                         onPressed: () {},
                         icon: const Icon(
                           Icons.favorite_sharp,
+                          color: Colors.red,
                         ),
                       ),
                       const Spacer(),
@@ -157,8 +162,8 @@ class _PlayerScreenState extends State<PlayerScreen> {
                         onPressed: _togglePlayPause,
                         icon: Icon(
                           _playerState == PlayerState.playing
-                              ? Icons.pause_circle_outline_outlined
-                              : Icons.play_circle_outline_outlined,
+                              ? Icons.pause
+                              : Icons.play_arrow,
                           size: 40,
                         ),
                       ),

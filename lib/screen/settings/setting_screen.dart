@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/screen/settings/theme_screen.dart';
 import 'package:musiq/screen/settings/widgets/list_tile_widget.dart';
@@ -14,6 +15,9 @@ class SettingsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Settings"),
+          actions: [
+          Lottie.asset("assets/animations/Animation1.json"),
+        ],
       ),
       body: Column(
         children: [
