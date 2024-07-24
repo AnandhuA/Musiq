@@ -115,7 +115,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                       ),
                     ),
                     Text(
-                      widget.song.name,
+                      widget.song.name??"no name",
                       style: const TextStyle(
                         fontSize: 30,
                       ),
@@ -134,7 +134,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                     const SizedBox(height: 30),
                     ProgressBar(
                       progress: _currentPosition,
-                      total: Duration(seconds: widget.song.duration),
+                      total: Duration(seconds: widget.song.duration??00),
                       onSeek: (duration) {
                         _audioPlayer.seek(duration);
                       },

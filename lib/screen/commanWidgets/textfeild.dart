@@ -5,27 +5,27 @@ class CustomTextFeild extends StatelessWidget {
   final Function(String)? onChanged;
   final Function(String)? onSubmitted;
   final TextEditingController? controller;
-    final FocusNode? focusNode;
+  final FocusNode? focusNode;
+  final Widget icon;
   const CustomTextFeild({
     super.key,
     required this.hintText,
     this.onChanged,
     this.onSubmitted,
     this.controller,
-        this.focusNode,
-
+    this.focusNode,
+    required this.icon,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextField(
-       focusNode: focusNode,
+      focusNode: focusNode,
       controller: controller,
       onChanged: onChanged,
       onSubmitted: onSubmitted,
       decoration: InputDecoration(
-        prefixIcon: const Icon(Icons.search),
-        
+        prefixIcon: icon,
         hintText: hintText,
         filled: true,
         fillColor: Theme.of(context).brightness == Brightness.dark

@@ -22,7 +22,7 @@ class CardWidget extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            song.name,
+            song.name ?? "no name",
             style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
             overflow: TextOverflow.ellipsis,
           ),

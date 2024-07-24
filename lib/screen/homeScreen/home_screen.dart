@@ -65,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ));
                     },
                     child: const AbsorbPointer(
-                      child: CustomTextFeild(hintText: "Search"),
+                      child: CustomTextFeild(hintText: "Search",icon: Icon(Icons.search),),
                     ),
                   ),
                 ),

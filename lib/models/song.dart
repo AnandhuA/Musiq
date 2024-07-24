@@ -1,18 +1,18 @@
 class Song {
-  String id;
-  String name;
-  String type;
-  String year;
-  String releaseDate;
-  int duration;
-  String label;
-  bool explicitContent;
-  int playCount;
-  String language;
-  bool hasLyrics;
+  String? id;
+  String? name;
+  String? type;
+  String? year;
+  String? releaseDate;
+  int? duration;
+  String? label;
+  bool? explicitContent;
+  int? playCount;
+  String? language;
+  bool? hasLyrics;
   String? lyricsId;
-  String url;
-  String copyright;
+  String? url;
+  String? copyright;
   Album album;
   Artists artists;
   List<ImageList> image;
@@ -57,7 +57,8 @@ class Song {
       copyright: json['copyright'],
       album: Album.fromJson(json['album']),
       artists: Artists.fromJson(json['artists']),
-      image: List<ImageList>.from(json['image'].map((x) => ImageList.fromJson(x))),
+      image:
+          List<ImageList>.from(json['image'].map((x) => ImageList.fromJson(x))),
       downloadUrl: List<DownloadUrl>.from(
           json['downloadUrl'].map((x) => DownloadUrl.fromJson(x))),
     );
@@ -166,7 +167,8 @@ class Artist {
       id: json['id'],
       name: json['name'],
       role: json['role'],
-      image: List<ImageList>.from(json['image'].map((x) => ImageList.fromJson(x))),
+      image:
+          List<ImageList>.from(json['image'].map((x) => ImageList.fromJson(x))),
       type: json['type'],
       url: json['url'],
     );
