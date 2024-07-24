@@ -22,7 +22,10 @@ class Suggestion extends StatelessWidget {
       children: [
         Text(
           "   $title Songs",
-          style: TextStyle(fontSize: 20, color: accentColors[colorIndex]),
+          style: TextStyle(
+            fontSize: 20,
+            color: accentColors[colorIndex],
+          ),
         ),
         const SizedBox(height: 10),
         SizedBox(

@@ -11,19 +11,25 @@ class CardWidget extends StatelessWidget {
       width: 200,
       child: Column(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Image.network(
-              song.image.last.url,
-              fit: BoxFit.fitWidth,
-              height: 180,
+          Expanded(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.network(
+                song.image.last.url,
+                fit: BoxFit.fitWidth,
+              ),
             ),
           ),
-          Expanded(
-            child: Text(
-              song.name,
-              overflow: TextOverflow.clip,
-            ),
+          const SizedBox(height: 8),
+          Text(
+            song.name,
+            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            overflow: TextOverflow.ellipsis,
+          ),
+          Text(
+            song.album.name, // Assuming song has an artist property
+            style: const TextStyle(fontSize: 12, color: Colors.grey),
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),

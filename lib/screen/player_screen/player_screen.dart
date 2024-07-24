@@ -81,109 +81,111 @@ class _PlayerScreenState extends State<PlayerScreen> {
         title: Text(widget.song.album.name),
         backgroundColor: Colors.transparent,
       ),
-      body: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: NetworkImage(widget.song.image[2].url),
-            fit: BoxFit.fitWidth,
+      body: SafeArea(
+        child: Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: NetworkImage(widget.song.image[2].url),
+              fit: BoxFit.fitWidth,
+            ),
           ),
-        ),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(
-            sigmaX: 100,
-            sigmaY: 100,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Container(
-                    height: 400,
-                    width: 500,
-                    margin: const EdgeInsets.all(30),
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: NetworkImage(
-                          widget.song.image[2].url,
+          child: BackdropFilter(
+            filter: ImageFilter.blur(
+              sigmaX: 100,
+              sigmaY: 100,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Container(
+                      height: 400,
+                      width: 500,
+                      margin: const EdgeInsets.all(30),
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: NetworkImage(
+                            widget.song.image[2].url,
+                          ),
+                          fit: BoxFit.fill,
                         ),
-                        fit: BoxFit.fill,
+                        borderRadius: BorderRadius.circular(20),
                       ),
-                      borderRadius: BorderRadius.circular(20),
                     ),
-                  ),
-                  Text(
-                    widget.song.name,
-                    style: const TextStyle(
-                      fontSize: 30,
+                    Text(
+                      widget.song.name,
+                      style: const TextStyle(
+                        fontSize: 30,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.fade,
+                      softWrap: false,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.fade,
-                    softWrap: false,
-                  ),
-                  Text(
-                    widget.song.artists.all
-                        .map((artist) => artist.name)
-                        .join(' | '),
-                    maxLines: 1,
-                    overflow: TextOverflow.fade,
-                    softWrap: false,
-                  ),
-                  const SizedBox(height: 30),
-                  ProgressBar(
-                    progress: _currentPosition,
-                    total: Duration(seconds: widget.song.duration),
-                    onSeek: (duration) {
-                      _audioPlayer.seek(duration);
-                    },
-                    progressBarColor: accentColors[colorIndex],
-                    thumbColor: accentColors[colorIndex],
-                  ),
-                  const SizedBox(height: 30),
-                  Row(
-                    children: [
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.favorite_sharp,
-                          color: Colors.red,
+                    Text(
+                      widget.song.artists.all
+                          .map((artist) => artist.name)
+                          .join(' | '),
+                      maxLines: 1,
+                      overflow: TextOverflow.fade,
+                      softWrap: false,
+                    ),
+                    const SizedBox(height: 30),
+                    ProgressBar(
+                      progress: _currentPosition,
+                      total: Duration(seconds: widget.song.duration),
+                      onSeek: (duration) {
+                        _audioPlayer.seek(duration);
+                      },
+                      progressBarColor: accentColors[colorIndex],
+                      thumbColor: accentColors[colorIndex],
+                    ),
+                    const SizedBox(height: 30),
+                    Row(
+                      children: [
+                        IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.favorite_sharp,
+                            color: Colors.red,
+                          ),
                         ),
-                      ),
-                      const Spacer(),
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.first_page,
-                          size: 40,
+                        const Spacer(),
+                        IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.first_page,
+                            size: 40,
+                          ),
                         ),
-                      ),
-                      IconButton(
-                        onPressed: _togglePlayPause,
-                        icon: Icon(
-                          _playerState == PlayerState.playing
-                              ? Icons.pause
-                              : Icons.play_arrow,
-                          size: 40,
+                        IconButton(
+                          onPressed: _togglePlayPause,
+                          icon: Icon(
+                            _playerState == PlayerState.playing
+                                ? Icons.pause
+                                : Icons.play_arrow,
+                            size: 40,
+                          ),
                         ),
-                      ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.last_page,
-                          size: 40,
+                        IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.last_page,
+                            size: 40,
+                          ),
                         ),
-                      ),
-                      const Spacer(),
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.download,
-                        ),
-                      )
-                    ],
-                  )
-                ],
+                        const Spacer(),
+                        IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.download,
+                          ),
+                        )
+                      ],
+                    )
+                  ],
+                ),
               ),
             ),
           ),

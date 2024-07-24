@@ -4,7 +4,9 @@ import 'package:lottie/lottie.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/main.dart';
+import 'package:musiq/screen/commanWidgets/textfeild.dart';
 import 'package:musiq/screen/homeScreen/widgets/drawer_widget.dart';
+import 'package:musiq/screen/search/search_screen.dart';
 import 'package:musiq/screen/settings/ThemeCubit/theme_cubit.dart';
 import 'package:musiq/screen/suggestion/bloc/EngSong/english_song_suggestion_bloc.dart';
 import 'package:musiq/screen/suggestion/bloc/HindiSong/hindi_song_bloc.dart';
@@ -51,17 +53,19 @@ class _HomeScreenState extends State<HomeScreen> {
               preferredSize: const Size.fromHeight(60),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: TextField(
-                  decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.search),
-                    hintText: "Search",
-                    filled: true,
-                    fillColor: Theme.of(context).brightness == Brightness.dark
-                        ? const Color.fromARGB(255, 32, 32, 32)
-                        : const Color.fromARGB(255, 196, 196, 196),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(18),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(18),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SearchScreen(),
+                          ));
+                    },
+                    child: const AbsorbPointer(
+                      child: CustomTextFeild(hintText: "Search"),
                     ),
                   ),
                 ),
@@ -133,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
                 const SizedBox(height: 25),
-                //-------------------------English-------------------------------
+                //-------------------------English-----------------
                 BlocBuilder<EnglishSongSuggestionBloc,
                     EnglishSongSuggestionState>(
                   builder: (context, state) {
