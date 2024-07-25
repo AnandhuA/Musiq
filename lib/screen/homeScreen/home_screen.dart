@@ -35,8 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ThemeCubit, ThemeState>(
-      listener: (context, state) {},
+    return BlocBuilder<ThemeCubit, ThemeState>(
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
@@ -65,7 +64,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           ));
                     },
                     child: const AbsorbPointer(
-                      child: CustomTextFeild(hintText: "Search",icon: Icon(Icons.search),),
+                      child: CustomTextFeild(
+                        hintText: "Search",
+                        icon: Icon(Icons.search),
+                      ),
                     ),
                   ),
                 ),

@@ -25,10 +25,6 @@ void main() async {
   );
   theme = await SharedPreference.getTheme();
   colorIndex = await SharedPreference.getAccentColorIndex() ?? 0;
-  // await FirebaseAuth.instance.signInWithEmailAndPassword(
-  //   email: "anandhu@gmail.com",
-  //   password: "1234567890",
-  // );
 
   runApp(const MyApp());
 }

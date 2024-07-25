@@ -8,6 +8,9 @@ class ThemeClass {
     drawerTheme: const DrawerThemeData(
       backgroundColor: Color.fromARGB(200, 255, 255, 255),
     ),
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      backgroundColor: Colors.white,
+    ),
   );
 
   static ThemeData darkTheme = ThemeData.dark().copyWith(
@@ -16,6 +19,9 @@ class ThemeClass {
     scaffoldBackgroundColor: Colors.black,
     drawerTheme: const DrawerThemeData(
       backgroundColor: Color.fromARGB(200, 0, 0, 0),
+    ),
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      backgroundColor: Colors.black,
     ),
   );
 }

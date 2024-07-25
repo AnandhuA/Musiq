@@ -1,10 +1,13 @@
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:musiq/core/sized.dart';
+import 'package:musiq/screen/commanWidgets/confirmation_diloge.dart';
 import 'package:musiq/screen/settings/theme_screen.dart';
 import 'package:musiq/screen/settings/widgets/list_tile_widget.dart';
+import 'package:musiq/screen/splashScreen/splash_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -15,7 +18,7 @@ class SettingsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Settings"),
-          actions: [
+        actions: [
           Lottie.asset("assets/animations/Animation1.json"),
         ],
       ),
@@ -42,7 +45,7 @@ class SettingsScreen extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ThemeScreen(),
+                  builder: (context) => const ThemeScreen(),
                 ),
               );
             },
@@ -55,7 +58,23 @@ class SettingsScreen extends StatelessWidget {
             ),
             logout: true,
             title: "Log out",
-            onTap: () {},
+            onTap: () {
+              confirmationDiloge(
+                context: context,
+                title: "Logout Confirmation",
+                confirmBtn: () async {
+                  await FirebaseAuth.instance.signOut();
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SplashScreen(),
+                    ),
+                    (route) => false,
+                  );
+                },
+                content: "Are you sure you want to logout?",
+              );
+            },
           ),
           const Spacer(),
           Text(
