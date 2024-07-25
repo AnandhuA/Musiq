@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/bloc/FeatchSongsBloc/featch_songs_bloc.dart';
 import 'package:musiq/core/theme.dart';
+import 'package:musiq/screen/loginScreen/bloc/login_bloc.dart';
 import 'package:musiq/screen/search/bloc/SearchSong/search_song_bloc.dart';
 import 'package:musiq/screen/settings/ThemeCubit/theme_cubit.dart';
 import 'package:musiq/screen/splashScreen/splash_screen.dart';
@@ -45,7 +46,8 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => TamilSongBloc()),
         BlocProvider(create: (context) => HindiSongBloc()),
         BlocProvider(create: (context) => ThemeCubit()),
-         BlocProvider(create: (context) => SearchSongBloc()),
+        BlocProvider(create: (context) => SearchSongBloc()),
+        BlocProvider(create: (context) => LoginBloc()),
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, state) {
