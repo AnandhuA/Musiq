@@ -1,5 +1,4 @@
-import 'dart:developer';
-
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/core/sized.dart';
@@ -17,10 +16,14 @@ class SearchScreen extends StatefulWidget {
 class SearchScreenState extends State<SearchScreen> {
   final FocusNode _focusNode = FocusNode();
   final TextEditingController _controller = TextEditingController();
+  Timer? _debounce;
 
   @override
   void initState() {
     super.initState();
+    context
+        .read<SearchSongBloc>()
+        .add(SearchSongEvent(searchQuery: 'New songs'));
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _focusNode.requestFocus();
     });
@@ -29,7 +32,16 @@ class SearchScreenState extends State<SearchScreen> {
   @override
   void dispose() {
     _focusNode.dispose();
+    _controller.dispose();
+    _debounce?.cancel();
     super.dispose();
+  }
+
+  void _onSearchChanged(String query) {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      context.read<SearchSongBloc>().add(SearchSongEvent(searchQuery: query));
+    });
   }
 
   @override
@@ -54,7 +66,7 @@ class SearchScreenState extends State<SearchScreen> {
                   icon: const Icon(Icons.arrow_back),
                 ),
                 onChanged: (value) {
-                  log("onChanged: $value");
+                  _onSearchChanged(value);
                 },
                 onSubmitted: (value) {
                   context
