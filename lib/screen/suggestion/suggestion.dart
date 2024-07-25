@@ -24,6 +24,7 @@ class Suggestion extends StatelessWidget {
           "   $title Songs",
           style: TextStyle(
             fontSize: 20,
+            fontWeight: FontWeight.w500,
             color: accentColors[colorIndex],
           ),
         ),

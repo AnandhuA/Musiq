@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/main.dart';
+import 'package:musiq/screen/favoriteScreen/bloc/favorite_bloc.dart';
 import 'package:musiq/screen/favoriteScreen/favorite_screen.dart';
 import 'package:musiq/screen/homeScreen/home_screen.dart';
 import 'package:musiq/screen/settings/ThemeCubit/theme_cubit.dart';
@@ -30,14 +31,15 @@ class MainPageState extends State<MainPage> {
       _selectedIndex = index;
     });
   }
+
   @override
   void initState() {
-   
     super.initState();
-       context.read<EnglishSongSuggestionBloc>().add(EnglishSongSuggestionEvent());
+    context.read<EnglishSongSuggestionBloc>().add(EnglishSongSuggestionEvent());
     context.read<MalSongsBloc>().add(MalSongsEvent());
     context.read<TamilSongBloc>().add(TamilSongEvent());
     context.read<HindiSongBloc>().add(HindiSongEvent());
+    context.read<FavoriteBloc>().add(FeatchFavoriteSongEvent());
   }
 
   @override

@@ -29,6 +29,7 @@ class HomeScreen extends StatelessWidget {
               'Music Library',
               style: TextStyle(
                 color: accentColors[colorIndex],
+                fontWeight: FontWeight.bold
               ),
             ),
             actions: [
@@ -72,6 +73,7 @@ class HomeScreen extends StatelessWidget {
                       return Suggestion(
                         title: "Malayalam",
                         suggetionSongs: state.songs,
+                        
                       );
                     } else if (state is MalSongsLoading) {
                       return const SuggetionShimmerWidget(

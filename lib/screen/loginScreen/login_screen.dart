@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/screen/commanWidgets/snack_bar.dart';
-import 'package:musiq/screen/homeScreen/home_screen.dart';
 import 'package:musiq/screen/loginScreen/bloc/login_bloc.dart';
+import 'package:musiq/screen/mainPage.dart/main_page.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
@@ -21,14 +21,15 @@ class LoginScreen extends StatelessWidget {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => const HomeScreen(),
+                builder: (context) => const MainPage(),
               ),
             );
           } else if (state is LoginError) {
             customSnackbar(
-                context: context,
-                message: state.errorMessage,
-                color: Colors.red);
+              context: context,
+              message: state.errorMessage,
+              color: Colors.red,
+            );
           }
         },
         child: SafeArea(

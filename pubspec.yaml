@@ -46,12 +46,13 @@ dependencies:
   bloc: ^8.1.4
   permission_handler: ^11.3.1
   audio_video_progress_bar: ^2.0.3
-  just_audio: ^0.9.39
-  just_audio_background: ^0.0.1-beta.13
-  just_audio_windows: ^0.2.1
+  # just_audio: ^0.9.39
+  # just_audio_background: ^0.0.1-beta.13
+  # just_audio_windows: ^0.2.1
   shimmer: ^3.0.0
   shared_preferences: ^2.2.3
   lottie: ^3.1.2
+  cloud_firestore: ^5.1.0
   
 
 dev_dependencies:

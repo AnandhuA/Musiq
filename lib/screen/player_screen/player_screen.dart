@@ -1,14 +1,15 @@
 import 'dart:ui';
 
-import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:musiq/core/colors.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/core/sized.dart';
-import 'package:musiq/main.dart';
-
 import 'package:musiq/models/song.dart';
 import 'package:musiq/screen/commanWidgets/custom_app_bar.dart';
+import 'package:musiq/screen/commanWidgets/favorite_icon.dart';
+import 'package:musiq/screen/player_screen/cubit/PlayAndPause/play_and_pause_cubit.dart';
+import 'package:musiq/screen/player_screen/cubit/ProgressBar/progress_bar_cubit.dart';
+import 'package:musiq/screen/player_screen/widgets/progress_bar_widget.dart';
 
 class PlayerScreen extends StatefulWidget {
   final Song song;
@@ -20,8 +21,8 @@ class PlayerScreen extends StatefulWidget {
 
 class _PlayerScreenState extends State<PlayerScreen> {
   late AudioPlayer _audioPlayer;
-  Duration _currentPosition = Duration.zero;
-  PlayerState _playerState = PlayerState.paused;
+  // Duration _currentPosition = Duration.zero;
+  // PlayerState _playerState = PlayerState.paused;
   bool _hasPlayed = false;
 
   @override
@@ -47,17 +48,13 @@ class _PlayerScreenState extends State<PlayerScreen> {
 
     _audioPlayer.onPlayerStateChanged.listen((state) {
       if (mounted) {
-        setState(() {
-          _playerState = state;
-        });
+        context.read<PlayAndPauseCubit>().togglePlayerState(state);
       }
     });
 
     _audioPlayer.onPositionChanged.listen((position) {
       if (mounted) {
-        setState(() {
-          _currentPosition = position;
-        });
+        context.read<ProgressBarCubit>().changeProgress(position);
       }
     });
   }
@@ -68,13 +65,13 @@ class _PlayerScreenState extends State<PlayerScreen> {
     super.dispose();
   }
 
-  void _togglePlayPause() {
-    if (_playerState == PlayerState.playing) {
-      _audioPlayer.pause();
-    } else {
-      _audioPlayer.resume();
-    }
-  }
+  // void _togglePlayPause() {
+  //   if (_playerState == PlayerState.playing) {
+  //     _audioPlayer.pause();
+  //   } else {
+  //     _audioPlayer.resume();
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -136,28 +133,26 @@ class _PlayerScreenState extends State<PlayerScreen> {
                       softWrap: false,
                     ),
                     constHeight40,
-                    ProgressBar(
-                      progress: _currentPosition,
-                      timeLabelPadding: 5,
-                      buffered: _currentPosition + const Duration(seconds: 30),
-                      bufferedBarColor: Colors.grey,
-                      timeLabelType: TimeLabelType.totalTime,
-                      total: Duration(seconds: widget.song.duration ?? 00),
-                      onSeek: (duration) {
-                        _audioPlayer.seek(duration);
+                    BlocBuilder<ProgressBarCubit, ProgressBarState>(
+                      builder: (context, state) {
+                        if (state is ProgressBarInitial) {
+                          return ProgressBarWidget(
+                            widget: widget,
+                            audioPlayer: _audioPlayer,
+                            progressDuration: state.progressDuration,
+                          );
+                        }
+                        return ProgressBarWidget(
+                          widget: widget,
+                          audioPlayer: _audioPlayer,
+                          progressDuration: Duration.zero,
+                        );
                       },
-                      progressBarColor: accentColors[colorIndex],
-                      thumbColor: accentColors[colorIndex],
                     ),
                     constHeight30,
                     Row(
                       children: [
-                        IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.favorite_border,
-                          ),
-                        ),
+                        FavoriteIcon(song: widget.song),
                         const Spacer(),
                         IconButton(
                           onPressed: () {},
@@ -166,14 +161,32 @@ class _PlayerScreenState extends State<PlayerScreen> {
                             size: 50,
                           ),
                         ),
-                        IconButton(
-                          onPressed: _togglePlayPause,
-                          icon: Icon(
-                            _playerState == PlayerState.playing
-                                ? Icons.pause_circle_filled_rounded
-                                : Icons.play_circle_fill_rounded,
-                            size: 60,
-                          ),
+                        BlocBuilder<PlayAndPauseCubit, PlayAndPauseState>(
+                          builder: (context, state) {
+                            if (state is PlayingStae) {
+                              return IconButton(
+                                onPressed: () {
+                                  _audioPlayer.resume();
+                                },
+                                icon: const Icon(
+                                  Icons.play_circle_fill_rounded,
+                                  size: 60,
+                                ),
+                              );
+                            }
+                            if (state is PausedState) {
+                              return IconButton(
+                                onPressed: () {
+                                  _audioPlayer.pause();
+                                },
+                                icon: const Icon(
+                                  Icons.pause_circle_filled,
+                                  size: 60,
+                                ),
+                              );
+                            }
+                            return const CircularProgressIndicator();
+                          },
                         ),
                         IconButton(
                           onPressed: () {},
@@ -201,4 +214,3 @@ class _PlayerScreenState extends State<PlayerScreen> {
     );
   }
 }
-//9745108597

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/core/sized.dart';
+import 'package:musiq/screen/commanWidgets/favorite_icon.dart';
 import 'package:musiq/screen/commanWidgets/textfeild.dart';
 import 'package:musiq/screen/player_screen/player_screen.dart';
 import 'package:musiq/screen/search/bloc/SearchSong/search_song_bloc.dart';
@@ -109,11 +110,8 @@ class SearchScreenState extends State<SearchScreen> {
                                   subtitle: Text(
                                     state.searchResult[index].album.name,
                                   ),
-                                  trailing: IconButton(
-                                    onPressed: () {},
-                                    icon: const Icon(
-                                      Icons.favorite_border,
-                                    ),
+                                  trailing: FavoriteIcon(
+                                    song: state.searchResult[index],
                                   ),
                                 );
                               },
