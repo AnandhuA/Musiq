@@ -16,22 +16,8 @@ import 'package:musiq/screen/suggestion/bloc/TamilSongs/tamil_song_bloc.dart';
 import 'package:musiq/screen/suggestion/suggestion.dart';
 import 'package:musiq/screen/suggestion/widgets/shimmer_widget.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  @override
-  void initState() {
-    context.read<EnglishSongSuggestionBloc>().add(EnglishSongSuggestionEvent());
-    context.read<MalSongsBloc>().add(MalSongsEvent());
-    context.read<TamilSongBloc>().add(TamilSongEvent());
-    context.read<HindiSongBloc>().add(HindiSongEvent());
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {

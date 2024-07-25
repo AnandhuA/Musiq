@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:musiq/screen/homeScreen/home_screen.dart';
+
 import 'package:musiq/screen/loginScreen/login_screen.dart';
 import 'package:musiq/screen/mainPage.dart/main_page.dart';
 
@@ -23,8 +23,10 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-          child:
-              Lottie.asset("assets/animations/Animation - 1721731246317.json")),
+        child: Lottie.asset(
+          "assets/animations/Animation - 1721731246317.json",
+        ),
+      ),
     );
   }
 

@@ -5,6 +5,10 @@ import 'package:musiq/main.dart';
 import 'package:musiq/screen/favoriteScreen/favorite_screen.dart';
 import 'package:musiq/screen/homeScreen/home_screen.dart';
 import 'package:musiq/screen/settings/ThemeCubit/theme_cubit.dart';
+import 'package:musiq/screen/suggestion/bloc/EngSong/english_song_suggestion_bloc.dart';
+import 'package:musiq/screen/suggestion/bloc/HindiSong/hindi_song_bloc.dart';
+import 'package:musiq/screen/suggestion/bloc/MalayalamSongs/mal_songs_bloc.dart';
+import 'package:musiq/screen/suggestion/bloc/TamilSongs/tamil_song_bloc.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -25,6 +29,15 @@ class MainPageState extends State<MainPage> {
     setState(() {
       _selectedIndex = index;
     });
+  }
+  @override
+  void initState() {
+   
+    super.initState();
+       context.read<EnglishSongSuggestionBloc>().add(EnglishSongSuggestionEvent());
+    context.read<MalSongsBloc>().add(MalSongsEvent());
+    context.read<TamilSongBloc>().add(TamilSongEvent());
+    context.read<HindiSongBloc>().add(HindiSongEvent());
   }
 
   @override

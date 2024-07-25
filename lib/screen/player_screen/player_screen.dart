@@ -120,7 +120,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                     Text(
                       widget.song.name ?? "no name",
                       style: const TextStyle(
-                        fontSize: 30,
+                        fontSize: 50,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.fade,
