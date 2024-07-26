@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:musiq/core/sized.dart';
+import 'package:musiq/main.dart';
 import 'package:musiq/presentation/commanWidgets/confirmation_diloge.dart';
 import 'package:musiq/presentation/screens/settingsScreen/theme_screen.dart';
 import 'package:musiq/presentation/screens/settingsScreen/widgets/list_tile_widget.dart';
@@ -64,6 +65,7 @@ class SettingsScreen extends StatelessWidget {
                 title: "Logout Confirmation",
                 confirmBtn: () async {
                   await FirebaseAuth.instance.signOut();
+                  userIsLoggedIn = null;
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(

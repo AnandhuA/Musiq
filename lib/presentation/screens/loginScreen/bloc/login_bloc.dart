@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:musiq/main.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';
@@ -15,6 +16,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           email: event.email,
           password: event.password,
         );
+        userIsLoggedIn = event.email;
         emit(LoginSuccess());
       } on FirebaseAuthException catch (e) {
         String errorMessage;

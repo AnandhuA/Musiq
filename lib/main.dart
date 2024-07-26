@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,6 +22,7 @@ import 'package:musiq/data/shared_preference.dart';
 String? theme;
 int colorIndex = 0;
 Song? lastplayed;
+String? userIsLoggedIn;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -30,7 +32,8 @@ void main() async {
   theme = await SharedPreference.getTheme();
   colorIndex = await SharedPreference.getAccentColorIndex() ?? 0;
   lastplayed = await SharedPreference.getLastPlayedSong();
-  print(lastplayed);
+  userIsLoggedIn = FirebaseAuth.instance.currentUser?.email;
+ 
   runApp(const MyApp());
 }
 

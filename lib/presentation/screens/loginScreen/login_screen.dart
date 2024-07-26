@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/presentation/commanWidgets/snack_bar.dart';
+import 'package:musiq/presentation/screens/favoriteScreen/bloc/favorite_bloc.dart';
 import 'package:musiq/presentation/screens/loginScreen/bloc/login_bloc.dart';
-import 'package:musiq/presentation/mainPage.dart/main_page.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
@@ -18,12 +18,14 @@ class LoginScreen extends StatelessWidget {
       body: BlocListener<LoginBloc, LoginState>(
         listener: (context, state) {
           if (state is LoginSuccess) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const MainPage(),
-              ),
-            );
+            // Navigator.pushReplacement(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => const MainPage(),
+            //   ),
+            // );
+            context.read<FavoriteBloc>().add(FeatchFavoriteSongEvent());
+            Navigator.pop(context);
           } else if (state is LoginError) {
             customSnackbar(
               context: context,

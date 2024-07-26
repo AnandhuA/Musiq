@@ -1,3 +1,4 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musiq/models/song.dart';
@@ -5,7 +6,7 @@ import 'package:musiq/models/song.dart';
 class FavoriteSongRepo {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
   static final FirebaseFirestore firestore = FirebaseFirestore.instance;
-  static Future<bool> addFavorite({required Song song}) async {
+  static Future<String> addFavorite({required Song song}) async {
     try {
       if (_auth.currentUser?.email != null) {
         final userId = _auth.currentUser!.email;
@@ -15,12 +16,16 @@ class FavoriteSongRepo {
 
         Map<String, dynamic> favoriteData = song.toJson();
         await favoriteCollection.add(favoriteData);
-        return true;
+        return "true";
+      }else{
+
+        return "not login";
       }
-      return false;
+      
+     
     } catch (e) {
       print('Error adding favorite: $e');
-      return false;
+      return "false";
     }
   }
 
