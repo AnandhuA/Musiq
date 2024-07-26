@@ -21,6 +21,7 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
     Emitter<FavoriteState> emit,
   ) async {
     emit(FavoriteLoading());
+
     List<Song> songList = await FavoriteSongRepo.fetchFavorites();
     emit(FeatchFavoriteSuccess(favorites: songList));
   }
@@ -35,7 +36,7 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
 
     if (result == "true") {
       log("set add");
-      // add(FeatchFavoriteSongEvent());
+      add(FeatchFavoriteSongEvent());
     } else if (result == "not login") {
       log("not login");
       return emit(UserNotLoggedIn());
@@ -55,7 +56,7 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
     );
     if (result) {
       log("set remove");
-      // add(FeatchFavoriteSongEvent());
+      add(FeatchFavoriteSongEvent());
     } else {
       log("not set");
       emit(FavoriteError());
