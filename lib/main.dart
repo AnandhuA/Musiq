@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/core/theme.dart';
+import 'package:musiq/models/song.dart';
 import 'package:musiq/presentation/screens/favoriteScreen/bloc/favorite_bloc.dart';
 import 'package:musiq/presentation/screens/loginScreen/bloc/login_bloc.dart';
 import 'package:musiq/presentation/screens/player_screen/cubit/PlayAndPause/play_and_pause_cubit.dart';
@@ -19,6 +20,7 @@ import 'package:musiq/data/shared_preference.dart';
 
 String? theme;
 int colorIndex = 0;
+Song? lastplayed;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -27,7 +29,8 @@ void main() async {
   );
   theme = await SharedPreference.getTheme();
   colorIndex = await SharedPreference.getAccentColorIndex() ?? 0;
-
+  lastplayed = await SharedPreference.getLastPlayedSong();
+  print(lastplayed);
   runApp(const MyApp());
 }
 

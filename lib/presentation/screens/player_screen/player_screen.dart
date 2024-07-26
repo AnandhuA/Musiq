@@ -2,6 +2,8 @@ import 'dart:ui';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:musiq/data/shared_preference.dart';
+import 'package:musiq/main.dart';
 import 'package:musiq/models/song.dart';
 import 'package:musiq/presentation/commanWidgets/custom_app_bar.dart';
 import 'package:musiq/presentation/commanWidgets/favorite_icon.dart';
@@ -24,6 +26,8 @@ class _PlayerScreenState extends State<PlayerScreen> {
   @override
   void initState() {
     super.initState();
+    lastplayed = widget.song;
+    SharedPreference.lastPlayedSong(widget.song);
     _audioPlayer = AudioPlayer();
 
     _audioPlayer.setSource(UrlSource(widget.song.downloadUrl.last.url)).then(
@@ -160,7 +164,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                         ),
                         BlocBuilder<PlayAndPauseCubit, PlayAndPauseState>(
                           builder: (context, state) {
-                            if (state is PlayingStae) {
+                            if (state is PlayingState) {
                               return IconButton(
                                 onPressed: () {
                                   _audioPlayer.resume();

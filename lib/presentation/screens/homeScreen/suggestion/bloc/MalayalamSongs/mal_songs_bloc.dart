@@ -28,6 +28,7 @@ class MalSongsBloc extends Bloc<MalSongsEvent, MalSongsState> {
                     .map((songJson) => Song.fromJson(songJson))
                     .toList();
             emit(MalSongsLoaded(songs: suggetionSongs));
+
             break;
 
           default:

@@ -29,7 +29,7 @@ class HomeScreen extends StatelessWidget {
               'Music Library',
               style: TextStyle(
                 color: accentColors[colorIndex],
-                fontWeight: FontWeight.bold
+                fontWeight: FontWeight.bold,
               ),
             ),
             actions: [
@@ -73,16 +73,28 @@ class HomeScreen extends StatelessWidget {
                       return Suggestion(
                         title: "Malayalam",
                         suggetionSongs: state.songs,
-                        
                       );
                     } else if (state is MalSongsLoading) {
                       return const SuggetionShimmerWidget(
                         title: "Malayalam",
                       );
-                    } else if (state is MalSongsError) {
-                      return const Center(child: Text('Somthig Wrong'));
                     } else {
-                      return const Center(child: Text('Error'));
+                      return SizedBox(
+                        height: 200,
+                        child: Center(
+                          child: TextButton(
+                            onPressed: () {
+                              context.read<MalSongsBloc>().add(MalSongsEvent());
+                            },
+                            child: Text(
+                              "Retry",
+                              style: TextStyle(
+                                color: accentColors[colorIndex],
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
                     }
                   },
                 ),
@@ -99,10 +111,25 @@ class HomeScreen extends StatelessWidget {
                       return const SuggetionShimmerWidget(
                         title: "Tamil",
                       );
-                    } else if (state is TamilSongError) {
-                      return const Center(child: Text('Somthig Wrong'));
                     } else {
-                      return const Center(child: Text('Error'));
+                      return SizedBox(
+                        height: 200,
+                        child: Center(
+                          child: TextButton(
+                            onPressed: () {
+                              context
+                                  .read<TamilSongBloc>()
+                                  .add(TamilSongEvent());
+                            },
+                            child: Text(
+                              "Retry",
+                              style: TextStyle(
+                                color: accentColors[colorIndex],
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
                     }
                   },
                 ),
@@ -119,10 +146,25 @@ class HomeScreen extends StatelessWidget {
                       return const SuggetionShimmerWidget(
                         title: "Hindi",
                       );
-                    } else if (state is HindiSongError) {
-                      return const Center(child: Text('Somthig Wrong'));
                     } else {
-                      return const Center(child: Text('Error'));
+                      return SizedBox(
+                        height: 200,
+                        child: Center(
+                          child: TextButton(
+                            onPressed: () {
+                              context
+                                  .read<HindiSongBloc>()
+                                  .add(HindiSongEvent());
+                            },
+                            child: Text(
+                              "Retry",
+                              style: TextStyle(
+                                color: accentColors[colorIndex],
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
                     }
                   },
                 ),
@@ -140,10 +182,25 @@ class HomeScreen extends StatelessWidget {
                       return const SuggetionShimmerWidget(
                         title: "English",
                       );
-                    } else if (state is EnglishSongSuggestionError) {
-                      return const Center(child: Text('Somthig Wrong'));
                     } else {
-                      return const Center(child: Text('Error'));
+                      return SizedBox(
+                        height: 200,
+                        child: Center(
+                          child: TextButton(
+                            onPressed: () {
+                              context
+                                  .read<EnglishSongSuggestionBloc>()
+                                  .add(EnglishSongSuggestionEvent());
+                            },
+                            child: Text(
+                              "Retry",
+                              style: TextStyle(
+                                color: accentColors[colorIndex],
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
                     }
                   },
                 ),

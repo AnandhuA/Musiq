@@ -9,7 +9,7 @@ final class PlayAndPauseInitial extends PlayAndPauseState {
   PlayAndPauseInitial({required this.playerState});
 }
 
-final class PlayingStae extends PlayAndPauseState {
+final class PlayingState extends PlayAndPauseState {
 
 }
 

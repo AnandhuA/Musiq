@@ -42,13 +42,38 @@ class MainPageState extends State<MainPage> {
     context.read<FavoriteBloc>().add(FeatchFavoriteSongEvent());
   }
 
+  Future<void> _refreshData() async {
+    context.read<MalSongsBloc>().add(MalSongsEvent());
+    context.read<TamilSongBloc>().add(TamilSongEvent());
+    context.read<HindiSongBloc>().add(HindiSongEvent());
+    context.read<FavoriteBloc>().add(FeatchFavoriteSongEvent());
+    context.read<EnglishSongSuggestionBloc>().add(EnglishSongSuggestionEvent());
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ThemeCubit, ThemeState>(
-      builder: (context, state) {
+      builder: (context, themeState) {
         return Scaffold(
-          body: Center(
-            child: _widgetOptions.elementAt(_selectedIndex),
+          body: Stack(
+            children: [
+              RefreshIndicator(
+                onRefresh: _refreshData,
+                child: Center(
+                  child: _widgetOptions.elementAt(_selectedIndex),
+                ),
+              ),
+              // Positioned(
+              //   bottom: 0,
+              //   left: 0,
+              //   right: 0,
+              //   child: lastplayed != null
+              //       ? BottomPlayerBar(
+              //           song: lastplayed!,
+              //         )
+              //       : const SizedBox(),
+              // ),
+            ],
           ),
           bottomNavigationBar: BottomNavigationBar(
             items: const <BottomNavigationBarItem>[
@@ -62,7 +87,8 @@ class MainPageState extends State<MainPage> {
               ),
             ],
             currentIndex: _selectedIndex,
-            selectedItemColor: accentColors[colorIndex],
+            selectedItemColor:
+                accentColors[colorIndex], // Customize based on theme
             onTap: _onItemTapped,
           ),
         );

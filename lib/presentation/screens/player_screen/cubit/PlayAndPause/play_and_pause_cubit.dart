@@ -12,7 +12,7 @@ class PlayAndPauseCubit extends Cubit<PlayAndPauseState> {
     if (state == PlayerState.playing) {
       emit(PausedState());
     } else {
-      emit(PlayingStae());
+      emit(PlayingState());
     }
    
   }
