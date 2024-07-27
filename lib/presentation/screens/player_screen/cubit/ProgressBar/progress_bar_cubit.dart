@@ -10,4 +10,8 @@ class ProgressBarCubit extends Cubit<ProgressBarState> {
   changeProgress(Duration progress) {
     emit(ProgressBarInitial(progressDuration: progress));
   }
+
+   void reset() {
+    emit(ProgressBarInitial(progressDuration: Duration.zero));
+  }
 }

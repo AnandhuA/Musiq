@@ -46,7 +46,7 @@ class MainPageState extends State<MainPage> {
     context.read<MalSongsBloc>().add(MalSongsEvent());
     context.read<TamilSongBloc>().add(TamilSongEvent());
     context.read<HindiSongBloc>().add(HindiSongEvent());
-    context.read<FavoriteBloc>().add(FeatchFavoriteSongEvent());
+    // context.read<FavoriteBloc>().add(FeatchFavoriteSongEvent());
     context.read<EnglishSongSuggestionBloc>().add(EnglishSongSuggestionEvent());
   }
 

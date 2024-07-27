@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 import 'package:musiq/data/shared_preference.dart';
 import 'package:musiq/main.dart';
 import 'package:musiq/models/song.dart';
@@ -26,6 +27,8 @@ class _PlayerScreenState extends State<PlayerScreen> {
   @override
   void initState() {
     super.initState();
+    context.read<PlayAndPauseCubit>().reset();
+    context.read<ProgressBarCubit>().reset();
     lastplayed = widget.song;
     SharedPreference.lastPlayedSong(widget.song);
     _audioPlayer = AudioPlayer();
@@ -186,7 +189,18 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                 ),
                               );
                             }
-                            return const CircularProgressIndicator();
+                            return SizedBox(
+                              height: screenWidth * 0.12,
+                              width: screenWidth * 0.12,
+                              child: Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? Lottie.asset(
+                                      "assets/animations/light_music_loading.json",
+                                      fit: BoxFit.cover)
+                                  : Lottie.asset(
+                                      "assets/animations/dark_music_loading.json",
+                                    ),
+                            );
                           },
                         ),
                         IconButton(

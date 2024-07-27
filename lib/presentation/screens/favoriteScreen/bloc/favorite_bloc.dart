@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +9,7 @@ part 'favorite_event.dart';
 part 'favorite_state.dart';
 
 class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
+  List<Song> _favorites = [];
   FavoriteBloc() : super(FavoriteInitial()) {
     on<FeatchFavoriteSongEvent>(_featchFavorite);
     on<AddFavoriteEvent>(_addFavorite);
@@ -22,8 +22,8 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
   ) async {
     emit(FavoriteLoading());
 
-    List<Song> songList = await FavoriteSongRepo.fetchFavorites();
-    emit(FeatchFavoriteSuccess(favorites: songList));
+    _favorites = await FavoriteSongRepo.fetchFavorites();
+    emit(FeatchFavoriteSuccess(favorites: _favorites));
   }
 
   FutureOr<void> _addFavorite(
@@ -31,19 +31,9 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
     Emitter<FavoriteState> emit,
   ) async {
     emit(FavoriteLoading());
-
-    final String result = await FavoriteSongRepo.addFavorite(song: event.song);
-
-    if (result == "true") {
-      log("set add");
-      add(FeatchFavoriteSongEvent());
-    } else if (result == "not login") {
-      log("not login");
-      return emit(UserNotLoggedIn());
-    } else {
-      log("not set");
-      emit(FavoriteError());
-    }
+    _favorites.add(event.song);
+    FavoriteSongRepo.addFavorite(song: event.song);
+    emit(FeatchFavoriteSuccess(favorites: _favorites));
   }
 
   FutureOr<void> _removeFavorite(
@@ -51,15 +41,10 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
     Emitter<FavoriteState> emit,
   ) async {
     emit(FavoriteLoading());
-    final bool result = await FavoriteSongRepo.removeFavorite(
+    _favorites.remove(event.song);
+    FavoriteSongRepo.removeFavorite(
       songID: event.song.id ?? "1",
     );
-    if (result) {
-      log("set remove");
-      add(FeatchFavoriteSongEvent());
-    } else {
-      log("not set");
-      emit(FavoriteError());
-    }
+    emit(FeatchFavoriteSuccess(favorites: _favorites));
   }
 }

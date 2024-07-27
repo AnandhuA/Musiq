@@ -9,11 +9,14 @@ class PlayAndPauseCubit extends Cubit<PlayAndPauseState> {
       : super(PlayAndPauseInitial(playerState: PlayerState.paused));
 
   void togglePlayerState(PlayerState state) {
+
     if (state == PlayerState.playing) {
       emit(PausedState());
     } else {
       emit(PlayingState());
     }
-   
+  }
+   void reset() {
+    emit(PlayAndPauseInitial(playerState: PlayerState.paused));
   }
 }
