@@ -17,4 +17,4 @@ final class FeatchFavoriteSuccess extends FavoriteState {
 final class AddFavoriteSuccess extends FavoriteState {}
 final class RemoveFavoriteSuccess extends FavoriteState {}
 
-final class UserNotLoggedIn extends FavoriteState {}
+// final class UserNotLoggedIn extends FavoriteState {}
