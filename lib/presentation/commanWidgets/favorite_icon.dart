@@ -9,7 +9,10 @@ import 'package:musiq/presentation/screens/loginScreen/login_screen.dart';
 
 class FavoriteIcon extends StatelessWidget {
   final Song song;
-  const FavoriteIcon({super.key, required this.song});
+  const FavoriteIcon({
+    super.key,
+    required this.song,
+  });
 
   @override
   Widget build(BuildContext context) {

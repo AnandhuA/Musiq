@@ -12,7 +12,6 @@ import 'package:musiq/presentation/screens/searchScreen/bloc/SearchSong/search_s
 import 'package:musiq/presentation/screens/settingsScreen/ThemeCubit/theme_cubit.dart';
 import 'package:musiq/presentation/screens/splashScreen/splash_screen.dart';
 import 'package:musiq/presentation/screens/homeScreen/suggestion/bloc/EngSong/english_song_suggestion_bloc.dart';
-
 import 'package:musiq/core/firebase_options.dart';
 import 'package:musiq/presentation/screens/homeScreen/suggestion/bloc/HindiSong/hindi_song_bloc.dart';
 import 'package:musiq/presentation/screens/homeScreen/suggestion/bloc/MalayalamSongs/mal_songs_bloc.dart';
@@ -33,7 +32,8 @@ void main() async {
   colorIndex = await SharedPreference.getAccentColorIndex() ?? 0;
   lastplayed = await SharedPreference.getLastPlayedSong();
   userIsLoggedIn = FirebaseAuth.instance.currentUser?.email;
- 
+  print(userIsLoggedIn);
+
   runApp(const MyApp());
 }
 

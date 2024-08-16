@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
-confirmationDiloge(
-    {required BuildContext context,
-    required String title,
-    required Function confirmBtn,
-    required String content}) {
+confirmationDiloge({
+  required BuildContext context,
+  required String title,
+  required Function confirmBtn,
+  required String content,
+}) {
   final theme = Theme.of(context);
   showDialog(
     context: context,

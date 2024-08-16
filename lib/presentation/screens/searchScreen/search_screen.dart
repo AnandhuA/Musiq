@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/core/sized.dart';
@@ -92,6 +93,7 @@ class SearchScreenState extends State<SearchScreen> {
                                   constHeight10,
                               itemCount: state.searchResult.length,
                               itemBuilder: (context, index) {
+                                log(userIsLoggedIn.toString());
                                 return ListTile(
                                   onTap: () => Navigator.push(
                                       context,

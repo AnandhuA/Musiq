@@ -35,11 +35,13 @@ class MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
-    context.read<EnglishSongSuggestionBloc>().add(EnglishSongSuggestionEvent());
+    //
+
     context.read<MalSongsBloc>().add(MalSongsEvent());
     context.read<TamilSongBloc>().add(TamilSongEvent());
     context.read<HindiSongBloc>().add(HindiSongEvent());
     context.read<FavoriteBloc>().add(FeatchFavoriteSongEvent());
+    context.read<EnglishSongSuggestionBloc>().add(EnglishSongSuggestionEvent());
   }
 
   Future<void> _refreshData() async {
