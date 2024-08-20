@@ -32,7 +32,6 @@ void main() async {
   colorIndex = await SharedPreference.getAccentColorIndex() ?? 0;
   lastplayed = await SharedPreference.getLastPlayedSong();
   userIsLoggedIn = FirebaseAuth.instance.currentUser?.email;
-  print(userIsLoggedIn);
 
   runApp(const MyApp());
 }

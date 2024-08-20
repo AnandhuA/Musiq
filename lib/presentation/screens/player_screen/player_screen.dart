@@ -13,8 +13,10 @@ import 'package:musiq/presentation/screens/player_screen/cubit/ProgressBar/progr
 import 'package:musiq/presentation/screens/player_screen/widgets/progress_bar_widget.dart';
 
 class PlayerScreen extends StatefulWidget {
-  final Song song;
-  const PlayerScreen({super.key, required this.song});
+  final List<Song> songs;
+  final int initialIndex;
+
+  const PlayerScreen({super.key, required this.songs, this.initialIndex = 0});
 
   @override
   State<PlayerScreen> createState() => _PlayerScreenState();
@@ -22,28 +24,32 @@ class PlayerScreen extends StatefulWidget {
 
 class _PlayerScreenState extends State<PlayerScreen> {
   late AudioPlayer _audioPlayer;
+  late int _currentIndex;
   bool _hasPlayed = false;
+
+  Song get currentSong => widget.songs[_currentIndex];
 
   @override
   void initState() {
     super.initState();
+    _currentIndex = widget.initialIndex;
+    _initializePlayer();
+  }
+
+  void _initializePlayer() {
     context.read<PlayAndPauseCubit>().reset();
     context.read<ProgressBarCubit>().reset();
-    lastplayed = widget.song;
-    SharedPreference.lastPlayedSong(widget.song);
+    lastplayed = currentSong;
+    SharedPreference.lastPlayedSong(currentSong);
     _audioPlayer = AudioPlayer();
 
-    _audioPlayer.setSource(UrlSource(widget.song.downloadUrl.last.url)).then(
+    _audioPlayer.setSource(UrlSource(currentSong.downloadUrl.last.url)).then(
       (_) {
         _audioPlayer.getDuration().then(
               (duration) {},
             );
         if (!_hasPlayed) {
-          _audioPlayer.play(
-            UrlSource(
-              widget.song.downloadUrl.last.url,
-            ),
-          );
+          _audioPlayer.play(UrlSource(currentSong.downloadUrl.last.url));
           setState(() {
             _hasPlayed = true;
           });
@@ -66,6 +72,32 @@ class _PlayerScreenState extends State<PlayerScreen> {
         }
       },
     );
+
+    _audioPlayer.onPlayerComplete.listen((event) {
+      _playNext();
+    });
+  }
+
+  void _playNext() {
+    if (_currentIndex < widget.songs.length - 1) {
+       _audioPlayer.stop();
+      setState(() {
+        _currentIndex++;
+        _hasPlayed = false;
+        _initializePlayer();
+      });
+    }
+  }
+
+  void _playPrevious() {
+    if (_currentIndex > 0) {
+      _audioPlayer.stop();
+      setState(() {
+        _currentIndex--;
+        _hasPlayed = false;
+        _initializePlayer();
+      });
+    }
   }
 
   @override
@@ -85,7 +117,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
           height: double.infinity,
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: NetworkImage(widget.song.image.first.url),
+              image: NetworkImage(currentSong.image.first.url),
               alignment: const Alignment(1, -1),
               fit: BoxFit.fitWidth,
             ),
@@ -101,7 +133,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                 child: Column(
                   children: [
                     CustomAppBar(
-                      title: widget.song.album.name,
+                      title: currentSong.album.name,
                     ),
                     Container(
                       height: screenHeight * 0.36,
@@ -109,9 +141,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                       margin: const EdgeInsets.all(30),
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: NetworkImage(
-                            widget.song.image.last.url,
-                          ),
+                          image: NetworkImage(currentSong.image.last.url),
                           fit: BoxFit.fill,
                         ),
                         borderRadius: BorderRadius.circular(20),
@@ -119,7 +149,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                     ),
                     SizedBox(height: screenHeight * 0.02),
                     Text(
-                      widget.song.name ?? "no name",
+                      currentSong.name ?? "no name",
                       style: TextStyle(
                         fontSize: screenWidth * 0.1,
                       ),
@@ -129,7 +159,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                     ),
                     SizedBox(height: screenHeight * 0.01),
                     Text(
-                      widget.song.artists.all
+                      currentSong.artists.all
                           .map((artist) => artist.name)
                           .join(' | '),
                       maxLines: 1,
@@ -141,13 +171,13 @@ class _PlayerScreenState extends State<PlayerScreen> {
                       builder: (context, state) {
                         if (state is ProgressBarInitial) {
                           return ProgressBarWidget(
-                            widget: widget,
+                            song: widget.songs[_currentIndex],
                             audioPlayer: _audioPlayer,
                             progressDuration: state.progressDuration,
                           );
                         }
                         return ProgressBarWidget(
-                          widget: widget,
+                          song: widget.songs[_currentIndex],
                           audioPlayer: _audioPlayer,
                           progressDuration: Duration.zero,
                         );
@@ -156,10 +186,10 @@ class _PlayerScreenState extends State<PlayerScreen> {
                     SizedBox(height: screenHeight * 0.03),
                     Row(
                       children: [
-                        FavoriteIcon(song: widget.song),
+                        FavoriteIcon(song: currentSong),
                         const Spacer(),
                         IconButton(
-                          onPressed: () {},
+                          onPressed: _playPrevious,
                           icon: Icon(
                             Icons.skip_previous_rounded,
                             size: screenWidth * 0.12,
@@ -204,7 +234,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                           },
                         ),
                         IconButton(
-                          onPressed: () {},
+                          onPressed: _playNext,
                           icon: Icon(
                             Icons.skip_next_rounded,
                             size: screenWidth * 0.12,

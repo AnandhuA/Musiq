@@ -38,7 +38,8 @@ class Suggestion extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => PlayerScreen(
-                    song: suggetionSongs[index],
+                    songs: suggetionSongs,
+                    initialIndex: index,
                   ),
                 ),
               ),

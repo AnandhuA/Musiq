@@ -99,7 +99,8 @@ class SearchScreenState extends State<SearchScreen> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => PlayerScreen(
-                                          song: state.searchResult[index],
+                                          songs: state.searchResult,
+                                          initialIndex: index,
                                         ),
                                       )),
                                   leading: ClipRRect(

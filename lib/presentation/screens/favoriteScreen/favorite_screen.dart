@@ -29,8 +29,10 @@ class FavoriteScreen extends StatelessWidget {
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          PlayerScreen(song: state.favorites[index]),
+                      builder: (context) => PlayerScreen(
+                        songs: state.favorites,
+                        initialIndex: index,
+                      ),
                     ),
                   ),
                   trailing: FavoriteIcon(
