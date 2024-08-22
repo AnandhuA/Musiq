@@ -31,6 +31,15 @@
         </activity>
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
+
+             <!-- Background audio service -->
+                 <service
+            android:name="com.ryanheise.audioservice.AudioServiceBackground"
+            android:exported="true"
+            android:permission="android.permission.BIND_MEDIA_SESSION"
+            android:foregroundServiceType="mediaPlayback"/>
+
+            
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />

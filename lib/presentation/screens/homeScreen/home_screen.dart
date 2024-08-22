@@ -5,6 +5,7 @@ import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/main.dart';
 import 'package:musiq/presentation/commanWidgets/textfeild.dart';
+import 'package:musiq/presentation/screens/homeScreen/suggestion/bloc/Trending/trending_cubit.dart';
 import 'package:musiq/presentation/screens/homeScreen/widgets/drawer_widget.dart';
 import 'package:musiq/presentation/screens/searchScreen/search_screen.dart';
 import 'package:musiq/presentation/screens/settingsScreen/ThemeCubit/theme_cubit.dart';
@@ -50,10 +51,13 @@ class HomeScreen extends StatelessWidget {
                             builder: (context) => const SearchScreen(),
                           ));
                     },
-                    child: const AbsorbPointer(
+                    child: AbsorbPointer(
                       child: CustomTextFeild(
                         hintText: "Search",
-                        icon: Icon(Icons.search),
+                        icon: Icon(
+                          Icons.search,
+                          color: accentColors[colorIndex],
+                        ),
                       ),
                     ),
                   ),
@@ -65,6 +69,41 @@ class HomeScreen extends StatelessWidget {
           body: SingleChildScrollView(
             child: Column(
               children: [
+                constHeight20,
+                //--------------Ternding-------------------------
+                BlocBuilder<TrendingCubit, TrendingState>(
+                  builder: (context, state) {
+                    if (state is TrendingLoading) {
+                      return const SuggetionShimmerWidget(
+                        title: "Ternding",
+                      );
+                    } else if (state is TrendingLoaded) {
+                      return Suggestion(
+                        title: "Ternding",
+                        suggetionSongs: state.songs,
+                      );
+                    } else {
+                      return SizedBox(
+                        height: 200,
+                        child: Center(
+                          child: TextButton(
+                            onPressed: () {
+                              context
+                                  .read<TrendingCubit>()
+                                  .fetchTrendingSongs();
+                            },
+                            child: Text(
+                              "Retry",
+                              style: TextStyle(
+                                color: accentColors[colorIndex],
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                  },
+                ),
                 constHeight20,
                 //---------------malayalam-------------------------
                 BlocBuilder<MalSongsBloc, MalSongsState>(

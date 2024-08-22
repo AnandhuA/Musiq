@@ -87,7 +87,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
                 : const SizedBox(),
           ),
           constHeight30,
-          const Text("Chose your accent color"),
+          const Text("Chose your color"),
           constHeight20,
           Expanded(
             child: GridView.builder(

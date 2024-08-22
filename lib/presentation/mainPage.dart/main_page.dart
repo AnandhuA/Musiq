@@ -5,6 +5,7 @@ import 'package:musiq/main.dart';
 import 'package:musiq/presentation/screens/favoriteScreen/bloc/favorite_bloc.dart';
 import 'package:musiq/presentation/screens/favoriteScreen/favorite_screen.dart';
 import 'package:musiq/presentation/screens/homeScreen/home_screen.dart';
+import 'package:musiq/presentation/screens/homeScreen/suggestion/bloc/Trending/trending_cubit.dart';
 import 'package:musiq/presentation/screens/settingsScreen/ThemeCubit/theme_cubit.dart';
 import 'package:musiq/presentation/screens/homeScreen/suggestion/bloc/EngSong/english_song_suggestion_bloc.dart';
 import 'package:musiq/presentation/screens/homeScreen/suggestion/bloc/HindiSong/hindi_song_bloc.dart';
@@ -36,7 +37,7 @@ class MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
     //
-
+    context.read<TrendingCubit>().fetchTrendingSongs();
     context.read<MalSongsBloc>().add(MalSongsEvent());
     context.read<TamilSongBloc>().add(TamilSongEvent());
     context.read<HindiSongBloc>().add(HindiSongEvent());
@@ -45,6 +46,7 @@ class MainPageState extends State<MainPage> {
   }
 
   Future<void> _refreshData() async {
+    context.read<TrendingCubit>().fetchTrendingSongs();
     context.read<MalSongsBloc>().add(MalSongsEvent());
     context.read<TamilSongBloc>().add(TamilSongEvent());
     context.read<HindiSongBloc>().add(HindiSongEvent());
@@ -90,7 +92,7 @@ class MainPageState extends State<MainPage> {
             ],
             currentIndex: _selectedIndex,
             selectedItemColor:
-                accentColors[colorIndex], // Customize based on theme
+                accentColors[colorIndex], 
             onTap: _onItemTapped,
           ),
         );
