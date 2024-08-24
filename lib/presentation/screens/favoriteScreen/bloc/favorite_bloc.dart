@@ -14,6 +14,7 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
     on<FeatchFavoriteSongEvent>(_featchFavorite);
     on<AddFavoriteEvent>(_addFavorite);
     on<RemoveFavoriteEvent>(_removeFavorite);
+    on<SearchFavoriteEvent>(_searchFavorite);
   }
 
   FutureOr<void> _featchFavorite(
@@ -46,5 +47,19 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
       songID: event.song.id ?? "1",
     );
     emit(FeatchFavoriteSuccess(favorites: _favorites));
+  }
+
+  FutureOr<void> _searchFavorite(
+    SearchFavoriteEvent event,
+    Emitter<FavoriteState> emit,
+  ) {
+    emit(FavoriteLoading());
+
+    final query = event.query.toLowerCase();
+    final filteredFavorites = _favorites
+        .where((song) => song.name?.toLowerCase().contains(query) ?? false)
+        .toList();
+
+    emit(FeatchFavoriteSuccess(favorites: filteredFavorites));
   }
 }

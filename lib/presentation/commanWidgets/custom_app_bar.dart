@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:musiq/core/colors.dart';
+import 'package:musiq/main.dart';
 
 class CustomAppBar extends StatelessWidget {
   final String title;
@@ -29,6 +31,65 @@ class CustomAppBar extends StatelessWidget {
           ))
         ],
       ),
+    );
+  }
+}
+
+class SearchAppBar extends StatefulWidget implements PreferredSizeWidget {
+  const SearchAppBar({
+    super.key,
+    required this.title,
+    required this.searchController,
+    required this.onSearchChanged,
+  });
+
+  final String title;
+  final TextEditingController searchController;
+  final ValueChanged<String> onSearchChanged;
+
+  @override
+  SearchAppBarState createState() => SearchAppBarState();
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+}
+
+class SearchAppBarState extends State<SearchAppBar> {
+  bool _isSearching = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      title: _isSearching
+          ? TextField(
+              controller: widget.searchController,
+              decoration: const InputDecoration(
+                hintText: 'Search...',
+                border: InputBorder.none,
+              ),
+              autofocus: true,
+              onChanged: (value) {
+                widget.onSearchChanged(value);
+              },
+            )
+          : Text(widget.title),
+      actions: [
+        IconButton(
+          icon: Icon(
+            _isSearching ? Icons.close : Icons.search,
+            color: accentColors[colorIndex],
+          ),
+          onPressed: () {
+            setState(() {
+              _isSearching = !_isSearching;
+              if (!_isSearching) {
+                widget.searchController.clear();
+                widget.onSearchChanged(''); // Clear search when closing
+              }
+            });
+          },
+        ),
+      ],
     );
   }
 }

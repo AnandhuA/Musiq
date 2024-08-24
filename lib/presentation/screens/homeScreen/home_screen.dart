@@ -27,7 +27,7 @@ class HomeScreen extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(
             title: Text(
-              'Music Library',
+              'Music',
               style: TextStyle(
                 color: accentColors[colorIndex],
                 fontWeight: FontWeight.bold,

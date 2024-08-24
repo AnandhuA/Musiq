@@ -16,3 +16,9 @@ final class RemoveFavoriteEvent extends FavoriteEvent {
 
   RemoveFavoriteEvent({required this.song});
 }
+
+final class SearchFavoriteEvent extends FavoriteEvent {
+  final String query;
+
+  SearchFavoriteEvent({required this.query});
+}

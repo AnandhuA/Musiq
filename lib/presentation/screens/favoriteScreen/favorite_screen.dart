@@ -1,27 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/main.dart';
+import 'package:musiq/presentation/commanWidgets/custom_app_bar.dart';
 import 'package:musiq/presentation/commanWidgets/favorite_icon.dart';
 import 'package:musiq/presentation/screens/favoriteScreen/bloc/favorite_bloc.dart';
 import 'package:musiq/presentation/screens/loginScreen/login_screen.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 
 class FavoriteScreen extends StatelessWidget {
-  const FavoriteScreen({super.key});
+  FavoriteScreen({super.key});
+  final TextEditingController searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Favorite",
+      appBar: PreferredSize(
+        preferredSize: const Size(
+          double.infinity,
+          50,
+        ),
+        child: SearchAppBar(
+          title: "Favorite",
+          searchController: searchController,
+          onSearchChanged: (value) {
+            context.read<FavoriteBloc>().add(SearchFavoriteEvent(query: value));
+          },
         ),
       ),
       body: userIsLoggedIn == null
           ? Center(
               child: TextButton(
                 onPressed: () {
-                    Navigator.push(
+                  Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => LoginScreen(),
@@ -71,7 +81,8 @@ class FavoriteScreen extends StatelessWidget {
                                 ),
                               ),
                               title: Text(
-                                  state.favorites[index].name ?? "Unknown"),
+                                state.favorites[index].name ?? "Unknown",
+                              ),
                               subtitle: Text(state.favorites[index].album.name),
                             );
                           },
