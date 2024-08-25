@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,7 +16,6 @@ import 'package:musiq/core/firebase_options.dart';
 import 'package:musiq/presentation/screens/homeScreen/suggestion/bloc/HindiSong/hindi_song_bloc.dart';
 import 'package:musiq/presentation/screens/homeScreen/suggestion/bloc/MalayalamSongs/mal_songs_bloc.dart';
 import 'package:musiq/presentation/screens/homeScreen/suggestion/bloc/TamilSongs/tamil_song_bloc.dart';
-import 'package:musiq/data/shared_preference.dart';
 
 String? theme;
 int colorIndex = 0;
@@ -29,10 +27,6 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  theme = await SharedPreference.getTheme();
-  colorIndex = await SharedPreference.getAccentColorIndex() ?? 0;
-  lastplayed = await SharedPreference.getLastPlayedSong();
-  userIsLoggedIn = FirebaseAuth.instance.currentUser?.email;
 
   runApp(const MyApp());
 }

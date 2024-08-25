@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:musiq/core/sized.dart';
 import 'package:shimmer/shimmer.dart';
 
 class SuggetionShimmerWidget extends StatelessWidget {
@@ -16,7 +17,7 @@ class SuggetionShimmerWidget extends StatelessWidget {
             "   $title Songs",
             style: const TextStyle(fontSize: 20),
           ),
-          const SizedBox(height: 10),
+         constHeight10,
           Expanded(
             child: ListView.builder(
               scrollDirection: Axis.horizontal,

@@ -77,7 +77,7 @@ class SearchAppBarState extends State<SearchAppBar> {
         IconButton(
           icon: Icon(
             _isSearching ? Icons.close : Icons.search,
-            color: accentColors[colorIndex],
+            color: colorList[colorIndex],
           ),
           onPressed: () {
             setState(() {

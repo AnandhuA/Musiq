@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:musiq/core/colors.dart';
+import 'package:musiq/core/sized.dart';
 import 'package:musiq/main.dart';
 
 import 'package:musiq/models/song.dart';
@@ -25,10 +26,10 @@ class Suggestion extends StatelessWidget {
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w500,
-            color: accentColors[colorIndex],
+            color: colorList[colorIndex],
           ),
         ),
-        const SizedBox(height: 10),
+        constHeight10,
         SizedBox(
           height: 200,
           child: ListView.builder(

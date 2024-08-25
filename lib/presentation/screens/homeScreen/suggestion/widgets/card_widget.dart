@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:musiq/core/sized.dart';
 import 'package:musiq/models/song.dart';
 
 class CardWidget extends StatelessWidget {
@@ -16,11 +17,11 @@ class CardWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
               child: Image.network(
                 song.image.last.url,
-                fit: BoxFit.fitWidth,
+                fit: BoxFit.contain,
               ),
             ),
           ),
-          const SizedBox(height: 8),
+          constWidth10,
           Text(
             song.name ?? "no name",
             style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),

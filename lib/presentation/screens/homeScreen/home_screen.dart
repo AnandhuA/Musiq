@@ -13,7 +13,6 @@ import 'package:musiq/presentation/screens/homeScreen/suggestion/bloc/EngSong/en
 import 'package:musiq/presentation/screens/homeScreen/suggestion/bloc/HindiSong/hindi_song_bloc.dart';
 import 'package:musiq/presentation/screens/homeScreen/suggestion/bloc/MalayalamSongs/mal_songs_bloc.dart';
 import 'package:musiq/presentation/screens/homeScreen/suggestion/bloc/TamilSongs/tamil_song_bloc.dart';
-
 import 'package:musiq/presentation/screens/homeScreen/suggestion/suggestion.dart';
 import 'package:musiq/presentation/screens/homeScreen/suggestion/widgets/shimmer_widget.dart';
 
@@ -29,7 +28,7 @@ class HomeScreen extends StatelessWidget {
             title: Text(
               'Music',
               style: TextStyle(
-                color: accentColors[colorIndex],
+                color: colorList[colorIndex],
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -56,7 +55,7 @@ class HomeScreen extends StatelessWidget {
                         hintText: "Search",
                         icon: Icon(
                           Icons.search,
-                          color: accentColors[colorIndex],
+                          color: colorList[colorIndex],
                         ),
                       ),
                     ),
@@ -65,21 +64,23 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
           ),
-          drawer: const DrawerWidget(),
+          drawer: isMobile(context)
+              ? const DrawerWidget()
+              : null, // Use isMobile function
           body: SingleChildScrollView(
             child: Column(
               children: [
                 constHeight20,
-                //--------------Ternding-------------------------
+                //--------------Trending-------------------------
                 BlocBuilder<TrendingCubit, TrendingState>(
                   builder: (context, state) {
                     if (state is TrendingLoading) {
                       return const SuggetionShimmerWidget(
-                        title: "Ternding",
+                        title: "Trending",
                       );
                     } else if (state is TrendingLoaded) {
                       return Suggestion(
-                        title: "Ternding",
+                        title: "Trending",
                         suggetionSongs: state.songs,
                       );
                     } else {
@@ -95,7 +96,7 @@ class HomeScreen extends StatelessWidget {
                             child: Text(
                               "Retry",
                               style: TextStyle(
-                                color: accentColors[colorIndex],
+                                color: colorList[colorIndex],
                               ),
                             ),
                           ),
@@ -105,7 +106,7 @@ class HomeScreen extends StatelessWidget {
                   },
                 ),
                 constHeight20,
-                //---------------malayalam-------------------------
+                //---------------Malayalam-------------------------
                 BlocBuilder<MalSongsBloc, MalSongsState>(
                   builder: (context, state) {
                     if (state is MalSongsLoaded) {
@@ -128,7 +129,7 @@ class HomeScreen extends StatelessWidget {
                             child: Text(
                               "Retry",
                               style: TextStyle(
-                                color: accentColors[colorIndex],
+                                color: colorList[colorIndex],
                               ),
                             ),
                           ),
@@ -163,7 +164,7 @@ class HomeScreen extends StatelessWidget {
                             child: Text(
                               "Retry",
                               style: TextStyle(
-                                color: accentColors[colorIndex],
+                                color: colorList[colorIndex],
                               ),
                             ),
                           ),
@@ -198,7 +199,7 @@ class HomeScreen extends StatelessWidget {
                             child: Text(
                               "Retry",
                               style: TextStyle(
-                                color: accentColors[colorIndex],
+                                color: colorList[colorIndex],
                               ),
                             ),
                           ),
@@ -234,7 +235,7 @@ class HomeScreen extends StatelessWidget {
                             child: Text(
                               "Retry",
                               style: TextStyle(
-                                color: accentColors[colorIndex],
+                                color: colorList[colorIndex],
                               ),
                             ),
                           ),

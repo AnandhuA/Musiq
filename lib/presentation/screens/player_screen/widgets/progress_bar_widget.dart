@@ -30,8 +30,8 @@ class ProgressBarWidget extends StatelessWidget {
       onSeek: (duration) {
         _audioPlayer.seek(duration);
       },
-      progressBarColor: accentColors[colorIndex],
-      thumbColor: accentColors[colorIndex],
+      progressBarColor: colorList[colorIndex],
+      thumbColor: colorList[colorIndex],
     );
   }
 }

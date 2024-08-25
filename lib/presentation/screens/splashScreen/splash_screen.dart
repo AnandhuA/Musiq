@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:musiq/data/shared_preference.dart';
+import 'package:musiq/main.dart';
 
 import 'package:musiq/presentation/mainPage.dart/main_page.dart';
 
@@ -29,13 +32,17 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void _startApp() async {
-    await Future.delayed(const Duration(seconds: 2));
-    // final firebaseAuth = FirebaseAuth.instance;
+    theme = await SharedPreference.getTheme();
+    colorIndex = await SharedPreference.getAccentColorIndex() ?? 0;
+    lastplayed = await SharedPreference.getLastPlayedSong();
+    userIsLoggedIn = FirebaseAuth.instance.currentUser?.email;
+    if (!mounted) return;
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (context) => const MainPage(),
       ),
     );
+
     // if (firebaseAuth.currentUser == null) {
     //   Navigator.of(context).pushReplacement(MaterialPageRoute(
     //     builder: (context) => LoginScreen(),

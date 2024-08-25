@@ -97,7 +97,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
                 mainAxisSpacing: 12.0,
                 crossAxisSpacing: 8.0,
               ),
-              itemCount: accentColors.length,
+              itemCount: colorList.length,
               itemBuilder: (context, index) {
                 return InkWell(
                   onTap: () {
@@ -110,7 +110,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
                     context.read<ThemeCubit>().chanheTheme(theme: theme);
                   },
                   child: CircleAvatar(
-                    backgroundColor: accentColors[index],
+                    backgroundColor: colorList[index],
                     child: colorIndex == index
                         ? const Icon(
                             Icons.check,

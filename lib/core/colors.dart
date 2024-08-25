@@ -7,8 +7,10 @@ const Color yellow = Colors.yellow;
 const Color purple = Colors.purple;
 const Color orange = Colors.orange;
 const Color pink = Colors.pink;
+const Color black = Colors.black;
+const Color white = Colors.white;
 
-const List<Color> accentColors = [
+const List<Color> colorList = [
   Colors.red,
   Colors.redAccent,
   Color(0xFFFFC0C0),

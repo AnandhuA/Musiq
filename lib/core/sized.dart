@@ -1,5 +1,22 @@
 import 'package:flutter/material.dart';
 
+
+class ScreenBreakpoints {
+  static const double mobile = 600;
+  static const double tablet = 1024;
+}
+
+bool isMobile(BuildContext context) =>
+    MediaQuery.of(context).size.width < ScreenBreakpoints.mobile;
+
+bool isTablet(BuildContext context) =>
+    MediaQuery.of(context).size.width >= ScreenBreakpoints.mobile &&
+    MediaQuery.of(context).size.width < ScreenBreakpoints.tablet;
+
+bool isDesktop(BuildContext context) =>
+    MediaQuery.of(context).size.width >= ScreenBreakpoints.tablet;
+
+
 //----------------height--------------
 const constHeight3 = SizedBox(height: 3);
 const constHeight5 = SizedBox(height: 5);
