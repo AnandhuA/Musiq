@@ -33,7 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void _startApp() async {
     theme = await SharedPreference.getTheme();
-    colorIndex = await SharedPreference.getAccentColorIndex() ?? 0;
+    colorIndex = await SharedPreference.getColorIndex() ?? 0;
     lastplayed = await SharedPreference.getLastPlayedSong();
     userIsLoggedIn = FirebaseAuth.instance.currentUser?.email;
     if (!mounted) return;

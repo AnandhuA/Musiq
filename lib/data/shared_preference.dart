@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreference {
   static const String themeKey = "THEME_KEY";
-  static const String accentColor = "ACCENT_COLOR_KEY";
+  static const String color = "COLOR_KEY";
   static const String currentSongKey = "CURRENT_SONG_KEY";
 
   static setTheme({required String theme}) async {
@@ -19,14 +19,14 @@ class SharedPreference {
     return theme;
   }
 
-  static setAccentColorIndex({required int accentColorIndex}) async {
+  static setColorIndex({required int colorIndex}) async {
     final sharedPref = await SharedPreferences.getInstance();
-    await sharedPref.setInt(accentColor, accentColorIndex);
+    await sharedPref.setInt(color, colorIndex);
   }
 
-  static Future<int?> getAccentColorIndex() async {
+  static Future<int?> getColorIndex() async {
     final sharedPref = await SharedPreferences.getInstance();
-    final index = sharedPref.getInt(accentColor);
+    final index = sharedPref.getInt(color);
     return index;
   }
 

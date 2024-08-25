@@ -101,8 +101,8 @@ class _ThemeScreenState extends State<ThemeScreen> {
               itemBuilder: (context, index) {
                 return InkWell(
                   onTap: () {
-                    SharedPreference.setAccentColorIndex(
-                      accentColorIndex: index,
+                    SharedPreference.setColorIndex(
+                      colorIndex: index,
                     );
                     setState(() {
                       colorIndex = index;
