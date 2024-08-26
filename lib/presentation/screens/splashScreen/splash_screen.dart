@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -36,11 +38,13 @@ class _SplashScreenState extends State<SplashScreen> {
     colorIndex = await SharedPreference.getColorIndex() ?? 0;
     lastplayed = await SharedPreference.getLastPlayedSong();
     userIsLoggedIn = FirebaseAuth.instance.currentUser?.email;
+    log("splash");
     if (!mounted) return;
-    Navigator.of(context).pushReplacement(
+    Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
         builder: (context) => const MainPage(),
       ),
+      (route) => false,
     );
 
     // if (firebaseAuth.currentUser == null) {

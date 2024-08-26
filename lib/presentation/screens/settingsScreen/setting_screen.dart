@@ -6,6 +6,7 @@ import 'package:lottie/lottie.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/main.dart';
 import 'package:musiq/presentation/commanWidgets/confirmation_diloge.dart';
+import 'package:musiq/presentation/screens/loginScreen/login_screen.dart';
 import 'package:musiq/presentation/screens/settingsScreen/theme_screen.dart';
 import 'package:musiq/presentation/screens/settingsScreen/widgets/list_tile_widget.dart';
 import 'package:musiq/presentation/screens/splashScreen/splash_screen.dart';
@@ -52,32 +53,47 @@ class SettingsScreen extends StatelessWidget {
             },
           ),
           constHeight20,
-          ListTileWidget(
-            icon: const Icon(
-              Icons.login_outlined,
-              color: Colors.red,
-            ),
-            logout: true,
-            title: "Log out",
-            onTap: () {
-              confirmationDiloge(
-                context: context,
-                title: "Logout Confirmation",
-                confirmBtn: () async {
-                  await FirebaseAuth.instance.signOut();
-                  userIsLoggedIn = null;
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const SplashScreen(),
-                    ),
-                    (route) => false,
-                  );
-                },
-                content: "Are you sure you want to logout?",
-              );
-            },
-          ),
+          userIsLoggedIn != null
+              ? ListTileWidget(
+                  icon: const Icon(
+                    Icons.login_outlined,
+                    color: Colors.red,
+                  ),
+                  logout: true,
+                  title: "Log out",
+                  onTap: () {
+                    confirmationDiloge(
+                      context: context,
+                      title: "Logout Confirmation",
+                      confirmBtn: () async {
+                        await FirebaseAuth.instance.signOut();
+                        userIsLoggedIn = null;
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SplashScreen(),
+                          ),
+                          (route) => false,
+                        );
+                      },
+                      content: "Are you sure you want to logout?",
+                    );
+                  },
+                )
+              : ListTileWidget(
+                  icon: const Icon(
+                    Icons.login_outlined,
+                    color: Colors.green,
+                  ),
+                  title: "Log In",
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LoginScreen(),
+                        ));
+                  },
+                ),
           const Spacer(),
           Text(
             "v1.0",
