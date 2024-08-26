@@ -309,11 +309,28 @@ class _PlayerScreenState extends State<PlayerScreen> {
               Container(
                 width: sidebarWidth,
                 color: Colors.transparent,
-                child: ListView.builder(
-                  controller: _scrollController,
-                  itemCount: widget.songs.length,
-                  itemBuilder: (context, index) {
+                child: ReorderableListView(
+                  onReorder: (oldIndex, newIndex) {
+                    setState(() {
+                      if (newIndex > oldIndex) {
+                        newIndex -= 1;
+                      }
+                      final moveSong = widget.songs.removeAt(oldIndex);
+                      widget.songs.insert(newIndex, moveSong);
+                      if (_currentIndex == oldIndex) {
+                        _currentIndex = newIndex;
+                      } else if (_currentIndex > oldIndex &&
+                          _currentIndex <= newIndex) {
+                        _currentIndex--;
+                      } else if (_currentIndex < oldIndex &&
+                          _currentIndex >= newIndex) {
+                        _currentIndex++;
+                      }
+                    });
+                  },
+                  children: List.generate(widget.songs.length, (index) {
                     return ListTile(
+                      key: ValueKey(widget.songs[index].id),
                       onTap: () {
                         if (index != _currentIndex) {
                           _audioPlayer.stop();
@@ -334,7 +351,8 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                           Brightness.dark
                                       ? "assets/animations/musicPlaying_light.json"
                                       : "assets/animations/musicPlaying_dark.json",
-                                )
+                                  height: 50,
+                                  width: 50)
                               : const SizedBox(),
                           FavoriteIcon(
                             song: widget.songs[index],
@@ -358,9 +376,9 @@ class _PlayerScreenState extends State<PlayerScreen> {
                       ),
                       subtitle: Text(widget.songs[index].album.name),
                     );
-                  },
+                  }),
                 ),
-              ),
+              )
           ],
         ),
       ),
