@@ -3,12 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:musiq/data/shared_preference.dart';
 import 'package:musiq/main.dart';
+import 'package:musiq/models/song_model.dart';
 import 'package:musiq/presentation/screens/player_screen/cubit/PlayAndPause/play_and_pause_cubit.dart';
-import 'package:musiq/models/song.dart';
 import 'package:musiq/presentation/screens/player_screen/cubit/ProgressBar/progress_bar_cubit.dart';
 
 class BottomPlayerBar extends StatefulWidget {
-  final Song song;
+  final SongModel song;
   const BottomPlayerBar({super.key, required this.song});
 
   @override
@@ -26,7 +26,7 @@ class _BottomPlayerBarState extends State<BottomPlayerBar> {
     SharedPreference.lastPlayedSong(widget.song);
     _audioPlayer = AudioPlayer();
 
-    _audioPlayer.setSource(UrlSource(widget.song.downloadUrl.last.url)).then(
+    _audioPlayer.setSource(UrlSource(widget.song.url)).then(
       (_) {
         _audioPlayer.getDuration().then(
               (duration) {},
@@ -34,7 +34,7 @@ class _BottomPlayerBarState extends State<BottomPlayerBar> {
         if (!_hasPlayed) {
           _audioPlayer.play(
             UrlSource(
-              widget.song.downloadUrl.last.url,
+              widget.song.url,
             ),
           );
           setState(() {
@@ -79,7 +79,7 @@ class _BottomPlayerBarState extends State<BottomPlayerBar> {
           ClipRRect(
             borderRadius: BorderRadius.circular(5),
             child: Image.network(
-              widget.song.image.first.url,
+              widget.song.imageUrl,
             ),
           ),
           const SizedBox(width: 10),
@@ -88,7 +88,7 @@ class _BottomPlayerBarState extends State<BottomPlayerBar> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  widget.song.name ?? "No name",
+                  widget.song.title,
                   maxLines: 1,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
@@ -96,7 +96,7 @@ class _BottomPlayerBarState extends State<BottomPlayerBar> {
                   overflow: TextOverflow.ellipsis,
                 ),
                 Text(
-                  widget.song.album.name,
+                  widget.song.album,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),

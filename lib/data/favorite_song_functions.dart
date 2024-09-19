@@ -1,12 +1,12 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:musiq/models/song.dart';
+import 'package:musiq/models/song_model.dart';
 
 class FavoriteSongRepo {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
   static final FirebaseFirestore firestore = FirebaseFirestore.instance;
-  static Future<String> addFavorite({required Song song}) async {
+  static Future<String> addFavorite({required SongModel song}) async {
     try {
       if (_auth.currentUser?.email != null) {
         final userId = _auth.currentUser!.email;
@@ -51,8 +51,8 @@ class FavoriteSongRepo {
     }
   }
 
-  static Future<List<Song>> fetchFavorites() async {
-    List<Song> favoriteSongs = [];
+  static Future<List<SongModel>> fetchFavorites() async {
+    List<SongModel> favoriteSongs = [];
     try {
       if (_auth.currentUser?.email != null) {
         final userId = _auth.currentUser!.email;
@@ -62,7 +62,7 @@ class FavoriteSongRepo {
 
         QuerySnapshot querySnapshot = await favoriteCollection.get();
         for (var doc in querySnapshot.docs) {
-          favoriteSongs.add(Song.fromJson(doc.data() as Map<String, dynamic>));
+          favoriteSongs.add(SongModel.fromJson(doc.data() as Map<String, dynamic>));
         }
       }
     } catch (e) {

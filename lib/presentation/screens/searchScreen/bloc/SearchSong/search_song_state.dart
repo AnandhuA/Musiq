@@ -8,7 +8,7 @@ final class SearchSongInitial extends SearchSongState {}
 final class SearchSongLoading extends SearchSongState {}
 
 final class SearchSongSuccess extends SearchSongState {
-  final List<Song> searchResult;
+  final SearchModel searchResult;
 
   SearchSongSuccess({required this.searchResult});
 }

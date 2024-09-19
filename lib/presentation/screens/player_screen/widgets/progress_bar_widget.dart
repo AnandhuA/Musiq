@@ -2,7 +2,7 @@ import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:musiq/core/colors.dart';
-import 'package:musiq/models/song.dart';
+import 'package:musiq/models/song_model.dart';
 
 class ProgressBarWidget extends StatelessWidget {
   const ProgressBarWidget(
@@ -12,7 +12,7 @@ class ProgressBarWidget extends StatelessWidget {
       required this.progressDuration})
       : _audioPlayer = audioPlayer;
 
-  final Song song;
+  final SongModel song;
   final AudioPlayer _audioPlayer;
   final Duration progressDuration;
 
@@ -26,7 +26,7 @@ class ProgressBarWidget extends StatelessWidget {
       buffered: progressDuration + const Duration(seconds: 30),
       bufferedBarColor: Colors.grey,
       timeLabelType: TimeLabelType.totalTime,
-      total: Duration(seconds: song.duration ?? 00),
+      total: Duration(seconds: song.duration),
       thumbColor: white,
       progressBarColor: white,
       onSeek: (duration) {

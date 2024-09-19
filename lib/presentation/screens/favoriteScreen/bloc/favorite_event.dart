@@ -6,13 +6,13 @@ sealed class FavoriteEvent {}
 final class FeatchFavoriteSongEvent extends FavoriteEvent {}
 
 final class AddFavoriteEvent extends FavoriteEvent {
-  final Song song;
+  final SongModel song;
 
   AddFavoriteEvent({required this.song});
 }
 
 final class RemoveFavoriteEvent extends FavoriteEvent {
-  final Song song;
+  final SongModel song;
 
   RemoveFavoriteEvent({required this.song});
 }

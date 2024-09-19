@@ -1,0 +1,261 @@
+{
+    "albums": {
+        "data": [
+            {
+                "id": "57019500",
+                "title": "Stree 2",
+                "image": "https:\/\/c.saavncdn.com\/373\/Stree-2-Hindi-2024-20240828083834-50x50.jpg",
+                "music": "Sachin-Jigar, Amitabh Bhattacharya",
+                "url": "https:\/\/www.jiosaavn.com\/album\/stree-2\/VCjKuSJcwxs_",
+                "type": "album",
+                "description": "2024 \u00b7 Hindi Film \u00b7 Sachin-Jigar, Amitabh Bhattacharya",
+                "ctr": 76126,
+                "position": 1,
+                "more_info": {
+                    "year": "2024",
+                    "is_movie": "1",
+                    "language": "hindi",
+                    "song_pids": "3r4R_yeL, Q6l0a09y, OLR5vaQP, ZsGGaRro"
+                }
+            },
+            {
+                "id": "56856178",
+                "title": "Chuttamalle (From \"Devara Part 1\")",
+                "image": "https:\/\/c.saavncdn.com\/411\/Chuttamalle-From-Devara-Part-1-Telugu-2024-20240805181008-50x50.jpg",
+                "music": "Anirudh Ravichander, Shilpa Rao, Ramajogayya Sastry",
+                "url": "https:\/\/www.jiosaavn.com\/album\/chuttamalle-from-devara-part-1\/,WpdR0Vw4A0_",
+                "type": "album",
+                "description": "2024 \u00b7 Telugu Album \u00b7 Anirudh Ravichander, Shilpa Rao, Ramajogayya Sastry",
+                "ctr": 51428,
+                "position": 2,
+                "more_info": {
+                    "year": "2024",
+                    "is_movie": "",
+                    "language": "telugu",
+                    "song_pids": "Evs3gawd"
+                }
+            },
+            {
+                "id": "49021683",
+                "title": "Tu hai kahan",
+                "image": "https:\/\/c.saavncdn.com\/397\/Tu-hai-kahan-Hindi-2023-20231016122634-50x50.jpg",
+                "music": "AUR",
+                "url": "https:\/\/www.jiosaavn.com\/album\/tu-hai-kahan\/UJia9ruIVF0_",
+                "type": "album",
+                "description": "2023 \u00b7 Hindi Album \u00b7 AUR",
+                "ctr": 8836,
+                "position": 3,
+                "more_info": {
+                    "year": "2023",
+                    "is_movie": "",
+                    "language": "hindi",
+                    "song_pids": "inYsaOZR"
+                }
+            }
+        ],
+        "position": 2
+    },
+    "songs": {
+        "data": [
+            {
+                "id": "Q6l0a09y",
+                "title": "Aaj Ki Raat",
+                "image": "https:\/\/c.saavncdn.com\/373\/Stree-2-Hindi-2024-20240828083834-50x50.jpg",
+                "album": "Stree 2",
+                "url": "https:\/\/www.jiosaavn.com\/song\/aaj-ki-raat\/IV4HARUADko",
+                "type": "song",
+                "description": "Stree 2 \u00b7 Amitabh Bhattacharya, Sachin-Jigar, Madhubanti Bagchi, Divya Kumar",
+                "ctr": 69598,
+                "position": 1,
+                "more_info": {
+                    "vcode": "010910082530177",
+                    "vlink": "https:\/\/jiotunepreview.jio.com\/content\/Converted\/010910082489976.mp3",
+                    "primary_artists": "Amitabh Bhattacharya, Sachin-Jigar, Madhubanti Bagchi, Divya Kumar",
+                    "singers": "",
+                    "video_available": null,
+                    "triller_available": false,
+                    "language": "hindi"
+                }
+            },
+            {
+                "id": "ZsGGaRro",
+                "title": "Aayi Nai",
+                "image": "https:\/\/c.saavncdn.com\/373\/Stree-2-Hindi-2024-20240828083834-50x50.jpg",
+                "album": "Stree 2",
+                "url": "https:\/\/www.jiosaavn.com\/song\/aayi-nai\/KhssdhViRVw",
+                "type": "song",
+                "description": "Stree 2 \u00b7 Amitabh Bhattacharya, Sachin-Jigar, Pawan Singh, Simran Choudhary, Divya Kumar",
+                "ctr": 24844,
+                "position": 2,
+                "more_info": {
+                    "vcode": "010910082552263",
+                    "vlink": "https:\/\/jiotunepreview.jio.com\/content\/Converted\/010910082508700.mp3",
+                    "primary_artists": "Amitabh Bhattacharya, Sachin-Jigar, Pawan Singh, Simran Choudhary, Divya Kumar",
+                    "singers": "",
+                    "video_available": null,
+                    "triller_available": false,
+                    "language": "hindi"
+                }
+            },
+            {
+                "id": "3r4R_yeL",
+                "title": "Tumhare Hi Rahenge Hum",
+                "image": "https:\/\/c.saavncdn.com\/373\/Stree-2-Hindi-2024-20240828083834-50x50.jpg",
+                "album": "Stree 2",
+                "url": "https:\/\/www.jiosaavn.com\/song\/tumhare-hi-rahenge-hum\/QxpfYytJUn8",
+                "type": "song",
+                "description": "Stree 2 \u00b7 Amitabh Bhattacharya, Sachin-Jigar, Varun Jain, Shilpa Rao",
+                "ctr": 20591,
+                "position": 3,
+                "more_info": {
+                    "vcode": "010910082558315",
+                    "vlink": "https:\/\/jiotunepreview.jio.com\/content\/Converted\/010910082512957.mp3",
+                    "primary_artists": "Amitabh Bhattacharya, Sachin-Jigar, Varun Jain, Shilpa Rao",
+                    "singers": "",
+                    "video_available": null,
+                    "triller_available": false,
+                    "language": "hindi"
+                }
+            }
+        ],
+        "position": 3
+    },
+    "playlists": {
+        "data": [
+            {
+                "id": "110858205",
+                "title": "Trending Today",
+                "image": "https:\/\/c.saavncdn.com\/editorial\/charts_TrendingToday_134351_20230826113717_50x50.jpg",
+                "extra": "Saavn",
+                "url": "https:\/\/www.jiosaavn.com\/featured\/trending-today\/I3kvhipIy73uCJW60TJk1Q__",
+                "language": "english",
+                "type": "playlist",
+                "description": "Chart",
+                "position": 1,
+                "more_info": null
+            },
+            {
+                "id": "6689255",
+                "title": "Taaza Tunes",
+                "image": "https:\/\/c.saavncdn.com\/editorial\/TaazaTunes_20240917110702_50x50.jpg",
+                "extra": "Saavn",
+                "url": "https:\/\/www.jiosaavn.com\/featured\/taaza-tunes\/Me5RridRfDk_",
+                "language": "hindi",
+                "type": "playlist",
+                "description": "Saavn Editor",
+                "position": 2,
+                "more_info": null
+            },
+            {
+                "id": "49",
+                "title": "Dumdaar Hits",
+                "image": "https:\/\/c.saavncdn.com\/editorial\/DumdaarHits_20240918030959_50x50.jpg",
+                "extra": "Saavn",
+                "url": "https:\/\/www.jiosaavn.com\/featured\/dumdaar-hits\/8MT-LQlP35c_",
+                "language": "hindi",
+                "type": "playlist",
+                "description": "Chart",
+                "position": 3,
+                "more_info": null
+            }
+        ],
+        "position": 1
+    },
+    "artists": {
+        "data": [
+            {
+                "id": "459320",
+                "title": "Arijit Singh",
+                "image": "https:\/\/c.saavncdn.com\/artists\/Arijit_Singh_002_20230323062147_50x50.jpg",
+                "extra": "primary",
+                "url": "https:\/\/www.jiosaavn.com\/artist\/arijit-singh-songs\/LlRWpHzy3Hk_",
+                "type": "artist",
+                "description": "Primary",
+                "ctr": 65711,
+                "entity": 1,
+                "position": 1
+            },
+            {
+                "id": "455120",
+                "title": "Alka Yagnik",
+                "image": "https:\/\/c.saavncdn.com\/artists\/Alka_Yagnik_002_20220314192930_50x50.jpg",
+                "extra": "singer",
+                "url": "https:\/\/www.jiosaavn.com\/artist\/alka-yagnik-songs\/uqRkqsl4ZnQ_",
+                "type": "artist",
+                "description": "Singer",
+                "ctr": 5696,
+                "entity": 1,
+                "position": 2
+            },
+            {
+                "id": "456323",
+                "title": "Pritam",
+                "image": "https:\/\/c.saavncdn.com\/artists\/Pritam_Chakraborty-20170711073326_50x50.jpg",
+                "extra": "music director",
+                "url": "https:\/\/www.jiosaavn.com\/artist\/pritam-songs\/OaFg9HPZgq8_",
+                "type": "artist",
+                "description": "Music director",
+                "ctr": 1435,
+                "entity": 1,
+                "position": 3
+            }
+        ],
+        "position": 4
+    },
+    "topquery": {
+        "data": [
+            {
+                "id": "110858205",
+                "title": "Trending Today",
+                "image": "https:\/\/c.saavncdn.com\/editorial\/charts_TrendingToday_134351_20230826113717_50x50.jpg",
+                "extra": "Saavn",
+                "url": "https:\/\/www.jiosaavn.com\/featured\/trending-today\/I3kvhipIy73uCJW60TJk1Q__",
+                "language": "english",
+                "type": "playlist",
+                "description": "",
+                "position": 1,
+                "more_info": null
+            }
+        ],
+        "position": 0
+    },
+    "shows": {
+        "data": [
+            {
+                "id": "54987",
+                "title": "Recensiamo On Twitch: Reaction new songs",
+                "image": "https:\/\/c.sop.saavncdn.com\/Recensiamo-On-Twitch-Reaction-new-songs-20221007162823-500x500.jpg",
+                "type": "show",
+                "season_number": 2,
+                "description": "Season 2",
+                "url": "https:\/\/www.jiosaavn.com\/shows\/recensiamo-on-twitch-reaction-new-songs\/2\/jIpcF5aNBVM_",
+                "position": 1
+            },
+            {
+                "id": "51621",
+                "title": "Rap Tape #37 | New Hip Hop Rap Songs",
+                "image": "https:\/\/c.sop.saavncdn.com\/Rap-Tape-37-New-Hip-Hop-Rap-Songs-20201217145450-500x500.jpg",
+                "type": "show",
+                "season_number": 1,
+                "description": "Season 1",
+                "url": "https:\/\/www.jiosaavn.com\/shows\/rap-tape-37-%7c-new-hip-hop-rap-songs\/1\/FP7BYL5Ods4_",
+                "position": 2
+            },
+            {
+                "id": "228263",
+                "title": "2021 Songs - Listen to best musics list",
+                "image": "https:\/\/c.sop.saavncdn.com\/2021-Songs-Listen-to-best-musics-list-20220811030820-500x500.jpg",
+                "type": "show",
+                "season_number": 3,
+                "description": "Season 3",
+                "url": "https:\/\/www.jiosaavn.com\/shows\/2021-songs-listen-to-best-musics-list\/3\/W4Q0ZNVsEM4_",
+                "position": 3
+            }
+        ],
+        "position": 5
+    },
+    "episodes": {
+        "data": [],
+        "position": 6
+    }
+}

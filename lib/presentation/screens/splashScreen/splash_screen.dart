@@ -34,6 +34,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void _startApp() async {
+    // await SharedPreference.clearAllPreferences();
     theme = await SharedPreference.getTheme();
     colorIndex = await SharedPreference.getColorIndex() ?? 0;
     lastplayed = await SharedPreference.getLastPlayedSong();

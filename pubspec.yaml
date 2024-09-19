@@ -52,6 +52,8 @@ dependencies:
   cloud_firestore: ^5.1.0
   url_launcher: ^6.3.0
   url_launcher_windows: ^3.1.2
+  html: ^0.15.4
+  encrypt: ^5.0.3
   
 
 dev_dependencies:

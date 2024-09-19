@@ -5,9 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:musiq/core/sized.dart';
-import 'package:musiq/data/shared_preference.dart';
-import 'package:musiq/main.dart';
-import 'package:musiq/models/song.dart';
+import 'package:musiq/models/song_model.dart';
 import 'package:musiq/presentation/commanWidgets/custom_app_bar.dart';
 import 'package:musiq/presentation/commanWidgets/favorite_icon.dart';
 import 'package:musiq/presentation/screens/player_screen/cubit/PlayAndPause/play_and_pause_cubit.dart';
@@ -15,7 +13,7 @@ import 'package:musiq/presentation/screens/player_screen/cubit/ProgressBar/progr
 import 'package:musiq/presentation/screens/player_screen/widgets/progress_bar_widget.dart';
 
 class PlayerScreen extends StatefulWidget {
-  final List<Song> songs;
+  final List<SongModel> songs;
   final int initialIndex;
 
   const PlayerScreen({super.key, required this.songs, this.initialIndex = 0});
@@ -31,7 +29,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
 
   bool _hasPlayed = false;
 
-  Song get currentSong => widget.songs[_currentIndex];
+  SongModel get currentSong => widget.songs[_currentIndex];
 
   @override
   void initState() {
@@ -47,17 +45,17 @@ class _PlayerScreenState extends State<PlayerScreen> {
   void _initializePlayer() {
     context.read<PlayAndPauseCubit>().reset();
     context.read<ProgressBarCubit>().reset();
-    lastplayed = currentSong;
-    SharedPreference.lastPlayedSong(currentSong);
+    // lastplayed = currentSong;
+    // SharedPreference.lastPlayedSong(currentSong);
     _audioPlayer = AudioPlayer();
 
-    _audioPlayer.setSource(UrlSource(currentSong.downloadUrl.last.url)).then(
+    _audioPlayer.setSource(UrlSource(currentSong.url)).then(
       (_) {
         _audioPlayer.getDuration().then(
               (duration) {},
             );
         if (!_hasPlayed) {
-          _audioPlayer.play(UrlSource(currentSong.downloadUrl.last.url));
+          _audioPlayer.play(UrlSource(currentSong.url));
           setState(() {
             _hasPlayed = true;
           });
@@ -160,7 +158,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                 height: double.infinity,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: NetworkImage(currentSong.image.first.url),
+                    image: NetworkImage(currentSong.imageUrl),
                     alignment: isMobile(context)
                         ? const Alignment(1, -2)
                         : const Alignment(1, 20),
@@ -179,7 +177,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                       child: Column(
                         children: [
                           CustomAppBar(
-                            title: currentSong.album.name,
+                            title: currentSong.album,
                           ),
                           constHeight30,
                           Container(
@@ -189,7 +187,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                 EdgeInsets.all(isMobile(context) ? 20 : 100),
                             decoration: BoxDecoration(
                               image: DecorationImage(
-                                image: NetworkImage(currentSong.image.last.url),
+                                image: NetworkImage(currentSong.imageUrl),
                                 fit: BoxFit.fill,
                               ),
                               borderRadius: BorderRadius.circular(
@@ -198,7 +196,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                           ),
                           SizedBox(height: isMobile(context) ? 50 : 20),
                           Text(
-                            currentSong.name ?? "no name",
+                            currentSong.title,
                             style: TextStyle(
                               fontSize: isMobile(context) ? 35 : 50,
                             ),
@@ -208,9 +206,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                           ),
                           SizedBox(height: isMobile(context) ? 15 : 10),
                           Text(
-                            currentSong.artists.all
-                                .map((artist) => artist.name)
-                                .join(' | '),
+                            currentSong.subtitle,
                             maxLines: 1,
                             overflow: TextOverflow.fade,
                             softWrap: false,
@@ -364,7 +360,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                         decoration: BoxDecoration(
                           image: DecorationImage(
                             image: NetworkImage(
-                              widget.songs[index].image.first.url,
+                              widget.songs[index].imageUrl,
                             ),
                             fit: BoxFit.fill,
                           ),
@@ -372,9 +368,9 @@ class _PlayerScreenState extends State<PlayerScreen> {
                         ),
                       ),
                       title: Text(
-                        widget.songs[index].name ?? "Unknown",
+                        widget.songs[index].title,
                       ),
-                      subtitle: Text(widget.songs[index].album.name),
+                      subtitle: Text(widget.songs[index].subtitle),
                     );
                   }),
                 ),

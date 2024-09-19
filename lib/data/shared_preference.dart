@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:musiq/models/song.dart';
+import 'package:musiq/models/song_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreference {
@@ -30,18 +30,22 @@ class SharedPreference {
     return index;
   }
 
-  static Future<void> lastPlayedSong(Song song) async {
+  static Future<void> lastPlayedSong(SongModel song) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String songJson = jsonEncode(song.toJson());
     await prefs.setString(currentSongKey, songJson);
   }
 
-  static Future<Song?> getLastPlayedSong() async {
+  static Future<SongModel?> getLastPlayedSong() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? songJson = prefs.getString(currentSongKey);
     if (songJson != null) {
-      return Song.fromJson(jsonDecode(songJson));
+      return SongModel.fromJson(jsonDecode(songJson));
     }
     return null;
+  }
+  static Future<void> clearAllPreferences() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.clear(); // This removes all the stored preferences
   }
 }

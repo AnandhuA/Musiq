@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
@@ -5,16 +7,12 @@ import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/main.dart';
 import 'package:musiq/presentation/commanWidgets/textfeild.dart';
-import 'package:musiq/presentation/screens/homeScreen/suggestion/bloc/Trending/trending_cubit.dart';
+import 'package:musiq/bloc/home_screen_cubit/home_screen_cubit.dart';
 import 'package:musiq/presentation/screens/homeScreen/widgets/drawer_widget.dart';
+import 'package:musiq/bloc/FeatchSong/featch_song_cubit.dart';
+import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 import 'package:musiq/presentation/screens/searchScreen/search_screen.dart';
 import 'package:musiq/presentation/screens/settingsScreen/ThemeCubit/theme_cubit.dart';
-import 'package:musiq/presentation/screens/homeScreen/suggestion/bloc/EngSong/english_song_suggestion_bloc.dart';
-import 'package:musiq/presentation/screens/homeScreen/suggestion/bloc/HindiSong/hindi_song_bloc.dart';
-import 'package:musiq/presentation/screens/homeScreen/suggestion/bloc/MalayalamSongs/mal_songs_bloc.dart';
-import 'package:musiq/presentation/screens/homeScreen/suggestion/bloc/TamilSongs/tamil_song_bloc.dart';
-import 'package:musiq/presentation/screens/homeScreen/suggestion/suggestion.dart';
-import 'package:musiq/presentation/screens/homeScreen/suggestion/widgets/shimmer_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -67,188 +65,223 @@ class HomeScreen extends StatelessWidget {
           drawer: isMobile(context)
               ? const DrawerWidget()
               : null, // Use isMobile function
-          body: SingleChildScrollView(
-            child: Column(
-              children: [
-                constHeight20,
-                //--------------Trending-------------------------
-                BlocBuilder<TrendingCubit, TrendingState>(
-                  builder: (context, state) {
-                    if (state is TrendingLoading) {
-                      return const SuggetionShimmerWidget(
-                        title: "Trending",
-                      );
-                    } else if (state is TrendingLoaded) {
-                      return Suggestion(
-                        title: "Trending",
-                        suggetionSongs: state.songs,
-                      );
-                    } else {
-                      return SizedBox(
-                        height: 200,
-                        child: Center(
-                          child: TextButton(
-                            onPressed: () {
-                              context
-                                  .read<TrendingCubit>()
-                                  .fetchTrendingSongs();
-                            },
-                            child: Text(
-                              "Retry",
-                              style: TextStyle(
-                                color: colorList[colorIndex],
-                              ),
-                            ),
-                          ),
+          body: BlocBuilder<HomeScreenCubit, HomeScreenState>(
+            builder: (context, state) {
+              if (state is HomeScreenLoaded) {
+                return SingleChildScrollView(
+                  child: BlocListener<FeatchSongCubit, FeatchSongState>(
+                    listener: (context, state) {
+                      if (state is FeatchSongLoaded) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  PlayerScreen(songs: state.songModel),
+                            ));
+                      }
+                    },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        constHeight20,
+                        Text(
+                          "Trending songs",
+                          style: TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                              color: colorList[colorIndex]),
                         ),
-                      );
-                    }
-                  },
-                ),
-                constHeight20,
-                //---------------Malayalam-------------------------
-                BlocBuilder<MalSongsBloc, MalSongsState>(
-                  builder: (context, state) {
-                    if (state is MalSongsLoaded) {
-                      return Suggestion(
-                        title: "Malayalam",
-                        suggetionSongs: state.songs,
-                      );
-                    } else if (state is MalSongsLoading) {
-                      return const SuggetionShimmerWidget(
-                        title: "Malayalam",
-                      );
-                    } else {
-                      return SizedBox(
-                        height: 200,
-                        child: Center(
-                          child: TextButton(
-                            onPressed: () {
-                              context.read<MalSongsBloc>().add(MalSongsEvent());
-                            },
-                            child: Text(
-                              "Retry",
-                              style: TextStyle(
-                                color: colorList[colorIndex],
-                              ),
-                            ),
-                          ),
+                        constHeight20,
+                        _SongList(
+                          model: state.homeScreenModel.newTrending,
+                          boderRadius: 10,
                         ),
-                      );
-                    }
-                  },
-                ),
-                const SizedBox(height: 25),
-                //----------------Tamil-------------------------
-                BlocBuilder<TamilSongBloc, TamilSongState>(
-                  builder: (context, state) {
-                    if (state is TamilSongLoaded) {
-                      return Suggestion(
-                        title: "Tamil",
-                        suggetionSongs: state.songs,
-                      );
-                    } else if (state is TamilSongLoading) {
-                      return const SuggetionShimmerWidget(
-                        title: "Tamil",
-                      );
-                    } else {
-                      return SizedBox(
-                        height: 200,
-                        child: Center(
-                          child: TextButton(
-                            onPressed: () {
-                              context
-                                  .read<TamilSongBloc>()
-                                  .add(TamilSongEvent());
-                            },
-                            child: Text(
-                              "Retry",
-                              style: TextStyle(
-                                color: colorList[colorIndex],
-                              ),
-                            ),
-                          ),
+                        // Text(
+                        //   "TagMixes",
+                        //   style: TextStyle(
+                        //       fontSize: 25,
+                        //       fontWeight: FontWeight.bold,
+                        //       color: colorList[colorIndex]),
+                        // ),
+                        // constHeight20,
+                        // _SongList(
+                        //   model: state.homeScreenModel.tagMixes,
+                        //   boderRadius: 30,
+                        // ),
+                        // Text(
+                        //   "Artist",
+                        //   style: TextStyle(
+                        //       fontSize: 25,
+                        //       fontWeight: FontWeight.bold,
+                        //       color: colorList[colorIndex]),
+                        // ),
+                        // constHeight20,
+                        // _SongList(
+                        //   model: state.homeScreenModel.artistRecos,
+                        //   boderRadius: 100,
+                        // ),
+                        // Text(
+                        //   "Radio",
+                        //   style: TextStyle(
+                        //       fontSize: 25,
+                        //       fontWeight: FontWeight.bold,
+                        //       color: colorList[colorIndex]),
+                        // ),
+                        // constHeight20,
+                        // _SongList(
+                        //   model: state.homeScreenModel.radio,
+                        //   boderRadius: 100,
+                        // ),
+                        Text(
+                          "Albums",
+                          style: TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                              color: colorList[colorIndex]),
                         ),
-                      );
-                    }
-                  },
-                ),
-                const SizedBox(height: 25),
-                //---------------------Hindi-------------
-                BlocBuilder<HindiSongBloc, HindiSongState>(
-                  builder: (context, state) {
-                    if (state is HindiSongLoaded) {
-                      return Suggestion(
-                        title: "Hindi",
-                        suggetionSongs: state.songs,
-                      );
-                    } else if (state is HindiSongLoading) {
-                      return const SuggetionShimmerWidget(
-                        title: "Hindi",
-                      );
-                    } else {
-                      return SizedBox(
-                        height: 200,
-                        child: Center(
-                          child: TextButton(
-                            onPressed: () {
-                              context
-                                  .read<HindiSongBloc>()
-                                  .add(HindiSongEvent());
-                            },
-                            child: Text(
-                              "Retry",
-                              style: TextStyle(
-                                color: colorList[colorIndex],
-                              ),
-                            ),
-                          ),
+                        constHeight20,
+                        _SongList(
+                          model: state.homeScreenModel.newAlbums,
+                          boderRadius: 10,
                         ),
-                      );
-                    }
-                  },
-                ),
-                const SizedBox(height: 25),
-                //-------------------------English-----------------
-                BlocBuilder<EnglishSongSuggestionBloc,
-                    EnglishSongSuggestionState>(
-                  builder: (context, state) {
-                    if (state is EnglishSongSuggestionLoaded) {
-                      return Suggestion(
-                        title: "English",
-                        suggetionSongs: state.engSongs,
-                      );
-                    } else if (state is EnglishSongSuggestionLoading) {
-                      return const SuggetionShimmerWidget(
-                        title: "English",
-                      );
-                    } else {
-                      return SizedBox(
-                        height: 200,
-                        child: Center(
-                          child: TextButton(
-                            onPressed: () {
-                              context
-                                  .read<EnglishSongSuggestionBloc>()
-                                  .add(EnglishSongSuggestionEvent());
-                            },
-                            child: Text(
-                              "Retry",
-                              style: TextStyle(
-                                color: colorList[colorIndex],
-                              ),
-                            ),
-                          ),
+                        constHeight20,
+                        Text(
+                          "Playlist",
+                          style: TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                              color: colorList[colorIndex]),
                         ),
-                      );
-                    }
-                  },
-                ),
-              ],
-            ),
+                        constHeight20,
+                        _SongList(
+                          model: state.homeScreenModel.topPlaylists,
+                          boderRadius: 20,
+                        ),
+                        Text(
+                          "BrowseDiscover",
+                          style: TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                              color: colorList[colorIndex]),
+                        ),
+                        constHeight20,
+                        _SongList(
+                          model: state.homeScreenModel.promoVxData122,
+                          boderRadius: 20,
+                        ),
+                        constHeight10,
+                        _SongList(
+                          model: state.homeScreenModel.promoVxData113,
+                          boderRadius: 20,
+                        ),
+                        constHeight10,
+                        _SongList(
+                          model: state.homeScreenModel.promoVxData117,
+                          boderRadius: 20,
+                        ),
+                        constHeight10,
+                        _SongList(
+                          model: state.homeScreenModel.promoVxData116,
+                          boderRadius: 20,
+                        ),
+                        constHeight10,
+                        _SongList(
+                          model: state.homeScreenModel.promoVxData118,
+                          boderRadius: 20,
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              } else {
+                return SizedBox(
+                  child: Center(
+                    child: Text("Loading"),
+                  ),
+                );
+              }
+            },
           ),
         );
       },
+    );
+  }
+}
+
+// ignore: must_be_immutable
+class _SongList extends StatelessWidget {
+  final List model;
+  double boderRadius;
+  _SongList({
+    required this.model,
+    required this.boderRadius,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 200,
+      child: ListView.separated(
+        separatorBuilder: (context, index) => SizedBox(width: 10),
+        itemCount: model.length,
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (context, index) {
+          final data = model[index];
+
+          return GestureDetector(
+            onTap: () {
+              log("Type: ${data.type}");
+              log("ID: ${data.id}");
+              log("Title: ${data.title}");
+              // log("Subtitle: ${data.subtitle}");
+              // log("Description: ${data.description}");
+              // log("HeaderDesc: ${data.headerDesc}");
+              // log("PermaUrl: ${data.permaUrl}");
+              // log("Image: ${data.image}");
+              // log("Language: ${data.language}");
+              // log("Year: ${data.year}");
+              // log("PlayCount: ${data.playCount}");
+              // log("ExplicitContent: ${data.explicitContent}");
+              // log("ListCount: ${data.listCount}");
+              // log("ListType: ${data.listType}");
+              // log("List: ${data.list.toString()}"); // Convert list to a string
+              // log("MoreInfo: ${data.moreInfo}"); // Assuming moreInfo is a Map
+              // log("ButtonTooltipInfo: ${data.buttonTooltipInfo}");
+              context
+                  .read<FeatchSongCubit>()
+                  .clickSong(type: data.type ?? "", id: data.id ?? "0");
+            },
+            child: SizedBox(
+              width: 180,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(boderRadius),
+                      child: Image.network(
+                        data.image ?? "",
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  constWidth20,
+                  Text(
+                    data.title ?? "no name",
+                    style: const TextStyle(
+                        fontSize: 15, fontWeight: FontWeight.bold),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(
+                    data.subtitle ?? "null",
+                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }

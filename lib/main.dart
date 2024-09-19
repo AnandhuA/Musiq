@@ -2,24 +2,21 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/core/theme.dart';
-import 'package:musiq/models/song.dart';
+import 'package:musiq/models/song_model.dart';
 import 'package:musiq/presentation/screens/favoriteScreen/bloc/favorite_bloc.dart';
-import 'package:musiq/presentation/screens/homeScreen/suggestion/bloc/Trending/trending_cubit.dart';
+import 'package:musiq/bloc/home_screen_cubit/home_screen_cubit.dart';
 import 'package:musiq/presentation/screens/loginScreen/bloc/login_bloc.dart';
+import 'package:musiq/bloc/FeatchSong/featch_song_cubit.dart';
 import 'package:musiq/presentation/screens/player_screen/cubit/PlayAndPause/play_and_pause_cubit.dart';
 import 'package:musiq/presentation/screens/player_screen/cubit/ProgressBar/progress_bar_cubit.dart';
 import 'package:musiq/presentation/screens/searchScreen/bloc/SearchSong/search_song_bloc.dart';
 import 'package:musiq/presentation/screens/settingsScreen/ThemeCubit/theme_cubit.dart';
 import 'package:musiq/presentation/screens/splashScreen/splash_screen.dart';
-import 'package:musiq/presentation/screens/homeScreen/suggestion/bloc/EngSong/english_song_suggestion_bloc.dart';
 import 'package:musiq/core/firebase_options.dart';
-import 'package:musiq/presentation/screens/homeScreen/suggestion/bloc/HindiSong/hindi_song_bloc.dart';
-import 'package:musiq/presentation/screens/homeScreen/suggestion/bloc/MalayalamSongs/mal_songs_bloc.dart';
-import 'package:musiq/presentation/screens/homeScreen/suggestion/bloc/TamilSongs/tamil_song_bloc.dart';
 
 String? theme;
 int colorIndex = 0;
-Song? lastplayed;
+SongModel? lastplayed;
 String? userIsLoggedIn;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,17 +35,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => EnglishSongSuggestionBloc()),
-        BlocProvider(create: (context) => MalSongsBloc()),
-        BlocProvider(create: (context) => TamilSongBloc()),
-        BlocProvider(create: (context) => HindiSongBloc()),
         BlocProvider(create: (context) => ThemeCubit()),
         BlocProvider(create: (context) => SearchSongBloc()),
         BlocProvider(create: (context) => LoginBloc()),
         BlocProvider(create: (context) => FavoriteBloc()),
         BlocProvider(create: (context) => ProgressBarCubit()),
         BlocProvider(create: (context) => PlayAndPauseCubit()),
-        BlocProvider(create: (context) => TrendingCubit()),
+        BlocProvider(create: (context) => HomeScreenCubit()),
+        BlocProvider(create: (context) => FeatchSongCubit()),
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, state) {

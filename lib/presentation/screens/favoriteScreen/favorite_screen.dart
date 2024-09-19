@@ -5,7 +5,6 @@ import 'package:musiq/presentation/commanWidgets/custom_app_bar.dart';
 import 'package:musiq/presentation/commanWidgets/favorite_icon.dart';
 import 'package:musiq/presentation/screens/favoriteScreen/bloc/favorite_bloc.dart';
 import 'package:musiq/presentation/screens/loginScreen/login_screen.dart';
-import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 
 class FavoriteScreen extends StatelessWidget {
   FavoriteScreen({super.key});
@@ -55,15 +54,15 @@ class FavoriteScreen extends StatelessWidget {
                           itemCount: state.favorites.length,
                           itemBuilder: (context, index) {
                             return ListTile(
-                              onTap: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => PlayerScreen(
-                                    songs: state.favorites,
-                                    initialIndex: index,
-                                  ),
-                                ),
-                              ),
+                              // onTap: () => Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //     builder: (context) => PlayerScreen(
+                              //       songs: state.favorites,
+                              //       initialIndex: index,
+                              //     ),
+                              //   ),
+                              // ),
                               trailing: FavoriteIcon(
                                 song: state.favorites[index],
                               ),
@@ -73,7 +72,7 @@ class FavoriteScreen extends StatelessWidget {
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
                                     image: NetworkImage(
-                                      state.favorites[index].image.first.url,
+                                      state.favorites[index].imageUrl,
                                     ),
                                     fit: BoxFit.fill,
                                   ),
@@ -81,9 +80,9 @@ class FavoriteScreen extends StatelessWidget {
                                 ),
                               ),
                               title: Text(
-                                state.favorites[index].name ?? "Unknown",
+                                state.favorites[index].title,
                               ),
-                              subtitle: Text(state.favorites[index].album.name),
+                              subtitle: Text(state.favorites[index].album),
                             );
                           },
                         );

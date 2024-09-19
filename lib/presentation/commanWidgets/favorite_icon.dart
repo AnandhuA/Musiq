@@ -3,12 +3,12 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:musiq/models/song.dart';
+import 'package:musiq/models/song_model.dart';
 import 'package:musiq/presentation/screens/favoriteScreen/bloc/favorite_bloc.dart';
 import 'package:musiq/presentation/screens/loginScreen/login_screen.dart';
 
 class FavoriteIcon extends StatelessWidget {
-  final Song song;
+  final SongModel song;
   const FavoriteIcon({
     super.key,
     required this.song,
@@ -35,16 +35,14 @@ class FavoriteIcon extends StatelessWidget {
                       builder: (context) => LoginScreen(),
                     ));
               } else {
-                if (song.id != null) {
-                  isFav
-                      ? context
-                          .read<FavoriteBloc>()
-                          .add(RemoveFavoriteEvent(song: song))
-                      : context
-                          .read<FavoriteBloc>()
-                          .add(AddFavoriteEvent(song: song));
-                }
-              }
+                isFav
+                    ? context
+                        .read<FavoriteBloc>()
+                        .add(RemoveFavoriteEvent(song: song))
+                    : context
+                        .read<FavoriteBloc>()
+                        .add(AddFavoriteEvent(song: song));
+                            }
             },
             icon: Icon(
               isFav ? Icons.favorite : Icons.favorite_border,

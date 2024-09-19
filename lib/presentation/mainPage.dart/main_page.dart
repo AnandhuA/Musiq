@@ -3,15 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/main.dart';
-import 'package:musiq/presentation/screens/favoriteScreen/bloc/favorite_bloc.dart';
 import 'package:musiq/presentation/screens/favoriteScreen/favorite_screen.dart';
 import 'package:musiq/presentation/screens/homeScreen/home_screen.dart';
+import 'package:musiq/bloc/home_screen_cubit/home_screen_cubit.dart';
 import 'package:musiq/presentation/screens/settingsScreen/ThemeCubit/theme_cubit.dart';
-import 'package:musiq/presentation/screens/homeScreen/suggestion/bloc/Trending/trending_cubit.dart';
-import 'package:musiq/presentation/screens/homeScreen/suggestion/bloc/EngSong/english_song_suggestion_bloc.dart';
-import 'package:musiq/presentation/screens/homeScreen/suggestion/bloc/HindiSong/hindi_song_bloc.dart';
-import 'package:musiq/presentation/screens/homeScreen/suggestion/bloc/MalayalamSongs/mal_songs_bloc.dart';
-import 'package:musiq/presentation/screens/homeScreen/suggestion/bloc/TamilSongs/tamil_song_bloc.dart';
 import 'package:musiq/presentation/screens/settingsScreen/setting_screen.dart';
 
 class MainPage extends StatefulWidget {
@@ -25,7 +20,8 @@ class MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
 
   static final List<Widget> _widgetOptions = <Widget>[
-    const HomeScreen(),
+    // const NewHomeScreen(),
+    HomeScreen(),
     FavoriteScreen(),
   ];
 
@@ -38,20 +34,28 @@ class MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
-    context.read<TrendingCubit>().fetchTrendingSongs();
-    context.read<MalSongsBloc>().add(MalSongsEvent());
-    context.read<TamilSongBloc>().add(TamilSongEvent());
-    context.read<HindiSongBloc>().add(HindiSongEvent());
-    context.read<FavoriteBloc>().add(FeatchFavoriteSongEvent());
-    context.read<EnglishSongSuggestionBloc>().add(EnglishSongSuggestionEvent());
+
+    context.read<HomeScreenCubit>().loadData();
+    // context.read<MalSongsBloc>().add(MalSongsEvent());
+    // context.read<TamilSongBloc>().add(TamilSongEvent());
+    // context.read<HindiSongBloc>().add(HindiSongEvent());
+    // context.read<FavoriteBloc>().add(FeatchFavoriteSongEvent());
+    // context.read<EnglishSongSuggestionBloc>().add(EnglishSongSuggestionEvent());
   }
 
+  // getnewRelease() async {
+  //   final HomeScreenModel res = await SaavnAPI().getHomePageDetails();
+
+  //   // print("-----------${res}");
+  // }
+
   Future<void> _refreshData() async {
-    context.read<TrendingCubit>().fetchTrendingSongs();
-    context.read<MalSongsBloc>().add(MalSongsEvent());
-    context.read<TamilSongBloc>().add(TamilSongEvent());
-    context.read<HindiSongBloc>().add(HindiSongEvent());
-    context.read<EnglishSongSuggestionBloc>().add(EnglishSongSuggestionEvent());
+    context.read<HomeScreenCubit>().loadData();
+    // context.read<TrendingCubit>().fetchTrendingSongs();
+    // context.read<MalSongsBloc>().add(MalSongsEvent());
+    // context.read<TamilSongBloc>().add(TamilSongEvent());
+    // context.read<HindiSongBloc>().add(HindiSongEvent());
+    // context.read<EnglishSongSuggestionBloc>().add(EnglishSongSuggestionEvent());
   }
 
   @override
