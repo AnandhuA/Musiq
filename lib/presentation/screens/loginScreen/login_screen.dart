@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/presentation/commanWidgets/snack_bar.dart';
-import 'package:musiq/presentation/screens/favoriteScreen/bloc/favorite_bloc.dart';
+import 'package:musiq/bloc/favorite_bloc/favorite_bloc.dart';
 import 'package:musiq/presentation/screens/loginScreen/bloc/login_bloc.dart';
 import 'package:musiq/presentation/screens/splashScreen/splash_screen.dart';
 

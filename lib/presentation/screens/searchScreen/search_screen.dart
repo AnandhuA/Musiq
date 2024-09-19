@@ -6,7 +6,7 @@ import 'package:musiq/core/colors.dart';
 import 'package:musiq/main.dart';
 import 'package:musiq/presentation/commanWidgets/textfeild.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
-import 'package:musiq/presentation/screens/searchScreen/bloc/SearchSong/search_song_bloc.dart';
+import 'package:musiq/bloc/SearchSong/search_song_bloc.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -19,6 +19,9 @@ class SearchScreenState extends State<SearchScreen> {
   final FocusNode _focusNode = FocusNode();
   final TextEditingController _controller = TextEditingController();
   Timer? _debounce;
+
+  // Filter state
+  String selectedFilter = "All";
 
   @override
   void initState() {
@@ -48,6 +51,7 @@ class SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -77,6 +81,140 @@ class SearchScreenState extends State<SearchScreen> {
                 },
               ),
               const SizedBox(height: 10),
+
+              // Row with filter buttons
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        selectedFilter = "All";
+                      });
+                    },
+                    child: Text(
+                      "All",
+                      style: TextStyle(
+                        color: selectedFilter == "All"
+                            ? colorList[colorIndex]
+                            : theme.brightness == Brightness.dark
+                                ? Colors.white
+                                : Colors.black,
+                      ),
+                    ),
+                    style: TextButton.styleFrom(
+                      backgroundColor: theme.brightness == Brightness.dark
+                          ? Colors.white.withOpacity(0.1)
+                          : Colors.black.withOpacity(0.1),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        // side: selectedFilter == "All"
+                        //     ? BorderSide(color: colorList[colorIndex])
+                        //     : BorderSide.none,
+                        borderRadius: BorderRadius.circular(15),
+                        // Rounded corners
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        selectedFilter = "Albums";
+                      });
+                    },
+                    child: Text(
+                      "Albums",
+                      style: TextStyle(
+                        color: selectedFilter == "Albums"
+                            ? colorList[colorIndex]
+                            : theme.brightness == Brightness.dark
+                                ? Colors.white
+                                : Colors.black,
+                      ),
+                    ),
+                    style: TextButton.styleFrom(
+                      backgroundColor: theme.brightness == Brightness.dark
+                          ? Colors.white.withOpacity(0.1)
+                          : Colors.black.withOpacity(0.1),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        // side: selectedFilter == "Albums"
+                        //     ? BorderSide(color: colorList[colorIndex])
+                        //     : BorderSide.none,
+                        borderRadius: BorderRadius.circular(15),
+                        // Rounded corners
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        selectedFilter = "Artists";
+                      });
+                    },
+                    child: Text(
+                      "Artists",
+                      style: TextStyle(
+                        color: selectedFilter == "Artists"
+                            ? colorList[colorIndex]
+                            : theme.brightness == Brightness.dark
+                                ? Colors.white
+                                : Colors.black,
+                      ),
+                    ),
+                    style: TextButton.styleFrom(
+                      backgroundColor: theme.brightness == Brightness.dark
+                          ? Colors.white.withOpacity(0.1)
+                          : Colors.black.withOpacity(0.1),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        // side: selectedFilter == "Artists"
+                        //     ? BorderSide(color: colorList[colorIndex])
+                        //     : BorderSide.none,
+                        borderRadius: BorderRadius.circular(15),
+                        // Rounded corners
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        selectedFilter = "Songs";
+                      });
+                    },
+                    child: Text(
+                      "Songs",
+                      style: TextStyle(
+                        color: selectedFilter == "Songs"
+                            ? colorList[colorIndex]
+                            : theme.brightness == Brightness.dark
+                                ? Colors.white
+                                : Colors.black,
+                      ),
+                    ),
+                    style: TextButton.styleFrom(
+                      backgroundColor: theme.brightness == Brightness.dark
+                          ? Colors.white.withOpacity(0.1)
+                          : Colors.black.withOpacity(0.1),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        // side: selectedFilter == "Songs"
+                        //     ? BorderSide(color: colorList[colorIndex])
+                        //     : BorderSide.none,
+                        borderRadius: BorderRadius.circular(15),
+                        // Rounded corners
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 10),
+
               Expanded(
                 child: BlocBuilder<SearchSongBloc, SearchSongState>(
                   builder: (context, state) {
@@ -90,7 +228,10 @@ class SearchScreenState extends State<SearchScreen> {
 
                       return ListView(
                         children: [
-                          if (songList.isNotEmpty) ...[
+                          // Show Songs if "All" or "Songs" is selected
+                          if ((selectedFilter == "All" ||
+                                  selectedFilter == "Songs") &&
+                              songList.isNotEmpty) ...[
                             Text(
                               '   Songs',
                               style: TextStyle(
@@ -112,7 +253,10 @@ class SearchScreenState extends State<SearchScreen> {
                                   },
                                 )),
                           ],
-                          if (searchResult.albums != null &&
+                          // Show Albums if "All" or "Albums" is selected
+                          if ((selectedFilter == "All" ||
+                                  selectedFilter == "Albums") &&
+                              searchResult.albums != null &&
                               searchResult.albums!.isNotEmpty) ...[
                             Text(
                               '   Albums',
@@ -133,7 +277,9 @@ class SearchScreenState extends State<SearchScreen> {
                                   },
                                 )),
                           ],
-                          if (searchResult.playlists != null &&
+                          // Show Playlists if "All" is selected
+                          if (selectedFilter == "All" &&
+                              searchResult.playlists != null &&
                               searchResult.playlists!.isNotEmpty) ...[
                             Text(
                               '   Playlists',

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/main.dart';
 import 'package:musiq/presentation/commanWidgets/custom_app_bar.dart';
 import 'package:musiq/presentation/commanWidgets/favorite_icon.dart';
-import 'package:musiq/presentation/screens/favoriteScreen/bloc/favorite_bloc.dart';
+import 'package:musiq/bloc/favorite_bloc/favorite_bloc.dart';
 import 'package:musiq/presentation/screens/loginScreen/login_screen.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 

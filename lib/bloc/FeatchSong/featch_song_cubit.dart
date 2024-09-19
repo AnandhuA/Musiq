@@ -19,12 +19,12 @@ class FeatchSongCubit extends Cubit<FeatchSongState> {
     if (type == "song") {
       fetchSong(songId: id);
     } else if (type == "album") {
-      featchAlbum(albumId: id, imageUrl: imageUrl,title: title);
+      featchAlbum(albumId: id, imageUrl: imageUrl, title: title);
     } else if (type == "playlist") {
-      featchPlaylist(playlistId: id, imageUrl: imageUrl,title: title);
+      featchPlaylist(playlistId: id, imageUrl: imageUrl, title: title);
     } else if (type == "mix") {
       log("$id");
-      SaavnAPI().fetchSearchResults(id);
+      featchPlaylist(playlistId: id, imageUrl: imageUrl, title: title);
     }
   }
 

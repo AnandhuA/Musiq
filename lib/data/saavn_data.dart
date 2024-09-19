@@ -114,7 +114,7 @@ class SaavnAPI {
   Future<List<Map>> fetchAlbums({
     required String searchQuery,
     required String type,
-    int count = 20,
+    int count = 30,
     int page = 1,
   }) async {
     String? params;
@@ -249,7 +249,6 @@ class SaavnAPI {
     List searchedPlaylistList = [];
     List searchedArtistList = [];
     List searchedTopQueryList = [];
- 
 
     final String params =
         '__call=autocomplete.get&cc=in&includeMetaTags=1&query=$searchQuery';
@@ -281,7 +280,6 @@ class SaavnAPI {
       if (searchedPlaylistList.isNotEmpty) {
         result['Playlists'] = searchedPlaylistList;
       }
-
 
       searchedArtistList = await formatAlbumResponse(
         artistResponseList,

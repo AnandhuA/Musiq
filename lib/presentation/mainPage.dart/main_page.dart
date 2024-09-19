@@ -3,11 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/main.dart';
-import 'package:musiq/presentation/screens/favoriteScreen/bloc/favorite_bloc.dart';
+import 'package:musiq/bloc/favorite_bloc/favorite_bloc.dart';
 import 'package:musiq/presentation/screens/favoriteScreen/favorite_screen.dart';
 import 'package:musiq/presentation/screens/homeScreen/home_screen.dart';
 import 'package:musiq/bloc/home_screen_cubit/home_screen_cubit.dart';
-import 'package:musiq/presentation/screens/settingsScreen/ThemeCubit/theme_cubit.dart';
+import 'package:musiq/bloc/ThemeCubit/theme_cubit.dart';
 import 'package:musiq/presentation/screens/settingsScreen/setting_screen.dart';
 
 class MainPage extends StatefulWidget {

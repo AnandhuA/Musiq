@@ -18,6 +18,7 @@ class ProgressBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return ProgressBar(
       progress: progressDuration,
       timeLabelPadding: 5,
@@ -27,8 +28,8 @@ class ProgressBarWidget extends StatelessWidget {
       bufferedBarColor: Colors.grey,
       timeLabelType: TimeLabelType.totalTime,
       total: Duration(seconds: song.duration),
-      thumbColor: white,
-      progressBarColor: white,
+      thumbColor: theme.brightness == Brightness.dark ? white : black,
+      progressBarColor: theme.brightness == Brightness.dark ? white : black,
       onSeek: (duration) {
         _audioPlayer.seek(duration);
       },

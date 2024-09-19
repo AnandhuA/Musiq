@@ -13,7 +13,7 @@ import 'package:musiq/presentation/screens/homeScreen/widgets/drawer_widget.dart
 import 'package:musiq/bloc/FeatchSong/featch_song_cubit.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 import 'package:musiq/presentation/screens/searchScreen/search_screen.dart';
-import 'package:musiq/presentation/screens/settingsScreen/ThemeCubit/theme_cubit.dart';
+import 'package:musiq/bloc/ThemeCubit/theme_cubit.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/core/theme.dart';
 import 'package:musiq/models/song_model.dart';
-import 'package:musiq/presentation/screens/favoriteScreen/bloc/favorite_bloc.dart';
+import 'package:musiq/bloc/favorite_bloc/favorite_bloc.dart';
 import 'package:musiq/bloc/home_screen_cubit/home_screen_cubit.dart';
 import 'package:musiq/presentation/screens/loginScreen/bloc/login_bloc.dart';
 import 'package:musiq/bloc/FeatchSong/featch_song_cubit.dart';
 import 'package:musiq/presentation/screens/player_screen/cubit/PlayAndPause/play_and_pause_cubit.dart';
 import 'package:musiq/presentation/screens/player_screen/cubit/ProgressBar/progress_bar_cubit.dart';
-import 'package:musiq/presentation/screens/searchScreen/bloc/SearchSong/search_song_bloc.dart';
-import 'package:musiq/presentation/screens/settingsScreen/ThemeCubit/theme_cubit.dart';
+import 'package:musiq/bloc/SearchSong/search_song_bloc.dart';
+import 'package:musiq/bloc/ThemeCubit/theme_cubit.dart';
 import 'package:musiq/presentation/screens/splashScreen/splash_screen.dart';
 import 'package:musiq/core/firebase_options.dart';
 

@@ -4,7 +4,7 @@ import 'package:lottie/lottie.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/main.dart';
-import 'package:musiq/presentation/screens/settingsScreen/ThemeCubit/theme_cubit.dart';
+import 'package:musiq/bloc/ThemeCubit/theme_cubit.dart';
 import 'package:musiq/presentation/screens/settingsScreen/widgets/list_tile_widget.dart';
 import 'package:musiq/data/shared_preference.dart';
 

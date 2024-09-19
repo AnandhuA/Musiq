@@ -238,6 +238,9 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                 icon: Icon(
                                   Icons.skip_previous_rounded,
                                   size: fontSize,
+                                  color: _currentIndex == 0
+                                      ? const Color.fromARGB(99, 158, 158, 158)
+                                      : null,
                                 ),
                               ),
                               BlocBuilder<PlayAndPauseCubit, PlayAndPauseState>(
@@ -280,10 +283,13 @@ class _PlayerScreenState extends State<PlayerScreen> {
                               ),
                               IconButton(
                                 onPressed: _playNext,
-                                icon: Icon(
-                                  Icons.skip_next_rounded,
-                                  size: fontSize,
-                                ),
+                                icon: Icon(Icons.skip_next_rounded,
+                                    size: fontSize,
+                                    color: _currentIndex ==
+                                            ((widget.songs.length) - 1)
+                                        ? const Color.fromARGB(
+                                            99, 158, 158, 158)
+                                        : null),
                               ),
                               const Spacer(),
                               IconButton(

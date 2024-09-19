@@ -19,6 +19,7 @@ class AlbumOrPlaylistScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(),
       body: Column(
@@ -58,27 +59,47 @@ class AlbumOrPlaylistScreen extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         maxLines: 5,
                       ),
-                      Text(
-                        songModel.first.language,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 5,
-                      ),
-                      Text(
-                        songModel.first.albumArtist,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 5,
-                      ),
+                      songModel.isNotEmpty
+                          ? Text(
+                              songModel.first.language,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 5,
+                            )
+                          : SizedBox(),
+                      songModel.isNotEmpty
+                          ? Text(
+                              songModel.first.albumArtist,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 5,
+                            )
+                          : SizedBox(),
                       constHeight10,
                       Row(
                         children: [
                           Spacer(),
-                          CircleAvatar(
-                            backgroundColor: colorList[colorIndex],
-                            radius: 28,
-                            child: Center(
-                              child: Icon(
-                                Icons.play_arrow_sharp,
-                                size: 35,
+                          GestureDetector(
+                            onTap: () {
+                              songModel.isNotEmpty
+                                  ? Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => PlayerScreen(
+                                          songs: songModel,
+                                        ),
+                                      ))
+                                  : null;
+                            },
+                            child: CircleAvatar(
+                              backgroundColor: colorList[colorIndex],
+                              radius: 28,
+                              child: Center(
+                                child: Icon(
+                                  Icons.play_arrow_sharp,
+                                  size: 35,
+                                  color: theme.brightness == Brightness.dark
+                                      ? Colors.black
+                                      : Colors.white,
+                                ),
                               ),
                             ),
                           ),
