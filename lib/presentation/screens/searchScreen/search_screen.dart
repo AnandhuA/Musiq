@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:musiq/bloc/FeatchSong/featch_song_cubit.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/main.dart';
-import 'package:musiq/models/search_model.dart';
 import 'package:musiq/presentation/commanWidgets/textfeild.dart';
 import 'package:musiq/presentation/screens/searchScreen/bloc/SearchSong/search_song_bloc.dart';
 
@@ -103,7 +103,8 @@ class SearchScreenState extends State<SearchScreen> {
                                   subtitle: Text(album.artist),
                                   leading: Image.network(album.image),
                                   onTap: () {
-                                    // Handle album tap
+                                    context.read<FeatchSongCubit>().clickSong(
+                                        type: album.type, id: album.id);
                                   },
                                 )),
                           ],
@@ -122,7 +123,11 @@ class SearchScreenState extends State<SearchScreen> {
                                       subtitle: Text(playlist.artist),
                                       leading: Image.network(playlist.image),
                                       onTap: () {
-                                        // Handle playlist tap
+                                        context
+                                            .read<FeatchSongCubit>()
+                                            .clickSong(
+                                                type: playlist.type,
+                                                id: playlist.id);
                                       },
                                     )),
                           ],
@@ -140,7 +145,8 @@ class SearchScreenState extends State<SearchScreen> {
                                   subtitle: Text(artist.artist),
                                   leading: Image.network(artist.image),
                                   onTap: () {
-                                    // Handle artist tap
+                                    context.read<FeatchSongCubit>().clickSong(
+                                        type: artist.type, id: artist.id);
                                   },
                                 )),
                           ],

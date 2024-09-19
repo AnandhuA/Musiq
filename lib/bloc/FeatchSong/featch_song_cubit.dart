@@ -39,12 +39,12 @@ class FeatchSongCubit extends Cubit<FeatchSongState> {
   void featchAlbum({required String albumId}) async {
     try {
       final albumData = await SaavnAPI().fetchAlbumSongs(albumId);
-      log("$albumData");
+      log("--------$albumData--------");
       List<SongModel> songList = (albumData['songs'] as List)
           .map((songJson) => SongModel.fromJson(songJson))
           .toList();
 
-      emit(FeatchSongLoaded(songModel: songList));
+      emit(FeatchAlbumOrPlayList(songModel: songList));
     } catch (error) {
       log("Failed to fetch album: $error");
     }
@@ -59,7 +59,7 @@ class FeatchSongCubit extends Cubit<FeatchSongState> {
           .map((songJson) => SongModel.fromJson(songJson))
           .toList();
 
-      emit(FeatchSongLoaded(songModel: songList));
+      emit(FeatchAlbumOrPlayList(songModel: songList));
     } catch (error) {
       log("Failed to fetch playlist: $error");
     }

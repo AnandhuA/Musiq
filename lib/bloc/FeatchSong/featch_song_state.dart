@@ -13,6 +13,11 @@ final class FeatchSongLoaded extends FeatchSongState {
    FeatchSongLoaded({required this.songModel });
 }
 
+final class FeatchAlbumOrPlayList extends FeatchSongState {
+    final List<SongModel> songModel;
+
+  FeatchAlbumOrPlayList({required this.songModel});
+}
 
 
 final class FeatchSongError extends FeatchSongState{

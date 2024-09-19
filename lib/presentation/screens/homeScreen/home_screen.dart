@@ -8,6 +8,7 @@ import 'package:musiq/core/sized.dart';
 import 'package:musiq/main.dart';
 import 'package:musiq/presentation/commanWidgets/textfeild.dart';
 import 'package:musiq/bloc/home_screen_cubit/home_screen_cubit.dart';
+import 'package:musiq/presentation/screens/album_or_playlist_screen/album_or_playlist_screen.dart';
 import 'package:musiq/presentation/screens/homeScreen/widgets/drawer_widget.dart';
 import 'package:musiq/bloc/FeatchSong/featch_song_cubit.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
@@ -77,6 +78,14 @@ class HomeScreen extends StatelessWidget {
                             MaterialPageRoute(
                               builder: (context) =>
                                   PlayerScreen(songs: state.songModel),
+                            ));
+                      } else if (state is FeatchAlbumOrPlayList) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AlbumOrPlaylistScreen(
+                                songModel: state.songModel,
+                              ),
                             ));
                       }
                     },
