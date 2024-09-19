@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/main.dart';
+import 'package:musiq/presentation/screens/favoriteScreen/bloc/favorite_bloc.dart';
 import 'package:musiq/presentation/screens/favoriteScreen/favorite_screen.dart';
 import 'package:musiq/presentation/screens/homeScreen/home_screen.dart';
 import 'package:musiq/bloc/home_screen_cubit/home_screen_cubit.dart';
@@ -20,7 +21,6 @@ class MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
 
   static final List<Widget> _widgetOptions = <Widget>[
-    // const NewHomeScreen(),
     HomeScreen(),
     FavoriteScreen(),
   ];
@@ -36,26 +36,14 @@ class MainPageState extends State<MainPage> {
     super.initState();
 
     context.read<HomeScreenCubit>().loadData();
-    // context.read<MalSongsBloc>().add(MalSongsEvent());
-    // context.read<TamilSongBloc>().add(TamilSongEvent());
-    // context.read<HindiSongBloc>().add(HindiSongEvent());
-    // context.read<FavoriteBloc>().add(FeatchFavoriteSongEvent());
-    // context.read<EnglishSongSuggestionBloc>().add(EnglishSongSuggestionEvent());
+
+    context.read<FavoriteBloc>().add(FeatchFavoriteSongEvent());
   }
-
-  // getnewRelease() async {
-  //   final HomeScreenModel res = await SaavnAPI().getHomePageDetails();
-
-  //   // print("-----------${res}");
-  // }
 
   Future<void> _refreshData() async {
     context.read<HomeScreenCubit>().loadData();
-    // context.read<TrendingCubit>().fetchTrendingSongs();
-    // context.read<MalSongsBloc>().add(MalSongsEvent());
-    // context.read<TamilSongBloc>().add(TamilSongEvent());
-    // context.read<HindiSongBloc>().add(HindiSongEvent());
-    // context.read<EnglishSongSuggestionBloc>().add(EnglishSongSuggestionEvent());
+
+    context.read<FavoriteBloc>().add(FeatchFavoriteSongEvent());
   }
 
   @override

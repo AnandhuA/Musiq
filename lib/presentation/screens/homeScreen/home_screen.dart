@@ -72,7 +72,24 @@ class HomeScreen extends StatelessWidget {
                 return SingleChildScrollView(
                   child: BlocListener<FeatchSongCubit, FeatchSongState>(
                     listener: (context, state) {
-                      if (state is FeatchSongLoaded) {
+                      /// ----------- show loading ---------
+                      if (state is FeatchSongLoading) {
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              backgroundColor: Colors.transparent,
+                              content: Center(
+                                child: CircularProgressIndicator(
+                                  color: colorList[colorIndex],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      } else if (state is FeatchSongLoaded) {
+                        Navigator.pop(context); // for close loading
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -80,11 +97,14 @@ class HomeScreen extends StatelessWidget {
                                   PlayerScreen(songs: state.songModel),
                             ));
                       } else if (state is FeatchAlbumOrPlayList) {
+                        Navigator.pop(context); // for close loading
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => AlbumOrPlaylistScreen(
                                 songModel: state.songModel,
+                                imageUrl: state.imageUrl,
+                                title: state.title,
                               ),
                             ));
                       }
@@ -94,7 +114,7 @@ class HomeScreen extends StatelessWidget {
                       children: [
                         constHeight20,
                         Text(
-                          "Trending songs",
+                          " Trending songs",
                           style: TextStyle(
                               fontSize: 25,
                               fontWeight: FontWeight.bold,
@@ -105,44 +125,49 @@ class HomeScreen extends StatelessWidget {
                           model: state.homeScreenModel.newTrending,
                           boderRadius: 10,
                         ),
-                        // Text(
-                        //   "TagMixes",
-                        //   style: TextStyle(
-                        //       fontSize: 25,
-                        //       fontWeight: FontWeight.bold,
-                        //       color: colorList[colorIndex]),
-                        // ),
-                        // constHeight20,
-                        // _SongList(
-                        //   model: state.homeScreenModel.tagMixes,
-                        //   boderRadius: 30,
-                        // ),
-                        // Text(
-                        //   "Artist",
-                        //   style: TextStyle(
-                        //       fontSize: 25,
-                        //       fontWeight: FontWeight.bold,
-                        //       color: colorList[colorIndex]),
-                        // ),
-                        // constHeight20,
-                        // _SongList(
-                        //   model: state.homeScreenModel.artistRecos,
-                        //   boderRadius: 100,
-                        // ),
-                        // Text(
-                        //   "Radio",
-                        //   style: TextStyle(
-                        //       fontSize: 25,
-                        //       fontWeight: FontWeight.bold,
-                        //       color: colorList[colorIndex]),
-                        // ),
-                        // constHeight20,
-                        // _SongList(
-                        //   model: state.homeScreenModel.radio,
-                        //   boderRadius: 100,
-                        // ),
                         Text(
-                          "Albums",
+                          " Playlist",
+                          style: TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                              color: colorList[colorIndex]),
+                        ),
+                        constHeight20,
+                        _SongList(
+                          model: state.homeScreenModel.charts,
+                          boderRadius: 20,
+                        ),
+                        constHeight20,
+                        _SongList(
+                          model: state.homeScreenModel.topPlaylists,
+                          boderRadius: 20,
+                        ),
+                        Text(
+                          " TagMixes",
+                          style: TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                              color: colorList[colorIndex]),
+                        ),
+                        constHeight20,
+                        _SongList(
+                          model: state.homeScreenModel.tagMixes,
+                          boderRadius: 30,
+                        ),
+                        Text(
+                          " Artist",
+                          style: TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                              color: colorList[colorIndex]),
+                        ),
+                        constHeight20,
+                        _SongList(
+                          model: state.homeScreenModel.artistRecos,
+                          boderRadius: 100,
+                        ),
+                        Text(
+                          " Albums",
                           style: TextStyle(
                               fontSize: 25,
                               fontWeight: FontWeight.bold,
@@ -155,19 +180,7 @@ class HomeScreen extends StatelessWidget {
                         ),
                         constHeight20,
                         Text(
-                          "Playlist",
-                          style: TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold,
-                              color: colorList[colorIndex]),
-                        ),
-                        constHeight20,
-                        _SongList(
-                          model: state.homeScreenModel.topPlaylists,
-                          boderRadius: 20,
-                        ),
-                        Text(
-                          "BrowseDiscover",
+                          " BrowseDiscover",
                           style: TextStyle(
                               fontSize: 25,
                               fontWeight: FontWeight.bold,
@@ -205,8 +218,9 @@ class HomeScreen extends StatelessWidget {
               } else {
                 return SizedBox(
                   child: Center(
-                    child: Text("Loading"),
-                  ),
+                      child: CircularProgressIndicator(
+                    color: colorList[colorIndex],
+                  )),
                 );
               }
             },
@@ -256,9 +270,18 @@ class _SongList extends StatelessWidget {
               // log("List: ${data.list.toString()}"); // Convert list to a string
               // log("MoreInfo: ${data.moreInfo}"); // Assuming moreInfo is a Map
               // log("ButtonTooltipInfo: ${data.buttonTooltipInfo}");
-              context
-                  .read<FeatchSongCubit>()
-                  .clickSong(type: data.type ?? "", id: data.id ?? "0");
+              if (data.type == "radio_station") {
+                context.read<FeatchSongCubit>().feachArtistSong(
+                    artistName: data.title,
+                    imageUrl: data.image,
+                    title: data.title);
+              } else {
+                context.read<FeatchSongCubit>().clickSong(
+                    type: data.type ?? "",
+                    id: data.id ?? "0",
+                    imageUrl: data.image,
+                    title: data.title);
+              }
             },
             child: SizedBox(
               width: 180,
@@ -268,7 +291,8 @@ class _SongList extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(boderRadius),
                       child: Image.network(
-                        data.image ?? "",
+                        data.image ??
+                            "https://static.vecteezy.com/system/resources/thumbnails/037/044/052/small_2x/ai-generated-studio-shot-of-black-headphones-over-music-note-explosion-background-with-empty-space-for-text-photo.jpg",
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -281,8 +305,10 @@ class _SongList extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    data.subtitle ?? "null",
-                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                    data.subtitle ?? "",
+                    style: const TextStyle(
+                      fontSize: 12,
+                    ),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ],

@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/sized.dart';
+import 'package:musiq/main.dart';
 import 'package:musiq/models/song_model.dart';
 import 'package:musiq/presentation/commanWidgets/favorite_icon.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 
 class AlbumOrPlaylistScreen extends StatelessWidget {
   final List<SongModel> songModel;
-  const AlbumOrPlaylistScreen({super.key, required this.songModel});
+  final String? imageUrl;
+  final String title;
+  const AlbumOrPlaylistScreen({
+    super.key,
+    required this.songModel,
+    this.imageUrl,
+    required this.title,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,24 +24,69 @@ class AlbumOrPlaylistScreen extends StatelessWidget {
       body: Column(
         children: [
           Container(
+            margin: EdgeInsets.all(10),
             child: Row(
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image.network(
-                    songModel.first.imageUrl,
-                    scale: 2,
+                Container(
+                  width: 220,
+                  height: 200,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.network(
+                      imageUrl ?? songModel.first.imageUrl,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
                 constWidth20,
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(songModel.first.album),
-                    Text("${songModel.length}-songs"),
-                    Text(songModel.first.language),
-                    Text(songModel.first.albumArtist),
-                  ],
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 5,
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: colorList[colorIndex],
+                        ),
+                      ),
+                      Text(
+                        "${songModel.length}-songs",
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 5,
+                      ),
+                      Text(
+                        songModel.first.language,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 5,
+                      ),
+                      Text(
+                        songModel.first.albumArtist,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 5,
+                      ),
+                      constHeight10,
+                      Row(
+                        children: [
+                          Spacer(),
+                          CircleAvatar(
+                            backgroundColor: colorList[colorIndex],
+                            radius: 28,
+                            child: Center(
+                              child: Icon(
+                                Icons.play_arrow_sharp,
+                                size: 35,
+                              ),
+                            ),
+                          ),
+                          constWidth20
+                        ],
+                      )
+                    ],
+                  ),
                 )
               ],
             ),

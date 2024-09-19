@@ -39,7 +39,8 @@ class _SplashScreenState extends State<SplashScreen> {
     colorIndex = await SharedPreference.getColorIndex() ?? 0;
     lastplayed = await SharedPreference.getLastPlayedSong();
     userIsLoggedIn = FirebaseAuth.instance.currentUser?.email;
-    log("splash");
+
+    log("$userIsLoggedIn");
     if (!mounted) return;
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(

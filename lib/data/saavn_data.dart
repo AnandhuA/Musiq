@@ -249,8 +249,7 @@ class SaavnAPI {
     List searchedPlaylistList = [];
     List searchedArtistList = [];
     List searchedTopQueryList = [];
-    // List searchedShowList = [];
-    // List searchedEpisodeList = [];
+ 
 
     final String params =
         '__call=autocomplete.get&cc=in&includeMetaTags=1&query=$searchQuery';
@@ -283,7 +282,6 @@ class SaavnAPI {
         result['Playlists'] = searchedPlaylistList;
       }
 
-      // }
 
       searchedArtistList = await formatAlbumResponse(
         artistResponseList,
@@ -334,7 +332,7 @@ class SaavnAPI {
   Future<List<String>> getTopSearches() async {
     try {
       final res = await getResponse(endpoints['topSearches']!, useProxy: true);
-      log("${res.body}");
+      // log("${res.body}");
       if (res.statusCode == 200) {
         final List getMain = json.decode(res.body) as List;
         return getMain.map((element) {
@@ -345,6 +343,39 @@ class SaavnAPI {
       log('Error in getTopSearches: $e');
     }
     return List.empty();
+  }
+
+//-------------featch song search --------------------
+  Future<Map> fetchSongSearchResults({
+    required String searchQuery,
+    int count = 20,
+    int page = 1,
+  }) async {
+    final String params =
+        "p=$page&q=$searchQuery&n=$count&${endpoints['getResults']}";
+
+    try {
+      final res = await getResponse(params, useProxy: false);
+      if (res.statusCode == 200) {
+        final Map getMain = json.decode(res.body) as Map;
+        final List responseList = getMain['results'] as List;
+        return {
+          'songs': await formatSongsResponse(responseList, 'song'),
+          'error': '',
+        };
+      } else {
+        return {
+          'songs': List.empty(),
+          'error': res.body,
+        };
+      }
+    } catch (e) {
+      log('Error in fetchSongSearchResults: $e');
+      return {
+        'songs': List.empty(),
+        'error': e,
+      };
+    }
   }
 }
 

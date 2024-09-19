@@ -1,11 +1,11 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/bloc/FeatchSong/featch_song_cubit.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/main.dart';
 import 'package:musiq/presentation/commanWidgets/textfeild.dart';
+import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 import 'package:musiq/presentation/screens/searchScreen/bloc/SearchSong/search_song_bloc.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -86,9 +86,32 @@ class SearchScreenState extends State<SearchScreen> {
                       return Center(child: Text('Error occurred.'));
                     } else if (state is SearchSongSuccess) {
                       final searchResult = state.searchResult;
+                      final songList = state.songModel;
 
                       return ListView(
                         children: [
+                          if (songList.isNotEmpty) ...[
+                            Text(
+                              '   Songs',
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: colorList[colorIndex]),
+                            ),
+                            ...songList.map((song) => ListTile(
+                                  title: Text(song.album),
+                                  subtitle: Text(song.artist),
+                                  leading: Image.network(song.imageUrl),
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              PlayerScreen(songs: [song]),
+                                        ));
+                                  },
+                                )),
+                          ],
                           if (searchResult.albums != null &&
                               searchResult.albums!.isNotEmpty) ...[
                             Text(
@@ -104,7 +127,9 @@ class SearchScreenState extends State<SearchScreen> {
                                   leading: Image.network(album.image),
                                   onTap: () {
                                     context.read<FeatchSongCubit>().clickSong(
-                                        type: album.type, id: album.id);
+                                        type: album.type,
+                                        id: album.id,
+                                        title: album.title);
                                   },
                                 )),
                           ],
@@ -126,29 +151,12 @@ class SearchScreenState extends State<SearchScreen> {
                                         context
                                             .read<FeatchSongCubit>()
                                             .clickSong(
-                                                type: playlist.type,
-                                                id: playlist.id);
+                                              type: playlist.type,
+                                              id: playlist.id,
+                                              title: playlist.title,
+                                            );
                                       },
                                     )),
-                          ],
-                          if (searchResult.artists != null &&
-                              searchResult.artists!.isNotEmpty) ...[
-                            Text(
-                              '   Artists',
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: colorList[colorIndex]),
-                            ),
-                            ...searchResult.artists!.map((artist) => ListTile(
-                                  title: Text(artist.title),
-                                  subtitle: Text(artist.artist),
-                                  leading: Image.network(artist.image),
-                                  onTap: () {
-                                    context.read<FeatchSongCubit>().clickSong(
-                                        type: artist.type, id: artist.id);
-                                  },
-                                )),
                           ],
                         ],
                       );

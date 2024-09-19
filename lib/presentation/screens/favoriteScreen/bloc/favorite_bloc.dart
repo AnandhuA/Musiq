@@ -22,7 +22,6 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
     Emitter<FavoriteState> emit,
   ) async {
     emit(FavoriteLoading());
-
     _favorites = await FavoriteSongRepo.fetchFavorites();
     emit(FeatchFavoriteSuccess(favorites: _favorites));
   }

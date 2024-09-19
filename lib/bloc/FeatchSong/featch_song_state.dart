@@ -10,16 +10,18 @@ final class FeatchSongLoading extends FeatchSongState {}
 final class FeatchSongLoaded extends FeatchSongState {
   final List<SongModel> songModel;
 
-   FeatchSongLoaded({required this.songModel });
+  FeatchSongLoaded({required this.songModel});
 }
 
 final class FeatchAlbumOrPlayList extends FeatchSongState {
-    final List<SongModel> songModel;
-
-  FeatchAlbumOrPlayList({required this.songModel});
+  final List<SongModel> songModel;
+  final String? imageUrl;
+  final String title;
+  FeatchAlbumOrPlayList({
+    required this.songModel,
+    this.imageUrl,
+    required this.title,
+  });
 }
 
-
-final class FeatchSongError extends FeatchSongState{
-  
-}
+final class FeatchSongError extends FeatchSongState {}
