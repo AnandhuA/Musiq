@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:ui';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
@@ -135,6 +136,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
@@ -158,7 +160,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                 height: double.infinity,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: NetworkImage(currentSong.imageUrl),
+                    image: CachedNetworkImageProvider(currentSong.imageUrl),
                     alignment: isMobile(context)
                         ? const Alignment(1, -2)
                         : const Alignment(1, 20),
@@ -166,19 +168,14 @@ class _PlayerScreenState extends State<PlayerScreen> {
                   ),
                 ),
                 child: BackdropFilter(
-                  filter: ImageFilter.blur(
-                    sigmaX: 100,
-                    sigmaY: 100,
-                  ),
+                  filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
                   child: Padding(
                     padding: EdgeInsets.symmetric(
                         horizontal: isMobile(context) ? 10 : 100),
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
-                          CustomAppBar(
-                            title: currentSong.album,
-                          ),
+                          CustomAppBar(title: currentSong.album),
                           constHeight30,
                           Container(
                             height: screenHeight * 0.3,
@@ -187,7 +184,8 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                 EdgeInsets.all(isMobile(context) ? 20 : 100),
                             decoration: BoxDecoration(
                               image: DecorationImage(
-                                image: NetworkImage(currentSong.imageUrl),
+                                image: CachedNetworkImageProvider(
+                                    currentSong.imageUrl),
                                 fit: BoxFit.fill,
                               ),
                               borderRadius: BorderRadius.circular(
@@ -300,6 +298,23 @@ class _PlayerScreenState extends State<PlayerScreen> {
                               ),
                             ],
                           ),
+                          Row(
+                            children: [
+                              if (isMobile(context))
+                                IconButton(
+                                  onPressed: () {
+                                    showModalBottomSheet(
+                                      context: context,
+                                      isScrollControlled: true,
+                                      builder: (BuildContext context) {
+                                        return _buildSongList(context);
+                                      },
+                                    );
+                                  },
+                                  icon: const Icon(Icons.queue_music_sharp),
+                                ),
+                            ],
+                          )
                         ],
                       ),
                     ),
@@ -311,79 +326,78 @@ class _PlayerScreenState extends State<PlayerScreen> {
               Container(
                 width: sidebarWidth,
                 color: Colors.transparent,
-                child: ReorderableListView(
-                  onReorder: (oldIndex, newIndex) {
-                    setState(() {
-                      if (newIndex > oldIndex) {
-                        newIndex -= 1;
-                      }
-                      final moveSong = widget.songs.removeAt(oldIndex);
-                      widget.songs.insert(newIndex, moveSong);
-                      if (_currentIndex == oldIndex) {
-                        _currentIndex = newIndex;
-                      } else if (_currentIndex > oldIndex &&
-                          _currentIndex <= newIndex) {
-                        _currentIndex--;
-                      } else if (_currentIndex < oldIndex &&
-                          _currentIndex >= newIndex) {
-                        _currentIndex++;
-                      }
-                    });
-                  },
-                  children: List.generate(widget.songs.length, (index) {
-                    return ListTile(
-                      key: ValueKey(widget.songs[index].id),
-                      onTap: () {
-                        if (index != _currentIndex) {
-                          _audioPlayer.stop();
-                          setState(() {
-                            _currentIndex = index;
-                            _hasPlayed = false;
-                          });
-                          _initializePlayer();
-                          _scrollToCurrentSong();
-                        }
-                      },
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          _currentIndex == index
-                              ? Lottie.asset(
-                                  Theme.of(context).brightness ==
-                                          Brightness.dark
-                                      ? "assets/animations/musicPlaying_light.json"
-                                      : "assets/animations/musicPlaying_dark.json",
-                                  height: 50,
-                                  width: 50)
-                              : const SizedBox(),
-                          FavoriteIcon(
-                            song: widget.songs[index],
-                          ),
-                        ],
-                      ),
-                      leading: Container(
-                        width: 60,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: NetworkImage(
-                              widget.songs[index].imageUrl,
-                            ),
-                            fit: BoxFit.fill,
-                          ),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                      ),
-                      title: Text(
-                        widget.songs[index].title,
-                      ),
-                      subtitle: Text(widget.songs[index].subtitle),
-                    );
-                  }),
-                ),
+                child: _buildSongList(context),
               )
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildSongList(BuildContext context) {
+    return ReorderableListView(
+      onReorder: (oldIndex, newIndex) {
+        setState(() {
+          if (newIndex > oldIndex) {
+            newIndex -= 1;
+          }
+          final moveSong = widget.songs.removeAt(oldIndex);
+          widget.songs.insert(newIndex, moveSong);
+          if (_currentIndex == oldIndex) {
+            _currentIndex = newIndex;
+          } else if (_currentIndex > oldIndex && _currentIndex <= newIndex) {
+            _currentIndex--;
+          } else if (_currentIndex < oldIndex && _currentIndex >= newIndex) {
+            _currentIndex++;
+          }
+        });
+      },
+      children: List.generate(widget.songs.length, (index) {
+        return ListTile(
+          key: ValueKey(widget.songs[index].id),
+          onTap: () {
+            if (index != _currentIndex) {
+              _audioPlayer.stop();
+              setState(() {
+                _currentIndex = index;
+                _hasPlayed = false;
+              });
+              _initializePlayer();
+              _scrollToCurrentSong();
+            }
+          },
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _currentIndex == index
+                  ? Lottie.asset(
+                      Theme.of(context).brightness == Brightness.dark
+                          ? "assets/animations/musicPlaying_light.json"
+                          : "assets/animations/musicPlaying_dark.json",
+                      height: 50,
+                      width: 50)
+                  : const SizedBox(),
+              FavoriteIcon(
+                song: widget.songs[index],
+              ),
+            ],
+          ),
+          leading: Container(
+            width: 60,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: CachedNetworkImageProvider(
+                  widget.songs[index].imageUrl,
+                ),
+                fit: BoxFit.fill,
+              ),
+              borderRadius: BorderRadius.circular(5),
+            ),
+          ),
+          title: Text(widget.songs[index].title),
+          subtitle: Text(widget.songs[index].subtitle),
+        );
+      }),
     );
   }
 }

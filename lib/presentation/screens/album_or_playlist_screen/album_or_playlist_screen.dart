@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/sized.dart';
@@ -33,9 +34,13 @@ class AlbumOrPlaylistScreen extends StatelessWidget {
                   height: 200,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
-                    child: Image.network(
-                      imageUrl ?? songModel.first.imageUrl,
+                    child: CachedNetworkImage(
+                      imageUrl: imageUrl ?? songModel.first.imageUrl,
                       fit: BoxFit.cover,
+                      placeholder: (context, url) =>
+                          Image.asset("assets/images/album.png"),
+                      errorWidget: (context, url, error) =>
+                          Image.asset("assets/images/album.png"),
                     ),
                   ),
                 ),
@@ -130,8 +135,16 @@ class AlbumOrPlaylistScreen extends StatelessWidget {
                         ));
                   },
                   leading: ClipRRect(
-                      borderRadius: BorderRadius.circular(5),
-                      child: Image.network(song.imageUrl)),
+                    borderRadius: BorderRadius.circular(5),
+                    child: CachedNetworkImage(
+                      imageUrl: song.imageUrl,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) =>
+                          Image.asset("assets/images/song.png"),
+                      errorWidget: (context, url, error) =>
+                          Image.asset("assets/images/song.png"),
+                    ),
+                  ),
                   title: Text(song.title),
                   subtitle: Text(song.subtitle),
                   trailing: FavoriteIcon(song: song),

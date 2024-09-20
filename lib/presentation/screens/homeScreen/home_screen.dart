@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
@@ -290,10 +291,14 @@ class _SongList extends StatelessWidget {
                   Expanded(
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(boderRadius),
-                      child: Image.network(
-                        data.image ??
+                      child: CachedNetworkImage(
+                        imageUrl: data.image ??
                             "https://static.vecteezy.com/system/resources/thumbnails/037/044/052/small_2x/ai-generated-studio-shot-of-black-headphones-over-music-note-explosion-background-with-empty-space-for-text-photo.jpg",
                         fit: BoxFit.cover,
+                        placeholder: (context, url) =>
+                            Image.asset("assets/images/song.png"),
+                        errorWidget: (context, url, error) =>
+                            Image.asset("assets/images/song.png"),
                       ),
                     ),
                   ),

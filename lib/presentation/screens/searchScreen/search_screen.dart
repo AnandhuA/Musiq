@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/bloc/FeatchSong/featch_song_cubit.dart';
@@ -151,13 +152,13 @@ class SearchScreenState extends State<SearchScreen> {
                   TextButton(
                     onPressed: () {
                       setState(() {
-                        selectedFilter = "Artists";
+                        selectedFilter = "Playlists";
                       });
                     },
                     child: Text(
-                      "Artists",
+                      "Playlists",
                       style: TextStyle(
-                        color: selectedFilter == "Artists"
+                        color: selectedFilter == "Playlists"
                             ? colorList[colorIndex]
                             : theme.brightness == Brightness.dark
                                 ? Colors.white
@@ -242,7 +243,13 @@ class SearchScreenState extends State<SearchScreen> {
                             ...songList.map((song) => ListTile(
                                   title: Text(song.album),
                                   subtitle: Text(song.artist),
-                                  leading: Image.network(song.imageUrl),
+                                  leading: CachedNetworkImage(
+                                    imageUrl: song.imageUrl,
+                                    placeholder: (context, url) =>
+                                        Image.asset("assets/images/song.png"),
+                                    errorWidget: (context, url, error) =>
+                                        Image.asset("assets/images/song.png"),
+                                  ),
                                   onTap: () {
                                     Navigator.push(
                                         context,
@@ -268,7 +275,13 @@ class SearchScreenState extends State<SearchScreen> {
                             ...searchResult.albums!.map((album) => ListTile(
                                   title: Text(album.album),
                                   subtitle: Text(album.artist),
-                                  leading: Image.network(album.image),
+                                  leading: CachedNetworkImage(
+                                    imageUrl: album.image,
+                                    placeholder: (context, url) =>
+                                        Image.asset("assets/images/album.png"),
+                                    errorWidget: (context, url, error) =>
+                                        Image.asset("assets/images/album.png"),
+                                  ),
                                   onTap: () {
                                     context.read<FeatchSongCubit>().clickSong(
                                         type: album.type,
@@ -278,7 +291,8 @@ class SearchScreenState extends State<SearchScreen> {
                                 )),
                           ],
                           // Show Playlists if "All" is selected
-                          if (selectedFilter == "All" &&
+                          if ((selectedFilter == "All" ||
+                                  selectedFilter == "Playlists") &&
                               searchResult.playlists != null &&
                               searchResult.playlists!.isNotEmpty) ...[
                             Text(
@@ -288,21 +302,25 @@ class SearchScreenState extends State<SearchScreen> {
                                   fontWeight: FontWeight.bold,
                                   color: colorList[colorIndex]),
                             ),
-                            ...searchResult.playlists!
-                                .map((playlist) => ListTile(
-                                      title: Text(playlist.title),
-                                      subtitle: Text(playlist.artist),
-                                      leading: Image.network(playlist.image),
-                                      onTap: () {
-                                        context
-                                            .read<FeatchSongCubit>()
-                                            .clickSong(
-                                              type: playlist.type,
-                                              id: playlist.id,
-                                              title: playlist.title,
-                                            );
-                                      },
-                                    )),
+                            ...searchResult.playlists!.map((playlist) =>
+                                ListTile(
+                                  title: Text(playlist.title),
+                                  subtitle: Text(playlist.artist),
+                                  leading: CachedNetworkImage(
+                                    imageUrl: playlist.image,
+                                    placeholder: (context, url) =>
+                                        Image.asset("assets/images/album.png"),
+                                    errorWidget: (context, url, error) =>
+                                        Image.asset("assets/images/album.png"),
+                                  ),
+                                  onTap: () {
+                                    context.read<FeatchSongCubit>().clickSong(
+                                          type: playlist.type,
+                                          id: playlist.id,
+                                          title: playlist.title,
+                                        );
+                                  },
+                                )),
                           ],
                         ],
                       );

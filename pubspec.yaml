@@ -54,6 +54,7 @@ dependencies:
   url_launcher_windows: ^3.1.2
   html: ^0.15.4
   encrypt: ^5.0.3
+  cached_network_image: ^3.4.1
   
 
 dev_dependencies:
