@@ -19,7 +19,7 @@ class CustomAppBar extends StatelessWidget {
             onPressed: () {
               Navigator.pop(context);
             },
-            icon: const Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back_ios_new_sharp),
           ),
           Expanded(
               child: Text(

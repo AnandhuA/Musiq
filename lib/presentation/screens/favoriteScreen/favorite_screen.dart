@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/main.dart';
@@ -72,7 +73,7 @@ class FavoriteScreen extends StatelessWidget {
                                 height: 50,
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
-                                    image: NetworkImage(
+                                    image: CachedNetworkImageProvider(
                                       state.favorites[index].imageUrl,
                                     ),
                                     fit: BoxFit.fill,
@@ -82,8 +83,9 @@ class FavoriteScreen extends StatelessWidget {
                               ),
                               title: Text(
                                 state.favorites[index].title,
+                                maxLines: 1,
                               ),
-                              subtitle: Text(state.favorites[index].album),
+                              subtitle: Text(state.favorites[index].album,maxLines: 1,),
                             );
                           },
                         );

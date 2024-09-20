@@ -70,7 +70,7 @@ class SearchScreenState extends State<SearchScreen> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  icon: const Icon(Icons.arrow_back),
+                  icon: const Icon(Icons.arrow_back_ios_new_sharp),
                 ),
                 onChanged: (value) {
                   _onSearchChanged(value);
@@ -241,8 +241,14 @@ class SearchScreenState extends State<SearchScreen> {
                                   color: colorList[colorIndex]),
                             ),
                             ...songList.map((song) => ListTile(
-                                  title: Text(song.album),
-                                  subtitle: Text(song.artist),
+                                  title: Text(
+                                    song.album,
+                                    maxLines: 1,
+                                  ),
+                                  subtitle: Text(
+                                    song.artist,
+                                    maxLines: 1,
+                                  ),
                                   leading: CachedNetworkImage(
                                     imageUrl: song.imageUrl,
                                     placeholder: (context, url) =>
@@ -273,8 +279,14 @@ class SearchScreenState extends State<SearchScreen> {
                                   color: colorList[colorIndex]),
                             ),
                             ...searchResult.albums!.map((album) => ListTile(
-                                  title: Text(album.album),
-                                  subtitle: Text(album.artist),
+                                  title: Text(
+                                    album.album,
+                                    maxLines: 1,
+                                  ),
+                                  subtitle: Text(
+                                    album.artist,
+                                    maxLines: 1,
+                                  ),
                                   leading: CachedNetworkImage(
                                     imageUrl: album.image,
                                     placeholder: (context, url) =>
@@ -304,8 +316,14 @@ class SearchScreenState extends State<SearchScreen> {
                             ),
                             ...searchResult.playlists!.map((playlist) =>
                                 ListTile(
-                                  title: Text(playlist.title),
-                                  subtitle: Text(playlist.artist),
+                                  title: Text(
+                                    playlist.title,
+                                    maxLines: 1,
+                                  ),
+                                  subtitle: Text(
+                                    playlist.artist,
+                                    maxLines: 1,
+                                  ),
                                   leading: CachedNetworkImage(
                                     imageUrl: playlist.image,
                                     placeholder: (context, url) =>

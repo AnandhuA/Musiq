@@ -21,6 +21,12 @@ class _ThemeScreenState extends State<ThemeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Change Theme"),
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.arrow_back_ios_new_sharp)),
         actions: [
           Lottie.asset("assets/animations/Animation1.json"),
         ],

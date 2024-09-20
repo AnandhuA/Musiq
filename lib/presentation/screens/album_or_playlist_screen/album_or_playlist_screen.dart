@@ -22,7 +22,15 @@ class AlbumOrPlaylistScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.arrow_back_ios_new_sharp)),
+        title: Text(title),
+      ),
       body: Column(
         children: [
           Container(
@@ -145,8 +153,14 @@ class AlbumOrPlaylistScreen extends StatelessWidget {
                           Image.asset("assets/images/song.png"),
                     ),
                   ),
-                  title: Text(song.title),
-                  subtitle: Text(song.subtitle),
+                  title: Text(
+                    song.title,
+                    maxLines: 1,
+                  ),
+                  subtitle: Text(
+                    song.subtitle,
+                    maxLines: 1,
+                  ),
                   trailing: FavoriteIcon(song: song),
                 );
               },

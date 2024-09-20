@@ -151,184 +151,197 @@ class _PlayerScreenState extends State<PlayerScreen> {
 
     return Scaffold(
       body: SafeArea(
-        child: Row(
-          children: [
-            Expanded(
-              flex: 4,
-              child: Container(
-                width: double.infinity,
-                height: double.infinity,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: CachedNetworkImageProvider(currentSong.imageUrl),
-                    alignment: isMobile(context)
-                        ? const Alignment(1, -2)
-                        : const Alignment(1, 20),
-                    fit: BoxFit.fitWidth,
+        child: GestureDetector(
+          onHorizontalDragEnd: (DragEndDetails details) {
+            if (details.primaryVelocity! < 0) {
+              _playNext();
+            } else if (details.primaryVelocity! > 0) {
+              _playPrevious();
+            }
+          },
+          child: Row(
+            children: [
+              Expanded(
+                flex: 4,
+                child: Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: CachedNetworkImageProvider(currentSong.imageUrl),
+                      alignment: isMobile(context)
+                          ? const Alignment(1, -2)
+                          : const Alignment(1, 20),
+                      fit: BoxFit.fitWidth,
+                    ),
                   ),
-                ),
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: isMobile(context) ? 10 : 100),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          CustomAppBar(title: currentSong.album),
-                          constHeight30,
-                          Container(
-                            height: screenHeight * 0.3,
-                            width: imageSize,
-                            margin:
-                                EdgeInsets.all(isMobile(context) ? 20 : 100),
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: CachedNetworkImageProvider(
-                                    currentSong.imageUrl),
-                                fit: BoxFit.fill,
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: isMobile(context) ? 10 : 100),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            CustomAppBar(title: currentSong.album),
+                            constHeight30,
+                            Container(
+                              height: screenHeight * 0.3,
+                              width: imageSize,
+                              margin:
+                                  EdgeInsets.all(isMobile(context) ? 20 : 100),
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: CachedNetworkImageProvider(
+                                      currentSong.imageUrl),
+                                  fit: BoxFit.fill,
+                                ),
+                                borderRadius: BorderRadius.circular(
+                                    isMobile(context) ? 15 : 20),
                               ),
-                              borderRadius: BorderRadius.circular(
-                                  isMobile(context) ? 15 : 20),
                             ),
-                          ),
-                          SizedBox(height: isMobile(context) ? 50 : 20),
-                          Text(
-                            currentSong.title,
-                            style: TextStyle(
-                              fontSize: isMobile(context) ? 35 : 50,
+                            SizedBox(height: isMobile(context) ? 50 : 20),
+                            Text(
+                              currentSong.title,
+                              style: TextStyle(
+                                fontSize: isMobile(context) ? 35 : 50,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.fade,
+                              softWrap: false,
                             ),
-                            maxLines: 1,
-                            overflow: TextOverflow.fade,
-                            softWrap: false,
-                          ),
-                          SizedBox(height: isMobile(context) ? 15 : 10),
-                          Text(
-                            currentSong.subtitle,
-                            maxLines: 1,
-                            overflow: TextOverflow.fade,
-                            softWrap: false,
-                          ),
-                          SizedBox(height: isMobile(context) ? 35 : 30),
-                          BlocBuilder<ProgressBarCubit, ProgressBarState>(
-                            builder: (context, state) {
-                              if (state is ProgressBarInitial) {
+                            SizedBox(height: isMobile(context) ? 15 : 10),
+                            Text(
+                              currentSong.subtitle,
+                              maxLines: 1,
+                              overflow: TextOverflow.fade,
+                              softWrap: false,
+                            ),
+                            SizedBox(height: isMobile(context) ? 35 : 30),
+                            BlocBuilder<ProgressBarCubit, ProgressBarState>(
+                              builder: (context, state) {
+                                if (state is ProgressBarInitial) {
+                                  return ProgressBarWidget(
+                                    song: widget.songs[_currentIndex],
+                                    audioPlayer: _audioPlayer,
+                                    progressDuration: state.progressDuration,
+                                  );
+                                }
                                 return ProgressBarWidget(
                                   song: widget.songs[_currentIndex],
                                   audioPlayer: _audioPlayer,
-                                  progressDuration: state.progressDuration,
+                                  progressDuration: Duration.zero,
                                 );
-                              }
-                              return ProgressBarWidget(
-                                song: widget.songs[_currentIndex],
-                                audioPlayer: _audioPlayer,
-                                progressDuration: Duration.zero,
-                              );
-                            },
-                          ),
-                          SizedBox(height: isMobile(context) ? 15 : 20),
-                          Row(
-                            children: [
-                              FavoriteIcon(song: currentSong),
-                              const Spacer(),
-                              IconButton(
-                                onPressed: _playPrevious,
-                                icon: Icon(
-                                  Icons.skip_previous_rounded,
-                                  size: fontSize,
-                                  color: _currentIndex == 0
-                                      ? const Color.fromARGB(99, 158, 158, 158)
-                                      : null,
-                                ),
-                              ),
-                              BlocBuilder<PlayAndPauseCubit, PlayAndPauseState>(
-                                builder: (context, state) {
-                                  if (state is PlayingState) {
-                                    return IconButton(
-                                      onPressed: () {
-                                        _audioPlayer.resume();
-                                      },
-                                      icon: Icon(
-                                        Icons.play_circle_fill_rounded,
-                                        size: fontSize * 1.2,
-                                      ),
-                                    );
-                                  }
-                                  if (state is PausedState) {
-                                    return IconButton(
-                                      onPressed: () {
-                                        _audioPlayer.pause();
-                                      },
-                                      icon: Icon(
-                                        Icons.pause_circle_filled,
-                                        size: fontSize * 1.2,
-                                      ),
-                                    );
-                                  }
-                                  return SizedBox(
-                                    height: fontSize,
-                                    width: fontSize,
-                                    child: Theme.of(context).brightness ==
-                                            Brightness.dark
-                                        ? Lottie.asset(
-                                            "assets/animations/light_music_loading.json",
-                                            fit: BoxFit.cover)
-                                        : Lottie.asset(
-                                            "assets/animations/dark_music_loading.json",
-                                          ),
-                                  );
-                                },
-                              ),
-                              IconButton(
-                                onPressed: _playNext,
-                                icon: Icon(Icons.skip_next_rounded,
+                              },
+                            ),
+                            SizedBox(height: isMobile(context) ? 15 : 20),
+                            Row(
+                              children: [
+                                FavoriteIcon(song: currentSong),
+                                const Spacer(),
+                                IconButton(
+                                  onPressed: _playPrevious,
+                                  icon: Icon(
+                                    Icons.skip_previous_rounded,
                                     size: fontSize,
-                                    color: _currentIndex ==
-                                            ((widget.songs.length) - 1)
+                                    color: _currentIndex == 0
                                         ? const Color.fromARGB(
                                             99, 158, 158, 158)
-                                        : null),
-                              ),
-                              const Spacer(),
-                              IconButton(
-                                onPressed: () {},
-                                icon: const Icon(
-                                  Icons.download,
+                                        : null,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              if (isMobile(context))
-                                IconButton(
-                                  onPressed: () {
-                                    showModalBottomSheet(
-                                      context: context,
-                                      isScrollControlled: true,
-                                      builder: (BuildContext context) {
-                                        return _buildSongList(context);
-                                      },
+                                BlocBuilder<PlayAndPauseCubit,
+                                    PlayAndPauseState>(
+                                  builder: (context, state) {
+                                    if (state is PlayingState) {
+                                      return IconButton(
+                                        onPressed: () {
+                                          _audioPlayer.resume();
+                                        },
+                                        icon: Icon(
+                                          Icons.play_circle_fill_rounded,
+                                          size: fontSize * 1.2,
+                                        ),
+                                      );
+                                    }
+                                    if (state is PausedState) {
+                                      return IconButton(
+                                        onPressed: () {
+                                          _audioPlayer.pause();
+                                        },
+                                        icon: Icon(
+                                          Icons.pause_circle_filled,
+                                          size: fontSize * 1.2,
+                                        ),
+                                      );
+                                    }
+                                    return SizedBox(
+                                      height: fontSize,
+                                      width: fontSize,
+                                      child: Theme.of(context).brightness ==
+                                              Brightness.dark
+                                          ? Lottie.asset(
+                                              "assets/animations/light_music_loading.json",
+                                              fit: BoxFit.cover)
+                                          : Lottie.asset(
+                                              "assets/animations/dark_music_loading.json",
+                                            ),
                                     );
                                   },
-                                  icon: const Icon(Icons.queue_music_sharp),
                                 ),
-                            ],
-                          )
-                        ],
+                                IconButton(
+                                  onPressed: _playNext,
+                                  icon: Icon(Icons.skip_next_rounded,
+                                      size: fontSize,
+                                      color: _currentIndex ==
+                                              ((widget.songs.length) - 1)
+                                          ? const Color.fromARGB(
+                                              99, 158, 158, 158)
+                                          : null),
+                                ),
+                                const Spacer(),
+                                IconButton(
+                                  onPressed: () {},
+                                  icon: const Icon(
+                                    Icons.download,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                if (isMobile(context))
+                                  IconButton(
+                                    onPressed: () {
+                                      showModalBottomSheet(
+                                        backgroundColor:
+                                            Colors.transparent.withOpacity(0.5),
+                                        context: context,
+                                        isScrollControlled: true,
+                                        builder: (BuildContext context) {
+                                          return _buildSongList(context);
+                                        },
+                                      );
+                                    },
+                                    icon: const Icon(Icons.queue_music_sharp),
+                                  ),
+                              ],
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-            if (isDesktop(context))
-              Container(
-                width: sidebarWidth,
-                color: Colors.transparent,
-                child: _buildSongList(context),
-              )
-          ],
+              if (isDesktop(context))
+                Container(
+                  width: sidebarWidth,
+                  color: Colors.transparent,
+                  child: _buildSongList(context),
+                )
+            ],
+          ),
         ),
       ),
     );
@@ -394,8 +407,14 @@ class _PlayerScreenState extends State<PlayerScreen> {
               borderRadius: BorderRadius.circular(5),
             ),
           ),
-          title: Text(widget.songs[index].title),
-          subtitle: Text(widget.songs[index].subtitle),
+          title: Text(
+            widget.songs[index].title,
+            maxLines: 1,
+          ),
+          subtitle: Text(
+            widget.songs[index].subtitle,
+            maxLines: 1,
+          ),
         );
       }),
     );

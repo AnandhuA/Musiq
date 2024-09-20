@@ -29,8 +29,8 @@ class CustomTextFeild extends StatelessWidget {
         hintText: hintText,
         filled: true,
         fillColor: Theme.of(context).brightness == Brightness.dark
-            ? const Color.fromARGB(255, 32, 32, 32)
-            : const Color.fromARGB(255, 196, 196, 196),
+            ? Color.fromARGB(100, 32, 32, 32)
+            : Color.fromARGB(132, 196, 196, 196),
         border: OutlineInputBorder(
           borderSide: BorderSide.none,
           borderRadius: BorderRadius.circular(18),

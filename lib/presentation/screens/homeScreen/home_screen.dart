@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lottie/lottie.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/main.dart';
@@ -25,30 +24,18 @@ class HomeScreen extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            title: Text(
-              'Music',
-              style: TextStyle(
-                color: colorList[colorIndex],
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            actions: [
-              Lottie.asset("assets/animations/Animation1.json"),
-            ],
-            bottom: PreferredSize(
-              preferredSize: const Size.fromHeight(60),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+            title: Row(
+              children: [
+                Expanded(
                   child: InkWell(
                     borderRadius: BorderRadius.circular(18),
                     onTap: () {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const SearchScreen(),
-                          ));
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SearchScreen(),
+                        ),
+                      );
                     },
                     child: AbsorbPointer(
                       child: CustomTextFeild(
@@ -61,9 +48,10 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-              ),
+              ],
             ),
           ),
+
           drawer: isMobile(context)
               ? const DrawerWidget()
               : null, // Use isMobile function
