@@ -67,6 +67,103 @@ class HomeScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        constHeight10,
+                        state.lastplayed.isNotEmpty
+                            ? Text(
+                                "  Last Played ",
+                                style: TextStyle(
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold,
+                                    color: colorList[colorIndex]),
+                              )
+                            : SizedBox(),
+                        state.lastplayed.isNotEmpty
+                            ? Container(
+                                height: 230,
+                                child: PageView.builder(
+                                  itemCount: ((state.lastplayed.length + 2) / 3)
+                                      .floor(),
+                                  pageSnapping: true,
+                                  controller:
+                                      PageController(viewportFraction: 0.8),
+                                  itemBuilder: (context, pageIndex) {
+                                    return Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: List.generate(3, (itemIndex) {
+                                        final index = pageIndex * 3 + itemIndex;
+                                        if (index >= state.lastplayed.length) {
+                                          return SizedBox();
+                                        }
+                                        return Container(
+                                          child: ListTile(
+                                            leading: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              child: CachedNetworkImage(
+                                                imageUrl: state
+                                                    .lastplayed[index].imageUrl,
+                                                placeholder: (context, url) {
+                                                  // Placeholder logic
+                                                  return state.lastplayed[index]
+                                                              .type ==
+                                                          "Artist"
+                                                      ? Image.asset(
+                                                          "assets/images/artist.png")
+                                                      : state.lastplayed[index]
+                                                                  .type ==
+                                                              "album"
+                                                          ? Image.asset(
+                                                              "assets/images/album.png")
+                                                          : Image.asset(
+                                                              "assets/images/song.png");
+                                                },
+                                                errorWidget:
+                                                    (context, url, error) {
+                                                  // Error widget logic
+                                                  return state.lastplayed[index]
+                                                              .type ==
+                                                          "Artist"
+                                                      ? Image.asset(
+                                                          "assets/images/artist.png")
+                                                      : state.lastplayed[index]
+                                                                  .type ==
+                                                              "album"
+                                                          ? Image.asset(
+                                                              "assets/images/album.png")
+                                                          : Image.asset(
+                                                              "assets/images/song.png");
+                                                },
+                                              ),
+                                            ),
+                                            title: Text(
+                                              state.lastplayed[index].title,
+                                              maxLines: 1,
+                                            ),
+                                            subtitle: Text(
+                                              state.lastplayed[index].artist,
+                                              maxLines: 1,
+                                            ),
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      PlayerScreen(
+                                                    songs: state.lastplayed,
+                                                    initialIndex: index,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        );
+                                      }),
+                                    );
+                                  },
+                                ),
+                              )
+                            : SizedBox(),
                         constHeight20,
                         Text(
                           " Trending songs",
@@ -254,13 +351,13 @@ class _SongList extends StatelessWidget {
                             ? Image.asset("assets/images/artist.png")
                             : data.type == "album"
                                 ? Image.asset("assets/images/album.png")
-                                : Image.asset("assets/images/music.jpg"),
+                                : Image.asset("assets/images/song.png"),
                         errorWidget: (context, url, error) =>
                             data.type == "Artist"
                                 ? Image.asset("assets/images/artist.png")
                                 : data.type == "album"
                                     ? Image.asset("assets/images/album.png")
-                                    : Image.asset("assets/images/music.jpg"),
+                                    : Image.asset("assets/images/song.png"),
                       ),
                     ),
                   ),

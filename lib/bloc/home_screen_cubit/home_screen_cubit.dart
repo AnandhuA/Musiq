@@ -1,7 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:musiq/data/favorite_song_functions.dart';
 import 'package:musiq/data/saavn_data.dart';
 import 'package:musiq/models/home_screen_model.dart';
+import 'package:musiq/models/song_model.dart';
 
 part 'home_screen_state.dart';
 
@@ -17,7 +19,11 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
         data.map((key, value) => MapEntry(key.toString(), value));
 
     final HomeScreenModel homeScreenModel = HomeScreenModel.fromJson(jsonData);
+    final List<SongModel> lastplayed = await FavoriteSongRepo.fetchLastPlayed();
 
-    emit(HomeScreenLoaded(homeScreenModel: homeScreenModel));
+    emit(HomeScreenLoaded(
+      homeScreenModel: homeScreenModel,
+      lastplayed: lastplayed,
+    ));
   }
 }

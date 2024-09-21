@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:musiq/bloc/FeatchLibraty/featch_library_cubit.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/sized.dart';
@@ -69,9 +70,9 @@ class MainPageState extends State<MainPage> {
                       selectedIndex: _selectedIndex,
                       onDestinationSelected: _onItemTapped,
                       labelType: NavigationRailLabelType.selected,
-                      destinations: const <NavigationRailDestination>[
+                      destinations: <NavigationRailDestination>[
                         NavigationRailDestination(
-                          indicatorColor: Colors.red,
+                          indicatorColor: colorList[colorIndex],
                           icon: Icon(Icons.home),
                           label: Text('Home'),
                         ),
@@ -144,8 +145,7 @@ class MainPageState extends State<MainPage> {
                             ),
                           ],
                         )
-                      : const Text(
-                          "Library"), // Change to Text when "Library" is selected
+                      : const Text("Library"),
                 ),
                 drawer: isMobile(context) ? const DrawerWidget() : null,
                 body: Stack(
@@ -158,20 +158,28 @@ class MainPageState extends State<MainPage> {
                     ),
                   ],
                 ),
-                bottomNavigationBar: BottomNavigationBar(
-                  items: const <BottomNavigationBarItem>[
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.home),
-                      label: 'Home',
+                bottomNavigationBar: GNav(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  backgroundColor: Colors.transparent,
+                  color: Colors.grey[800],
+                  haptic: true,
+                  activeColor: colorList[colorIndex],
+                  tabBackgroundColor: colorList[colorIndex].withOpacity(0.1),
+                  gap: 5,
+                  padding: const EdgeInsets.all(10),
+                  tabMargin: EdgeInsets.all(14),
+                  tabs: const [
+                    GButton(
+                      icon: Icons.home,
+                      text: 'Home',
                     ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.library_music_sharp),
-                      label: 'Library',
+                    GButton(
+                      icon: Icons.library_music_sharp,
+                      text: 'Library',
                     ),
                   ],
-                  currentIndex: _selectedIndex,
-                  selectedItemColor: colorList[colorIndex],
-                  onTap: _onItemTapped,
+                  selectedIndex: _selectedIndex,
+                  onTabChange: _onItemTapped,
                 ),
               );
             }

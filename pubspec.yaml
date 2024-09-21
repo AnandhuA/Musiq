@@ -55,6 +55,7 @@ dependencies:
   html: ^0.15.4
   encrypt: ^5.0.3
   cached_network_image: ^3.4.1
+  google_nav_bar: ^5.0.6
   
 
 dev_dependencies:

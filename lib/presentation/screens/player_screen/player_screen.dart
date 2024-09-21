@@ -5,7 +5,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
+import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/sized.dart';
+import 'package:musiq/data/favorite_song_functions.dart';
+import 'package:musiq/data/shared_preference.dart';
+import 'package:musiq/main.dart';
 import 'package:musiq/models/song_model.dart';
 import 'package:musiq/presentation/commanWidgets/custom_app_bar.dart';
 import 'package:musiq/presentation/commanWidgets/favorite_icon.dart';
@@ -46,8 +50,9 @@ class _PlayerScreenState extends State<PlayerScreen> {
   void _initializePlayer() {
     context.read<PlayAndPauseCubit>().reset();
     context.read<ProgressBarCubit>().reset();
-    // lastplayed = currentSong;
-    // SharedPreference.lastPlayedSong(currentSong);
+    lastplayed = currentSong;
+    SharedPreference.lastPlayedSong(currentSong);
+    FavoriteSongRepo.addSong(currentSong);
     _audioPlayer = AudioPlayer();
 
     _audioPlayer.setSource(UrlSource(currentSong.url)).then(
@@ -317,9 +322,13 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                         backgroundColor:
                                             Colors.transparent.withOpacity(0.5),
                                         context: context,
-                                        isScrollControlled: true,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
                                         builder: (BuildContext context) {
-                                          return _buildSongList(context);
+                                          return Padding(
+                                              padding: EdgeInsets.all(10),
+                                              child: _buildSongList(context));
                                         },
                                       );
                                     },
@@ -410,10 +419,14 @@ class _PlayerScreenState extends State<PlayerScreen> {
           title: Text(
             widget.songs[index].title,
             maxLines: 1,
+            style: TextStyle(
+                color: _currentIndex == index ? colorList[colorIndex] : null),
           ),
           subtitle: Text(
             widget.songs[index].subtitle,
             maxLines: 1,
+            style: TextStyle(
+                color: _currentIndex == index ? colorList[colorIndex] : null),
           ),
         );
       }),

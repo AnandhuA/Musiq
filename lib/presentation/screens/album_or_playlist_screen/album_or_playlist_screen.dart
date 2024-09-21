@@ -77,13 +77,13 @@ class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
                           ? Image.asset("assets/images/artist.png")
                           : widget.songModel.first.type == "album"
                               ? Image.asset("assets/images/album.png")
-                              : Image.asset("assets/images/music.jpg"),
+                              : Image.asset("assets/images/song.png"),
                       errorWidget: (context, url, error) =>
                           widget.songModel.first.type == "Artist"
                               ? Image.asset("assets/images/artist.png")
                               : widget.songModel.first.type == "album"
                                   ? Image.asset("assets/images/album.png")
-                                  : Image.asset("assets/images/music.jpg"),
+                                  : Image.asset("assets/images/song.png"),
                     ),
                   ),
                 ),
@@ -244,13 +244,13 @@ class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
                           ? Image.asset("assets/images/artist.png")
                           : song.type == "album"
                               ? Image.asset("assets/images/album.png")
-                              : Image.asset("assets/images/music.jpg"),
+                              : Image.asset("assets/images/song.png"),
                       errorWidget: (context, url, error) =>
                           song.type == "Artist"
                               ? Image.asset("assets/images/artist.png")
                               : song.type == "album"
                                   ? Image.asset("assets/images/album.png")
-                                  : Image.asset("assets/images/music.jpg"),
+                                  : Image.asset("assets/images/song.png"),
                     ),
                   ),
                   title: Text(

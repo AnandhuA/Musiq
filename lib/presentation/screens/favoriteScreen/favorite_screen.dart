@@ -1,11 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:musiq/main.dart';
 import 'package:musiq/presentation/commanWidgets/custom_app_bar.dart';
 import 'package:musiq/presentation/commanWidgets/favorite_icon.dart';
 import 'package:musiq/bloc/favorite_bloc/favorite_bloc.dart';
-import 'package:musiq/presentation/screens/loginScreen/login_screen.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 
 class FavoriteScreen extends StatelessWidget {
@@ -28,20 +26,7 @@ class FavoriteScreen extends StatelessWidget {
           },
         ),
       ),
-      body: userIsLoggedIn == null
-          ? Center(
-              child: TextButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => LoginScreen(),
-                      ));
-                },
-                child: const Text("LogIn"),
-              ),
-            )
-          : BlocBuilder<FavoriteBloc, FavoriteState>(
+      body: BlocBuilder<FavoriteBloc, FavoriteState>(
               builder: (context, state) {
                 if (state is FavoriteLoading) {
                   return const Center(

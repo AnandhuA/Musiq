@@ -259,7 +259,7 @@ class SearchScreenState extends State<SearchScreen> {
                                                 ? Image.asset(
                                                     "assets/images/album.png")
                                                 : Image.asset(
-                                                    "assets/images/music.jpg"),
+                                                    "assets/images/song.png"),
                                     errorWidget: (context, url, error) =>
                                         song.type == "Artist"
                                             ? Image.asset(
@@ -268,7 +268,7 @@ class SearchScreenState extends State<SearchScreen> {
                                                 ? Image.asset(
                                                     "assets/images/album.png")
                                                 : Image.asset(
-                                                    "assets/images/music.jpg"),
+                                                    "assets/images/song.png"),
                                   ),
                                   onTap: () {
                                     Navigator.push(
@@ -311,7 +311,7 @@ class SearchScreenState extends State<SearchScreen> {
                                                 ? Image.asset(
                                                     "assets/images/album.png")
                                                 : Image.asset(
-                                                    "assets/images/music.jpg"),
+                                                    "assets/images/song.png"),
                                     errorWidget: (context, url, error) =>
                                         album.type == "Artist"
                                             ? Image.asset(
@@ -320,7 +320,7 @@ class SearchScreenState extends State<SearchScreen> {
                                                 ? Image.asset(
                                                     "assets/images/album.png")
                                                 : Image.asset(
-                                                    "assets/images/music.jpg"),
+                                                    "assets/images/song.png"),
                                   ),
                                   onTap: () {
                                     context.read<FeatchSongCubit>().clickSong(
@@ -363,7 +363,7 @@ class SearchScreenState extends State<SearchScreen> {
                                                 ? Image.asset(
                                                     "assets/images/album.png")
                                                 : Image.asset(
-                                                    "assets/images/music.jpg"),
+                                                    "assets/images/song.png"),
                                     errorWidget: (context, url, error) =>
                                         playlist.type == "Artist"
                                             ? Image.asset(
@@ -372,7 +372,7 @@ class SearchScreenState extends State<SearchScreen> {
                                                 ? Image.asset(
                                                     "assets/images/album.png")
                                                 : Image.asset(
-                                                    "assets/images/music.jpg"),
+                                                    "assets/images/song.png"),
                                   ),
                                   onTap: () {
                                     context.read<FeatchSongCubit>().clickSong(
