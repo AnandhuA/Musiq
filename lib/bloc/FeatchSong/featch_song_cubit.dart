@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:musiq/data/saavn_data.dart';
+import 'package:musiq/models/library_model.dart';
 import 'package:musiq/models/song_model.dart';
 
 part 'featch_song_state.dart';
@@ -13,18 +14,22 @@ class FeatchSongCubit extends Cubit<FeatchSongState> {
   void clickSong({
     required String type,
     required String id,
-    String? imageUrl,
+    required String imageUrl,
     required String title,
   }) {
     if (type == "song") {
       fetchSong(songId: id);
     } else if (type == "album") {
-      featchAlbum(albumId: id, imageUrl: imageUrl, title: title);
+      featchAlbum(albumId: id, imageUrl: imageUrl, title: title, type: "album");
     } else if (type == "playlist") {
-      featchPlaylist(playlistId: id, imageUrl: imageUrl, title: title);
+      featchPlaylist(
+          playlistId: id, imageUrl: imageUrl, title: title, type: "playlist");
     } else if (type == "mix") {
       log("$id");
-      featchPlaylist(playlistId: id, imageUrl: imageUrl, title: title);
+      featchPlaylist(
+          playlistId: id, imageUrl: imageUrl, title: title, type: "mix");
+    } else if (type == "Artist") {
+      feachArtistSong(artistName: id, imageUrl: imageUrl, title: title);
     }
   }
 
@@ -43,6 +48,7 @@ class FeatchSongCubit extends Cubit<FeatchSongState> {
     required String albumId,
     String? imageUrl,
     required String title,
+    required String type,
   }) async {
     emit(FeatchSongLoading());
     try {
@@ -51,23 +57,32 @@ class FeatchSongCubit extends Cubit<FeatchSongState> {
       List<SongModel> songList = (albumData['songs'] as List)
           .map((songJson) => SongModel.fromJson(songJson))
           .toList();
-
-      emit(FeatchAlbumOrPlayList(
-        songModel: songList,
-        imageUrl: imageUrl,
+      final LibraryModel liModel = LibraryModel(
+        id: albumId,
+        imageUrl: imageUrl ??
+            "https://static.vecteezy.com/system/resources/thumbnails/037/044/052/small_2x/ai-generated-studio-shot-of-black-headphones-over-music-note-explosion-background-with-empty-space-for-text-photo.jpg",
         title: title,
-      ));
+        type: type,
+      );
+      emit(
+        FeatchAlbumOrPlayList(
+          songModel: songList,
+          imageUrl: imageUrl,
+          title: title,
+          libraryModel: liModel,
+        ),
+      );
     } catch (error) {
       log("Failed to fetch album: $error");
     }
   }
 //--------- is playlist -------
 
-  void featchPlaylist({
-    required String playlistId,
-    required String? imageUrl,
-    required String title,
-  }) async {
+  void featchPlaylist(
+      {required String playlistId,
+      required String? imageUrl,
+      required String title,
+      required String type}) async {
     emit(FeatchSongLoading());
     try {
       final playlistData = await SaavnAPI().fetchPlaylistSongs(playlistId);
@@ -75,9 +90,19 @@ class FeatchSongCubit extends Cubit<FeatchSongState> {
       List<SongModel> songList = (playlistData['songs'] as List)
           .map((songJson) => SongModel.fromJson(songJson))
           .toList();
-
+      final LibraryModel liModel = LibraryModel(
+        id: playlistId,
+        imageUrl: imageUrl ??
+            "https://static.vecteezy.com/system/resources/thumbnails/037/044/052/small_2x/ai-generated-studio-shot-of-black-headphones-over-music-note-explosion-background-with-empty-space-for-text-photo.jpg",
+        title: title,
+        type: type,
+      );
       emit(FeatchAlbumOrPlayList(
-          songModel: songList, imageUrl: imageUrl, title: title));
+        songModel: songList,
+        imageUrl: imageUrl,
+        title: title,
+        libraryModel: liModel,
+      ));
     } catch (error) {
       log("Failed to fetch playlist: $error");
     }
@@ -97,8 +122,18 @@ class FeatchSongCubit extends Cubit<FeatchSongState> {
       List<SongModel> songList = (songdata['songs'] as List)
           .map((songJson) => SongModel.fromJson(songJson))
           .toList();
+      final LibraryModel liModel = LibraryModel(
+        id: artistName,
+        imageUrl: imageUrl,
+        title: title,
+        type: "Artist",
+      );
       emit(FeatchAlbumOrPlayList(
-          songModel: songList, imageUrl: imageUrl, title: title));
+        songModel: songList,
+        imageUrl: imageUrl,
+        title: title,
+        libraryModel: liModel,
+      ));
       // log("${songdata}");
     } catch (e) {
       log("Failed to fetch playlist: $e");

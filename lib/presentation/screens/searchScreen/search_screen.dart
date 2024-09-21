@@ -252,9 +252,23 @@ class SearchScreenState extends State<SearchScreen> {
                                   leading: CachedNetworkImage(
                                     imageUrl: song.imageUrl,
                                     placeholder: (context, url) =>
-                                        Image.asset("assets/images/song.png"),
+                                        song.type == "Artist"
+                                            ? Image.asset(
+                                                "assets/images/artist.png")
+                                            : song.type == "album"
+                                                ? Image.asset(
+                                                    "assets/images/album.png")
+                                                : Image.asset(
+                                                    "assets/images/music.jpg"),
                                     errorWidget: (context, url, error) =>
-                                        Image.asset("assets/images/song.png"),
+                                        song.type == "Artist"
+                                            ? Image.asset(
+                                                "assets/images/artist.png")
+                                            : song.type == "album"
+                                                ? Image.asset(
+                                                    "assets/images/album.png")
+                                                : Image.asset(
+                                                    "assets/images/music.jpg"),
                                   ),
                                   onTap: () {
                                     Navigator.push(
@@ -290,15 +304,30 @@ class SearchScreenState extends State<SearchScreen> {
                                   leading: CachedNetworkImage(
                                     imageUrl: album.image,
                                     placeholder: (context, url) =>
-                                        Image.asset("assets/images/album.png"),
+                                        album.type == "Artist"
+                                            ? Image.asset(
+                                                "assets/images/artist.png")
+                                            : album.type == "album"
+                                                ? Image.asset(
+                                                    "assets/images/album.png")
+                                                : Image.asset(
+                                                    "assets/images/music.jpg"),
                                     errorWidget: (context, url, error) =>
-                                        Image.asset("assets/images/album.png"),
+                                        album.type == "Artist"
+                                            ? Image.asset(
+                                                "assets/images/artist.png")
+                                            : album.type == "album"
+                                                ? Image.asset(
+                                                    "assets/images/album.png")
+                                                : Image.asset(
+                                                    "assets/images/music.jpg"),
                                   ),
                                   onTap: () {
                                     context.read<FeatchSongCubit>().clickSong(
                                         type: album.type,
                                         id: album.id,
-                                        title: album.title);
+                                        title: album.title,
+                                        imageUrl: album.image);
                                   },
                                 )),
                           ],
@@ -327,16 +356,30 @@ class SearchScreenState extends State<SearchScreen> {
                                   leading: CachedNetworkImage(
                                     imageUrl: playlist.image,
                                     placeholder: (context, url) =>
-                                        Image.asset("assets/images/album.png"),
+                                        playlist.type == "Artist"
+                                            ? Image.asset(
+                                                "assets/images/artist.png")
+                                            : playlist.type == "album"
+                                                ? Image.asset(
+                                                    "assets/images/album.png")
+                                                : Image.asset(
+                                                    "assets/images/music.jpg"),
                                     errorWidget: (context, url, error) =>
-                                        Image.asset("assets/images/album.png"),
+                                        playlist.type == "Artist"
+                                            ? Image.asset(
+                                                "assets/images/artist.png")
+                                            : playlist.type == "album"
+                                                ? Image.asset(
+                                                    "assets/images/album.png")
+                                                : Image.asset(
+                                                    "assets/images/music.jpg"),
                                   ),
                                   onTap: () {
                                     context.read<FeatchSongCubit>().clickSong(
-                                          type: playlist.type,
-                                          id: playlist.id,
-                                          title: playlist.title,
-                                        );
+                                        type: playlist.type,
+                                        id: playlist.id,
+                                        title: playlist.title,
+                                        imageUrl: playlist.image);
                                   },
                                 )),
                           ],

@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:musiq/bloc/FeatchLibraty/featch_library_cubit.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/main.dart';
 import 'package:musiq/bloc/favorite_bloc/favorite_bloc.dart';
-import 'package:musiq/presentation/screens/favoriteScreen/favorite_screen.dart';
+import 'package:musiq/presentation/commanWidgets/textfeild.dart';
+import 'package:musiq/presentation/screens/LibraryScreen/library_screen.dart';
 import 'package:musiq/presentation/screens/homeScreen/home_screen.dart';
 import 'package:musiq/bloc/home_screen_cubit/home_screen_cubit.dart';
 import 'package:musiq/bloc/ThemeCubit/theme_cubit.dart';
+import 'package:musiq/presentation/screens/homeScreen/widgets/drawer_widget.dart';
+import 'package:musiq/presentation/screens/searchScreen/search_screen.dart';
 import 'package:musiq/presentation/screens/settingsScreen/setting_screen.dart';
 
 class MainPage extends StatefulWidget {
@@ -22,7 +26,7 @@ class MainPageState extends State<MainPage> {
 
   static final List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
-    FavoriteScreen(),
+    LibraryScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -36,13 +40,13 @@ class MainPageState extends State<MainPage> {
     super.initState();
 
     context.read<HomeScreenCubit>().loadData();
-
     context.read<FavoriteBloc>().add(FeatchFavoriteSongEvent());
+    context.read<FeatchLibraryCubit>().featchLibrary();
   }
 
   Future<void> _refreshData() async {
     context.read<HomeScreenCubit>().loadData();
-
+    context.read<FeatchLibraryCubit>().featchLibrary();
     context.read<FavoriteBloc>().add(FeatchFavoriteSongEvent());
   }
 
@@ -101,13 +105,6 @@ class MainPageState extends State<MainPage> {
                             Expanded(
                                 child:
                                     _widgetOptions.elementAt(_selectedIndex)),
-                            // Container(
-                            //   width: 500, // Adjust width as needed
-                            //   // child: PlayerScreen(
-                            //   //   songs: [sampleSong], // Provide songs list here
-                            //   //   initialIndex: 0,
-                            //   // ),
-                            // ),
                           ],
                         ),
                       ),
@@ -118,6 +115,39 @@ class MainPageState extends State<MainPage> {
             } else {
               // Mobile Layout
               return Scaffold(
+                appBar: AppBar(
+                  title: _selectedIndex == 0
+                      ? Row(
+                          children: [
+                            Expanded(
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(18),
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const SearchScreen(),
+                                    ),
+                                  );
+                                },
+                                child: AbsorbPointer(
+                                  child: CustomTextFeild(
+                                    hintText: "Search",
+                                    icon: Icon(
+                                      Icons.search,
+                                      color: colorList[colorIndex],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      : const Text(
+                          "Library"), // Change to Text when "Library" is selected
+                ),
+                drawer: isMobile(context) ? const DrawerWidget() : null,
                 body: Stack(
                   children: [
                     RefreshIndicator(
@@ -135,8 +165,8 @@ class MainPageState extends State<MainPage> {
                       label: 'Home',
                     ),
                     BottomNavigationBarItem(
-                      icon: Icon(Icons.favorite),
-                      label: 'Favorites',
+                      icon: Icon(Icons.library_music_sharp),
+                      label: 'Library',
                     ),
                   ],
                   currentIndex: _selectedIndex,

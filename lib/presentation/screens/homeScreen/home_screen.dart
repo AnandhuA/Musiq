@@ -6,13 +6,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/main.dart';
-import 'package:musiq/presentation/commanWidgets/textfeild.dart';
 import 'package:musiq/bloc/home_screen_cubit/home_screen_cubit.dart';
 import 'package:musiq/presentation/screens/album_or_playlist_screen/album_or_playlist_screen.dart';
-import 'package:musiq/presentation/screens/homeScreen/widgets/drawer_widget.dart';
 import 'package:musiq/bloc/FeatchSong/featch_song_cubit.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
-import 'package:musiq/presentation/screens/searchScreen/search_screen.dart';
 import 'package:musiq/bloc/ThemeCubit/theme_cubit.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -23,38 +20,6 @@ class HomeScreen extends StatelessWidget {
     return BlocBuilder<ThemeCubit, ThemeState>(
       builder: (context, state) {
         return Scaffold(
-          appBar: AppBar(
-            title: Row(
-              children: [
-                Expanded(
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(18),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SearchScreen(),
-                        ),
-                      );
-                    },
-                    child: AbsorbPointer(
-                      child: CustomTextFeild(
-                        hintText: "Search",
-                        icon: Icon(
-                          Icons.search,
-                          color: colorList[colorIndex],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          drawer: isMobile(context)
-              ? const DrawerWidget()
-              : null, // Use isMobile function
           body: BlocBuilder<HomeScreenCubit, HomeScreenState>(
             builder: (context, state) {
               if (state is HomeScreenLoaded) {
@@ -94,6 +59,7 @@ class HomeScreen extends StatelessWidget {
                                 songModel: state.songModel,
                                 imageUrl: state.imageUrl,
                                 title: state.title,
+                                libraryModel: state.libraryModel,
                               ),
                             ));
                       }
@@ -261,9 +227,10 @@ class _SongList extends StatelessWidget {
               // log("ButtonTooltipInfo: ${data.buttonTooltipInfo}");
               if (data.type == "radio_station") {
                 context.read<FeatchSongCubit>().feachArtistSong(
-                    artistName: data.title,
-                    imageUrl: data.image,
-                    title: data.title);
+                      artistName: data.title,
+                      imageUrl: data.image,
+                      title: data.title,
+                    );
               } else {
                 context.read<FeatchSongCubit>().clickSong(
                     type: data.type ?? "",
@@ -283,10 +250,17 @@ class _SongList extends StatelessWidget {
                         imageUrl: data.image ??
                             "https://static.vecteezy.com/system/resources/thumbnails/037/044/052/small_2x/ai-generated-studio-shot-of-black-headphones-over-music-note-explosion-background-with-empty-space-for-text-photo.jpg",
                         fit: BoxFit.cover,
-                        placeholder: (context, url) =>
-                            Image.asset("assets/images/song.png"),
+                        placeholder: (context, url) => data.type == "Artist"
+                            ? Image.asset("assets/images/artist.png")
+                            : data.type == "album"
+                                ? Image.asset("assets/images/album.png")
+                                : Image.asset("assets/images/music.jpg"),
                         errorWidget: (context, url, error) =>
-                            Image.asset("assets/images/song.png"),
+                            data.type == "Artist"
+                                ? Image.asset("assets/images/artist.png")
+                                : data.type == "album"
+                                    ? Image.asset("assets/images/album.png")
+                                    : Image.asset("assets/images/music.jpg"),
                       ),
                     ),
                   ),

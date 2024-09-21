@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
+import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/presentation/commanWidgets/snack_bar.dart';
 import 'package:musiq/bloc/favorite_bloc/favorite_bloc.dart';
@@ -33,7 +34,8 @@ class LoginScreen extends StatelessWidget {
             customSnackbar(
               context: context,
               message: state.errorMessage,
-              color: Colors.red,
+              bgColor: Colors.red,
+              textColor:  white
             );
           }
         },

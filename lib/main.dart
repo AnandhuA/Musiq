@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:musiq/bloc/FeatchLibraty/featch_library_cubit.dart';
 import 'package:musiq/core/theme.dart';
 import 'package:musiq/models/song_model.dart';
 import 'package:musiq/bloc/favorite_bloc/favorite_bloc.dart';
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => PlayAndPauseCubit()),
         BlocProvider(create: (context) => HomeScreenCubit()),
         BlocProvider(create: (context) => FeatchSongCubit()),
+        BlocProvider(create: (context) => FeatchLibraryCubit()),
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, state) {

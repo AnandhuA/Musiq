@@ -17,11 +17,12 @@ final class FeatchAlbumOrPlayList extends FeatchSongState {
   final List<SongModel> songModel;
   final String? imageUrl;
   final String title;
-  FeatchAlbumOrPlayList({
-    required this.songModel,
-    this.imageUrl,
-    required this.title,
-  });
+  final LibraryModel libraryModel;
+  FeatchAlbumOrPlayList(
+      {required this.songModel,
+      this.imageUrl,
+      required this.title,
+      required this.libraryModel});
 }
 
 final class FeatchSongError extends FeatchSongState {}

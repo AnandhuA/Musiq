@@ -2,21 +2,45 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/sized.dart';
+import 'package:musiq/data/add_to_library_funtions.dart';
 import 'package:musiq/main.dart';
+import 'package:musiq/models/library_model.dart';
 import 'package:musiq/models/song_model.dart';
 import 'package:musiq/presentation/commanWidgets/favorite_icon.dart';
+import 'package:musiq/presentation/commanWidgets/snack_bar.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 
-class AlbumOrPlaylistScreen extends StatelessWidget {
+class AlbumOrPlaylistScreen extends StatefulWidget {
   final List<SongModel> songModel;
   final String? imageUrl;
   final String title;
+  final LibraryModel libraryModel;
   const AlbumOrPlaylistScreen({
     super.key,
     required this.songModel,
     this.imageUrl,
     required this.title,
+    required this.libraryModel,
   });
+
+  @override
+  State<AlbumOrPlaylistScreen> createState() => _AlbumOrPlaylistScreenState();
+}
+
+class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
+  bool _addToLibrary = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkAddToLibery();
+  }
+
+  _checkAddToLibery() async {
+    _addToLibrary = await AddToLibrary.checkLibraryItemExists(
+        id: widget.libraryModel.id, type: widget.libraryModel.type);
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +49,14 @@ class AlbumOrPlaylistScreen extends StatelessWidget {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: Icon(Icons.arrow_back_ios_new_sharp)),
-        title: Text(title),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(
+            Icons.arrow_back_ios_new_sharp,
+          ),
+        ),
+        title: Text(widget.title),
       ),
       body: Column(
         children: [
@@ -43,12 +70,20 @@ class AlbumOrPlaylistScreen extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: CachedNetworkImage(
-                      imageUrl: imageUrl ?? songModel.first.imageUrl,
+                      imageUrl:
+                          widget.imageUrl ?? widget.songModel.first.imageUrl,
                       fit: BoxFit.cover,
-                      placeholder: (context, url) =>
-                          Image.asset("assets/images/album.png"),
+                    placeholder: (context, url) => widget.songModel.first.type == "Artist"
+                          ? Image.asset("assets/images/artist.png")
+                          : widget.songModel.first.type == "album"
+                              ? Image.asset("assets/images/album.png")
+                              : Image.asset("assets/images/music.jpg"),
                       errorWidget: (context, url, error) =>
-                          Image.asset("assets/images/album.png"),
+                          widget.songModel.first.type == "Artist"
+                              ? Image.asset("assets/images/artist.png")
+                              : widget.songModel.first.type == "album"
+                                  ? Image.asset("assets/images/album.png")
+                                  : Image.asset("assets/images/music.jpg"),
                     ),
                   ),
                 ),
@@ -58,7 +93,7 @@ class AlbumOrPlaylistScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        title,
+                        widget.title,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 5,
                         style: TextStyle(
@@ -68,20 +103,20 @@ class AlbumOrPlaylistScreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        "${songModel.length}-songs",
+                        "${widget.songModel.length}-songs",
                         overflow: TextOverflow.ellipsis,
                         maxLines: 5,
                       ),
-                      songModel.isNotEmpty
+                      widget.songModel.isNotEmpty
                           ? Text(
-                              songModel.first.language,
+                              widget.songModel.first.language,
                               overflow: TextOverflow.ellipsis,
                               maxLines: 5,
                             )
                           : SizedBox(),
-                      songModel.isNotEmpty
+                      widget.songModel.isNotEmpty
                           ? Text(
-                              songModel.first.albumArtist,
+                              widget.songModel.first.albumArtist,
                               overflow: TextOverflow.ellipsis,
                               maxLines: 5,
                             )
@@ -89,15 +124,73 @@ class AlbumOrPlaylistScreen extends StatelessWidget {
                       constHeight10,
                       Row(
                         children: [
+                          GestureDetector(
+                            onTap: () async {
+                              if (!_addToLibrary) {
+                                await AddToLibrary.addLibraryItem(
+                                  libraryModel: widget.libraryModel,
+                                );
+                                customSnackbar(
+                                  context: context,
+                                  message: "Add to Library",
+                                  bgColor: Theme.of(context).brightness ==
+                                          Brightness.dark
+                                      ? white
+                                      : black,
+                                  textColor: Theme.of(context).brightness ==
+                                          Brightness.dark
+                                      ? black
+                                      : white,
+                                );
+                              } else {
+                                await AddToLibrary.deleteLibraryItem(
+                                  id: widget.libraryModel.id,
+                                  type: widget.libraryModel.type,
+                                );
+                                customSnackbar(
+                                  context: context,
+                                  message: "removed from the library",
+                                  bgColor: Theme.of(context).brightness ==
+                                          Brightness.dark
+                                      ? white
+                                      : black,
+                                  textColor: Theme.of(context).brightness ==
+                                          Brightness.dark
+                                      ? black
+                                      : white,
+                                );
+                              }
+                              setState(() {
+                                _addToLibrary = !_addToLibrary;
+                              });
+                            },
+                            child: Container(
+                              width: 34,
+                              height: 34,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: colorList[colorIndex],
+                                  width: 2.0,
+                                ),
+                              ),
+                              child: Center(
+                                child: Icon(
+                                  _addToLibrary ? Icons.check : Icons.add,
+                                  size: 20,
+                                ),
+                              ),
+                            ),
+                          ),
                           Spacer(),
                           GestureDetector(
                             onTap: () {
-                              songModel.isNotEmpty
+                              widget.songModel.isNotEmpty
                                   ? Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => PlayerScreen(
-                                          songs: songModel,
+                                          songs: widget.songModel,
                                         ),
                                       ))
                                   : null;
@@ -128,16 +221,16 @@ class AlbumOrPlaylistScreen extends StatelessWidget {
           constHeight30,
           Expanded(
             child: ListView.builder(
-              itemCount: songModel.length,
+              itemCount: widget.songModel.length,
               itemBuilder: (context, index) {
-                final song = songModel[index];
+                final song = widget.songModel[index];
                 return ListTile(
                   onTap: () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => PlayerScreen(
-                            songs: songModel,
+                            songs: widget.songModel,
                             initialIndex: index,
                           ),
                         ));
@@ -147,10 +240,17 @@ class AlbumOrPlaylistScreen extends StatelessWidget {
                     child: CachedNetworkImage(
                       imageUrl: song.imageUrl,
                       fit: BoxFit.cover,
-                      placeholder: (context, url) =>
-                          Image.asset("assets/images/song.png"),
+                      placeholder: (context, url) => song.type == "Artist"
+                          ? Image.asset("assets/images/artist.png")
+                          : song.type == "album"
+                              ? Image.asset("assets/images/album.png")
+                              : Image.asset("assets/images/music.jpg"),
                       errorWidget: (context, url, error) =>
-                          Image.asset("assets/images/song.png"),
+                          song.type == "Artist"
+                              ? Image.asset("assets/images/artist.png")
+                              : song.type == "album"
+                                  ? Image.asset("assets/images/album.png")
+                                  : Image.asset("assets/images/music.jpg"),
                     ),
                   ),
                   title: Text(
