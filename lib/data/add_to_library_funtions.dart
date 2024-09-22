@@ -174,5 +174,29 @@ class AddToLibrary {
 
     return lastPlayedSongs;
   }
+  
+  static Future<void> clearLastPlayedSongs() async {
+    try {
+      if (_auth.currentUser?.email != null) {
+        final userId = _auth.currentUser!.email;
+        CollectionReference musicCollection = _firestore
+            .collection('users')
+            .doc(userId)
+            .collection('Last Played');
+
+        final snapshot = await musicCollection.get();
+        for (var doc in snapshot.docs) {
+          await doc.reference.delete();
+          log("Deleted song: ${doc.id}"); 
+        }
+        log("All last played songs cleared.");
+      } else {
+        log("Not logged in");
+      }
+    } catch (e) {
+      log("Error clearing last played songs: $e");
+    }
+  }
+
 }
 

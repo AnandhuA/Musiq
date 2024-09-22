@@ -89,7 +89,13 @@ class HomeScreen extends StatelessWidget {
                                   ),
                                   itemBuilder: (context, pageIndex) {
                                     return Transform.translate(
-                                      offset: const Offset(-30, 0),
+                                      offset: Offset(
+                                          isMobile(context)
+                                              ? -32
+                                              : isTablet(context)
+                                                  ? -40
+                                                  : -70,
+                                          0),
                                       child: Column(
                                         children: List.generate(3, (itemIndex) {
                                           final index =
@@ -168,6 +174,9 @@ class HomeScreen extends StatelessWidget {
                                                   ),
                                                 );
                                               },
+                                              trailing: IconButton(
+                                                  onPressed: () {},
+                                                  icon: Icon(Icons.more_vert)),
                                             ),
                                           );
                                         }),

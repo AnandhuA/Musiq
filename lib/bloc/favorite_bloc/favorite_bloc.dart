@@ -15,6 +15,7 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
     on<AddFavoriteEvent>(_addFavorite);
     on<RemoveFavoriteEvent>(_removeFavorite);
     on<SearchFavoriteEvent>(_searchFavorite);
+      on<SortFavoriteEvent>(_sortFavorite); 
   }
 
   FutureOr<void> _featchFavorite(
@@ -61,4 +62,32 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
 
     emit(FeatchFavoriteSuccess(favorites: filteredFavorites));
   }
+  FutureOr<void> _sortFavorite(
+    SortFavoriteEvent event,
+    Emitter<FavoriteState> emit,
+  ) {
+    emit(FavoriteLoading());
+
+    if (event.sortType == SortType.name) {
+      _favorites.sort((a, b) => event.ascending
+          ? a.title.compareTo(b.title)
+          : b.title.compareTo(a.title));
+    } else if (event.sortType == SortType.time) {
+      _favorites.sort((a, b) {
+        final aTime = a.addedAt ??
+            DateTime.fromMillisecondsSinceEpoch(
+                0); 
+        final bTime = b.addedAt ??
+            DateTime.fromMillisecondsSinceEpoch(
+                0);
+
+        return event.ascending
+            ? aTime.compareTo(bTime)
+            : bTime.compareTo(aTime);
+      });
+    }
+
+    emit(FeatchFavoriteSuccess(favorites: _favorites));
+  }
+
 }

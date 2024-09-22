@@ -22,3 +22,24 @@ final class SearchFavoriteEvent extends FavoriteEvent {
 
   SearchFavoriteEvent({required this.query});
 }
+
+class SortFavoriteEvent extends FavoriteEvent {
+  final SortType sortType;
+  final bool ascending;
+
+  SortFavoriteEvent({required this.sortType, this.ascending = true});
+}
+
+enum SortType { name, time }
+
+class SortOption {
+  final String key;
+  final SortType sortType;
+  final bool ascending;
+
+  SortOption({
+    required this.key,
+    required this.sortType,
+    required this.ascending,
+  });
+}

@@ -6,7 +6,7 @@ import 'package:musiq/models/song_model.dart';
 class FavoriteSongRepo {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
   static final FirebaseFirestore firestore = FirebaseFirestore.instance;
-  static Future<String> addFavorite({required SongModel song}) async {
+ static Future<String> addFavorite({required SongModel song}) async {
     try {
       if (_auth.currentUser?.email != null) {
         final userId = _auth.currentUser!.email;
@@ -15,6 +15,9 @@ class FavoriteSongRepo {
             firestore.collection('users').doc(userId).collection('favorite');
 
         Map<String, dynamic> favoriteData = song.toJson();
+        favoriteData['addedAt'] =
+            DateTime.now().toIso8601String(); 
+
         await favoriteCollection.add(favoriteData);
         return "true";
       } else {
@@ -25,6 +28,7 @@ class FavoriteSongRepo {
       return "false";
     }
   }
+
 
   static Future<bool> removeFavorite({required String songID}) async {
     try {

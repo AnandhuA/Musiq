@@ -37,6 +37,16 @@ class _LastPlayedListState extends State<LastPlayedList> {
             },
             icon: Icon(Icons.arrow_back_ios_new_sharp)),
         title: Text("Last Played"),
+        actions: [
+          IconButton(
+              onPressed: () async {
+                await AddToLibrary.clearLastPlayedSongs();
+                setState(() {
+                  lastplayed = [];
+                });
+              },
+              icon: Icon(Icons.clear_all_sharp))
+        ],
       ),
       body: lastplayed.isEmpty
           ? const Center(
@@ -55,8 +65,14 @@ class _LastPlayedListState extends State<LastPlayedList> {
                       ),
                     ),
                   ),
-                  trailing: FavoriteIcon(
-                    song: lastplayed[index],
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      FavoriteIcon(
+                        song: lastplayed[index],
+                      ),
+                      IconButton(onPressed: () {}, icon: Icon(Icons.more_vert)),
+                    ],
                   ),
                   leading: Container(
                     width: 50,

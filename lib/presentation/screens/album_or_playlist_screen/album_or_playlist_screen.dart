@@ -62,22 +62,25 @@ class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
         children: [
           Container(
             margin: EdgeInsets.all(10),
+            padding:
+                EdgeInsets.symmetric(horizontal: isDesktop(context) ? 30 : 0),
             child: Row(
               children: [
                 Container(
-                  width: 220,
-                  height: 200,
+                  width: isMobile(context) ? 220 : 280,
+                  height: isMobile(context) ? 200 : 250,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: CachedNetworkImage(
                       imageUrl:
                           widget.imageUrl ?? widget.songModel.first.imageUrl,
                       fit: BoxFit.cover,
-                    placeholder: (context, url) => widget.songModel.first.type == "Artist"
-                          ? Image.asset("assets/images/artist.png")
-                          : widget.songModel.first.type == "album"
-                              ? Image.asset("assets/images/album.png")
-                              : Image.asset("assets/images/song.png"),
+                      placeholder: (context, url) =>
+                          widget.songModel.first.type == "Artist"
+                              ? Image.asset("assets/images/artist.png")
+                              : widget.songModel.first.type == "album"
+                                  ? Image.asset("assets/images/album.png")
+                                  : Image.asset("assets/images/song.png"),
                       errorWidget: (context, url, error) =>
                           widget.songModel.first.type == "Artist"
                               ? Image.asset("assets/images/artist.png")

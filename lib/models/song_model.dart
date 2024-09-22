@@ -18,6 +18,7 @@ class SongModel {
   final String imageUrl;
   final String permaUrl;
   final String url;
+  final DateTime? addedAt; // Nullable addedAt field
 
   SongModel({
     required this.id,
@@ -39,6 +40,7 @@ class SongModel {
     required this.imageUrl,
     required this.permaUrl,
     required this.url,
+    this.addedAt, // Initialize as nullable
   });
 
   factory SongModel.fromJson(Map<dynamic, dynamic> json) {
@@ -66,6 +68,8 @@ class SongModel {
       imageUrl: json['image'] as String? ?? '',
       permaUrl: json['perma_url'] as String? ?? '',
       url: json['url'] as String? ?? '',
+      addedAt:
+          json['added_at'] != null ? DateTime.parse(json['added_at']) : null,
     );
   }
 
@@ -90,6 +94,7 @@ class SongModel {
       'image': imageUrl,
       'perma_url': permaUrl,
       'url': url,
+      'added_at': addedAt?.toIso8601String(), // Convert DateTime to ISO String
     };
   }
 }
