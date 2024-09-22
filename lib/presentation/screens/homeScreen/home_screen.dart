@@ -84,81 +84,94 @@ class HomeScreen extends StatelessWidget {
                                   itemCount: ((state.lastplayed.length + 2) / 3)
                                       .floor(),
                                   pageSnapping: true,
-                                  controller:
-                                      PageController(viewportFraction: 0.8),
+                                  controller: PageController(
+                                    viewportFraction: 0.9,
+                                  ),
                                   itemBuilder: (context, pageIndex) {
-                                    return Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: List.generate(3, (itemIndex) {
-                                        final index = pageIndex * 3 + itemIndex;
-                                        if (index >= state.lastplayed.length) {
-                                          return SizedBox();
-                                        }
-                                        return Container(
-                                          child: ListTile(
-                                            leading: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                              child: CachedNetworkImage(
-                                                imageUrl: state
-                                                    .lastplayed[index].imageUrl,
-                                                placeholder: (context, url) {
-                                                  // Placeholder logic
-                                                  return state.lastplayed[index]
-                                                              .type ==
-                                                          "Artist"
-                                                      ? Image.asset(
-                                                          "assets/images/artist.png")
-                                                      : state.lastplayed[index]
-                                                                  .type ==
-                                                              "album"
-                                                          ? Image.asset(
-                                                              "assets/images/album.png")
-                                                          : Image.asset(
-                                                              "assets/images/song.png");
-                                                },
-                                                errorWidget:
-                                                    (context, url, error) {
-                                                  // Error widget logic
-                                                  return state.lastplayed[index]
-                                                              .type ==
-                                                          "Artist"
-                                                      ? Image.asset(
-                                                          "assets/images/artist.png")
-                                                      : state.lastplayed[index]
-                                                                  .type ==
-                                                              "album"
-                                                          ? Image.asset(
-                                                              "assets/images/album.png")
-                                                          : Image.asset(
-                                                              "assets/images/song.png");
-                                                },
-                                              ),
-                                            ),
-                                            title: Text(
-                                              state.lastplayed[index].title,
-                                              maxLines: 1,
-                                            ),
-                                            subtitle: Text(
-                                              state.lastplayed[index].artist,
-                                              maxLines: 1,
-                                            ),
-                                            onTap: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      PlayerScreen(
-                                                    songs: state.lastplayed,
-                                                    initialIndex: index,
-                                                  ),
+                                    return Transform.translate(
+                                      offset: const Offset(-30, 0),
+                                      child: Column(
+                                        children: List.generate(3, (itemIndex) {
+                                          final index =
+                                              pageIndex * 3 + itemIndex;
+                                          if (index >=
+                                              state.lastplayed.length) {
+                                            return SizedBox();
+                                          }
+                                          return Container(
+                                            child: ListTile(
+                                              leading: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                child: CachedNetworkImage(
+                                                  imageUrl: state
+                                                      .lastplayed[index]
+                                                      .imageUrl,
+                                                  placeholder: (context, url) {
+                                                    // Placeholder logic
+                                                    return state
+                                                                .lastplayed[
+                                                                    index]
+                                                                .type ==
+                                                            "Artist"
+                                                        ? Image.asset(
+                                                            "assets/images/artist.png")
+                                                        : state
+                                                                    .lastplayed[
+                                                                        index]
+                                                                    .type ==
+                                                                "album"
+                                                            ? Image.asset(
+                                                                "assets/images/album.png")
+                                                            : Image.asset(
+                                                                "assets/images/song.png");
+                                                  },
+                                                  errorWidget:
+                                                      (context, url, error) {
+                                                    // Error widget logic
+                                                    return state
+                                                                .lastplayed[
+                                                                    index]
+                                                                .type ==
+                                                            "Artist"
+                                                        ? Image.asset(
+                                                            "assets/images/artist.png")
+                                                        : state
+                                                                    .lastplayed[
+                                                                        index]
+                                                                    .type ==
+                                                                "album"
+                                                            ? Image.asset(
+                                                                "assets/images/album.png")
+                                                            : Image.asset(
+                                                                "assets/images/song.png");
+                                                  },
                                                 ),
-                                              );
-                                            },
-                                          ),
-                                        );
-                                      }),
+                                              ),
+                                              title: Text(
+                                                state.lastplayed[index].title,
+                                                maxLines: 1,
+                                              ),
+                                              subtitle: Text(
+                                                state.lastplayed[index].artist,
+                                                maxLines: 1,
+                                              ),
+                                              onTap: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        PlayerScreen(
+                                                      songs: state.lastplayed,
+                                                      initialIndex: index,
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          );
+                                        }),
+                                      ),
                                     );
                                   },
                                 ),

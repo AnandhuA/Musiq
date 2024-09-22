@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/sized.dart';
-import 'package:musiq/data/favorite_song_functions.dart';
+import 'package:musiq/data/add_to_library_funtions.dart';
 import 'package:musiq/data/shared_preference.dart';
 import 'package:musiq/main.dart';
 import 'package:musiq/models/song_model.dart';
@@ -52,7 +52,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
     context.read<ProgressBarCubit>().reset();
     lastplayed = currentSong;
     SharedPreference.lastPlayedSong(currentSong);
-    FavoriteSongRepo.addSong(currentSong);
+    AddToLibrary.addToLastPlayedSong(currentSong);
     _audioPlayer = AudioPlayer();
 
     _audioPlayer.setSource(UrlSource(currentSong.url)).then(
@@ -156,30 +156,30 @@ class _PlayerScreenState extends State<PlayerScreen> {
 
     return Scaffold(
       body: SafeArea(
-        child: GestureDetector(
-          onHorizontalDragEnd: (DragEndDetails details) {
-            if (details.primaryVelocity! < 0) {
-              _playNext();
-            } else if (details.primaryVelocity! > 0) {
-              _playPrevious();
-            }
-          },
-          child: Row(
-            children: [
-              Expanded(
-                flex: 4,
-                child: Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: CachedNetworkImageProvider(currentSong.imageUrl),
-                      alignment: isMobile(context)
-                          ? const Alignment(1, -2)
-                          : const Alignment(1, 20),
-                      fit: BoxFit.fitWidth,
-                    ),
+        child: Row(
+          children: [
+            Expanded(
+              flex: 4,
+              child: Container(
+                width: double.infinity,
+                height: double.infinity,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: CachedNetworkImageProvider(currentSong.imageUrl),
+                    alignment: isMobile(context)
+                        ? const Alignment(1, -2)
+                        : const Alignment(1, 20),
+                    fit: BoxFit.fitWidth,
                   ),
+                ),
+                child: GestureDetector(
+                  onHorizontalDragEnd: (DragEndDetails details) {
+                    if (details.primaryVelocity! < 0) {
+                      _playNext();
+                    } else if (details.primaryVelocity! > 0) {
+                      _playPrevious();
+                    }
+                  },
                   child: BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
                     child: Padding(
@@ -343,14 +343,14 @@ class _PlayerScreenState extends State<PlayerScreen> {
                   ),
                 ),
               ),
-              if (isDesktop(context))
-                Container(
-                  width: sidebarWidth,
-                  color: Colors.transparent,
-                  child: _buildSongList(context),
-                )
-            ],
-          ),
+            ),
+            if (isDesktop(context))
+              Container(
+                width: sidebarWidth,
+                color: Colors.transparent,
+                child: _buildSongList(context),
+              )
+          ],
         ),
       ),
     );

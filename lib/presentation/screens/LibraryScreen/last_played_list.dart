@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:musiq/data/favorite_song_functions.dart';
+import 'package:musiq/data/add_to_library_funtions.dart';
 import 'package:musiq/models/song_model.dart';
 import 'package:musiq/presentation/commanWidgets/favorite_icon.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
@@ -22,7 +22,7 @@ class _LastPlayedListState extends State<LastPlayedList> {
   }
 
   featchLastplayed() async {
-    lastplayed = await FavoriteSongRepo.fetchLastPlayed();
+    lastplayed = await AddToLibrary.fetchLastPlayed();
     setState(() {});
   }
 
