@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,6 +16,7 @@ import 'package:musiq/bloc/SearchSong/search_song_bloc.dart';
 import 'package:musiq/bloc/ThemeCubit/theme_cubit.dart';
 import 'package:musiq/presentation/screens/splashScreen/splash_screen.dart';
 import 'package:musiq/core/firebase_options.dart';
+import 'package:uni_links2/uni_links.dart';
 
 String? theme;
 int colorIndex = 0;
@@ -29,8 +32,47 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  late StreamSubscription _linkSubscription;
+  @override
+  void initState() {
+    super.initState();
+    _initDeepLinkListener();
+  }
+
+  void _initDeepLinkListener() {
+    _linkSubscription = linkStream.listen((String? link) {
+      if (link != null) {
+        _handleDeepLink(link);
+      }
+    });
+  }
+
+  void _handleDeepLink(String link) {
+    Uri uri = Uri.parse(link);
+    if (uri.scheme == 'music' && uri.host == 'example.com') {
+      if (uri.pathSegments.isNotEmpty && uri.pathSegments[0] == 'song') {
+        String songId = uri.pathSegments.length > 1 ? uri.pathSegments[1] : '';
+        // Navigate to the song detail screen
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => SplashScreen()),
+        );
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _linkSubscription.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
