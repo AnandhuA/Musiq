@@ -145,6 +145,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
+    final theme = Theme.of(context);
 
     double imageSize = isMobile(context)
         ? screenWidth * 0.7
@@ -320,7 +321,9 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                     onPressed: () {
                                       showModalBottomSheet(
                                         backgroundColor:
-                                            Colors.transparent.withOpacity(0.5),
+                                            theme.brightness == Brightness.dark
+                                                ? Colors.black.withOpacity(0.7)
+                                                : Colors.white.withOpacity(0.7),
                                         context: context,
                                         shape: RoundedRectangleBorder(
                                             borderRadius:

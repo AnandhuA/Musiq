@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,7 +30,7 @@ class FavoriteScreen extends StatelessWidget {
             context.read<FavoriteBloc>().add(SearchFavoriteEvent(query: value));
           },
           onSortSelected: (sortOption) {
-            _currentSortOption = sortOption.key; // Now this works
+            _currentSortOption = sortOption.key;
             context.read<FavoriteBloc>().add(SortFavoriteEvent(
                   sortType: sortOption.sortType,
                   ascending: sortOption.ascending,
@@ -99,7 +101,6 @@ class FavoriteScreen extends StatelessWidget {
     );
   }
 
-  // Sorting function based on the selected sort option
   List<SongModel> _sortFavorites(List<SongModel> favorites) {
     List<SongModel> sortedFavorites = List.from(favorites);
 
