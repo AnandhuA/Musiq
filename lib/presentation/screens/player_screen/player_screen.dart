@@ -49,14 +49,15 @@ class _PlayerScreenState extends State<PlayerScreen> {
   Future<void> _initializeAudioHandler() async {
     _playbackStateSubscription =
         audioHandler.playbackState.listen((playbackState) {
-      if (mounted) {
-        // Check if the widget is still mounted
-        context
-            .read<PlayAndPauseCubit>()
-            .togglePlayerState(playbackState.playing);
-        context
-            .read<ProgressBarCubit>()
-            .changeProgress(playbackState.updatePosition);
+      final isPlaying = playbackState.playing;
+      final position = playbackState.updatePosition;
+      final processingState = playbackState.processingState;
+
+      context.read<PlayAndPauseCubit>().togglePlayerState(isPlaying);
+      context.read<ProgressBarCubit>().changeProgress(position);
+
+      if (processingState == AudioProcessingState.completed) {
+        _playNext();
       }
     });
 
@@ -68,8 +69,9 @@ class _PlayerScreenState extends State<PlayerScreen> {
     await audioHandler.stop();
     await audioHandler.playUrl(song.url);
     await audioHandler.playMediaItem(
+    
       MediaItem(
-        id: song.id,
+        id: song.url,
         album: song.album,
         title: song.title,
         displayTitle: song.title,
@@ -84,7 +86,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
 
   void _playNext() async {
     if (_currentIndex < widget.songs.length - 1) {
-      // await audioHandler.playNext();
+      await audioHandler.playNext();
       setState(() {
         _currentIndex++;
       });
@@ -96,7 +98,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
 
   void _playPrevious() async {
     if (_currentIndex > 0) {
-      // await audioHandler.playPrevious();
+      await audioHandler.playPrevious();
       setState(() {
         _currentIndex--;
       });
