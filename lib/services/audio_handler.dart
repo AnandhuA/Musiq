@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:audio_service/audio_service.dart';
 import 'package:audioplayers/audioplayers.dart';
 
@@ -23,6 +25,23 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
         ),
       );
     });
+
+    _player.onPlayerComplete.listen((_) {
+      _onSongComplete();
+    });
+  }
+
+  Future<void> _onSongComplete() async {
+    if (_currentIndex < _mediaItems.length - 1) {
+      _currentIndex++;
+      await _playCurrentSong();
+    } else {
+      await stop();
+      playbackState.add(playbackStateForPlayer(
+        _player.state,
+        processingState: AudioProcessingState.completed,
+      ));
+    }
   }
 
   Future<void> playUrl(String url) async {
@@ -33,6 +52,7 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   @override
   Future<void> play() async {
     await _player.resume();
+    // await _playCurrentSong();
   }
 
   @override
@@ -55,6 +75,7 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   }
 
   Future<void> playNext() async {
+    log("next");
     if (_currentIndex < _mediaItems.length - 1) {
       _currentIndex++;
       await _playCurrentSong();
@@ -62,6 +83,7 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   }
 
   Future<void> playPrevious() async {
+    log("pre");
     if (_currentIndex > 0) {
       _currentIndex--;
       await _playCurrentSong();
@@ -70,16 +92,19 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
 
   Future<void> _playCurrentSong() async {
     final currentMediaItem = _mediaItems[_currentIndex];
-    await playUrl(currentMediaItem.id); // Use the URL of the media item
-    // await audioService.setMediaItem(currentMediaItem); // Update media item
+    log("${currentMediaItem.id}");
+    await playUrl(currentMediaItem.id);
+    mediaItem.add(currentMediaItem);
   }
 }
 
+
 PlaybackState playbackStateForPlayer(PlayerState state,
-    {Duration updatePosition = Duration.zero}) {
+    {Duration updatePosition = Duration.zero,
+    AudioProcessingState processingState = AudioProcessingState.ready}) {
   return PlaybackState(
     controls: _getControlsForState(state),
-    processingState: _mapProcessingState(state),
+    processingState: processingState,
     playing: state == PlayerState.playing,
     updatePosition: updatePosition,
   );
@@ -87,19 +112,28 @@ PlaybackState playbackStateForPlayer(PlayerState state,
 
 List<MediaControl> _getControlsForState(PlayerState state) {
   if (state == PlayerState.playing) {
-    return [MediaControl.pause, MediaControl.stop];
+    return [
+      MediaControl.pause,
+      MediaControl.skipToNext,
+      MediaControl.skipToPrevious,
+    ];
   } else {
-    return [MediaControl.play, MediaControl.stop];
+    return [
+      MediaControl.play,
+      MediaControl.skipToNext,
+      MediaControl.skipToPrevious,
+    ];
   }
 }
 
-AudioProcessingState _mapProcessingState(PlayerState state) {
+AudioProcessingState mapProcessingState(PlayerState state) {
   switch (state) {
     case PlayerState.playing:
       return AudioProcessingState.ready;
     case PlayerState.paused:
-      return AudioProcessingState.idle;
+      return AudioProcessingState.ready;
     case PlayerState.stopped:
+      return AudioProcessingState.idle;
     default:
       return AudioProcessingState.completed;
   }
