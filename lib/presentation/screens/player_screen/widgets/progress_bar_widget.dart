@@ -1,5 +1,5 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/models/song_model.dart';
@@ -8,12 +8,12 @@ class ProgressBarWidget extends StatelessWidget {
   const ProgressBarWidget(
       {super.key,
       required this.song,
-      required AudioPlayer audioPlayer,
+      required AudioHandler audioPlayer,
       required this.progressDuration})
       : _audioPlayer = audioPlayer;
 
   final SongModel song;
-  final AudioPlayer _audioPlayer;
+  final AudioHandler _audioPlayer;
   final Duration progressDuration;
 
   @override

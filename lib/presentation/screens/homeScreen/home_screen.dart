@@ -90,13 +90,12 @@ class HomeScreen extends StatelessWidget {
                                   itemBuilder: (context, pageIndex) {
                                     return Transform.translate(
                                       offset: Offset(
-                                        isMobile(context)
-                                            ? -36
-                                            : isTablet(context)
-                                                ? -42
-                                                : -72,
-                                        0,
-                                      ),
+                                          isMobile(context)
+                                              ? -22
+                                              : isTablet(context)
+                                                  ? -38
+                                                  : -70,
+                                          0),
                                       child: Column(
                                         children: List.generate(3, (itemIndex) {
                                           final index =

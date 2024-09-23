@@ -61,7 +61,6 @@ class AddToLibrary {
     }
   }
 
-
   static Future<void> deleteLibraryItem({
     required String id,
     required String type,
@@ -112,8 +111,10 @@ class AddToLibrary {
     try {
       if (_auth.currentUser?.email != null) {
         final userId = _auth.currentUser!.email;
-        CollectionReference musicCollection =
-            _firestore.collection('users').doc(userId).collection('Last Played');
+        CollectionReference musicCollection = _firestore
+            .collection('users')
+            .doc(userId)
+            .collection('Last Played');
 
         final existingSongSnapshot =
             await musicCollection.where('id', isEqualTo: song.id).get();
@@ -131,7 +132,7 @@ class AddToLibrary {
         log("Song added: ${song.title}");
 
         final snapshot = await musicCollection.get();
-        if (snapshot.docs.length > 15) {
+        if (snapshot.docs.length > 11) {
           await musicCollection
               .orderBy('addedAt', descending: false)
               .limit(1)
@@ -156,8 +157,10 @@ class AddToLibrary {
     try {
       if (_auth.currentUser?.email != null) {
         final userId = _auth.currentUser!.email;
-        CollectionReference musicCollection =
-            _firestore.collection('users').doc(userId).collection('Last Played');
+        CollectionReference musicCollection = _firestore
+            .collection('users')
+            .doc(userId)
+            .collection('Last Played');
         final snapshot =
             await musicCollection.orderBy('addedAt', descending: true).get();
 
@@ -174,7 +177,7 @@ class AddToLibrary {
 
     return lastPlayedSongs;
   }
-  
+
   static Future<void> clearLastPlayedSongs() async {
     try {
       if (_auth.currentUser?.email != null) {
@@ -187,7 +190,7 @@ class AddToLibrary {
         final snapshot = await musicCollection.get();
         for (var doc in snapshot.docs) {
           await doc.reference.delete();
-          log("Deleted song: ${doc.id}"); 
+          log("Deleted song: ${doc.id}");
         }
         log("All last played songs cleared.");
       } else {
@@ -197,6 +200,4 @@ class AddToLibrary {
       log("Error clearing last played songs: $e");
     }
   }
-
 }
-

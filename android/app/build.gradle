@@ -1,10 +1,7 @@
 plugins {
     id "com.android.application"
-    // START: FlutterFire Configuration
-    id 'com.google.gms.google-services'
-    // END: FlutterFire Configuration
+    id 'com.google.gms.google-services' 
     id "kotlin-android"
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id "dev.flutter.flutter-gradle-plugin"
 }
 
@@ -30,26 +27,27 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.music.musiq" // Update with your unique application ID
+        applicationId = "com.example.musiq" 
         minSdk = 23
         targetSdk = flutter.targetSdkVersion
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
     }
-  signingConfigs {
+
+    signingConfigs {
         release {
-            keyAlias 'my-key-alias'  // Replace with your actual key alias
-            keyPassword 'anandhu'    // Replace with your key password
-            storeFile file('C:/Users/anand/Desktop/My/Musiq/android/app/key/my-release-key.jks')  // Full path to your keystore
-            storePassword 'anandhu'  // Replace with your store password
+            keyAlias 'my-key-alias'
+            keyPassword 'anandhu'
+            storeFile file('C:/Users/anand/Desktop/My/Musiq/android/app/key/my-release-key.jks')
+            storePassword 'anandhu'
         }
     }
 
     buildTypes {
         release {
             signingConfig signingConfigs.release
-            minifyEnabled true  // Enable this to reduce APK size
-            shrinkResources true  // Enable this to remove unused resources
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

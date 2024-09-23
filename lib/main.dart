@@ -1,9 +1,11 @@
 import 'dart:async';
 
+import 'package:audio_service/audio_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/bloc/FeatchLibraty/featch_library_cubit.dart';
+import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/theme.dart';
 import 'package:musiq/models/song_model.dart';
 import 'package:musiq/bloc/favorite_bloc/favorite_bloc.dart';
@@ -16,17 +18,31 @@ import 'package:musiq/bloc/SearchSong/search_song_bloc.dart';
 import 'package:musiq/bloc/ThemeCubit/theme_cubit.dart';
 import 'package:musiq/presentation/screens/splashScreen/splash_screen.dart';
 import 'package:musiq/core/firebase_options.dart';
+import 'package:musiq/services/audio_handler.dart';
 import 'package:uni_links2/uni_links.dart';
 
 String? theme;
 int colorIndex = 0;
 SongModel? lastplayed;
 String? userIsLoggedIn;
+late final AudioPlayerHandler audioHandler;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
+  );
+  audioHandler = await AudioService.init(
+    builder: () => AudioPlayerHandler(),
+    config:  AudioServiceConfig(
+      androidNotificationChannelId: 'com.example.musiq.channel.audio',
+      androidNotificationChannelName: 'Music Playback',
+      androidNotificationIcon:
+          'drawable/music', 
+          androidStopForegroundOnPause: false,
+          preloadArtwork: true,
+          notificationColor: colorList[colorIndex],
+    ),
   );
 
   runApp(const MyApp());
@@ -57,9 +73,9 @@ class _MyAppState extends State<MyApp> {
 
   void _handleDeepLink(String link) {
     Uri uri = Uri.parse(link);
-    if (uri.scheme == 'music' && uri.host == 'example.com') {
+    if (uri.scheme == 'musiq' && uri.host == 'example.com') {
       if (uri.pathSegments.isNotEmpty && uri.pathSegments[0] == 'song') {
-        String songId = uri.pathSegments.length > 1 ? uri.pathSegments[1] : '';
+        // String songId = uri.pathSegments.length > 1 ? uri.pathSegments[1] : '';
         // Navigate to the song detail screen
         Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => SplashScreen()),
