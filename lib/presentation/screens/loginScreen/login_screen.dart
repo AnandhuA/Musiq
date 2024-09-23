@@ -18,6 +18,7 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: BlocListener<LoginBloc, LoginState>(
         listener: (context, state) {
@@ -32,19 +33,26 @@ class LoginScreen extends StatelessWidget {
             context.read<FavoriteBloc>().add(FeatchFavoriteSongEvent());
           } else if (state is LoginError) {
             customSnackbar(
-              context: context,
-              message: state.errorMessage,
-              bgColor: Colors.red,
-              textColor:  white
-            );
+                context: context,
+                message: state.errorMessage,
+                bgColor: Colors.red,
+                textColor: white);
           }
         },
         child: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
               padding: EdgeInsets.symmetric(
-                vertical: isMobile(context) ? 10 : 100,
-                horizontal: isMobile(context) ? 20 : 800,
+                vertical: isMobile(context)
+                    ? 10
+                    : isTablet(context)
+                        ? 50
+                        : 100,
+                horizontal: isMobile(context)
+                    ? 20
+                    : isTablet(context)
+                        ? 50
+                        : screenWidth * 0.3+5,
               ),
               child: Form(
                 key: _formKey,
