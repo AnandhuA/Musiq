@@ -14,3 +14,9 @@ final class PlayingState extends PlayAndPauseState {}
 final class PausedState extends PlayAndPauseState {}
 
 final class PlayerLoadingState extends PlayAndPauseState {}
+
+final class PlayerErrorState extends PlayAndPauseState {
+  final String message;
+
+  PlayerErrorState({required this.message});
+}

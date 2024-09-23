@@ -1,6 +1,6 @@
-import 'dart:developer';
+import 'dart:async';
 import 'dart:ui';
-import 'package:audioplayers/audioplayers.dart';
+import 'package:audio_service/audio_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,7 +8,6 @@ import 'package:lottie/lottie.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/data/add_to_library_funtions.dart';
-import 'package:musiq/data/shared_preference.dart';
 import 'package:musiq/main.dart';
 import 'package:musiq/models/song_model.dart';
 import 'package:musiq/presentation/commanWidgets/custom_app_bar.dart';
@@ -28,11 +27,11 @@ class PlayerScreen extends StatefulWidget {
 }
 
 class _PlayerScreenState extends State<PlayerScreen> {
-  late AudioPlayer _audioPlayer;
   late int _currentIndex;
   late ScrollController _scrollController;
+  late StreamSubscription<PlaybackState> _playbackStateSubscription;
 
-  bool _hasPlayed = false;
+  bool hasPlayed = false;
 
   SongModel get currentSong => widget.songs[_currentIndex];
 
@@ -41,82 +40,69 @@ class _PlayerScreenState extends State<PlayerScreen> {
     super.initState();
     _currentIndex = widget.initialIndex;
     _scrollController = ScrollController();
-    _initializePlayer();
+    _initializeAudioHandler();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollToCurrentSong();
     });
   }
 
-  void _initializePlayer() {
-    context.read<PlayAndPauseCubit>().reset();
-    context.read<ProgressBarCubit>().reset();
-    lastplayed = currentSong;
-    SharedPreference.lastPlayedSong(currentSong);
-    AddToLibrary.addToLastPlayedSong(currentSong);
-    _audioPlayer = AudioPlayer();
-
-    _audioPlayer.setSource(UrlSource(currentSong.url)).then(
-      (_) {
-        _audioPlayer.getDuration().then(
-              (duration) {},
-            );
-        if (!_hasPlayed) {
-          _audioPlayer.play(UrlSource(currentSong.url));
-          setState(() {
-            _hasPlayed = true;
-          });
-        }
-      },
-    ).catchError((error) {
-      log('Error setting audio source: $error');
+  Future<void> _initializeAudioHandler() async {
+    _playbackStateSubscription =
+        audioHandler.playbackState.listen((playbackState) {
+      if (mounted) {
+        // Check if the widget is still mounted
+        context
+            .read<PlayAndPauseCubit>()
+            .togglePlayerState(playbackState.playing);
+        context
+            .read<ProgressBarCubit>()
+            .changeProgress(playbackState.updatePosition);
+      }
     });
 
-    _audioPlayer.onPlayerStateChanged.listen(
-      (state) {
-        if (mounted) {
-          context.read<PlayAndPauseCubit>().togglePlayerState(state);
-        }
-      },
-    );
-
-    _audioPlayer.onPositionChanged.listen(
-      (position) {
-        if (mounted) {
-          context.read<ProgressBarCubit>().changeProgress(position);
-        }
-      },
-    );
-
-    _audioPlayer.onPlayerComplete.listen((event) {
-      _playNext();
-    });
+    _playSong(widget.songs[_currentIndex]);
   }
 
-  void _playNext() {
+  void _playSong(SongModel song) async {
+    AddToLibrary.addToLastPlayedSong(song);
+    await audioHandler.stop();
+    await audioHandler.playUrl(song.url);
+    await audioHandler.playMediaItem(
+      MediaItem(
+        id: song.id,
+        album: song.album,
+        title: song.title,
+        displayTitle: song.title,
+        duration: Duration(seconds: song.duration),
+        artist: song.subtitle,
+        artUri: Uri.parse(song.url),
+      ),
+    );
+
+    await audioHandler.play();
+  }
+
+  void _playNext() async {
     if (_currentIndex < widget.songs.length - 1) {
-      _audioPlayer.stop();
+      // await audioHandler.playNext();
       setState(() {
         _currentIndex++;
-        _hasPlayed = false;
-        _initializePlayer();
       });
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _scrollToCurrentSong();
-      });
+      _playSong(widget.songs[_currentIndex]);
+
+      _scrollToCurrentSong();
     }
   }
 
-  void _playPrevious() {
+  void _playPrevious() async {
     if (_currentIndex > 0) {
-      _audioPlayer.stop();
+      // await audioHandler.playPrevious();
       setState(() {
         _currentIndex--;
-        _hasPlayed = false;
-        _initializePlayer();
       });
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _scrollToCurrentSong();
-      });
+      _playSong(widget.songs[_currentIndex]);
+
+      _scrollToCurrentSong();
     }
   }
 
@@ -136,7 +122,9 @@ class _PlayerScreenState extends State<PlayerScreen> {
 
   @override
   void dispose() {
-    _audioPlayer.dispose();
+    _playbackStateSubscription.cancel();
+    // audioHandler.stop();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -229,13 +217,13 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                 if (state is ProgressBarInitial) {
                                   return ProgressBarWidget(
                                     song: widget.songs[_currentIndex],
-                                    audioPlayer: _audioPlayer,
+                                    audioPlayer: audioHandler,
                                     progressDuration: state.progressDuration,
                                   );
                                 }
                                 return ProgressBarWidget(
                                   song: widget.songs[_currentIndex],
-                                  audioPlayer: _audioPlayer,
+                                  audioPlayer: audioHandler,
                                   progressDuration: Duration.zero,
                                 );
                               },
@@ -262,7 +250,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                     if (state is PlayingState) {
                                       return IconButton(
                                         onPressed: () {
-                                          _audioPlayer.resume();
+                                          audioHandler.play();
                                         },
                                         icon: Icon(
                                           Icons.play_circle_fill_rounded,
@@ -273,7 +261,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                     if (state is PausedState) {
                                       return IconButton(
                                         onPressed: () {
-                                          _audioPlayer.pause();
+                                          audioHandler.pause();
                                         },
                                         icon: Icon(
                                           Icons.pause_circle_filled,
@@ -382,12 +370,13 @@ class _PlayerScreenState extends State<PlayerScreen> {
           key: ValueKey(widget.songs[index].id),
           onTap: () {
             if (index != _currentIndex) {
-              _audioPlayer.stop();
+              audioHandler.stop();
               setState(() {
                 _currentIndex = index;
-                _hasPlayed = false;
+                hasPlayed = false;
               });
-              _initializePlayer();
+              // _initializePlayer();
+              _initializeAudioHandler();
               _scrollToCurrentSong();
             }
           },

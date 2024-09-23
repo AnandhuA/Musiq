@@ -91,9 +91,9 @@ class HomeScreen extends StatelessWidget {
                                     return Transform.translate(
                                       offset: Offset(
                                           isMobile(context)
-                                              ? -32
+                                              ? -22
                                               : isTablet(context)
-                                                  ? -40
+                                                  ? -38
                                                   : -70,
                                           0),
                                       child: Column(

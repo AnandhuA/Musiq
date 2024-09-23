@@ -57,6 +57,7 @@ dependencies:
   cached_network_image: ^3.4.1
   google_nav_bar: ^5.0.6
   uni_links2: ^0.6.0+2
+  audio_service: ^0.18.15
   
 
 dev_dependencies:
