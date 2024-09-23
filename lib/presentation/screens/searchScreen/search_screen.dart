@@ -242,11 +242,11 @@ class SearchScreenState extends State<SearchScreen> {
                             ),
                             ...songList.map((song) => ListTile(
                                   title: Text(
-                                    song.album,
+                                    song.title,
                                     maxLines: 1,
                                   ),
                                   subtitle: Text(
-                                    song.artist,
+                                    song.subtitle,
                                     maxLines: 1,
                                   ),
                                   leading: CachedNetworkImage(
@@ -294,11 +294,11 @@ class SearchScreenState extends State<SearchScreen> {
                             ),
                             ...searchResult.albums!.map((album) => ListTile(
                                   title: Text(
-                                    album.album,
+                                    album.title,
                                     maxLines: 1,
                                   ),
                                   subtitle: Text(
-                                    album.artist,
+                                    album.subtitle,
                                     maxLines: 1,
                                   ),
                                   leading: CachedNetworkImage(
@@ -350,7 +350,7 @@ class SearchScreenState extends State<SearchScreen> {
                                     maxLines: 1,
                                   ),
                                   subtitle: Text(
-                                    playlist.artist,
+                                    playlist.subtitle,
                                     maxLines: 1,
                                   ),
                                   leading: CachedNetworkImage(
