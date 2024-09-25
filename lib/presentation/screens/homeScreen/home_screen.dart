@@ -7,6 +7,7 @@ import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/main.dart';
 import 'package:musiq/bloc/home_screen_cubit/home_screen_cubit.dart';
+import 'package:musiq/models/home_screen_model.dart';
 import 'package:musiq/presentation/screens/album_or_playlist_screen/album_or_playlist_screen.dart';
 import 'package:musiq/bloc/FeatchSong/featch_song_cubit.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
@@ -23,6 +24,7 @@ class HomeScreen extends StatelessWidget {
           body: BlocBuilder<HomeScreenCubit, HomeScreenState>(
             builder: (context, state) {
               if (state is HomeScreenLoaded) {
+                final songList = getAllSongs(state.homeScreenModel);
                 return SingleChildScrollView(
                   child: BlocListener<FeatchSongCubit, FeatchSongState>(
                     listener: (context, state) {
@@ -217,18 +219,6 @@ class HomeScreen extends StatelessWidget {
                           boderRadius: 20,
                         ),
                         Text(
-                          " TagMixes",
-                          style: TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold,
-                              color: colorList[colorIndex]),
-                        ),
-                        constHeight20,
-                        _SongList(
-                          model: state.homeScreenModel.tagMixes,
-                          boderRadius: 30,
-                        ),
-                        Text(
                           " Artist",
                           style: TextStyle(
                               fontSize: 25,
@@ -240,6 +230,136 @@ class HomeScreen extends StatelessWidget {
                           model: state.homeScreenModel.artistRecos,
                           boderRadius: 100,
                         ),
+//----------------------top played --------------------------------
+                        songList.isNotEmpty
+                            ? Text(
+                                "  Top Played ",
+                                style: TextStyle(
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold,
+                                    color: colorList[colorIndex]),
+                              )
+                            : SizedBox(),
+                        songList.isNotEmpty
+                            ? Container(
+                                height: 230,
+                                child: PageView.builder(
+                                  itemCount:
+                                      ((songList.length + 2) / 3).floor(),
+                                  pageSnapping: true,
+                                  controller: PageController(
+                                    viewportFraction: 0.9,
+                                  ),
+                                  itemBuilder: (context, pageIndex) {
+                                    return Transform.translate(
+                                      offset: Offset(
+                                          isMobile(context)
+                                              ? -22
+                                              : isTablet(context)
+                                                  ? -38
+                                                  : -70,
+                                          0),
+                                      child: Column(
+                                        children: List.generate(3, (itemIndex) {
+                                          final index =
+                                              pageIndex * 3 + itemIndex;
+                                          if (index >= songList.length) {
+                                            return SizedBox();
+                                          }
+                                          return Container(
+                                            child: ListTile(
+                                              leading: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                child: CachedNetworkImage(
+                                                  imageUrl: songList[index]
+                                                          .image ??
+                                                      "https://static.vecteezy.com/system/resources/thumbnails/037/044/052/small_2x/ai-generated-studio-shot-of-black-headphones-over-music-note-explosion-background-with-empty-space-for-text-photo.jpg",
+                                                  placeholder: (context, url) {
+                                                    // Placeholder logic
+                                                    return songList[index]
+                                                                .type ==
+                                                            "Artist"
+                                                        ? Image.asset(
+                                                            "assets/images/artist.png")
+                                                        : songList[index]
+                                                                    .type ==
+                                                                "album"
+                                                            ? Image.asset(
+                                                                "assets/images/album.png")
+                                                            : Image.asset(
+                                                                "assets/images/song.png");
+                                                  },
+                                                  errorWidget:
+                                                      (context, url, error) {
+                                                    // Error widget logic
+                                                    return songList[index]
+                                                                .type ==
+                                                            "Artist"
+                                                        ? Image.asset(
+                                                            "assets/images/artist.png")
+                                                        : songList[index]
+                                                                    .type ==
+                                                                "album"
+                                                            ? Image.asset(
+                                                                "assets/images/album.png")
+                                                            : Image.asset(
+                                                                "assets/images/song.png");
+                                                  },
+                                                ),
+                                              ),
+                                              title: Text(
+                                                songList[index].title,
+                                                maxLines: 1,
+                                              ),
+                                              subtitle: Text(
+                                                songList[index].subtitle,
+                                                maxLines: 1,
+                                              ),
+                                              onTap: () {
+                                                context
+                                                    .read<FeatchSongCubit>()
+                                                    .clickSong(
+                                                        type: songList[index]
+                                                                .type ??
+                                                            "",
+                                                        id: songList[index]
+                                                                .id ??
+                                                            "0",
+                                                        imageUrl:
+                                                            songList[index]
+                                                                .image,
+                                                        title: songList[index]
+                                                            .title);
+                                              },
+                                              trailing: IconButton(
+                                                  onPressed: () {},
+                                                  icon: Icon(Icons.more_vert)),
+                                            ),
+                                          );
+                                        }),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              )
+                            : SizedBox(),
+
+//--------------------------------------------------------------
+
+                        Text(
+                          " TagMixes",
+                          style: TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                              color: colorList[colorIndex]),
+                        ),
+                        constHeight20,
+                        _SongList(
+                          model: state.homeScreenModel.tagMixes,
+                          boderRadius: 30,
+                        ),
+
                         Text(
                           " Albums",
                           style: TextStyle(
@@ -405,4 +525,28 @@ class _SongList extends StatelessWidget {
       ),
     );
   }
+}
+
+List<dynamic> getAllSongs(HomeScreenModel homeScreenModel) {
+  List<dynamic> allSongs = [];
+
+  allSongs.addAll(
+    homeScreenModel.newTrending.where((item) => item.type == 'song'),
+  );
+  allSongs.addAll(
+    homeScreenModel.charts.where((item) => item.type == 'song'),
+  );
+  allSongs.addAll(
+    homeScreenModel.topPlaylists.where((item) => item.type == 'song'),
+  );
+  allSongs.addAll(
+    homeScreenModel.tagMixes.where((item) => item.type == 'song'),
+  );
+  allSongs.addAll(
+    homeScreenModel.artistRecos.where((item) => item.type == 'song'),
+  );
+  allSongs.addAll(
+    homeScreenModel.newAlbums.where((item) => item.type == 'song'),
+  );
+  return allSongs;
 }
