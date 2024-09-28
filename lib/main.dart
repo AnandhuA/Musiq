@@ -35,19 +35,17 @@ void main() async {
   );
   await Hive.initFlutter();
   Hive.registerAdapter(SongModelAdapter());
-
-
+  await Hive.openBox<SongModel>('lastPlayedBox');
 
   audioHandler = await AudioService.init(
     builder: () => AudioPlayerHandler(),
-    config:  AudioServiceConfig(
+    config: AudioServiceConfig(
       androidNotificationChannelId: 'com.example.musiq.channel.audio',
       androidNotificationChannelName: 'Music Playback',
-      androidNotificationIcon:
-          'drawable/music', 
-          androidStopForegroundOnPause: false,
-          preloadArtwork: true,
-          notificationColor: colorList[colorIndex],
+      androidNotificationIcon: 'drawable/music',
+      androidStopForegroundOnPause: false,
+      preloadArtwork: true,
+      notificationColor: colorList[colorIndex],
     ),
   );
 

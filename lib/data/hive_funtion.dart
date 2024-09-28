@@ -6,7 +6,7 @@ import 'package:musiq/models/song_model.dart';
 class LastPlayedRepo {
   static Future<void> addToLastPlayedSong(SongModel song) async {
     try {
-      final box = Hive.box<SongModel>('lastPlayedBox');
+      final box =  Hive.box<SongModel>('lastPlayedBox');
 
       final existingSongIndex =
           box.values.toList().indexWhere((s) => s.id == song.id);
@@ -55,7 +55,7 @@ class LastPlayedRepo {
     List<SongModel> lastPlayedSongs = [];
 
     try {
-      final box = Hive.box<SongModel>('lastPlayedBox');
+      final box =  Hive.box<SongModel>('lastPlayedBox');
 
       lastPlayedSongs = box.values.toList()
         ..sort((a, b) => b.addedAt!.compareTo(a.addedAt!));
