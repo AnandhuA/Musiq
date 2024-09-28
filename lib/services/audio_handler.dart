@@ -93,11 +93,11 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   Future<void> _playCurrentSong() async {
     final currentMediaItem = _mediaItems[_currentIndex];
     log("${currentMediaItem.id}");
-    await playUrl(currentMediaItem.id);
     mediaItem.add(currentMediaItem);
+    await playUrl(currentMediaItem.id);
+ 
   }
 }
-
 
 PlaybackState playbackStateForPlayer(PlayerState state,
     {Duration updatePosition = Duration.zero,

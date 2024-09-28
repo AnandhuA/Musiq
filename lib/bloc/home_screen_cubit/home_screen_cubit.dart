@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:musiq/data/add_to_library_funtions.dart';
+import 'package:musiq/data/hive_funtion.dart';
 import 'package:musiq/data/saavn_data.dart';
 import 'package:musiq/models/home_screen_model.dart';
 import 'package:musiq/models/song_model.dart';
@@ -19,7 +19,7 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
         data.map((key, value) => MapEntry(key.toString(), value));
 
     final HomeScreenModel homeScreenModel = HomeScreenModel.fromJson(jsonData);
-    final List<SongModel> lastplayed = await AddToLibrary.fetchLastPlayed();
+    final List<SongModel> lastplayed = await LastPlayedRepo.fetchLastPlayed();
 
     emit(HomeScreenLoaded(
       homeScreenModel: homeScreenModel,

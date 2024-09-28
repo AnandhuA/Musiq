@@ -1,23 +1,68 @@
-class SongModel {
+
+import 'package:hive/hive.dart';
+
+part 'song_model.g.dart'; // Generated adapter file
+
+@HiveType(typeId: 1)
+class SongModel extends HiveObject {
+  @HiveField(0)
   final String id;
+
+  @HiveField(1)
   final String type;
+
+  @HiveField(2)
   final String album;
+
+  @HiveField(3)
   final int year;
+
+  @HiveField(4)
   final int duration;
+
+  @HiveField(5)
   final String language;
+
+  @HiveField(6)
   final String genre;
+
+  @HiveField(7)
   final bool is320Kbps;
+
+  @HiveField(8)
   final bool hasLyrics;
+
+  @HiveField(9)
   final String lyricsSnippet;
+
+  @HiveField(10)
   final String releaseDate;
+
+  @HiveField(11)
   final String albumId;
+
+  @HiveField(12)
   final String subtitle;
+
+  @HiveField(13)
   final String title;
+
+  @HiveField(14)
   final String artist;
+
+  @HiveField(15)
   final String albumArtist;
+
+  @HiveField(16)
   final String imageUrl;
+
+  @HiveField(17)
   final String permaUrl;
+
+  @HiveField(18)
   final String url;
+
+  @HiveField(19)
   final DateTime? addedAt; // Nullable addedAt field
 
   SongModel({
@@ -42,6 +87,8 @@ class SongModel {
     required this.url,
     this.addedAt, // Initialize as nullable
   });
+
+  // Conversion to and from JSON is optional when using Hive, but here's your previous methods for reference.
 
   factory SongModel.fromJson(Map<dynamic, dynamic> json) {
     return SongModel(

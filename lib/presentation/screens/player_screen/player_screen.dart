@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/sized.dart';
-import 'package:musiq/data/add_to_library_funtions.dart';
+import 'package:musiq/data/hive_funtion.dart';
 import 'package:musiq/main.dart';
 import 'package:musiq/models/song_model.dart';
 import 'package:musiq/presentation/commanWidgets/custom_app_bar.dart';
@@ -65,7 +65,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
   }
 
   void _playSong(SongModel song) async {
-    AddToLibrary.addToLastPlayedSong(song);
+    LastPlayedRepo.addToLastPlayedSong(song);
     await audioHandler.stop();
     await audioHandler.playUrl(song.url);
     await audioHandler.playMediaItem(
@@ -77,10 +77,10 @@ class _PlayerScreenState extends State<PlayerScreen> {
         displayTitle: song.title,
         duration: Duration(seconds: song.duration),
         artist: song.subtitle,
-        artUri: Uri.parse(song.url),
+        artUri: Uri.parse(song.imageUrl),
       ),
     );
-
+  
     await audioHandler.play();
   }
 
