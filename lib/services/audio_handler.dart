@@ -1,12 +1,12 @@
 import 'dart:developer';
-
 import 'package:audio_service/audio_service.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 
 class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   final AudioPlayer _player;
   List<MediaItem> _mediaItems = [];
-  int _currentIndex = 0;
+  bool _pausedByFocusLoss = false;
 
   AudioPlayerHandler() : _player = AudioPlayer() {
     _initializePlayer();
@@ -15,6 +15,11 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   Future<void> _initializePlayer() async {
     _player.onPlayerStateChanged.listen((state) {
       playbackState.add(playbackStateForPlayer(state));
+
+      if (_pausedByFocusLoss && state == PlayerState.playing) {
+        log("Playback resumed after focus loss, pausing again.");
+        _player.pause();
+      }
     });
 
     _player.onPositionChanged.listen((position) {
@@ -29,22 +34,28 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
     _player.onPlayerComplete.listen((_) {
       _onSongComplete();
     });
+
+    _player.onPlayerStateChanged.listen((state) {
+      if (state == PlayerState.paused) {
+        log("Audio focus lost, pausing the player.");
+        _pausedByFocusLoss = true;
+        playbackState.add(playbackStateForPlayer(PlayerState.paused));
+      } else if (state == PlayerState.playing) {
+        log("Audio focus gained.");
+        _pausedByFocusLoss = false;
+      }
+    });
   }
 
   Future<void> _onSongComplete() async {
-    if (_currentIndex < _mediaItems.length - 1) {
-      _currentIndex++;
-      await _playCurrentSong();
-    } else {
-      await stop();
-      playbackState.add(playbackStateForPlayer(
-        _player.state,
-        processingState: AudioProcessingState.completed,
-      ));
-    }
+    playbackState.add(playbackStateForPlayer(
+      _player.state,
+      processingState: AudioProcessingState.completed,
+    ));
+    await skipToNext();
   }
 
-  Future<void> playUrl(String url) async {
+  Future<void> _playUrl(String url) async {
     await _player.setSourceUrl(url);
     await play();
   }
@@ -52,12 +63,13 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   @override
   Future<void> play() async {
     await _player.resume();
-    // await _playCurrentSong();
+    _pausedByFocusLoss = false;
   }
 
   @override
   Future<void> pause() async {
     await _player.pause();
+    _pausedByFocusLoss = false;
   }
 
   @override
@@ -70,38 +82,57 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
     await _player.stop();
   }
 
-  Future<void> setMediaItems(List<MediaItem> mediaItems) async {
+  @override
+  Future<void> skipToNext() async {
+    if (currentSongIndex < _mediaItems.length - 1) {
+      currentSongIndex++;
+      playbackState.add(playbackStateForPlayer(
+        _player.state,
+        processingState: AudioProcessingState.completed,
+      ));
+      log("Skip to next: $currentSongIndex");
+      await playCurrentSong();
+    }
+  }
+
+  @override
+  Future<void> skipToPrevious() async {
+    if (currentSongIndex > 0) {
+      currentSongIndex--;
+      playbackState.add(playbackStateForPlayer(
+        _player.state,
+        processingState: AudioProcessingState.completed,
+      ));
+      log("Skip to previous: $currentSongIndex");
+      await playCurrentSong();
+    }
+  }
+
+  Future<void> playCurrentSong() async {
+    if (_mediaItems.isNotEmpty) {
+      final newMediaItem = _mediaItems[currentSongIndex];
+      mediaItem.add(newMediaItem);
+      await _playUrl(newMediaItem.id);
+      playbackState.add(playbackStateForPlayer(_player.state));
+    }
+  }
+
+  void setMediaItems({
+    required List<MediaItem> mediaItems,
+    required int currentIndex,
+  }) {
     _mediaItems = mediaItems;
+    currentSongIndex = currentIndex;
   }
 
-  Future<void> playNext() async {
-    log("next");
-    if (_currentIndex < _mediaItems.length - 1) {
-      _currentIndex++;
-      await _playCurrentSong();
-    }
-  }
 
-  Future<void> playPrevious() async {
-    log("pre");
-    if (_currentIndex > 0) {
-      _currentIndex--;
-      await _playCurrentSong();
-    }
-  }
-
-  Future<void> _playCurrentSong() async {
-    final currentMediaItem = _mediaItems[_currentIndex];
-    log("${currentMediaItem.id}");
-    await playUrl(currentMediaItem.id);
-    mediaItem.add(currentMediaItem);
-  }
 }
 
-
-PlaybackState playbackStateForPlayer(PlayerState state,
-    {Duration updatePosition = Duration.zero,
-    AudioProcessingState processingState = AudioProcessingState.ready}) {
+PlaybackState playbackStateForPlayer(
+  PlayerState state, {
+  Duration updatePosition = Duration.zero,
+  AudioProcessingState processingState = AudioProcessingState.ready,
+}) {
   return PlaybackState(
     controls: _getControlsForState(state),
     processingState: processingState,
@@ -110,6 +141,7 @@ PlaybackState playbackStateForPlayer(PlayerState state,
   );
 }
 
+// Define media controls based on player state
 List<MediaControl> _getControlsForState(PlayerState state) {
   if (state == PlayerState.playing) {
     return [
@@ -120,21 +152,6 @@ List<MediaControl> _getControlsForState(PlayerState state) {
   } else {
     return [
       MediaControl.play,
-      MediaControl.skipToNext,
-      MediaControl.skipToPrevious,
     ];
-  }
-}
-
-AudioProcessingState mapProcessingState(PlayerState state) {
-  switch (state) {
-    case PlayerState.playing:
-      return AudioProcessingState.ready;
-    case PlayerState.paused:
-      return AudioProcessingState.ready;
-    case PlayerState.stopped:
-      return AudioProcessingState.idle;
-    default:
-      return AudioProcessingState.completed;
   }
 }

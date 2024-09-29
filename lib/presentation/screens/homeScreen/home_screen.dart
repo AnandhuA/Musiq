@@ -189,6 +189,19 @@ class HomeScreen extends StatelessWidget {
                               )
                             : SizedBox(),
                         constHeight20,
+
+                        Text(
+                          " Top Playlist",
+                          style: TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                              color: colorList[colorIndex]),
+                        ),
+                        constHeight20,
+                        _SongList(
+                          model: state.homeScreenModel.charts,
+                          boderRadius: 20,
+                        ),
                         Text(
                           " Trending songs",
                           style: TextStyle(
@@ -201,36 +214,9 @@ class HomeScreen extends StatelessWidget {
                           model: state.homeScreenModel.newTrending,
                           boderRadius: 10,
                         ),
-                        Text(
-                          " Playlist",
-                          style: TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold,
-                              color: colorList[colorIndex]),
-                        ),
-                        constHeight20,
-                        _SongList(
-                          model: state.homeScreenModel.charts,
-                          boderRadius: 20,
-                        ),
-                        constHeight20,
-                        _SongList(
-                          model: state.homeScreenModel.topPlaylists,
-                          boderRadius: 20,
-                        ),
-                        Text(
-                          " Artist",
-                          style: TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold,
-                              color: colorList[colorIndex]),
-                        ),
-                        constHeight20,
-                        _SongList(
-                          model: state.homeScreenModel.artistRecos,
-                          boderRadius: 100,
-                        ),
+
 //----------------------top played --------------------------------
+                        constHeight20,
                         songList.isNotEmpty
                             ? Text(
                                 "  Top Played ",
@@ -346,7 +332,30 @@ class HomeScreen extends StatelessWidget {
                             : SizedBox(),
 
 //--------------------------------------------------------------
-
+                        Text(
+                          " Artist",
+                          style: TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                              color: colorList[colorIndex]),
+                        ),
+                        constHeight20,
+                        _SongList(
+                          model: state.homeScreenModel.artistRecos,
+                          boderRadius: 100,
+                        ),
+                        Text(
+                          " Playlist",
+                          style: TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                              color: colorList[colorIndex]),
+                        ),
+                        constHeight20,
+                        _SongList(
+                          model: state.homeScreenModel.topPlaylists,
+                          boderRadius: 20,
+                        ),
                         Text(
                           " TagMixes",
                           style: TextStyle(

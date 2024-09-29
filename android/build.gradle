@@ -1,3 +1,38 @@
+// allprojects {
+//     repositories {
+//         google()
+//         mavenCentral()
+//     }
+// }
+
+// rootProject.buildDir = "../build"
+// subprojects {
+//     project.buildDir = "${rootProject.buildDir}/${project.name}"
+// }
+// subprojects {
+//     project.evaluationDependsOn(":app")
+// }
+
+// tasks.register("clean", Delete) {
+//     delete rootProject.buildDir
+// }
+
+
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    ext.kotlin_version = '1.7.10' // or the latest version
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:8.0.0" // Update to the latest stable version if needed
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        // Other dependencies can be added here
+    }
+}
+
 allprojects {
     repositories {
         google()
@@ -5,14 +40,16 @@ allprojects {
     }
 }
 
+// Set a custom build directory
 rootProject.buildDir = "../build"
+
+// Define the build directory for each subproject
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
-}
-subprojects {
-    project.evaluationDependsOn(":app")
+    project.evaluationDependsOn(":app") // This ensures that :app is evaluated before others
 }
 
+// Register the clean task to delete the build directory
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }

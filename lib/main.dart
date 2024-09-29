@@ -4,8 +4,8 @@ import 'package:audio_service/audio_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:musiq/bloc/FeatchLibraty/featch_library_cubit.dart';
-import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/theme.dart';
 import 'package:musiq/models/song_model.dart';
 import 'package:musiq/bloc/favorite_bloc/favorite_bloc.dart';
@@ -32,16 +32,16 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await Hive.initFlutter();
+  Hive.registerAdapter(SongModelAdapter());
+  await Hive.openBox<SongModel>('lastPlayedBox');
+
   audioHandler = await AudioService.init(
     builder: () => AudioPlayerHandler(),
-    config:  AudioServiceConfig(
+    config: AudioServiceConfig(
       androidNotificationChannelId: 'com.example.musiq.channel.audio',
       androidNotificationChannelName: 'Music Playback',
-      androidNotificationIcon:
-          'drawable/music', 
-          androidStopForegroundOnPause: false,
-          preloadArtwork: true,
-          notificationColor: colorList[colorIndex],
+      androidNotificationIcon: 'drawable/music',
     ),
   );
 
