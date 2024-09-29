@@ -16,6 +16,8 @@ import 'package:musiq/presentation/screens/player_screen/cubit/PlayAndPause/play
 import 'package:musiq/presentation/screens/player_screen/cubit/ProgressBar/progress_bar_cubit.dart';
 import 'package:musiq/presentation/screens/player_screen/widgets/progress_bar_widget.dart';
 
+int currentSongIndex = 0;
+
 class PlayerScreen extends StatefulWidget {
   final List<SongModel> songs;
   final int initialIndex;
@@ -27,18 +29,18 @@ class PlayerScreen extends StatefulWidget {
 }
 
 class _PlayerScreenState extends State<PlayerScreen> {
-  late int _currentIndex;
+  // late int _currentIndex;
   late ScrollController _scrollController;
   late StreamSubscription<PlaybackState> _playbackStateSubscription;
   bool _loading = false;
   bool hasPlayed = false;
 
-  SongModel get currentSong => widget.songs[_currentIndex];
+  SongModel get currentSong => widget.songs[currentSongIndex];
 
   @override
   void initState() {
     super.initState();
-    _currentIndex = widget.initialIndex;
+    currentSongIndex = widget.initialIndex;
     _scrollController = ScrollController();
     _initializeAudioHandler();
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -47,6 +49,19 @@ class _PlayerScreenState extends State<PlayerScreen> {
   }
 
   Future<void> _initializeAudioHandler() async {
+    audioHandler.setMediaItems(
+        mediaItems: widget.songs
+            .map((song) => MediaItem(
+                  id: song.url,
+                  album: song.album,
+                  title: song.title,
+                  displayTitle: song.title,
+                  duration: Duration(seconds: song.duration),
+                  artist: song.subtitle,
+                  artUri: Uri.parse(song.imageUrl),
+                ))
+            .toList(),
+        curentIndex: currentSongIndex);
     _playbackStateSubscription =
         audioHandler.playbackState.listen((playbackState) {
       final isPlaying = playbackState.playing;
@@ -57,11 +72,11 @@ class _PlayerScreenState extends State<PlayerScreen> {
       context.read<ProgressBarCubit>().changeProgress(position);
 
       if (processingState == AudioProcessingState.completed) {
-        _playNext();
+        setState(() {});
       }
     });
 
-    _playSong(widget.songs[_currentIndex]);
+    _playSong(widget.songs[currentSongIndex]);
   }
 
   void _playSong(SongModel song) async {
@@ -70,16 +85,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
     });
     LastPlayedRepo.addToLastPlayedSong(song);
     await audioHandler.stop();
-    await audioHandler.playCurrentSong(
-        newMediaItem: MediaItem(
-      id: song.url,
-      album: song.album,
-      title: song.title,
-      displayTitle: song.title,
-      duration: Duration(seconds: song.duration),
-      artist: song.subtitle,
-      artUri: Uri.parse(song.imageUrl),
-    ));
+    await audioHandler.playCurrentSong();
     await audioHandler.play();
     setState(() {
       _loading = false;
@@ -87,21 +93,11 @@ class _PlayerScreenState extends State<PlayerScreen> {
   }
 
   void _playNext() async {
-    if (_currentIndex < widget.songs.length - 1) {
+    if (currentSongIndex < widget.songs.length - 1) {
       setState(() {
-        _currentIndex++;
         _loading = true;
       });
-      await audioHandler.playNext(
-          newMediaItem: MediaItem(
-        id: widget.songs[_currentIndex].url,
-        album: widget.songs[_currentIndex].album,
-        title: widget.songs[_currentIndex].title,
-        displayTitle: widget.songs[_currentIndex].title,
-        duration: Duration(seconds: widget.songs[_currentIndex].duration),
-        artist: widget.songs[_currentIndex].subtitle,
-        artUri: Uri.parse(widget.songs[_currentIndex].imageUrl),
-      ));
+      await audioHandler.skipToNext();
       _scrollToCurrentSong();
       setState(() {
         _loading = false;
@@ -110,21 +106,11 @@ class _PlayerScreenState extends State<PlayerScreen> {
   }
 
   void _playPrevious() async {
-    if (_currentIndex > 0) {
+    if (currentSongIndex > 0) {
       setState(() {
-        _currentIndex--;
         _loading = true;
       });
-      await audioHandler.playPrevious(
-          newMediaItem: MediaItem(
-        id: widget.songs[_currentIndex].url,
-        album: widget.songs[_currentIndex].album,
-        title: widget.songs[_currentIndex].title,
-        displayTitle: widget.songs[_currentIndex].title,
-        duration: Duration(seconds: widget.songs[_currentIndex].duration),
-        artist: widget.songs[_currentIndex].subtitle,
-        artUri: Uri.parse(widget.songs[_currentIndex].imageUrl),
-      ));
+      await audioHandler.skipToPrevious();
       _scrollToCurrentSong();
       setState(() {
         _loading = false;
@@ -136,7 +122,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
     if (_scrollController.hasClients) {
       const double itemHeight = 50;
       final double scrollPosition =
-          (_currentIndex * itemHeight) - (itemHeight * 1.5);
+          (currentSongIndex * itemHeight) - (itemHeight * 1.5);
 
       _scrollController.animateTo(
         scrollPosition,
@@ -154,7 +140,6 @@ class _PlayerScreenState extends State<PlayerScreen> {
     super.dispose();
   }
 
-  @override
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
@@ -242,13 +227,13 @@ class _PlayerScreenState extends State<PlayerScreen> {
                               builder: (context, state) {
                                 if (state is ProgressBarInitial) {
                                   return ProgressBarWidget(
-                                    song: widget.songs[_currentIndex],
+                                    song: widget.songs[currentSongIndex],
                                     audioPlayer: audioHandler,
                                     progressDuration: state.progressDuration,
                                   );
                                 }
                                 return ProgressBarWidget(
-                                  song: widget.songs[_currentIndex],
+                                  song: widget.songs[currentSongIndex],
                                   audioPlayer: audioHandler,
                                   progressDuration: Duration.zero,
                                 );
@@ -264,7 +249,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                   icon: Icon(
                                     Icons.skip_previous_rounded,
                                     size: fontSize,
-                                    color: _currentIndex == 0
+                                    color: currentSongIndex == 0
                                         ? const Color.fromARGB(
                                             99, 158, 158, 158)
                                         : null,
@@ -341,7 +326,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                   onPressed: _playNext,
                                   icon: Icon(Icons.skip_next_rounded,
                                       size: fontSize,
-                                      color: _currentIndex ==
+                                      color: currentSongIndex ==
                                               ((widget.songs.length) - 1)
                                           ? const Color.fromARGB(
                                               99, 158, 158, 158)
@@ -410,12 +395,14 @@ class _PlayerScreenState extends State<PlayerScreen> {
           }
           final moveSong = widget.songs.removeAt(oldIndex);
           widget.songs.insert(newIndex, moveSong);
-          if (_currentIndex == oldIndex) {
-            _currentIndex = newIndex;
-          } else if (_currentIndex > oldIndex && _currentIndex <= newIndex) {
-            _currentIndex--;
-          } else if (_currentIndex < oldIndex && _currentIndex >= newIndex) {
-            _currentIndex++;
+          if (currentSongIndex == oldIndex) {
+            currentSongIndex = newIndex;
+          } else if (currentSongIndex > oldIndex &&
+              currentSongIndex <= newIndex) {
+            currentSongIndex--;
+          } else if (currentSongIndex < oldIndex &&
+              currentSongIndex >= newIndex) {
+            currentSongIndex++;
           }
         });
       },
@@ -423,10 +410,10 @@ class _PlayerScreenState extends State<PlayerScreen> {
         return ListTile(
           key: ValueKey(widget.songs[index].id),
           onTap: () {
-            if (index != _currentIndex) {
+            if (index != currentSongIndex) {
               audioHandler.stop();
               setState(() {
-                _currentIndex = index;
+                currentSongIndex = index;
                 hasPlayed = false;
               });
               // _initializePlayer();
@@ -437,7 +424,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              _currentIndex == index
+              currentSongIndex == index
                   ? Lottie.asset(
                       Theme.of(context).brightness == Brightness.dark
                           ? "assets/animations/musicPlaying_light.json"
@@ -466,13 +453,15 @@ class _PlayerScreenState extends State<PlayerScreen> {
             widget.songs[index].title,
             maxLines: 1,
             style: TextStyle(
-                color: _currentIndex == index ? colorList[colorIndex] : null),
+                color:
+                    currentSongIndex == index ? colorList[colorIndex] : null),
           ),
           subtitle: Text(
             widget.songs[index].subtitle,
             maxLines: 1,
             style: TextStyle(
-                color: _currentIndex == index ? colorList[colorIndex] : null),
+                color:
+                    currentSongIndex == index ? colorList[colorIndex] : null),
           ),
         );
       }),

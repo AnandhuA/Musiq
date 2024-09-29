@@ -1,10 +1,11 @@
 import 'dart:developer';
-
 import 'package:audio_service/audio_service.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 
 class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   final AudioPlayer _player;
+  List<MediaItem> _mediaItems = [];
 
   AudioPlayerHandler() : _player = AudioPlayer() {
     _initializePlayer();
@@ -34,23 +35,21 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
       _player.state,
       processingState: AudioProcessingState.completed,
     ));
+    await skipToNext();
   }
 
   Future<void> _playUrl(String url) async {
-    log("url ply");
     await _player.setSourceUrl(url);
     await play();
   }
 
   @override
   Future<void> play() async {
-    log("play");
     await _player.resume();
   }
 
   @override
   Future<void> pause() async {
-    log("pause");
     await _player.pause();
   }
 
@@ -61,24 +60,50 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
 
   @override
   Future<void> stop() async {
-    log("stop");
     await _player.stop();
   }
 
-  Future<void> playNext({required MediaItem newMediaItem}) async {
-    log("next");
-    await playCurrentSong(newMediaItem: newMediaItem);
+  @override
+  Future<void> skipToNext() async {
+    if (currentSongIndex < _mediaItems.length - 1) {
+      currentSongIndex++;
+      playbackState.add(playbackStateForPlayer(
+        _player.state,
+        processingState: AudioProcessingState.completed,
+      ));
+      await playCurrentSong();
+      log("handeler$currentSongIndex");
+    }
   }
 
-  Future<void> playPrevious({required MediaItem newMediaItem}) async {
-    log("pre");
-    await playCurrentSong(newMediaItem: newMediaItem);
+  @override
+  Future<void> skipToPrevious() async {
+    if (currentSongIndex > 0) {
+      currentSongIndex--;
+      playbackState.add(playbackStateForPlayer(
+        _player.state,
+        processingState: AudioProcessingState.completed,
+      ));
+      await playCurrentSong();
+      log("handeler$currentSongIndex");
+    }
   }
 
-  Future<void> playCurrentSong({required MediaItem newMediaItem}) async {
-    mediaItem.add(newMediaItem);
-    await _playUrl(newMediaItem.id);
-    playbackState.add(playbackStateForPlayer(_player.state));
+  Future<void> playCurrentSong() async {
+    if (_mediaItems.isNotEmpty) {
+      final newMediaItem = _mediaItems[currentSongIndex];
+      mediaItem.add(newMediaItem);
+      await _playUrl(newMediaItem.id);
+      playbackState.add(playbackStateForPlayer(_player.state));
+    }
+  }
+
+  void setMediaItems({
+    required List<MediaItem> mediaItems,
+    required int curentIndex,
+  }) {
+    _mediaItems = mediaItems;
+    currentSongIndex = curentIndex;
   }
 }
 
@@ -106,20 +131,5 @@ List<MediaControl> _getControlsForState(PlayerState state) {
     return [
       MediaControl.play,
     ];
-  }
-}
-
-AudioProcessingState mapProcessingState(PlayerState state) {
-  switch (state) {
-    case PlayerState.playing:
-      return AudioProcessingState.ready;
-    case PlayerState.paused:
-      return AudioProcessingState.ready;
-    case PlayerState.stopped:
-      return AudioProcessingState.idle;
-    case PlayerState.completed:
-      return AudioProcessingState.completed;
-    default:
-      return AudioProcessingState.buffering;
   }
 }
