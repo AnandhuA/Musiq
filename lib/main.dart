@@ -23,7 +23,7 @@ import 'package:uni_links2/uni_links.dart';
 
 String? theme;
 int colorIndex = 0;
-SongModel? lastplayed;
+SongModel? lastplayedSong;
 String? userIsLoggedIn;
 late final AudioPlayerHandler audioHandler;
 void main() async {
