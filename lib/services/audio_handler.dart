@@ -6,6 +6,7 @@ import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   final AudioPlayer _player;
   List<MediaItem> _mediaItems = [];
+  bool _pausedByFocusLoss = false;
 
   AudioPlayerHandler() : _player = AudioPlayer() {
     _initializePlayer();
@@ -14,6 +15,11 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   Future<void> _initializePlayer() async {
     _player.onPlayerStateChanged.listen((state) {
       playbackState.add(playbackStateForPlayer(state));
+
+      if (_pausedByFocusLoss && state == PlayerState.playing) {
+        log("Playback resumed after focus loss, pausing again.");
+        _player.pause();
+      }
     });
 
     _player.onPositionChanged.listen((position) {
@@ -27,6 +33,17 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
 
     _player.onPlayerComplete.listen((_) {
       _onSongComplete();
+    });
+
+    _player.onPlayerStateChanged.listen((state) {
+      if (state == PlayerState.paused) {
+        log("Audio focus lost, pausing the player.");
+        _pausedByFocusLoss = true;
+        playbackState.add(playbackStateForPlayer(PlayerState.paused));
+      } else if (state == PlayerState.playing) {
+        log("Audio focus gained.");
+        _pausedByFocusLoss = false;
+      }
     });
   }
 
@@ -46,11 +63,13 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   @override
   Future<void> play() async {
     await _player.resume();
+    _pausedByFocusLoss = false;
   }
 
   @override
   Future<void> pause() async {
     await _player.pause();
+    _pausedByFocusLoss = false;
   }
 
   @override
@@ -71,8 +90,8 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
         _player.state,
         processingState: AudioProcessingState.completed,
       ));
+      log("Skip to next: $currentSongIndex");
       await playCurrentSong();
-      log("handeler$currentSongIndex");
     }
   }
 
@@ -84,8 +103,8 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
         _player.state,
         processingState: AudioProcessingState.completed,
       ));
+      log("Skip to previous: $currentSongIndex");
       await playCurrentSong();
-      log("handeler$currentSongIndex");
     }
   }
 
@@ -100,11 +119,13 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
 
   void setMediaItems({
     required List<MediaItem> mediaItems,
-    required int curentIndex,
+    required int currentIndex,
   }) {
     _mediaItems = mediaItems;
-    currentSongIndex = curentIndex;
+    currentSongIndex = currentIndex;
   }
+
+
 }
 
 PlaybackState playbackStateForPlayer(
@@ -120,6 +141,7 @@ PlaybackState playbackStateForPlayer(
   );
 }
 
+// Define media controls based on player state
 List<MediaControl> _getControlsForState(PlayerState state) {
   if (state == PlayerState.playing) {
     return [

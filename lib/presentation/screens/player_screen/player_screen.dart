@@ -61,7 +61,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                   artUri: Uri.parse(song.imageUrl),
                 ))
             .toList(),
-        curentIndex: currentSongIndex);
+        currentIndex: currentSongIndex);
     _playbackStateSubscription =
         audioHandler.playbackState.listen((playbackState) {
       final isPlaying = playbackState.playing;
@@ -73,6 +73,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
 
       if (processingState == AudioProcessingState.completed) {
         setState(() {});
+        LastPlayedRepo.addToLastPlayedSong(widget.songs[currentSongIndex]);
       }
     });
 
@@ -98,6 +99,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
         _loading = true;
       });
       await audioHandler.skipToNext();
+
       _scrollToCurrentSong();
       setState(() {
         _loading = false;
@@ -111,6 +113,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
         _loading = true;
       });
       await audioHandler.skipToPrevious();
+
       _scrollToCurrentSong();
       setState(() {
         _loading = false;
@@ -404,6 +407,20 @@ class _PlayerScreenState extends State<PlayerScreen> {
               currentSongIndex >= newIndex) {
             currentSongIndex++;
           }
+          audioHandler.setMediaItems(
+            mediaItems: widget.songs
+                .map((song) => MediaItem(
+                      id: song.url,
+                      album: song.album,
+                      title: song.title,
+                      displayTitle: song.title,
+                      duration: Duration(seconds: song.duration),
+                      artist: song.subtitle,
+                      artUri: Uri.parse(song.imageUrl),
+                    ))
+                .toList(),
+            currentIndex: currentSongIndex,
+          );
         });
       },
       children: List.generate(widget.songs.length, (index) {
