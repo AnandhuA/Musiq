@@ -22,7 +22,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
     super.initState();
     _audioHandler = AudioPlayerHandler();
     _playbackStateStream = _audioHandler.playbackState;
-    _audioHandler.playUrl(widget.song.url); // Play the song using its URL
+    // _audioHandler.playUrl(widget.song.url); // Play the song using its URL
   }
 
   @override

@@ -30,7 +30,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
   late int _currentIndex;
   late ScrollController _scrollController;
   late StreamSubscription<PlaybackState> _playbackStateSubscription;
-
+  bool _loading = false;
   bool hasPlayed = false;
 
   SongModel get currentSong => widget.songs[_currentIndex];
@@ -65,46 +65,70 @@ class _PlayerScreenState extends State<PlayerScreen> {
   }
 
   void _playSong(SongModel song) async {
+    setState(() {
+      _loading = true;
+    });
     LastPlayedRepo.addToLastPlayedSong(song);
     await audioHandler.stop();
-    await audioHandler.playUrl(song.url);
-    await audioHandler.playMediaItem(
-    
-      MediaItem(
-        id: song.url,
-        album: song.album,
-        title: song.title,
-        displayTitle: song.title,
-        duration: Duration(seconds: song.duration),
-        artist: song.subtitle,
-        artUri: Uri.parse(song.imageUrl),
-      ),
-    );
-  
+    await audioHandler.playCurrentSong(
+        newMediaItem: MediaItem(
+      id: song.url,
+      album: song.album,
+      title: song.title,
+      displayTitle: song.title,
+      duration: Duration(seconds: song.duration),
+      artist: song.subtitle,
+      artUri: Uri.parse(song.imageUrl),
+    ));
     await audioHandler.play();
+    setState(() {
+      _loading = false;
+    });
   }
 
   void _playNext() async {
     if (_currentIndex < widget.songs.length - 1) {
-      await audioHandler.playNext();
       setState(() {
         _currentIndex++;
+        _loading = true;
       });
-      _playSong(widget.songs[_currentIndex]);
-
+      await audioHandler.playNext(
+          newMediaItem: MediaItem(
+        id: widget.songs[_currentIndex].url,
+        album: widget.songs[_currentIndex].album,
+        title: widget.songs[_currentIndex].title,
+        displayTitle: widget.songs[_currentIndex].title,
+        duration: Duration(seconds: widget.songs[_currentIndex].duration),
+        artist: widget.songs[_currentIndex].subtitle,
+        artUri: Uri.parse(widget.songs[_currentIndex].imageUrl),
+      ));
       _scrollToCurrentSong();
+      setState(() {
+        _loading = false;
+      });
     }
   }
 
   void _playPrevious() async {
     if (_currentIndex > 0) {
-      await audioHandler.playPrevious();
       setState(() {
         _currentIndex--;
+        _loading = true;
       });
-      _playSong(widget.songs[_currentIndex]);
-
+      await audioHandler.playPrevious(
+          newMediaItem: MediaItem(
+        id: widget.songs[_currentIndex].url,
+        album: widget.songs[_currentIndex].album,
+        title: widget.songs[_currentIndex].title,
+        displayTitle: widget.songs[_currentIndex].title,
+        duration: Duration(seconds: widget.songs[_currentIndex].duration),
+        artist: widget.songs[_currentIndex].subtitle,
+        artUri: Uri.parse(widget.songs[_currentIndex].imageUrl),
+      ));
       _scrollToCurrentSong();
+      setState(() {
+        _loading = false;
+      });
     }
   }
 
@@ -254,10 +278,24 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                         onPressed: () {
                                           audioHandler.play();
                                         },
-                                        icon: Icon(
-                                          Icons.play_circle_fill_rounded,
-                                          size: fontSize * 1.2,
-                                        ),
+                                        icon: _loading
+                                            ? Theme.of(context).brightness ==
+                                                    Brightness.dark
+                                                ? Lottie.asset(
+                                                    "assets/animations/light_music_loading.json",
+                                                    fit: BoxFit.cover,
+                                                    width: fontSize,
+                                                    height: fontSize,
+                                                  )
+                                                : Lottie.asset(
+                                                    "assets/animations/dark_music_loading.json",
+                                                    fit: BoxFit.cover,
+                                                    width: fontSize,
+                                                    height: fontSize)
+                                            : Icon(
+                                                Icons.play_circle_fill_rounded,
+                                                size: fontSize * 1.2,
+                                              ),
                                       );
                                     }
                                     if (state is PausedState) {
@@ -265,10 +303,24 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                         onPressed: () {
                                           audioHandler.pause();
                                         },
-                                        icon: Icon(
-                                          Icons.pause_circle_filled,
-                                          size: fontSize * 1.2,
-                                        ),
+                                        icon: _loading
+                                            ? Theme.of(context).brightness ==
+                                                    Brightness.dark
+                                                ? Lottie.asset(
+                                                    "assets/animations/light_music_loading.json",
+                                                    width: fontSize,
+                                                    height: fontSize,
+                                                    fit: BoxFit.cover)
+                                                : Lottie.asset(
+                                                    "assets/animations/dark_music_loading.json",
+                                                    fit: BoxFit.cover,
+                                                    width: fontSize,
+                                                    height: fontSize,
+                                                  )
+                                            : Icon(
+                                                Icons.pause_circle_filled,
+                                                size: fontSize * 1.2,
+                                              ),
                                       );
                                     }
                                     return SizedBox(
