@@ -30,7 +30,7 @@ class SharedPreference {
     return index;
   }
 
-  static Future<void> lastPlayedSong(SongModel song) async {
+  static Future<void> addLastPlayedSong(SongModel song) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String songJson = jsonEncode(song.toJson());
     await prefs.setString(currentSongKey, songJson);
@@ -44,6 +44,7 @@ class SharedPreference {
     }
     return null;
   }
+
   static Future<void> clearAllPreferences() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear(); // This removes all the stored preferences

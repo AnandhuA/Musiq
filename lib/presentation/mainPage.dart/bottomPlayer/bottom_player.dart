@@ -1,155 +1,112 @@
-// import 'package:flutter/material.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:audioplayers/audioplayers.dart';
-// import 'package:musiq/data/shared_preference.dart';
-// import 'package:musiq/main.dart';
-// import 'package:musiq/models/song_model.dart';
-// import 'package:musiq/presentation/screens/player_screen/cubit/PlayAndPause/play_and_pause_cubit.dart';
-// import 'package:musiq/presentation/screens/player_screen/cubit/ProgressBar/progress_bar_cubit.dart';
+import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:musiq/core/colors.dart';
+import 'package:musiq/main.dart';
 
-// class BottomPlayerBar extends StatefulWidget {
-//   final SongModel song;
-//   const BottomPlayerBar({super.key, required this.song});
+class MiniPlayer extends StatefulWidget {
+  final Function()? onTap;
+  final double bottomPostion;
 
-//   @override
-//   State<BottomPlayerBar> createState() => _BottomPlayerBarState();
-// }
+  const MiniPlayer({
+    Key? key,
+    this.onTap,
+    this.bottomPostion = 0,
+  }) : super(key: key);
 
-// class _BottomPlayerBarState extends State<BottomPlayerBar> {
-//   late AudioPlayer _audioPlayer;
-//   bool _hasPlayed = false;
+  @override
+  _MiniPlayerState createState() => _MiniPlayerState();
+}
 
-//   @override
-//   void initState() {
-//     super.initState();
-//     lastplayed = widget.song;
-//     SharedPreference.lastPlayedSong(widget.song);
-//     _audioPlayer = AudioPlayer();
+class _MiniPlayerState extends State<MiniPlayer> {
+  late String _currentSongTitle;
+  late String _currentSongSubTitle;
+  late String _imgUrl;
 
-//     _audioPlayer.setSource(UrlSource(widget.song.url)).then(
-//       (_) {
-//         _audioPlayer.getDuration().then(
-//               (duration) {},
-//             );
-//         if (!_hasPlayed) {
-//           _audioPlayer.play(
-//             UrlSource(
-//               widget.song.url,
-//             ),
-//           );
-//           setState(() {
-//             _hasPlayed = true;
-//           });
-//         }
-//       },
-//     );
+  @override
+  void initState() {
+    super.initState();
+  }
 
-//     _audioPlayer.onPlayerStateChanged.listen(
-//       (pstate) {
-//         if (mounted) {
-//           context.read<PlayAndPauseCubit>().togglePlayerState(pstate);
-//         }
-//       },
-//     );
+  void _updateCurrentSongInfo() {
+    if (lastplayed != null) {
+      _currentSongTitle = lastplayed!.title;
+      _currentSongSubTitle = lastplayed!.subtitle;
+      _imgUrl = lastplayed!.imageUrl;
+    } else {
+      _currentSongTitle = 'No song playing';
+      _currentSongSubTitle = '';
+      _imgUrl = '';
+    }
+  }
 
-//     _audioPlayer.onPositionChanged.listen(
-//       (position) {
-//         if (mounted) {
-//           context.read<ProgressBarCubit>().changeProgress(position);
-//         }
-//       },
-//     );
-//   }
+  @override
+  Widget build(BuildContext context) {
+    _updateCurrentSongInfo();
+    return Positioned(
+      bottom: widget.bottomPostion,
+      left: 0,
+      right: 0,
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 8),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Theme.of(context).brightness == Brightness.dark
+                ? Colors.grey.shade800
+                : Colors.grey.shade400,
+          ),
+          color:
+              Theme.of(context).brightness == Brightness.dark ? black : white,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: ListTile(
+          onTap: () {
+            if (widget.onTap != null) {
+              widget.onTap!();
+            }
+          },
+          leading: Container(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(5),
+              child: CachedNetworkImage(
+                imageUrl: _imgUrl,
+                fit: BoxFit.fitWidth,
+                placeholder: (context, url) =>
+                    Image.asset("assets/images/song.png"),
+                errorWidget: (context, url, error) =>
+                    Image.asset("assets/images/song.png"),
+              ),
+            ),
+          ),
+          title: Text(
+            _currentSongTitle,
+            maxLines: 1,
+          ),
+          subtitle: Text(
+            _currentSongSubTitle,
+            maxLines: 1,
+          ),
+          trailing: IconButton(
+            icon: Icon(
+              audioHandler.playbackState.value.playing
+                  ? Icons.pause
+                  : Icons.play_arrow,
+            ),
+            onPressed: _togglePlayPause,
+          ),
+        ),
+      ),
+    );
+  }
 
-//   @override
-//   void dispose() {
-//     _audioPlayer.dispose();
-//     super.dispose();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final double screenWidth = MediaQuery.of(context).size.width;
-
-//     return Container(
-//       color: Colors.black.withOpacity(0.8),
-//       padding: const EdgeInsets.symmetric(vertical: 8.0),
-//       child: Row(
-//         children: [
-//           ClipRRect(
-//             borderRadius: BorderRadius.circular(5),
-//             child: Image.network(
-//               widget.song.imageUrl,
-//             ),
-//           ),
-//           const SizedBox(width: 10),
-//           Expanded(
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 Text(
-//                   widget.song.title,
-//                   maxLines: 1,
-//                   style: const TextStyle(
-//                     fontWeight: FontWeight.bold,
-//                   ),
-//                   overflow: TextOverflow.ellipsis,
-//                 ),
-//                 Text(
-//                   widget.song.album,
-//                   maxLines: 1,
-//                   overflow: TextOverflow.ellipsis,
-//                 ),
-//               ],
-//             ),
-//           ),
-//           IconButton(
-//             onPressed: () {
-//               // Handle previous action
-//             },
-//             icon: Icon(
-//               Icons.skip_previous_rounded,
-//               size: screenWidth * 0.08,
-//             ),
-//           ),
-//           BlocBuilder<PlayAndPauseCubit, PlayAndPauseState>(
-//             builder: (context, state) {
-//               if (state is PausedState) {
-//                 return IconButton(
-//                   onPressed: () {
-//                     _audioPlayer.pause();
-//                   },
-//                   icon: Icon(
-//                     Icons.pause_circle_filled,
-//                     size: screenWidth * 0.1,
-//                   ),
-//                 );
-//               }
-//               if (state is PlayingState) {
-//                 return IconButton(
-//                   onPressed: () {
-//                     _audioPlayer.resume();
-//                   },
-//                   icon: Icon(
-//                     Icons.play_circle_fill_rounded,
-//                     size: screenWidth * 0.1,
-//                   ),
-//                 );
-//               }
-//               return const CircularProgressIndicator();
-//             },
-//           ),
-//           IconButton(
-//             onPressed: () {
-//               // Handle next action
-//             },
-//             icon: Icon(
-//               Icons.skip_next_rounded,
-//               size: screenWidth * 0.08,
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
+  void _togglePlayPause() {
+    if (audioHandler.playbackState.value.playing) {
+      setState(() {
+        audioHandler.pause();
+      });
+    } else {
+      setState(() {
+        audioHandler.play();
+      });
+    }
+  }
+}

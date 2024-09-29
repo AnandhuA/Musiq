@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -18,30 +17,8 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // _initMediaItems();
     _startApp();
   }
-
-  // void _initMediaItems() async {
-  //   List<MediaItem> mediaItems = [
-  //     MediaItem(
-  //       id: 'https://www.example.com/audio1.mp3',
-  //       title: 'Audio 1',
-  //       artist: 'Artist 1',
-  //       album: 'Album 1',
-  //       duration: Duration(minutes: 3),
-  //     ),
-  //     MediaItem(
-  //       id: 'https://www.example.com/audio2.mp3',
-  //       title: 'Audio 2',
-  //       artist: 'Artist 2',
-  //       album: 'Album 2',
-  //       duration: Duration(minutes: 4),
-  //     ),
-  //   ];
-
-  //   await _audioPlayerHandler.setMediaItems(mediaItems);
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +38,6 @@ class _SplashScreenState extends State<SplashScreen> {
     lastplayed = await SharedPreference.getLastPlayedSong();
     userIsLoggedIn = FirebaseAuth.instance.currentUser?.email;
 
-    log("$userIsLoggedIn");
     if (!mounted) return;
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
