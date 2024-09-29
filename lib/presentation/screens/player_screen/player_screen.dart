@@ -74,7 +74,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
       if (processingState == AudioProcessingState.completed) {
         setState(() {});
         LastPlayedRepo.addToLastPlayedSong(widget.songs[currentSongIndex]);
-        lastplayed = widget.songs[currentSongIndex];
+        lastplayedSong = widget.songs[currentSongIndex];
         SharedPreference.addLastPlayedSong(widget.songs[currentSongIndex]);
       }
     });
@@ -87,7 +87,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
       _loading = true;
     });
     LastPlayedRepo.addToLastPlayedSong(song);
-    lastplayed = widget.songs[currentSongIndex];
+    lastplayedSong = widget.songs[currentSongIndex];
     SharedPreference.addLastPlayedSong(widget.songs[currentSongIndex]);
     await audioHandler.stop();
     await audioHandler.playCurrentSong();

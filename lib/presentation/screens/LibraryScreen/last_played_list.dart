@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:musiq/data/hive_funtion.dart';
+import 'package:musiq/main.dart';
 import 'package:musiq/models/song_model.dart';
 import 'package:musiq/presentation/commanWidgets/favorite_icon.dart';
+import 'package:musiq/presentation/mainPage.dart/bottomPlayer/bottom_player.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 
 class LastPlayedList extends StatefulWidget {
@@ -48,56 +50,63 @@ class _LastPlayedListState extends State<LastPlayedList> {
               icon: Icon(Icons.clear_all_sharp))
         ],
       ),
-      body: lastplayed.isEmpty
-          ? const Center(
-              child: Text("No Songs"),
-            )
-          : ListView.builder(
-              itemCount: lastplayed.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => PlayerScreen(
-                        songs: lastplayed,
-                        initialIndex: index,
-                      ),
-                    ),
-                  ),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      FavoriteIcon(
-                        song: lastplayed[index],
-                      ),
-                      IconButton(onPressed: () {}, icon: Icon(Icons.more_vert)),
-                    ],
-                  ),
-                  leading: Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: CachedNetworkImageProvider(
-                          lastplayed[index].imageUrl,
+      body: Stack(children: [
+        lastplayed.isEmpty
+                ? const Center(
+                    child: Text("No Songs"),
+                  )
+                : ListView.builder(
+                    itemCount: lastplayed.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PlayerScreen(
+                              songs: lastplayed,
+                              initialIndex: index,
+                            ),
+                          ),
                         ),
-                        fit: BoxFit.fill,
-                      ),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            FavoriteIcon(
+                              song: lastplayed[index],
+                            ),
+                            IconButton(
+                                onPressed: () {}, icon: Icon(Icons.more_vert)),
+                          ],
+                        ),
+                        leading: Container(
+                          width: 50,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: CachedNetworkImageProvider(
+                                lastplayed[index].imageUrl,
+                              ),
+                              fit: BoxFit.fill,
+                            ),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                        ),
+                        title: Text(
+                          lastplayed[index].title,
+                          maxLines: 1,
+                        ),
+                        subtitle: Text(
+                          lastplayed[index].album,
+                          maxLines: 1,
+                        ),
+                      );
+                    },
                   ),
-                  title: Text(
-                    lastplayed[index].title,
-                    maxLines: 1,
-                  ),
-                  subtitle: Text(
-                    lastplayed[index].album,
-                    maxLines: 1,
-                  ),
-                );
-              },
-            ),
+            if (lastplayedSong != null)
+              MiniPlayer(
+                bottomPostion: 16,
+              )
+      ],)
     );
   }
 }

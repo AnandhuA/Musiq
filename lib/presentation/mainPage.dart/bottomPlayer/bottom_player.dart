@@ -28,10 +28,10 @@ class _MiniPlayerState extends State<MiniPlayer> {
   }
 
   void _updateCurrentSongInfo() {
-    if (lastplayed != null) {
-      _currentSongTitle = lastplayed!.title;
-      _currentSongSubTitle = lastplayed!.subtitle;
-      _imgUrl = lastplayed!.imageUrl;
+    if (lastplayedSong != null) {
+      _currentSongTitle = lastplayedSong!.title;
+      _currentSongSubTitle = lastplayedSong!.subtitle;
+      _imgUrl = lastplayedSong!.imageUrl;
     } else {
       _currentSongTitle = 'No song playing';
       _currentSongSubTitle = '';

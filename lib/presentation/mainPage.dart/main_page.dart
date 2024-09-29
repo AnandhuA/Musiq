@@ -155,7 +155,7 @@ class MainPageState extends State<MainPage> {
                         child: _widgetOptions.elementAt(_selectedIndex),
                       ),
                     ),
-                    if (lastplayed != null)
+                    if (lastplayedSong != null)
                       MiniPlayer(
                         bottomPostion: 2,
                       ), // Add mini-player to stack

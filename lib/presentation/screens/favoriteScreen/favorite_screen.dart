@@ -103,7 +103,7 @@ class FavoriteScreen extends StatelessWidget {
               }
             },
           ),
-          if (lastplayed != null)
+          if (lastplayedSong != null)
             MiniPlayer(
               bottomPostion: 16,
             )
