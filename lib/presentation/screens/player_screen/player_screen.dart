@@ -347,7 +347,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                             Row(
                               children: [
                                 if (isMobile(context))
-                                  IconButton(
+                                 IconButton(
                                     onPressed: () {
                                       showModalBottomSheet(
                                         backgroundColor:
@@ -359,14 +359,161 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                             borderRadius:
                                                 BorderRadius.circular(10)),
                                         builder: (BuildContext context) {
-                                          return Padding(
-                                              padding: EdgeInsets.all(10),
-                                              child: _buildSongList(context));
+                                          return StatefulBuilder(
+                                            builder: (BuildContext context,
+                                                StateSetter setModalState) {
+                                              return Padding(
+                                                padding:
+                                                    const EdgeInsets.all(10),
+                                                child: ReorderableListView(
+                                                  onReorder:
+                                                      (oldIndex, newIndex) {
+                                                    setModalState(() {
+                                                      if (newIndex > oldIndex) {
+                                                        newIndex -= 1;
+                                                      }
+                                                      final moveSong = widget
+                                                          .songs
+                                                          .removeAt(oldIndex);
+                                                      widget.songs.insert(
+                                                          newIndex, moveSong);
+                                                      if (currentSongIndex ==
+                                                          oldIndex) {
+                                                        currentSongIndex =
+                                                            newIndex;
+                                                      } else if (currentSongIndex >
+                                                              oldIndex &&
+                                                          currentSongIndex <=
+                                                              newIndex) {
+                                                        currentSongIndex--;
+                                                      } else if (currentSongIndex <
+                                                              oldIndex &&
+                                                          currentSongIndex >=
+                                                              newIndex) {
+                                                        currentSongIndex++;
+                                                      }
+                                                      audioHandler
+                                                          .setMediaItems(
+                                                        mediaItems: widget.songs
+                                                            .map((song) =>
+                                                                MediaItem(
+                                                                  id: song.url,
+                                                                  album: song
+                                                                      .album,
+                                                                  title: song
+                                                                      .title,
+                                                                  displayTitle:
+                                                                      song.title,
+                                                                  duration: Duration(
+                                                                      seconds: song
+                                                                          .duration),
+                                                                  artist: song
+                                                                      .subtitle,
+                                                                  artUri: Uri
+                                                                      .parse(song
+                                                                          .imageUrl),
+                                                                ))
+                                                            .toList(),
+                                                        currentIndex:
+                                                            currentSongIndex,
+                                                      );
+                                                    });
+                                                  },
+                                                  children: List.generate(
+                                                      widget.songs.length,
+                                                      (index) {
+                                                    return ListTile(
+                                                      key: ValueKey(widget
+                                                          .songs[index].id),
+                                                      onTap: () {
+                                                        if (index !=
+                                                            currentSongIndex) {
+                                                          audioHandler.stop();
+                                                          setState(() {
+                                                            currentSongIndex =
+                                                                index;
+                                                            hasPlayed = false;
+                                                          });
+                                                          // Reinitialize player
+                                                          _initializeAudioHandler();
+                                                          _scrollToCurrentSong();
+                                                        }
+                                                      },
+                                                      trailing: Row(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: [
+                                                          currentSongIndex ==
+                                                                  index
+                                                              ? Lottie.asset(
+                                                                  Theme.of(context)
+                                                                              .brightness ==
+                                                                          Brightness
+                                                                              .dark
+                                                                      ? "assets/animations/musicPlaying_light.json"
+                                                                      : "assets/animations/musicPlaying_dark.json",
+                                                                  height: 50,
+                                                                  width: 50)
+                                                              : const SizedBox(),
+                                                          FavoriteIcon(
+                                                            song: widget
+                                                                .songs[index],
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      leading: Container(
+                                                        width: 60,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          image:
+                                                              DecorationImage(
+                                                            image:
+                                                                CachedNetworkImageProvider(
+                                                              widget
+                                                                  .songs[index]
+                                                                  .imageUrl,
+                                                            ),
+                                                            fit: BoxFit.fill,
+                                                          ),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(5),
+                                                        ),
+                                                      ),
+                                                      title: Text(
+                                                        widget
+                                                            .songs[index].title,
+                                                        maxLines: 1,
+                                                        style: TextStyle(
+                                                            color: currentSongIndex ==
+                                                                    index
+                                                                ? colorList[
+                                                                    colorIndex]
+                                                                : null),
+                                                      ),
+                                                      subtitle: Text(
+                                                        widget.songs[index]
+                                                            .subtitle,
+                                                        maxLines: 1,
+                                                        style: TextStyle(
+                                                            color: currentSongIndex ==
+                                                                    index
+                                                                ? colorList[
+                                                                    colorIndex]
+                                                                : null),
+                                                      ),
+                                                    );
+                                                  }),
+                                                ),
+                                              );
+                                            },
+                                          );
                                         },
                                       );
                                     },
                                     icon: const Icon(Icons.queue_music_sharp),
                                   ),
+
                               ],
                             )
                           ],
