@@ -61,6 +61,42 @@ class MainPageState extends State<MainPage> {
             if (constraints.maxWidth >= ScreenBreakpoints.tablet) {
 //---------- Desktop or Tablet Layout ---------------
               return Scaffold(
+                appBar: AppBar(
+                  title: _selectedIndex == 0
+                      ? Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 50,
+                          ),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(18),
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const SearchScreen(),
+                                      ),
+                                    );
+                                  },
+                                  child: AbsorbPointer(
+                                    child: CustomTextFeild(
+                                      hintText: "Search",
+                                      icon: Icon(
+                                        Icons.search,
+                                        color: colorList[colorIndex],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      : const Text("Library"),
+                ),
                 body: Stack(
                   children: [
                     Row(
@@ -80,8 +116,8 @@ class MainPageState extends State<MainPage> {
                               label: Text('Home'),
                             ),
                             NavigationRailDestination(
-                              icon: Icon(Icons.favorite),
-                              label: Text('Favorites'),
+                              icon: Icon(Icons.library_music_sharp),
+                              label: Text('Library'),
                             ),
                           ],
                           selectedIconTheme: IconThemeData(
