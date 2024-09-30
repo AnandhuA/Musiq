@@ -59,61 +59,70 @@ class MainPageState extends State<MainPage> {
         return LayoutBuilder(
           builder: (context, constraints) {
             if (constraints.maxWidth >= ScreenBreakpoints.tablet) {
-              // Desktop or Tablet Layout
+//---------- Desktop or Tablet Layout ---------------
               return Scaffold(
-                body: Row(
+                body: Stack(
                   children: [
-                    NavigationRail(
-                      backgroundColor:
-                          Theme.of(context).brightness == Brightness.dark
-                              ? black
-                              : white,
-                      selectedIndex: _selectedIndex,
-                      onDestinationSelected: _onItemTapped,
-                      labelType: NavigationRailLabelType.selected,
-                      destinations: <NavigationRailDestination>[
-                        NavigationRailDestination(
-                          indicatorColor: colorList[colorIndex],
-                          icon: Icon(Icons.home),
-                          label: Text('Home'),
-                        ),
-                        NavigationRailDestination(
-                          icon: Icon(Icons.favorite),
-                          label: Text('Favorites'),
-                        ),
-                      ],
-                      selectedIconTheme: IconThemeData(
-                        color: colorList[colorIndex],
-                      ),
-                      trailing: IconButton(
-                        icon: Icon(Icons.settings),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const SettingsScreen(),
+                    Row(
+                      children: [
+                        NavigationRail(
+                          backgroundColor:
+                              Theme.of(context).brightness == Brightness.dark
+                                  ? black
+                                  : white,
+                          selectedIndex: _selectedIndex,
+                          onDestinationSelected: _onItemTapped,
+                          labelType: NavigationRailLabelType.selected,
+                          destinations: <NavigationRailDestination>[
+                            NavigationRailDestination(
+                              indicatorColor: colorList[colorIndex],
+                              icon: Icon(Icons.home),
+                              label: Text('Home'),
                             ),
-                          );
-                        },
-                      ),
-                    ),
-                    Expanded(
-                      child: RefreshIndicator(
-                        onRefresh: _refreshData,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: _widgetOptions.elementAt(_selectedIndex),
+                            NavigationRailDestination(
+                              icon: Icon(Icons.favorite),
+                              label: Text('Favorites'),
                             ),
                           ],
+                          selectedIconTheme: IconThemeData(
+                            color: colorList[colorIndex],
+                          ),
+                          trailing: IconButton(
+                            icon: Icon(Icons.settings),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const SettingsScreen(),
+                                ),
+                              );
+                            },
+                          ),
                         ),
-                      ),
+                        Expanded(
+                          child: RefreshIndicator(
+                            onRefresh: _refreshData,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child:
+                                      _widgetOptions.elementAt(_selectedIndex),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
+                    if (lastplayedSong != null)
+                      MiniPlayer(
+                        bottomPostion: 2,
+                      ),
                   ],
                 ),
               );
             } else {
-              // Mobile Layout
+//--------- Mobile Layout -------------
               return Scaffold(
                 appBar: AppBar(
                   title: _selectedIndex == 0
@@ -158,7 +167,7 @@ class MainPageState extends State<MainPage> {
                     if (lastplayedSong != null)
                       MiniPlayer(
                         bottomPostion: 2,
-                      ), // Add mini-player to stack
+                      ),
                   ],
                 ),
                 bottomNavigationBar: GNav(
