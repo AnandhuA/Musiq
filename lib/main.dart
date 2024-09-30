@@ -42,6 +42,9 @@ void main() async {
       androidNotificationChannelId: 'com.example.musiq.channel.audio',
       androidNotificationChannelName: 'Music Playback',
       androidNotificationIcon: 'drawable/music',
+      androidShowNotificationBadge: true,
+      androidNotificationOngoing: true,
+      preloadArtwork: true,
     ),
   );
 
