@@ -14,15 +14,15 @@ class MainActivity : FlutterActivity() {
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
 
-        // Initialize the AudioManager
+    
         audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
-        // Set up the MethodChannel to communicate with Flutter
+       
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler { call, result ->
             when (call.method) {
                 "requestAudioFocus" -> {
                     val success = requestAudioFocus()
-                    result.success(success) // Send the success result back to Dart
+                    result.success(success) 
                 }
                 "abandonAudioFocus" -> {
                     abandonAudioFocus()
@@ -34,24 +34,20 @@ class MainActivity : FlutterActivity() {
             }
         }
 
-        // Initialize the audio focus change listener
+
         audioFocusChangeListener = AudioManager.OnAudioFocusChangeListener { focusChange ->
             when (focusChange) {
                 AudioManager.AUDIOFOCUS_GAIN -> {
-                    // Resume playback if paused
-                    // Call your Dart method to resume playback here if needed
+                 
                 }
                 AudioManager.AUDIOFOCUS_LOSS -> {
-                    // Stop playback
-                    // Call your Dart method to stop playback here if needed
+                   
                 }
                 AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
-                    // Pause playback temporarily
-                    // Call your Dart method to pause playback here if needed
+              
                 }
                 AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> {
-                    // Lower the volume
-                    // Call your Dart method to lower volume here if needed
+        
                 }
             }
         }

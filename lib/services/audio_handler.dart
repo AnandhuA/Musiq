@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'package:audio_service/audio_service.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:musiq/presentation/screens/player_screen/player_screen.dart'; 
+import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 
 class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   final AudioPlayer _player;
@@ -12,18 +12,10 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   }
 
   Future<void> _initializePlayer() async {
- 
     _player.playerStateStream.listen((state) {
-      playbackState.add(playbackStateForPlayer(state));
-      log("Player state changed: ${state.playing ? 'Playing' : 'Paused'}");
-
-      if (state.processingState == ProcessingState.completed) {
-        log("Audio completed");
-        _onSongComplete();
-      }
+      _handlePlayerStateChange(state);
     });
 
-  
     _player.positionStream.listen((position) {
       playbackState.add(
         playbackStateForPlayer(
@@ -34,8 +26,13 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
     });
   }
 
-  Future<void> _onSongComplete() async {
-    await skipToNext(); 
+  void _handlePlayerStateChange(PlayerState state) {
+    playbackState.add(playbackStateForPlayer(state));
+
+    if (state.processingState == ProcessingState.completed) {
+
+      skipToNext();
+    }
   }
 
   Future<void> _playUrl(String url) async {
@@ -102,27 +99,41 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
 PlaybackState playbackStateForPlayer(
   PlayerState state, {
   Duration updatePosition = Duration.zero,
-  AudioProcessingState processingState = AudioProcessingState.ready,
 }) {
+  final audioProcessingState = _mapProcessingState(state.processingState);
+
   return PlaybackState(
     controls: _getControlsForState(state),
-    processingState: processingState,
+    processingState: audioProcessingState,
     playing: state.playing,
     updatePosition: updatePosition,
   );
 }
 
+AudioProcessingState _mapProcessingState(ProcessingState state) {
+  switch (state) {
+    case ProcessingState.completed:
+      return AudioProcessingState.completed;
+    case ProcessingState.buffering:
+      return AudioProcessingState.buffering;
+    case ProcessingState.loading:
+      return AudioProcessingState.loading;
+    case ProcessingState.idle:
+      return AudioProcessingState.idle;
+    case ProcessingState.ready:
+      return AudioProcessingState.ready;
+    default:
+      return AudioProcessingState.error;
+  }
+}
+
 // Define media controls based on player state
 List<MediaControl> _getControlsForState(PlayerState state) {
-  if (state.playing) {
-    return [
-      MediaControl.pause,
-      MediaControl.skipToNext,
-      MediaControl.skipToPrevious,
-    ];
-  } else {
-    return [
-      MediaControl.play,
-    ];
-  }
+  return state.playing
+      ? [
+          MediaControl.pause,
+          MediaControl.skipToNext,
+          MediaControl.skipToPrevious,
+        ]
+      : [MediaControl.play];
 }

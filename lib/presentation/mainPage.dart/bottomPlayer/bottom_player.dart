@@ -100,13 +100,10 @@ class _MiniPlayerState extends State<MiniPlayer> {
 
   void _togglePlayPause() {
     if (audioHandler.playbackState.value.playing) {
-      setState(() {
-        audioHandler.pause();
-      });
+      audioHandler.pause();
     } else {
-      setState(() {
-        audioHandler.play();
-      });
+      audioHandler.play();
     }
+    setState(() {});
   }
 }
