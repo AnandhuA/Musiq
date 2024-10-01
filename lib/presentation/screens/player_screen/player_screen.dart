@@ -8,8 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/sized.dart';
-import 'package:musiq/data/hive_funtion.dart';
-import 'package:musiq/data/shared_preference.dart';
 import 'package:musiq/main.dart';
 import 'package:musiq/models/song_model.dart';
 import 'package:musiq/presentation/commanWidgets/custom_app_bar.dart';
@@ -61,7 +59,8 @@ class _PlayerScreenState extends State<PlayerScreen> {
                   artUri: Uri.parse(song.imageUrl),
                 ))
             .toList(),
-        currentIndex: currentSongIndex);
+        currentIndex: currentSongIndex,
+        songList: widget.songs);
     _playbackStateSubscription =
         audioHandler.playbackState.listen((playbackState) {
       final isPlaying = playbackState.playing;
@@ -72,10 +71,6 @@ class _PlayerScreenState extends State<PlayerScreen> {
       context.read<ProgressBarCubit>().changeProgress(position);
       if (processingState == AudioProcessingState.completed) {
         log("plyeriiiii----------$processingState");
-
-        LastPlayedRepo.addToLastPlayedSong(widget.songs[currentSongIndex]);
-        lastplayedSong = widget.songs[currentSongIndex];
-        SharedPreference.addLastPlayedSong(widget.songs[currentSongIndex]);
         setState(() {});
       }
     });
@@ -84,9 +79,6 @@ class _PlayerScreenState extends State<PlayerScreen> {
   }
 
   void _playSong(SongModel song) async {
-    LastPlayedRepo.addToLastPlayedSong(song);
-    lastplayedSong = widget.songs[currentSongIndex];
-    SharedPreference.addLastPlayedSong(widget.songs[currentSongIndex]);
     await audioHandler.stop();
     await audioHandler.playCurrentSong();
     // await audioHandler.play();
@@ -95,11 +87,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
   void _playNext() async {
     if (currentSongIndex < widget.songs.length - 1) {
       await audioHandler.skipToNext();
-
       _scrollToCurrentSong();
-      LastPlayedRepo.addToLastPlayedSong(widget.songs[currentSongIndex]);
-      lastplayedSong = widget.songs[currentSongIndex];
-      SharedPreference.addLastPlayedSong(widget.songs[currentSongIndex]);
       setState(() {});
     }
   }
@@ -107,11 +95,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
   void _playPrevious() async {
     if (currentSongIndex > 0) {
       await audioHandler.skipToPrevious();
-
       _scrollToCurrentSong();
-      LastPlayedRepo.addToLastPlayedSong(widget.songs[currentSongIndex]);
-      lastplayedSong = widget.songs[currentSongIndex];
-      SharedPreference.addLastPlayedSong(widget.songs[currentSongIndex]);
       setState(() {});
     }
   }
@@ -375,19 +359,20 @@ class _PlayerScreenState extends State<PlayerScreen> {
                           currentSongIndex++;
                         }
                         audioHandler.setMediaItems(
-                          mediaItems: widget.songs
-                              .map((song) => MediaItem(
-                                    id: song.url,
-                                    album: song.album,
-                                    title: song.title,
-                                    displayTitle: song.title,
-                                    duration: Duration(seconds: song.duration),
-                                    artist: song.subtitle,
-                                    artUri: Uri.parse(song.imageUrl),
-                                  ))
-                              .toList(),
-                          currentIndex: currentSongIndex,
-                        );
+                            mediaItems: widget.songs
+                                .map((song) => MediaItem(
+                                      id: song.url,
+                                      album: song.album,
+                                      title: song.title,
+                                      displayTitle: song.title,
+                                      duration:
+                                          Duration(seconds: song.duration),
+                                      artist: song.subtitle,
+                                      artUri: Uri.parse(song.imageUrl),
+                                    ))
+                                .toList(),
+                            currentIndex: currentSongIndex,
+                            songList: widget.songs);
                       });
                     },
                     children: List.generate(
@@ -489,19 +474,19 @@ class _PlayerScreenState extends State<PlayerScreen> {
               currentSongIndex++;
             }
             audioHandler.setMediaItems(
-              mediaItems: widget.songs
-                  .map((song) => MediaItem(
-                        id: song.url,
-                        album: song.album,
-                        title: song.title,
-                        displayTitle: song.title,
-                        duration: Duration(seconds: song.duration),
-                        artist: song.subtitle,
-                        artUri: Uri.parse(song.imageUrl),
-                      ))
-                  .toList(),
-              currentIndex: currentSongIndex,
-            );
+                mediaItems: widget.songs
+                    .map((song) => MediaItem(
+                          id: song.url,
+                          album: song.album,
+                          title: song.title,
+                          displayTitle: song.title,
+                          duration: Duration(seconds: song.duration),
+                          artist: song.subtitle,
+                          artUri: Uri.parse(song.imageUrl),
+                        ))
+                    .toList(),
+                currentIndex: currentSongIndex,
+                songList: widget.songs);
           },
         );
       },

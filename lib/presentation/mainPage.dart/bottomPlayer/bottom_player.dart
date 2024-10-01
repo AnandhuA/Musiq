@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:musiq/core/colors.dart';
@@ -18,13 +21,33 @@ class MiniPlayer extends StatefulWidget {
 }
 
 class _MiniPlayerState extends State<MiniPlayer> {
-  late String _currentSongTitle;
-  late String _currentSongSubTitle;
-  late String _imgUrl;
+  late String _currentSongTitle = 'No song playing';
+  late String _currentSongSubTitle = '';
+  late String _imgUrl = '';
+  late StreamSubscription<PlaybackState> _playbackStateSubscription;
 
   @override
   void initState() {
     super.initState();
+    _updateCurrentSongInfo();
+    _playbackStateSubscription =
+        audioHandler.playbackState.listen((playbackState) {
+      if (playbackState.processingState == AudioProcessingState.completed) {
+        setState(() {
+          _updateCurrentSongInfo();
+        });
+      } else {
+        setState(() {
+          _updateCurrentSongInfo();
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _playbackStateSubscription.cancel();
+    super.dispose();
   }
 
   void _updateCurrentSongInfo() {
@@ -32,16 +55,11 @@ class _MiniPlayerState extends State<MiniPlayer> {
       _currentSongTitle = lastplayedSong!.title;
       _currentSongSubTitle = lastplayedSong!.subtitle;
       _imgUrl = lastplayedSong!.imageUrl;
-    } else {
-      _currentSongTitle = 'No song playing';
-      _currentSongSubTitle = '';
-      _imgUrl = '';
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    _updateCurrentSongInfo();
     return Positioned(
       bottom: widget.bottomPostion,
       left: 0,
@@ -85,13 +103,34 @@ class _MiniPlayerState extends State<MiniPlayer> {
             _currentSongSubTitle,
             maxLines: 1,
           ),
-          trailing: IconButton(
-            icon: Icon(
-              audioHandler.playbackState.value.playing
-                  ? Icons.pause
-                  : Icons.play_arrow,
-            ),
-            onPressed: _togglePlayPause,
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                  onPressed: () async {
+                    await audioHandler.skipToPrevious();
+                  },
+                  icon: Icon(
+                    Icons.fast_rewind_sharp,
+                    size: 18,
+                  )),
+              IconButton(
+                icon: Icon(
+                  audioHandler.playbackState.value.playing
+                      ? Icons.pause
+                      : Icons.play_arrow,
+                ),
+                onPressed: _togglePlayPause,
+              ),
+              IconButton(
+                  onPressed: () async {
+                    await audioHandler.skipToNext();
+                  },
+                  icon: Icon(
+                    Icons.fast_forward_sharp,
+                    size: 18,
+                  ))
+            ],
           ),
         ),
       ),

@@ -1,11 +1,16 @@
 import 'dart:developer';
 import 'package:audio_service/audio_service.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:musiq/data/hive_funtion.dart';
+import 'package:musiq/data/shared_preference.dart';
+import 'package:musiq/main.dart';
+import 'package:musiq/models/song_model.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 
 class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   final AudioPlayer _player;
   List<MediaItem> _mediaItems = [];
+  List<SongModel> _songList = [];
 
   AudioPlayerHandler() : _player = AudioPlayer() {
     _initializePlayer();
@@ -30,7 +35,6 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
     playbackState.add(playbackStateForPlayer(state));
 
     if (state.processingState == ProcessingState.completed) {
-
       skipToNext();
     }
   }
@@ -65,6 +69,7 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
     if (currentSongIndex < _mediaItems.length - 1) {
       currentSongIndex++;
       log("Skip to next: $currentSongIndex");
+      lastplayedSong = _songList[colorIndex];
       await playCurrentSong();
     }
   }
@@ -82,16 +87,22 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
     if (_mediaItems.isNotEmpty) {
       final newMediaItem = _mediaItems[currentSongIndex];
       mediaItem.add(newMediaItem);
+      LastPlayedRepo.addToLastPlayedSong(_songList[currentSongIndex]);
+      lastplayedSong = _songList[currentSongIndex];
+      SharedPreference.addLastPlayedSong(_songList[currentSongIndex]);
       await _playUrl(newMediaItem.id);
+      
     }
   }
 
   void setMediaItems({
     required List<MediaItem> mediaItems,
     required int currentIndex,
+    required List<SongModel> songList,
   }) {
     _mediaItems = mediaItems;
     currentSongIndex = currentIndex;
+    _songList = songList;
   }
 }
 
