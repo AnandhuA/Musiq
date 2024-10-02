@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,7 +25,6 @@ class FavoriteIcon extends StatelessWidget {
           bool isFav =
               state.favorites.any((favorite) => favorite.id == song.id);
 
-          log(isFav.toString());
           return IconButton(
             onPressed: () {
               if (FirebaseAuth.instance.currentUser?.email == null) {

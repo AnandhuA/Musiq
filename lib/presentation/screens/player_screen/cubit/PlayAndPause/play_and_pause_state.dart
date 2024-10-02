@@ -9,6 +9,7 @@ final class PlayAndPauseInitial extends PlayAndPauseState {}
 final class PlayingState extends PlayAndPauseState {}
 
 final class PausedState extends PlayAndPauseState {}
+final class LoadingState extends PlayAndPauseState {}
 
 final class PlayerLoadingState extends PlayAndPauseState {}
 

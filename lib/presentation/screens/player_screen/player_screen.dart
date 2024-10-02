@@ -32,6 +32,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
   late ScrollController _scrollController;
   late StreamSubscription<PlaybackState> _playbackStateSubscription;
   bool hasPlayed = false;
+  // bool _loading = false;
 
   SongModel get currentSong => widget.songs[currentSongIndex];
 
@@ -63,14 +64,18 @@ class _PlayerScreenState extends State<PlayerScreen> {
         songList: widget.songs);
     _playbackStateSubscription =
         audioHandler.playbackState.listen((playbackState) {
-      final isPlaying = playbackState.playing;
-      final position = playbackState.updatePosition;
-      final processingState = playbackState.processingState;
+      bool isPlaying = playbackState.playing;
+      Duration position = playbackState.updatePosition;
+      AudioProcessingState processingState = playbackState.processingState;
+      bool loading = processingState == AudioProcessingState.loading;
 
-      context.read<PlayAndPauseCubit>().togglePlayerState(isPlaying);
+      context.read<PlayAndPauseCubit>().togglePlayerState(
+            isPlaying: isPlaying,
+            loading: loading,
+          );
       context.read<ProgressBarCubit>().changeProgress(position);
       if (processingState == AudioProcessingState.completed) {
-        log("plyeriiiii----------$processingState");
+        log("player----------$processingState");
         setState(() {});
       }
     });
@@ -81,7 +86,6 @@ class _PlayerScreenState extends State<PlayerScreen> {
   void _playSong(SongModel song) async {
     await audioHandler.stop();
     await audioHandler.playCurrentSong();
-    // await audioHandler.play();
   }
 
   void _playNext() async {
@@ -261,6 +265,20 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                           Icons.pause_circle_filled,
                                           size: fontSize * 1.2,
                                         ),
+                                      );
+                                    }
+                                    if (state is LoadingState) {
+                                      return SizedBox(
+                                        height: fontSize,
+                                        width: fontSize,
+                                        child: Theme.of(context).brightness ==
+                                                Brightness.dark
+                                            ? Lottie.asset(
+                                                "assets/animations/light_music_loading.json",
+                                                fit: BoxFit.cover)
+                                            : Lottie.asset(
+                                                "assets/animations/dark_music_loading.json",
+                                              ),
                                       );
                                     }
                                     return SizedBox(

@@ -3,8 +3,11 @@ import 'dart:async';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/main.dart';
+import 'package:musiq/presentation/screens/player_screen/cubit/PlayAndPause/play_and_pause_cubit.dart';
 
 class MiniPlayer extends StatefulWidget {
   final Function()? onTap;
@@ -32,6 +35,15 @@ class _MiniPlayerState extends State<MiniPlayer> {
     _updateCurrentSongInfo();
     _playbackStateSubscription =
         audioHandler.playbackState.listen((playbackState) {
+      bool isPlaying = playbackState.playing;
+      // Duration position = playbackState.updatePosition;
+      AudioProcessingState processingState = playbackState.processingState;
+      bool loading = processingState == AudioProcessingState.loading;
+
+      context.read<PlayAndPauseCubit>().togglePlayerState(
+            isPlaying: isPlaying,
+            loading: loading,
+          );
       if (playbackState.processingState == AudioProcessingState.completed) {
         setState(() {
           _updateCurrentSongInfo();
@@ -112,15 +124,50 @@ class _MiniPlayerState extends State<MiniPlayer> {
                   },
                   icon: Icon(
                     Icons.fast_rewind_sharp,
-                    size: 18,
+                    size: 16,
                   )),
-              IconButton(
-                icon: Icon(
-                  audioHandler.playbackState.value.playing
-                      ? Icons.pause
-                      : Icons.play_arrow,
-                ),
-                onPressed: _togglePlayPause,
+              BlocBuilder<PlayAndPauseCubit, PlayAndPauseState>(
+                builder: (context, state) {
+                  if (state is LoadingState) {
+                    return Theme.of(context).brightness == Brightness.dark
+                        ? Lottie.asset(
+                            "assets/animations/light_music_loading.json",
+                            width: 60,
+                            height: 60,
+                          )
+                        : Lottie.asset(
+                            "assets/animations/dark_music_loading.json",
+                            width: 60,
+                            height: 60,
+                          );
+                  } else if (state is PlayingState) {
+                    return IconButton(
+                      icon: Icon(
+                        Icons.play_circle_fill_rounded,
+                        size: 40,
+                      ),
+                      onPressed: () {
+                        audioHandler.play();
+                      },
+                    );
+                  } else if (state is PausedState) {
+                    return IconButton(
+                      icon: Icon(
+                        Icons.pause_circle_filled,
+                        size: 40,
+                      ),
+                      onPressed: () {
+                        audioHandler.pause();
+                      },
+                    );
+                  }
+                  return IconButton(
+                    icon: Icon(
+                      Icons.pause,
+                    ),
+                    onPressed: () {},
+                  );
+                },
               ),
               IconButton(
                   onPressed: () async {
@@ -128,21 +175,12 @@ class _MiniPlayerState extends State<MiniPlayer> {
                   },
                   icon: Icon(
                     Icons.fast_forward_sharp,
-                    size: 18,
+                    size: 16,
                   ))
             ],
           ),
         ),
       ),
     );
-  }
-
-  void _togglePlayPause() {
-    if (audioHandler.playbackState.value.playing) {
-      audioHandler.pause();
-    } else {
-      audioHandler.play();
-    }
-    setState(() {});
   }
 }
