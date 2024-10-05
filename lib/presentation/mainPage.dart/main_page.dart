@@ -220,6 +220,7 @@ class MainPageState extends State<MainPage> {
                     GButton(
                       icon: Icons.home,
                       text: 'Home',
+                      
                     ),
                     GButton(
                       icon: Icons.library_music_sharp,

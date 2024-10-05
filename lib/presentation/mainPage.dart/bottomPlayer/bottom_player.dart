@@ -94,6 +94,7 @@ class _MiniPlayerState extends State<MiniPlayer> {
               widget.onTap!();
             }
           },
+//---------- image ---------------
           leading: Container(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(5),
@@ -107,10 +108,12 @@ class _MiniPlayerState extends State<MiniPlayer> {
               ),
             ),
           ),
+//-------- title ---------
           title: Text(
             _currentSongTitle,
             maxLines: 1,
           ),
+//--------- sub title -----------
           subtitle: Text(
             _currentSongSubTitle,
             maxLines: 1,
@@ -118,6 +121,7 @@ class _MiniPlayerState extends State<MiniPlayer> {
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
+//------------- previous song icon -------------
               IconButton(
                   onPressed: () async {
                     await audioHandler.skipToPrevious();
@@ -128,6 +132,7 @@ class _MiniPlayerState extends State<MiniPlayer> {
                   )),
               BlocBuilder<PlayAndPauseCubit, PlayAndPauseState>(
                 builder: (context, state) {
+//----------------  if state is loading  show loading -------------------
                   if (state is LoadingState) {
                     return Theme.of(context).brightness == Brightness.dark
                         ? Lottie.asset(
@@ -140,7 +145,9 @@ class _MiniPlayerState extends State<MiniPlayer> {
                             width: 60,
                             height: 60,
                           );
-                  } else if (state is PlayingState) {
+                  }
+// ----------  if state is playingState  show play button
+                  else if (state is PlayingState) {
                     return IconButton(
                       icon: Icon(
                         Icons.play_circle_fill_rounded,
@@ -150,7 +157,9 @@ class _MiniPlayerState extends State<MiniPlayer> {
                         audioHandler.play();
                       },
                     );
-                  } else if (state is PausedState) {
+                  }
+//----------------if state is pauseState show pause button
+                  else if (state is PausedState) {
                     return IconButton(
                       icon: Icon(
                         Icons.pause_circle_filled,
@@ -161,14 +170,16 @@ class _MiniPlayerState extends State<MiniPlayer> {
                       },
                     );
                   }
+//------------ error icon -------------
                   return IconButton(
                     icon: Icon(
-                      Icons.pause,
+                      Icons.error_outline_sharp,
                     ),
                     onPressed: () {},
                   );
                 },
               ),
+//----------- next song icon --------------
               IconButton(
                   onPressed: () async {
                     await audioHandler.skipToNext();
