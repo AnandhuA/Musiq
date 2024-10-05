@@ -197,6 +197,7 @@ class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
                                           MaterialPageRoute(
                                             builder: (context) => PlayerScreen(
                                               songs: widget.songModel,
+                                             
                                             ),
                                           ))
                                       : null;
@@ -238,6 +239,7 @@ class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
                               builder: (context) => PlayerScreen(
                                 songs: widget.songModel,
                                 initialIndex: index,
+                             
                               ),
                             ));
                       },
@@ -274,10 +276,18 @@ class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
               ),
             ],
           ),
-          if (lastplayedSong != null)
-            MiniPlayer(
-              bottomPostion: 16,
-            )
+          ValueListenableBuilder<List<SongModel>>(
+              valueListenable: lastplayedSongNotifier,
+              builder: (context, lastPlayedSongs, _) {
+               
+                if (lastPlayedSongs.isNotEmpty) {
+                  return MiniPlayer(
+                    bottomPosition: 16,
+                  );
+                }
+                return SizedBox(); 
+              },
+            ),
         ],
       ),
     );

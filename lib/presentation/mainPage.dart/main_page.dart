@@ -6,6 +6,7 @@ import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/bloc/favorite_bloc/favorite_bloc.dart';
 import 'package:musiq/main.dart';
+import 'package:musiq/models/song_model.dart';
 import 'package:musiq/presentation/commanWidgets/textfeild.dart';
 import 'package:musiq/presentation/mainPage.dart/bottomPlayer/bottom_player.dart';
 import 'package:musiq/presentation/screens/LibraryScreen/library_screen.dart';
@@ -150,10 +151,17 @@ class MainPageState extends State<MainPage> {
                         ),
                       ],
                     ),
-                    if (lastplayedSong != null)
-                      MiniPlayer(
-                        bottomPostion: 2,
-                      ),
+                  ValueListenableBuilder<List<SongModel>>(
+                      valueListenable: lastplayedSongNotifier,
+                      builder: (context, lastPlayedSongs, _) {
+                        if (lastPlayedSongs.isNotEmpty) {
+                          return MiniPlayer(
+                            bottomPosition: 2,
+                          );
+                        }
+                        return SizedBox();
+                      },
+                    ),
                   ],
                 ),
               );
@@ -200,10 +208,17 @@ class MainPageState extends State<MainPage> {
                         child: _widgetOptions.elementAt(_selectedIndex),
                       ),
                     ),
-                    if (lastplayedSong != null)
-                      MiniPlayer(
-                        bottomPostion: 2,
-                      ),
+                   ValueListenableBuilder<List<SongModel>>(
+                      valueListenable: lastplayedSongNotifier,
+                      builder: (context, lastPlayedSongs, _) {
+                        if (lastPlayedSongs.isNotEmpty) {
+                          return MiniPlayer(
+                            bottomPosition: 2,
+                          );
+                        }
+                        return SizedBox();
+                      },
+                    ),
                   ],
                 ),
                 bottomNavigationBar: GNav(
@@ -220,7 +235,6 @@ class MainPageState extends State<MainPage> {
                     GButton(
                       icon: Icons.home,
                       text: 'Home',
-                      
                     ),
                     GButton(
                       icon: Icons.library_music_sharp,

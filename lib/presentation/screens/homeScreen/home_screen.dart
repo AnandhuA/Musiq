@@ -50,7 +50,7 @@ class HomeScreen extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                  PlayerScreen(songs: state.songModel),
+                                  PlayerScreen(songs: state.songModel,),
                             ));
                       } else if (state is FeatchAlbumOrPlayList) {
                         Navigator.pop(context); // for close loading
@@ -72,7 +72,7 @@ class HomeScreen extends StatelessWidget {
                         constHeight10,
                         state.lastplayed.isNotEmpty
                             ? Text(
-                                "Last Played ",
+                                " Last Played ",
                                 style: TextStyle(
                                     fontSize: 25,
                                     letterSpacing: 3,
@@ -174,6 +174,7 @@ class HomeScreen extends StatelessWidget {
                                                         PlayerScreen(
                                                       songs: state.lastplayed,
                                                       initialIndex: index,
+                                                     
                                                     ),
                                                   ),
                                                 );

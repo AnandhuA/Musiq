@@ -42,7 +42,10 @@ class LibraryScreen extends StatelessWidget {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => PlayerScreen(songs: state.songModel),
+                  builder: (context) => PlayerScreen(
+                    songs: state.songModel,
+                   
+                  ),
                 ));
           } else if (state is FeatchAlbumOrPlayList) {
             Navigator.pop(context); // for close loading

@@ -66,6 +66,7 @@ class FavoriteScreen extends StatelessWidget {
                                 builder: (context) => PlayerScreen(
                                   songs: sortedFavorites,
                                   initialIndex: index,
+                                  
                                 ),
                               ),
                             ),
@@ -103,10 +104,18 @@ class FavoriteScreen extends StatelessWidget {
               }
             },
           ),
-          if (lastplayedSong != null)
-            MiniPlayer(
-              bottomPostion: 16,
-            )
+        ValueListenableBuilder<List<SongModel>>(
+              valueListenable: lastplayedSongNotifier,
+              builder: (context, lastPlayedSongs, _) {
+               
+                if (lastPlayedSongs.isNotEmpty) {
+                  return MiniPlayer(
+                    bottomPosition: 16,
+                  );
+                }
+                return SizedBox(); 
+              },
+            ),
         ],
       ),
     );

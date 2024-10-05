@@ -65,7 +65,9 @@ class _LastPlayedListState extends State<LastPlayedList> {
                             builder: (context) => PlayerScreen(
                               songs: lastplayed,
                               initialIndex: index,
+                             
                             ),
+
                           ),
                         ),
                         trailing: Row(
@@ -102,10 +104,18 @@ class _LastPlayedListState extends State<LastPlayedList> {
                       );
                     },
                   ),
-            if (lastplayedSong != null)
-              MiniPlayer(
-                bottomPostion: 16,
-              )
+             ValueListenableBuilder<List<SongModel>>(
+              valueListenable: lastplayedSongNotifier,
+              builder: (context, lastPlayedSongs, _) {
+               
+                if (lastPlayedSongs.isNotEmpty) {
+                  return MiniPlayer(
+                    bottomPosition: 16,
+                  );
+                }
+                return SizedBox(); 
+              },
+            ),
       ],)
     );
   }

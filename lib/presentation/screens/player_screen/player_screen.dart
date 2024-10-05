@@ -21,8 +21,14 @@ int currentSongIndex = 0;
 class PlayerScreen extends StatefulWidget {
   final List<SongModel> songs;
   final int initialIndex;
+  final Duration currentpostion;
 
-  const PlayerScreen({super.key, required this.songs, this.initialIndex = 0});
+  const PlayerScreen(
+      {super.key,
+      required this.songs,
+      this.initialIndex = 0,
+       this.currentpostion = Duration.zero,
+     });
 
   @override
   State<PlayerScreen> createState() => _PlayerScreenState();
@@ -48,20 +54,45 @@ class _PlayerScreenState extends State<PlayerScreen> {
   }
 
   Future<void> _initializeAudioHandler() async {
+
+    if (widget.currentpostion != Duration.zero) {
+      _playbackStateSubscription =
+          audioHandler.playbackState.listen((playbackState) {
+        bool isPlaying = playbackState.playing;
+        Duration position = playbackState.updatePosition;
+        AudioProcessingState processingState = playbackState.processingState;
+        bool loading = processingState == AudioProcessingState.loading;
+
+        context.read<PlayAndPauseCubit>().togglePlayerState(
+              isPlaying: isPlaying,
+              loading: loading,
+            );
+        context.read<ProgressBarCubit>().changeProgress(position);
+        if (processingState == AudioProcessingState.completed) {
+          log("player----------$processingState");
+          setState(() {});
+        }
+      });
+      return;
+    }
+
+    // Initialize if not already set
     audioHandler.setMediaItems(
-        mediaItems: widget.songs
-            .map((song) => MediaItem(
-                  id: song.url,
-                  album: song.album,
-                  title: song.title,
-                  displayTitle: song.title,
-                  duration: Duration(seconds: song.duration),
-                  artist: song.subtitle,
-                  artUri: Uri.parse(song.imageUrl),
-                ))
-            .toList(),
-        currentIndex: currentSongIndex,
-        songList: widget.songs);
+      mediaItems: widget.songs
+          .map((song) => MediaItem(
+                id: song.url,
+                album: song.album,
+                title: song.title,
+                displayTitle: song.title,
+                duration: Duration(seconds: song.duration),
+                artist: song.subtitle,
+                artUri: Uri.parse(song.imageUrl),
+              ))
+          .toList(),
+      currentIndex: currentSongIndex,
+      songList: widget.songs,
+    );
+
     _playbackStateSubscription =
         audioHandler.playbackState.listen((playbackState) {
       bool isPlaying = playbackState.playing;
@@ -158,13 +189,13 @@ class _PlayerScreenState extends State<PlayerScreen> {
                   ),
                 ),
                 child: GestureDetector(
-                  onHorizontalDragEnd: (DragEndDetails details) {
-                    if (details.primaryVelocity! < 0) {
-                      _playNext();
-                    } else if (details.primaryVelocity! > 0) {
-                      _playPrevious();
-                    }
-                  },
+                  // onHorizontalDragEnd: (DragEndDetails details) {
+                  //   if (details.primaryVelocity! < 0) {
+                  //     _playNext();
+                  //   } else if (details.primaryVelocity! > 0) {
+                  //     _playPrevious();
+                  //   }
+                  // },
                   child: BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
                     child: Padding(
@@ -214,13 +245,19 @@ class _PlayerScreenState extends State<PlayerScreen> {
                               builder: (context, state) {
                                 if (state is ProgressBarInitial) {
                                   return ProgressBarWidget(
-                                    song: widget.songs[currentSongIndex],
+                                    songDuration: Duration(
+                                      seconds: widget
+                                          .songs[currentSongIndex].duration,
+                                    ),
                                     audioPlayer: audioHandler,
                                     progressDuration: state.progressDuration,
                                   );
                                 }
                                 return ProgressBarWidget(
-                                  song: widget.songs[currentSongIndex],
+                                  songDuration: Duration(
+                                    seconds:
+                                        widget.songs[currentSongIndex].duration,
+                                  ),
                                   audioPlayer: audioHandler,
                                   progressDuration: Duration.zero,
                                 );
