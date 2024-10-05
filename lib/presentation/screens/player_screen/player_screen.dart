@@ -23,12 +23,12 @@ class PlayerScreen extends StatefulWidget {
   final int initialIndex;
   final Duration currentpostion;
 
-  const PlayerScreen(
-      {super.key,
-      required this.songs,
-      this.initialIndex = 0,
-       this.currentpostion = Duration.zero,
-     });
+  const PlayerScreen({
+    super.key,
+    required this.songs,
+    this.initialIndex = 0,
+    this.currentpostion = Duration.zero,
+  });
 
   @override
   State<PlayerScreen> createState() => _PlayerScreenState();
@@ -54,10 +54,10 @@ class _PlayerScreenState extends State<PlayerScreen> {
   }
 
   Future<void> _initializeAudioHandler() async {
-
     if (widget.currentpostion != Duration.zero) {
       _playbackStateSubscription =
           audioHandler.playbackState.listen((playbackState) {
+        if (!mounted) return;
         bool isPlaying = playbackState.playing;
         Duration position = playbackState.updatePosition;
         AudioProcessingState processingState = playbackState.processingState;
@@ -70,7 +70,9 @@ class _PlayerScreenState extends State<PlayerScreen> {
         context.read<ProgressBarCubit>().changeProgress(position);
         if (processingState == AudioProcessingState.completed) {
           log("player----------$processingState");
-          setState(() {});
+          if (mounted) {
+            setState(() {});
+          }
         }
       });
       return;
@@ -95,6 +97,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
 
     _playbackStateSubscription =
         audioHandler.playbackState.listen((playbackState) {
+      if (!mounted) return;
       bool isPlaying = playbackState.playing;
       Duration position = playbackState.updatePosition;
       AudioProcessingState processingState = playbackState.processingState;
@@ -107,7 +110,9 @@ class _PlayerScreenState extends State<PlayerScreen> {
       context.read<ProgressBarCubit>().changeProgress(position);
       if (processingState == AudioProcessingState.completed) {
         log("player----------$processingState");
-        setState(() {});
+        if (mounted) {
+          setState(() {});
+        }
       }
     });
 
@@ -383,20 +388,39 @@ class _PlayerScreenState extends State<PlayerScreen> {
   IconButton songListMobile(ThemeData theme, BuildContext context) {
     return IconButton(
       onPressed: () {
+        _scrollToCurrentSong();
+
         showModalBottomSheet(
           backgroundColor: theme.brightness == Brightness.dark
               ? Colors.black.withOpacity(0.7)
               : Colors.white.withOpacity(0.7),
           context: context,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
           builder: (BuildContext context) {
+            ScrollController modalScrollController = ScrollController();
+
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              const double itemHeight = 72;
+              final double scrollPosition =
+                  (currentSongIndex * itemHeight) - (itemHeight * 1.5);
+
+              if (modalScrollController.hasClients) {
+                modalScrollController.animateTo(
+                  scrollPosition,
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                );
+              }
+            });
+
             return StatefulBuilder(
               builder: (BuildContext context, StateSetter setModalState) {
                 return Padding(
                   padding: const EdgeInsets.all(10),
                   child: ReorderableListView(
-                    scrollController: _scrollController,
+                    scrollController: modalScrollController,
                     onReorder: (oldIndex, newIndex) {
                       setModalState(() {
                         if (newIndex > oldIndex) {
@@ -404,6 +428,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                         }
                         final moveSong = widget.songs.removeAt(oldIndex);
                         widget.songs.insert(newIndex, moveSong);
+
                         if (currentSongIndex == oldIndex) {
                           currentSongIndex = newIndex;
                         } else if (currentSongIndex > oldIndex &&
@@ -413,21 +438,22 @@ class _PlayerScreenState extends State<PlayerScreen> {
                             currentSongIndex >= newIndex) {
                           currentSongIndex++;
                         }
+
                         audioHandler.setMediaItems(
-                            mediaItems: widget.songs
-                                .map((song) => MediaItem(
-                                      id: song.url,
-                                      album: song.album,
-                                      title: song.title,
-                                      displayTitle: song.title,
-                                      duration:
-                                          Duration(seconds: song.duration),
-                                      artist: song.subtitle,
-                                      artUri: Uri.parse(song.imageUrl),
-                                    ))
-                                .toList(),
-                            currentIndex: currentSongIndex,
-                            songList: widget.songs);
+                          mediaItems: widget.songs
+                              .map((song) => MediaItem(
+                                    id: song.url,
+                                    album: song.album,
+                                    title: song.title,
+                                    displayTitle: song.title,
+                                    duration: Duration(seconds: song.duration),
+                                    artist: song.subtitle,
+                                    artUri: Uri.parse(song.imageUrl),
+                                  ))
+                              .toList(),
+                          currentIndex: currentSongIndex,
+                          songList: widget.songs,
+                        );
                       });
                     },
                     children: List.generate(
@@ -436,6 +462,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                         return ListTile(
                           key: ValueKey(widget.songs[index].id),
                           onTap: () {
+                            Navigator.of(context).pop();
                             if (index != currentSongIndex) {
                               audioHandler.stop();
                               setState(() {
@@ -456,11 +483,10 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                           ? "assets/animations/musicPlaying_light.json"
                                           : "assets/animations/musicPlaying_dark.json",
                                       height: 50,
-                                      width: 50)
+                                      width: 50,
+                                    )
                                   : const SizedBox(),
-                              FavoriteIcon(
-                                song: widget.songs[index],
-                              ),
+                              FavoriteIcon(song: widget.songs[index]),
                             ],
                           ),
                           leading: Container(
@@ -468,8 +494,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                             decoration: BoxDecoration(
                               image: DecorationImage(
                                 image: CachedNetworkImageProvider(
-                                  widget.songs[index].imageUrl,
-                                ),
+                                    widget.songs[index].imageUrl),
                                 fit: BoxFit.fill,
                               ),
                               borderRadius: BorderRadius.circular(5),

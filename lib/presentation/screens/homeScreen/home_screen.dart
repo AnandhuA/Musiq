@@ -88,25 +88,49 @@ class HomeScreen extends StatelessWidget {
                             itemBuilder: (context, index) {
                               final artist =
                                   state.homeScreenModel.artistRecos[index];
-                              return Container(
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: colorList[colorIndex],
-                                      width: 2,
+                              return GestureDetector(
+                                onTap: () {
+                                  if (artist.type == "radio_station") {
+                                    context
+                                        .read<FeatchSongCubit>()
+                                        .feachArtistSong(
+                                          artistName: artist.title ?? "",
+                                          imageUrl: artist.image ??
+                                              "https://static.vecteezy.com/system/resources/thumbnails/037/044/052/small_2x/ai-generated-studio-shot-of-black-headphones-over-music-note-explosion-background-with-empty-space-for-text-photo.jpg",
+                                          title: artist.title ?? "",
+                                        );
+                                  } else {
+                                    context.read<FeatchSongCubit>().clickSong(
+                                          type: artist.type ?? "",
+                                          id: artist.id ?? "0",
+                                          imageUrl: artist.image ??
+                                              "https://static.vecteezy.com/system/resources/thumbnails/037/044/052/small_2x/ai-generated-studio-shot-of-black-headphones-over-music-note-explosion-background-with-empty-space-for-text-photo.jpg",
+                                          title: artist.title ?? "",
+                                        );
+                                  }
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: colorList[colorIndex],
+                                        width: 0,
+                                      ),
+                                      borderRadius: BorderRadius.circular(50)),
+                                  margin: EdgeInsets.all(10),
+                                  padding: EdgeInsets.all(1),
+                                  height: 60,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(50),
+                                    child: CachedNetworkImage(
+                                      imageUrl: artist.image ??
+                                          "https://static.vecteezy.com/system/resources/thumbnails/037/044/052/small_2x/ai-generated-studio-shot-of-black-headphones-over-music-note-explosion-background-with-empty-space-for-text-photo.jpg",
+                                      errorWidget: (context, url, error) =>
+                                          Image.asset(
+                                              "assets/images/artist.png"),
+                                      placeholder: (context, url) =>
+                                          Image.asset(
+                                              "assets/images/artist.png"),
                                     ),
-                                    borderRadius: BorderRadius.circular(50)),
-                                margin: EdgeInsets.all(10),
-                                padding: EdgeInsets.all(2),
-                                height: 60,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(50),
-                                  child: CachedNetworkImage(
-                                    imageUrl: artist.image ??
-                                        "https://static.vecteezy.com/system/resources/thumbnails/037/044/052/small_2x/ai-generated-studio-shot-of-black-headphones-over-music-note-explosion-background-with-empty-space-for-text-photo.jpg",
-                                    errorWidget: (context, url, error) =>
-                                        Image.asset("assets/images/artist.png"),
-                                    placeholder: (context, url) =>
-                                        Image.asset("assets/images/artist.png"),
                                   ),
                                 ),
                               );
@@ -158,7 +182,7 @@ class HomeScreen extends StatelessWidget {
                           ),
                           options: CarouselOptions(
                             autoPlay: true,
-                            autoPlayInterval: Duration(seconds: 3),
+                            autoPlayInterval: Duration(seconds: 8),
                             aspectRatio: isMobile(context)
                                 ? 2
                                 : isTablet(context)
