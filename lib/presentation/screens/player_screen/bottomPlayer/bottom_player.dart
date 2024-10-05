@@ -72,7 +72,8 @@ class _MiniPlayerState extends State<MiniPlayer> {
   void _updateCurrentSongInfo() {
     if (lastplayedSongNotifier.value.isNotEmpty) {
       _currentSongTitle = lastplayedSongNotifier.value[currentSongIndex].title;
-      _currentSongSubTitle = lastplayedSongNotifier.value[currentSongIndex].subtitle;
+      _currentSongSubTitle =
+          lastplayedSongNotifier.value[currentSongIndex].subtitle;
       _imgUrl = lastplayedSongNotifier.value[currentSongIndex].imageUrl;
     }
   }

@@ -8,7 +8,7 @@ import 'package:musiq/models/library_model.dart';
 import 'package:musiq/models/song_model.dart';
 import 'package:musiq/presentation/commanWidgets/favorite_icon.dart';
 import 'package:musiq/presentation/commanWidgets/snack_bar.dart';
-import 'package:musiq/presentation/mainPage.dart/bottomPlayer/bottom_player.dart';
+import 'package:musiq/presentation/screens/player_screen/bottomPlayer/bottom_player.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 
 class AlbumOrPlaylistScreen extends StatefulWidget {

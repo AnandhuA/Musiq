@@ -7,7 +7,7 @@ import 'package:musiq/core/colors.dart';
 import 'package:musiq/main.dart';
 import 'package:musiq/models/song_model.dart';
 import 'package:musiq/presentation/commanWidgets/textfeild.dart';
-import 'package:musiq/presentation/mainPage.dart/bottomPlayer/bottom_player.dart';
+import 'package:musiq/presentation/screens/player_screen/bottomPlayer/bottom_player.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 import 'package:musiq/bloc/SearchSong/search_song_bloc.dart';
 
