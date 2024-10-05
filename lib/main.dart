@@ -36,18 +36,6 @@ void main() async {
   Hive.registerAdapter(SongModelAdapter());
   await Hive.openBox<SongModel>('lastPlayedBox');
 
-  audioHandler = await AudioService.init(
-    builder: () => AudioPlayerHandler(),
-    config: AudioServiceConfig(
-      androidNotificationChannelId: 'com.example.musiq.channel.audio',
-      androidNotificationChannelName: 'Music Playback',
-      androidNotificationIcon: 'drawable/music',
-      androidShowNotificationBadge: true,
-      androidNotificationOngoing: true,
-      preloadArtwork: true,
-    ),
-  );
-
   runApp(const MyApp());
 }
 
@@ -64,6 +52,21 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     _initDeepLinkListener();
+    _audioPlayerInit();
+  }
+
+  void _audioPlayerInit() async {
+    audioHandler = await AudioService.init(
+      builder: () => AudioPlayerHandler(),
+      config: AudioServiceConfig(
+        androidNotificationChannelId: 'com.example.musiq.channel.audio',
+        androidNotificationChannelName: 'Music Playback',
+        androidNotificationIcon: 'drawable/music',
+        androidShowNotificationBadge: true,
+        androidNotificationOngoing: true,
+        preloadArtwork: true,
+      ),
+    );
   }
 
   void _initDeepLinkListener() {

@@ -72,9 +72,11 @@ class HomeScreen extends StatelessWidget {
                         constHeight10,
                         state.lastplayed.isNotEmpty
                             ? Text(
-                                "  Last Played ",
+                                "Last Played ",
                                 style: TextStyle(
                                     fontSize: 25,
+                                    letterSpacing: 3,
+                                    height: 2,
                                     fontWeight: FontWeight.bold,
                                     color: colorList[colorIndex]),
                               )
@@ -194,6 +196,8 @@ class HomeScreen extends StatelessWidget {
                           " Top Playlist",
                           style: TextStyle(
                               fontSize: 25,
+                              letterSpacing: 3,
+                              height: 2,
                               fontWeight: FontWeight.bold,
                               color: colorList[colorIndex]),
                         ),
@@ -206,6 +210,8 @@ class HomeScreen extends StatelessWidget {
                           " Trending songs",
                           style: TextStyle(
                               fontSize: 25,
+                              letterSpacing: 3,
+                              height: 2,
                               fontWeight: FontWeight.bold,
                               color: colorList[colorIndex]),
                         ),
@@ -222,6 +228,8 @@ class HomeScreen extends StatelessWidget {
                                 "  Top Played ",
                                 style: TextStyle(
                                     fontSize: 25,
+                                    letterSpacing: 3,
+                                    height: 2,
                                     fontWeight: FontWeight.bold,
                                     color: colorList[colorIndex]),
                               )
@@ -336,6 +344,8 @@ class HomeScreen extends StatelessWidget {
                           " Artist",
                           style: TextStyle(
                               fontSize: 25,
+                              letterSpacing: 3,
+                              height: 2,
                               fontWeight: FontWeight.bold,
                               color: colorList[colorIndex]),
                         ),
@@ -348,6 +358,8 @@ class HomeScreen extends StatelessWidget {
                           " Playlist",
                           style: TextStyle(
                               fontSize: 25,
+                              letterSpacing: 3,
+                              height: 2,
                               fontWeight: FontWeight.bold,
                               color: colorList[colorIndex]),
                         ),
@@ -360,6 +372,8 @@ class HomeScreen extends StatelessWidget {
                           " TagMixes",
                           style: TextStyle(
                               fontSize: 25,
+                              letterSpacing: 3,
+                              height: 2,
                               fontWeight: FontWeight.bold,
                               color: colorList[colorIndex]),
                         ),
@@ -373,6 +387,8 @@ class HomeScreen extends StatelessWidget {
                           " Albums",
                           style: TextStyle(
                               fontSize: 25,
+                              letterSpacing: 3,
+                              height: 2,
                               fontWeight: FontWeight.bold,
                               color: colorList[colorIndex]),
                         ),
@@ -386,6 +402,8 @@ class HomeScreen extends StatelessWidget {
                           " BrowseDiscover",
                           style: TextStyle(
                               fontSize: 25,
+                              letterSpacing: 3,
+                              height: 2,
                               fontWeight: FontWeight.bold,
                               color: colorList[colorIndex]),
                         ),
@@ -512,11 +530,12 @@ class _SongList extends StatelessWidget {
                       ),
                     ),
                   ),
-                  constWidth20,
                   Text(
                     data.title ?? "no name",
                     style: const TextStyle(
-                        fontSize: 15, fontWeight: FontWeight.bold),
+                      fontSize: 15,
+                      fontWeight: FontWeight.w100,
+                    ),
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
