@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/core/colors.dart';
@@ -49,8 +50,9 @@ class HomeScreen extends StatelessWidget {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  PlayerScreen(songs: state.songModel,),
+                              builder: (context) => PlayerScreen(
+                                songs: state.songModel,
+                              ),
                             ));
                       } else if (state is FeatchAlbumOrPlayList) {
                         Navigator.pop(context); // for close loading
@@ -69,6 +71,103 @@ class HomeScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Text(
+                          " Artist",
+                          style: TextStyle(
+                              fontSize: 18,
+                              letterSpacing: 3,
+                              height: 2,
+                              fontWeight: FontWeight.bold,
+                              color: colorList[colorIndex]),
+                        ),
+                        Container(
+                          height: 100,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: state.homeScreenModel.artistRecos.length,
+                            itemBuilder: (context, index) {
+                              final artist =
+                                  state.homeScreenModel.artistRecos[index];
+                              return Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: colorList[colorIndex],
+                                      width: 2,
+                                    ),
+                                    borderRadius: BorderRadius.circular(50)),
+                                margin: EdgeInsets.all(10),
+                                padding: EdgeInsets.all(2),
+                                height: 60,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(50),
+                                  child: CachedNetworkImage(
+                                    imageUrl: artist.image ??
+                                        "https://static.vecteezy.com/system/resources/thumbnails/037/044/052/small_2x/ai-generated-studio-shot-of-black-headphones-over-music-note-explosion-background-with-empty-space-for-text-photo.jpg",
+                                    errorWidget: (context, url, error) =>
+                                        Image.asset("assets/images/artist.png"),
+                                    placeholder: (context, url) =>
+                                        Image.asset("assets/images/artist.png"),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+
+                        constHeight30,
+                        CarouselSlider(
+                          items: List.generate(
+                            state.homeScreenModel.charts.length,
+                            (index) {
+                              final playList =
+                                  state.homeScreenModel.charts[index];
+                              return GestureDetector(
+                                onTap: () {
+                                  if (playList.type == "radio_station") {
+                                    context
+                                        .read<FeatchSongCubit>()
+                                        .feachArtistSong(
+                                          artistName: playList.title ?? "",
+                                          imageUrl: playList.image ??
+                                              "https://static.vecteezy.com/system/resources/thumbnails/037/044/052/small_2x/ai-generated-studio-shot-of-black-headphones-over-music-note-explosion-background-with-empty-space-for-text-photo.jpg",
+                                          title: playList.title ?? "",
+                                        );
+                                  } else {
+                                    context.read<FeatchSongCubit>().clickSong(
+                                          type: playList.type ?? "",
+                                          id: playList.id ?? "0",
+                                          imageUrl: playList.image ??
+                                              "https://static.vecteezy.com/system/resources/thumbnails/037/044/052/small_2x/ai-generated-studio-shot-of-black-headphones-over-music-note-explosion-background-with-empty-space-for-text-photo.jpg",
+                                          title: playList.title ?? "",
+                                        );
+                                  }
+                                },
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: CachedNetworkImage(
+                                    imageUrl: playList.image ??
+                                        "https://static.vecteezy.com/system/resources/thumbnails/037/044/052/small_2x/ai-generated-studio-shot-of-black-headphones-over-music-note-explosion-background-with-empty-space-for-text-photo.jpg",
+                                    errorWidget: (context, url, error) =>
+                                        Image.asset("assets/images/album.png"),
+                                    placeholder: (context, url) =>
+                                        Image.asset("assets/images/album.png"),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          options: CarouselOptions(
+                            autoPlay: true,
+                            autoPlayInterval: Duration(seconds: 3),
+                            aspectRatio: isMobile(context)
+                                ? 2
+                                : isTablet(context)
+                                    ? 5
+                                    : 12,
+                            enlargeCenterPage: true,
+                            viewportFraction: isMobile(context) ? 0.5 : 0.2,
+                          ),
+                        ),
                         constHeight10,
                         state.lastplayed.isNotEmpty
                             ? Text(
@@ -174,7 +273,6 @@ class HomeScreen extends StatelessWidget {
                                                         PlayerScreen(
                                                       songs: state.lastplayed,
                                                       initialIndex: index,
-                                                     
                                                     ),
                                                   ),
                                                 );
@@ -191,10 +289,9 @@ class HomeScreen extends StatelessWidget {
                                 ),
                               )
                             : SizedBox(),
-                        constHeight20,
 
                         Text(
-                          " Top Playlist",
+                          " Playlist",
                           style: TextStyle(
                               fontSize: 25,
                               letterSpacing: 3,
@@ -204,7 +301,7 @@ class HomeScreen extends StatelessWidget {
                         ),
                         constHeight20,
                         _SongList(
-                          model: state.homeScreenModel.charts,
+                          model: state.homeScreenModel.topPlaylists,
                           boderRadius: 20,
                         ),
                         Text(
@@ -341,34 +438,7 @@ class HomeScreen extends StatelessWidget {
                             : SizedBox(),
 
 //--------------------------------------------------------------
-                        Text(
-                          " Artist",
-                          style: TextStyle(
-                              fontSize: 25,
-                              letterSpacing: 3,
-                              height: 2,
-                              fontWeight: FontWeight.bold,
-                              color: colorList[colorIndex]),
-                        ),
-                        constHeight20,
-                        _SongList(
-                          model: state.homeScreenModel.artistRecos,
-                          boderRadius: 100,
-                        ),
-                        Text(
-                          " Playlist",
-                          style: TextStyle(
-                              fontSize: 25,
-                              letterSpacing: 3,
-                              height: 2,
-                              fontWeight: FontWeight.bold,
-                              color: colorList[colorIndex]),
-                        ),
-                        constHeight20,
-                        _SongList(
-                          model: state.homeScreenModel.topPlaylists,
-                          boderRadius: 20,
-                        ),
+
                         Text(
                           " TagMixes",
                           style: TextStyle(
@@ -457,6 +527,7 @@ class HomeScreen extends StatelessWidget {
 class _SongList extends StatelessWidget {
   final List model;
   double boderRadius;
+
   _SongList({
     required this.model,
     required this.boderRadius,
@@ -545,7 +616,7 @@ class _SongList extends StatelessWidget {
                       fontSize: 12,
                     ),
                     overflow: TextOverflow.ellipsis,
-                  ),
+                  )
                 ],
               ),
             ),
