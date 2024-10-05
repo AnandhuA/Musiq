@@ -4,7 +4,7 @@ import 'package:musiq/data/hive_funtion.dart';
 import 'package:musiq/main.dart';
 import 'package:musiq/models/song_model.dart';
 import 'package:musiq/presentation/commanWidgets/favorite_icon.dart';
-import 'package:musiq/presentation/mainPage.dart/bottomPlayer/bottom_player.dart';
+import 'package:musiq/presentation/screens/player_screen/bottomPlayer/bottom_player.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 
 class LastPlayedList extends StatefulWidget {
@@ -65,7 +65,9 @@ class _LastPlayedListState extends State<LastPlayedList> {
                             builder: (context) => PlayerScreen(
                               songs: lastplayed,
                               initialIndex: index,
+                             
                             ),
+
                           ),
                         ),
                         trailing: Row(
@@ -102,10 +104,18 @@ class _LastPlayedListState extends State<LastPlayedList> {
                       );
                     },
                   ),
-            if (lastplayedSong != null)
-              MiniPlayer(
-                bottomPostion: 16,
-              )
+             ValueListenableBuilder<List<SongModel>>(
+              valueListenable: lastplayedSongNotifier,
+              builder: (context, lastPlayedSongs, _) {
+               
+                if (lastPlayedSongs.isNotEmpty) {
+                  return MiniPlayer(
+                    bottomPosition: 16,
+                  );
+                }
+                return SizedBox(); 
+              },
+            ),
       ],)
     );
   }

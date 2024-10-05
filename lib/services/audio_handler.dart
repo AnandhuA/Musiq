@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'package:audio_service/audio_service.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:musiq/data/hive_funtion.dart';
-import 'package:musiq/data/shared_preference.dart';
 import 'package:musiq/main.dart';
 import 'package:musiq/models/song_model.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
@@ -69,7 +68,7 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
     if (currentSongIndex < _mediaItems.length - 1) {
       currentSongIndex++;
       log("Skip to next: $currentSongIndex");
-      lastplayedSong = _songList[colorIndex];
+      lastplayedSongNotifier.value = _songList;
       await playCurrentSong();
     }
   }
@@ -88,8 +87,7 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
       final newMediaItem = _mediaItems[currentSongIndex];
       mediaItem.add(newMediaItem);
       LastPlayedRepo.addToLastPlayedSong(_songList[currentSongIndex]);
-      lastplayedSong = _songList[currentSongIndex];
-      SharedPreference.addLastPlayedSong(_songList[currentSongIndex]);
+      lastplayedSongNotifier.value = _songList;
       await _playUrl(newMediaItem.id);
       
     }

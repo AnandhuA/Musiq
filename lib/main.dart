@@ -23,8 +23,8 @@ import 'package:uni_links2/uni_links.dart';
 
 String? theme;
 int colorIndex = 0;
-SongModel? lastplayedSong;
 String? userIsLoggedIn;
+ValueNotifier<List<SongModel>> lastplayedSongNotifier = ValueNotifier([]);
 late final AudioPlayerHandler audioHandler;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

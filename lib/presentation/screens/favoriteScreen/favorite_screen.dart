@@ -8,7 +8,7 @@ import 'package:musiq/models/song_model.dart';
 import 'package:musiq/presentation/commanWidgets/custom_app_bar.dart';
 import 'package:musiq/presentation/commanWidgets/favorite_icon.dart';
 import 'package:musiq/bloc/favorite_bloc/favorite_bloc.dart';
-import 'package:musiq/presentation/mainPage.dart/bottomPlayer/bottom_player.dart';
+import 'package:musiq/presentation/screens/player_screen/bottomPlayer/bottom_player.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 
 class FavoriteScreen extends StatelessWidget {
@@ -66,6 +66,7 @@ class FavoriteScreen extends StatelessWidget {
                                 builder: (context) => PlayerScreen(
                                   songs: sortedFavorites,
                                   initialIndex: index,
+                                  
                                 ),
                               ),
                             ),
@@ -103,10 +104,18 @@ class FavoriteScreen extends StatelessWidget {
               }
             },
           ),
-          if (lastplayedSong != null)
-            MiniPlayer(
-              bottomPostion: 16,
-            )
+        ValueListenableBuilder<List<SongModel>>(
+              valueListenable: lastplayedSongNotifier,
+              builder: (context, lastPlayedSongs, _) {
+               
+                if (lastPlayedSongs.isNotEmpty) {
+                  return MiniPlayer(
+                    bottomPosition: 16,
+                  );
+                }
+                return SizedBox(); 
+              },
+            ),
         ],
       ),
     );

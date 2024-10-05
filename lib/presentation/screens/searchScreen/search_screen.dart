@@ -5,8 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/bloc/FeatchSong/featch_song_cubit.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/main.dart';
+import 'package:musiq/models/song_model.dart';
 import 'package:musiq/presentation/commanWidgets/textfeild.dart';
-import 'package:musiq/presentation/mainPage.dart/bottomPlayer/bottom_player.dart';
+import 'package:musiq/presentation/screens/player_screen/bottomPlayer/bottom_player.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 import 'package:musiq/bloc/SearchSong/search_song_bloc.dart';
 
@@ -280,7 +281,9 @@ class SearchScreenState extends State<SearchScreen> {
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) =>
-                                                  PlayerScreen(songs: [song]),
+                                                  PlayerScreen(
+                                                songs: [song],
+                                              ),
                                             ));
                                       },
                                     )),
@@ -407,10 +410,17 @@ class SearchScreenState extends State<SearchScreen> {
                 ],
               ),
             ),
-            if (lastplayedSong != null)
-              MiniPlayer(
-                bottomPostion: 8,
-              )
+            ValueListenableBuilder<List<SongModel>>(
+              valueListenable: lastplayedSongNotifier,
+              builder: (context, lastPlayedSongs, _) {
+                if (lastPlayedSongs.isNotEmpty) {
+                  return MiniPlayer(
+                    bottomPosition: 8,
+                  );
+                }
+                return SizedBox();
+              },
+            ),
           ],
         ),
       ),
