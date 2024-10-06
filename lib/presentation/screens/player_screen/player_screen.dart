@@ -22,12 +22,14 @@ class PlayerScreen extends StatefulWidget {
   final List<SongModel> songs;
   final int initialIndex;
   final Duration currentpostion;
+  final bool shuffle;
 
   const PlayerScreen({
     super.key,
     required this.songs,
     this.initialIndex = 0,
     this.currentpostion = Duration.zero,
+    this.shuffle = false,
   });
 
   @override
@@ -38,7 +40,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
   late ScrollController _scrollController;
   late StreamSubscription<PlaybackState> _playbackStateSubscription;
   bool hasPlayed = false;
-  bool _shuffle = false;
+  late bool _shuffle;
   // bool _loading = false;
 
   SongModel get currentSong => widget.songs[currentSongIndex];
@@ -46,6 +48,10 @@ class _PlayerScreenState extends State<PlayerScreen> {
   @override
   void initState() {
     super.initState();
+    _shuffle = widget.shuffle;
+    if (widget.shuffle && !audioHandler.isShuffleOn()) {
+      audioHandler.toggleShuffle();
+    }
     currentSongIndex = widget.initialIndex;
     _scrollController = ScrollController();
     _initializeAudioHandler();
@@ -236,7 +242,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                 ),
                               ),
                             ),
-                            SizedBox(height: isMobile(context) ? 50 : 20),
+                            SizedBox(height: isMobile(context) ? 40 : 20),
                             Text(
                               currentSong.title,
                               style: TextStyle(
@@ -294,9 +300,13 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                     onPressed: _toggleShuffle,
                                     icon: Icon(
                                       Icons.shuffle,
-                                      color: _shuffle
-                                          ? Colors.white
-                                          : Colors.grey.shade900,
+                                      color: theme.brightness == Brightness.dark
+                                          ? _shuffle
+                                              ? white
+                                              : Colors.grey.shade700
+                                          : _shuffle
+                                              ? black
+                                              : Colors.grey,
                                     )),
                                 const Spacer(),
                                 IconButton(
@@ -339,7 +349,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                       return SizedBox(
                                         height: fontSize,
                                         width: fontSize,
-                                        child: Theme.of(context).brightness ==
+                                        child: theme.brightness ==
                                                 Brightness.dark
                                             ? Lottie.asset(
                                                 "assets/animations/light_music_loading.json",
@@ -352,8 +362,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                     return SizedBox(
                                       height: fontSize,
                                       width: fontSize,
-                                      child: Theme.of(context).brightness ==
-                                              Brightness.dark
+                                      child: theme.brightness == Brightness.dark
                                           ? Lottie.asset(
                                               "assets/animations/light_music_loading.json",
                                               fit: BoxFit.cover)

@@ -3,6 +3,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/main.dart';
 import 'package:musiq/models/song_model.dart';
 import 'package:musiq/presentation/commanWidgets/custom_app_bar.dart';
@@ -19,6 +20,7 @@ class FavoriteScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size(
@@ -40,23 +42,22 @@ class FavoriteScreen extends StatelessWidget {
           },
         ),
       ),
-      body: Stack(
-        children: [
-          BlocBuilder<FavoriteBloc, FavoriteState>(
-            builder: (context, state) {
-              if (state is FavoriteLoading) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else if (state is FeatchFavoriteSuccess) {
-                List<SongModel> sortedFavorites =
-                    _sortFavorites(state.favorites);
+      body: BlocBuilder<FavoriteBloc, FavoriteState>(
+        builder: (context, state) {
+          if (state is FavoriteLoading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (state is FeatchFavoriteSuccess) {
+            List<SongModel> sortedFavorites = _sortFavorites(state.favorites);
 
-                return sortedFavorites.isEmpty
-                    ? const Center(
-                        child: Text("No Favorite"),
-                      )
-                    : ListView.builder(
+            return sortedFavorites.isEmpty
+                ? const Center(
+                    child: Text("No Favorite"),
+                  )
+                : Stack(
+                    children: [
+                      ListView.builder(
                         itemCount: sortedFavorites.length,
                         itemBuilder: (context, index) {
                           return ListTile(
@@ -66,7 +67,6 @@ class FavoriteScreen extends StatelessWidget {
                                 builder: (context) => PlayerScreen(
                                   songs: sortedFavorites,
                                   initialIndex: index,
-                                  
                                 ),
                               ),
                             ),
@@ -96,27 +96,60 @@ class FavoriteScreen extends StatelessWidget {
                             ),
                           );
                         },
-                      );
-              } else {
-                return const Center(
-                  child: Text("Error"),
-                );
-              }
-            },
-          ),
-        ValueListenableBuilder<List<SongModel>>(
-              valueListenable: lastplayedSongNotifier,
-              builder: (context, lastPlayedSongs, _) {
-               
-                if (lastPlayedSongs.isNotEmpty) {
-                  return MiniPlayer(
-                    bottomPosition: 16,
+                      ),
+                      Positioned(
+                        right: 45,
+                        bottom: 145,
+                        child: GestureDetector(
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PlayerScreen(
+                                songs: sortedFavorites,
+                                initialIndex: getRandomSongIndex(
+                                  songList: sortedFavorites,
+                                ),
+                                shuffle: true,
+                              ),
+                            ),
+                          ),
+                          child: Container(
+                            padding: EdgeInsets.all(14),
+                            decoration: BoxDecoration(
+                              color: theme.brightness == Brightness.dark
+                                  ? Colors.grey.shade900
+                                  : Colors.grey,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text("Play"),
+                                Icon(Icons.shuffle),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      ValueListenableBuilder<List<SongModel>>(
+                        valueListenable: lastplayedSongNotifier,
+                        builder: (context, lastPlayedSongs, _) {
+                          if (lastPlayedSongs.isNotEmpty) {
+                            return MiniPlayer(
+                              bottomPosition: 16,
+                            );
+                          }
+                          return SizedBox();
+                        },
+                      ),
+                    ],
                   );
-                }
-                return SizedBox(); 
-              },
-            ),
-        ],
+          } else {
+            return const Center(
+              child: Text("Error"),
+            );
+          }
+        },
       ),
     );
   }

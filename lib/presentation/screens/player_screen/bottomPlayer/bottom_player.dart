@@ -11,12 +11,10 @@ import 'package:musiq/presentation/screens/player_screen/cubit/PlayAndPause/play
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 
 class MiniPlayer extends StatefulWidget {
-  final Function()? onTap;
   final double bottomPosition;
 
   const MiniPlayer({
     Key? key,
-    this.onTap,
     this.bottomPosition = 0,
   }) : super(key: key);
 
@@ -100,10 +98,6 @@ class _MiniPlayerState extends State<MiniPlayer> {
           children: [
             ListTile(
               onTap: () {
-                if (widget.onTap != null) {
-                  widget.onTap!();
-                }
-
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -111,6 +105,7 @@ class _MiniPlayerState extends State<MiniPlayer> {
                         songs: lastplayedSongNotifier.value,
                         currentpostion: _currentPosition,
                         initialIndex: currentSongIndex,
+                        shuffle: audioHandler.isShuffleOn(),
                       ),
                     ));
               },

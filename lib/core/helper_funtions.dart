@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:musiq/models/home_screen_model.dart';
 
 List<dynamic> getAllSongs(HomeScreenModel homeScreenModel) {
@@ -22,4 +24,9 @@ List<dynamic> getAllSongs(HomeScreenModel homeScreenModel) {
     homeScreenModel.newAlbums.where((item) => item.type == 'song'),
   );
   return allSongs;
+}
+
+int getRandomSongIndex({required List songList}) {
+  final random = Random();
+  return random.nextInt(songList.length);
 }

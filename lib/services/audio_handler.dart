@@ -1,6 +1,6 @@
-import 'dart:math';
 import 'package:audio_service/audio_service.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/data/hive_funtion.dart';
 import 'package:musiq/main.dart';
 import 'package:musiq/models/song_model.dart';
@@ -47,6 +47,9 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   void toggleShuffle() {
     _isShuffled = !_isShuffled;
   }
+    bool isShuffleOn() {
+    return _isShuffled;
+  }
 
   @override
   Future<void> play() async {
@@ -71,7 +74,7 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   @override
   Future<void> skipToNext() async {
     if (_isShuffled) {
-      currentSongIndex = _getRandomSongIndex();
+      currentSongIndex = getRandomSongIndex(songList: _mediaItems);
       lastplayedSongNotifier.value = _songList;
       await playCurrentSong();
     } else if (currentSongIndex < _mediaItems.length - 1) {
@@ -90,10 +93,7 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
     }
   }
 
-  int _getRandomSongIndex() {
-    final random = Random();
-    return random.nextInt(_mediaItems.length);
-  }
+  
 
   Future<void> playCurrentSong() async {
     if (_mediaItems.isNotEmpty) {
