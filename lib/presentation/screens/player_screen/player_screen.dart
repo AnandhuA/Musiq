@@ -22,13 +22,15 @@ class PlayerScreen extends StatefulWidget {
   final List<SongModel> songs;
   final int initialIndex;
   final Duration currentpostion;
+  final bool shuffle;
 
-  const PlayerScreen(
-      {super.key,
-      required this.songs,
-      this.initialIndex = 0,
-       this.currentpostion = Duration.zero,
-     });
+  const PlayerScreen({
+    super.key,
+    required this.songs,
+    this.initialIndex = 0,
+    this.currentpostion = Duration.zero,
+    this.shuffle = false,
+  });
 
   @override
   State<PlayerScreen> createState() => _PlayerScreenState();
@@ -38,6 +40,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
   late ScrollController _scrollController;
   late StreamSubscription<PlaybackState> _playbackStateSubscription;
   bool hasPlayed = false;
+  late bool _shuffle;
   // bool _loading = false;
 
   SongModel get currentSong => widget.songs[currentSongIndex];
@@ -45,6 +48,10 @@ class _PlayerScreenState extends State<PlayerScreen> {
   @override
   void initState() {
     super.initState();
+    _shuffle = widget.shuffle;
+    if (widget.shuffle && !audioHandler.isShuffleOn()) {
+      audioHandler.toggleShuffle();
+    }
     currentSongIndex = widget.initialIndex;
     _scrollController = ScrollController();
     _initializeAudioHandler();
@@ -53,11 +60,11 @@ class _PlayerScreenState extends State<PlayerScreen> {
     });
   }
 
-  Future<void> _initializeAudioHandler() async {
-
-    if (widget.currentpostion != Duration.zero) {
+  Future<void> _initializeAudioHandler({bool chage = true}) async {
+    if (widget.currentpostion != Duration.zero && chage) {
       _playbackStateSubscription =
           audioHandler.playbackState.listen((playbackState) {
+        if (!mounted) return;
         bool isPlaying = playbackState.playing;
         Duration position = playbackState.updatePosition;
         AudioProcessingState processingState = playbackState.processingState;
@@ -70,7 +77,9 @@ class _PlayerScreenState extends State<PlayerScreen> {
         context.read<ProgressBarCubit>().changeProgress(position);
         if (processingState == AudioProcessingState.completed) {
           log("player----------$processingState");
-          setState(() {});
+          if (mounted) {
+            setState(() {});
+          }
         }
       });
       return;
@@ -95,6 +104,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
 
     _playbackStateSubscription =
         audioHandler.playbackState.listen((playbackState) {
+      if (!mounted) return;
       bool isPlaying = playbackState.playing;
       Duration position = playbackState.updatePosition;
       AudioProcessingState processingState = playbackState.processingState;
@@ -107,7 +117,9 @@ class _PlayerScreenState extends State<PlayerScreen> {
       context.read<ProgressBarCubit>().changeProgress(position);
       if (processingState == AudioProcessingState.completed) {
         log("player----------$processingState");
-        setState(() {});
+        if (mounted) {
+          setState(() {});
+        }
       }
     });
 
@@ -133,6 +145,13 @@ class _PlayerScreenState extends State<PlayerScreen> {
       _scrollToCurrentSong();
       setState(() {});
     }
+  }
+
+  void _toggleShuffle() {
+    setState(() {
+      _shuffle = !_shuffle;
+    });
+    audioHandler.toggleShuffle();
   }
 
   void _scrollToCurrentSong() {
@@ -223,7 +242,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                 ),
                               ),
                             ),
-                            SizedBox(height: isMobile(context) ? 50 : 20),
+                            SizedBox(height: isMobile(context) ? 40 : 20),
                             Text(
                               currentSong.title,
                               style: TextStyle(
@@ -240,7 +259,18 @@ class _PlayerScreenState extends State<PlayerScreen> {
                               overflow: TextOverflow.fade,
                               softWrap: false,
                             ),
-                            SizedBox(height: isMobile(context) ? 35 : 30),
+                            constHeight10,
+                            Row(
+                              children: [
+                                Spacer(),
+                                IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(Icons.add_circle_outline_sharp),
+                                ),
+                                FavoriteIcon(song: currentSong),
+                              ],
+                            ),
+                            constHeight10,
                             BlocBuilder<ProgressBarCubit, ProgressBarState>(
                               builder: (context, state) {
                                 if (state is ProgressBarInitial) {
@@ -266,7 +296,18 @@ class _PlayerScreenState extends State<PlayerScreen> {
                             SizedBox(height: isMobile(context) ? 15 : 20),
                             Row(
                               children: [
-                                FavoriteIcon(song: currentSong),
+                                IconButton(
+                                    onPressed: _toggleShuffle,
+                                    icon: Icon(
+                                      Icons.shuffle,
+                                      color: theme.brightness == Brightness.dark
+                                          ? _shuffle
+                                              ? white
+                                              : Colors.grey.shade700
+                                          : _shuffle
+                                              ? black
+                                              : Colors.grey,
+                                    )),
                                 const Spacer(),
                                 IconButton(
                                   onPressed: _playPrevious,
@@ -308,7 +349,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                       return SizedBox(
                                         height: fontSize,
                                         width: fontSize,
-                                        child: Theme.of(context).brightness ==
+                                        child: theme.brightness ==
                                                 Brightness.dark
                                             ? Lottie.asset(
                                                 "assets/animations/light_music_loading.json",
@@ -321,8 +362,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                     return SizedBox(
                                       height: fontSize,
                                       width: fontSize,
-                                      child: Theme.of(context).brightness ==
-                                              Brightness.dark
+                                      child: theme.brightness == Brightness.dark
                                           ? Lottie.asset(
                                               "assets/animations/light_music_loading.json",
                                               fit: BoxFit.cover)
@@ -383,20 +423,39 @@ class _PlayerScreenState extends State<PlayerScreen> {
   IconButton songListMobile(ThemeData theme, BuildContext context) {
     return IconButton(
       onPressed: () {
+        _scrollToCurrentSong();
+
         showModalBottomSheet(
           backgroundColor: theme.brightness == Brightness.dark
               ? Colors.black.withOpacity(0.7)
               : Colors.white.withOpacity(0.7),
           context: context,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
           builder: (BuildContext context) {
+            ScrollController modalScrollController = ScrollController();
+
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              const double itemHeight = 72;
+              final double scrollPosition =
+                  (currentSongIndex * itemHeight) - (itemHeight * 1.5);
+
+              if (modalScrollController.hasClients) {
+                modalScrollController.animateTo(
+                  scrollPosition,
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                );
+              }
+            });
+
             return StatefulBuilder(
               builder: (BuildContext context, StateSetter setModalState) {
                 return Padding(
                   padding: const EdgeInsets.all(10),
                   child: ReorderableListView(
-                    scrollController: _scrollController,
+                    scrollController: modalScrollController,
                     onReorder: (oldIndex, newIndex) {
                       setModalState(() {
                         if (newIndex > oldIndex) {
@@ -404,6 +463,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                         }
                         final moveSong = widget.songs.removeAt(oldIndex);
                         widget.songs.insert(newIndex, moveSong);
+
                         if (currentSongIndex == oldIndex) {
                           currentSongIndex = newIndex;
                         } else if (currentSongIndex > oldIndex &&
@@ -413,21 +473,22 @@ class _PlayerScreenState extends State<PlayerScreen> {
                             currentSongIndex >= newIndex) {
                           currentSongIndex++;
                         }
+
                         audioHandler.setMediaItems(
-                            mediaItems: widget.songs
-                                .map((song) => MediaItem(
-                                      id: song.url,
-                                      album: song.album,
-                                      title: song.title,
-                                      displayTitle: song.title,
-                                      duration:
-                                          Duration(seconds: song.duration),
-                                      artist: song.subtitle,
-                                      artUri: Uri.parse(song.imageUrl),
-                                    ))
-                                .toList(),
-                            currentIndex: currentSongIndex,
-                            songList: widget.songs);
+                          mediaItems: widget.songs
+                              .map((song) => MediaItem(
+                                    id: song.url,
+                                    album: song.album,
+                                    title: song.title,
+                                    displayTitle: song.title,
+                                    duration: Duration(seconds: song.duration),
+                                    artist: song.subtitle,
+                                    artUri: Uri.parse(song.imageUrl),
+                                  ))
+                              .toList(),
+                          currentIndex: currentSongIndex,
+                          songList: widget.songs,
+                        );
                       });
                     },
                     children: List.generate(
@@ -436,13 +497,14 @@ class _PlayerScreenState extends State<PlayerScreen> {
                         return ListTile(
                           key: ValueKey(widget.songs[index].id),
                           onTap: () {
+                            Navigator.of(context).pop();
                             if (index != currentSongIndex) {
                               audioHandler.stop();
                               setState(() {
                                 currentSongIndex = index;
                                 hasPlayed = false;
                               });
-                              _initializeAudioHandler();
+                              _initializeAudioHandler(chage: false);
                               _scrollToCurrentSong();
                             }
                           },
@@ -456,11 +518,10 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                           ? "assets/animations/musicPlaying_light.json"
                                           : "assets/animations/musicPlaying_dark.json",
                                       height: 50,
-                                      width: 50)
+                                      width: 50,
+                                    )
                                   : const SizedBox(),
-                              FavoriteIcon(
-                                song: widget.songs[index],
-                              ),
+                              FavoriteIcon(song: widget.songs[index]),
                             ],
                           ),
                           leading: Container(
@@ -468,8 +529,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                             decoration: BoxDecoration(
                               image: DecorationImage(
                                 image: CachedNetworkImageProvider(
-                                  widget.songs[index].imageUrl,
-                                ),
+                                    widget.songs[index].imageUrl),
                                 fit: BoxFit.fill,
                               ),
                               borderRadius: BorderRadius.circular(5),
@@ -557,7 +617,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                   currentSongIndex = index;
                   hasPlayed = false;
                 });
-                _initializeAudioHandler();
+                _initializeAudioHandler(chage: false);
                 _scrollToCurrentSong();
               }
             },

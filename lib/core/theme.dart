@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:musiq/core/colors.dart';
 
 class ThemeClass {
   static ThemeData lightTheme = ThemeData.light().copyWith(
@@ -12,21 +13,36 @@ class ThemeClass {
       backgroundColor: Colors.white,
     ),
     textTheme: ThemeData.light().textTheme.copyWith(
-          displayLarge: const TextStyle(fontFamily: 'LED-Dot-Matrix'),
-          displayMedium: const TextStyle(fontFamily: 'LED-Dot-Matrix'),
-          displaySmall: const TextStyle(fontFamily: 'LED-Dot-Matrix'),
-          headlineLarge: const TextStyle(fontFamily: 'LED-Dot-Matrix'),
-          headlineMedium: const TextStyle(fontFamily: 'LED-Dot-Matrix'),
-          headlineSmall: const TextStyle(fontFamily: 'LED-Dot-Matrix'),
-          titleLarge: const TextStyle(fontFamily: 'LED-Dot-Matrix'),
-          titleMedium: const TextStyle(fontFamily: 'LED-Dot-Matrix'),
-          titleSmall: const TextStyle(fontFamily: 'LED-Dot-Matrix'),
-          bodyLarge: const TextStyle(fontFamily: 'LED-Dot-Matrix'),
-          bodyMedium: const TextStyle(fontFamily: 'LED-Dot-Matrix'),
-          bodySmall: const TextStyle(fontFamily: 'LED-Dot-Matrix'),
-          labelLarge: const TextStyle(fontFamily: 'LED-Dot-Matrix'),
-          labelMedium: const TextStyle(fontFamily: 'LED-Dot-Matrix'),
-          labelSmall: const TextStyle(fontFamily: 'LED-Dot-Matrix'),
+          displayLarge:
+              const TextStyle(fontFamily: 'LED-Dot-Matrix', color: black),
+          displayMedium:
+              const TextStyle(fontFamily: 'LED-Dot-Matrix', color: black),
+          displaySmall:
+              const TextStyle(fontFamily: 'LED-Dot-Matrix', color: black),
+          headlineLarge:
+              const TextStyle(fontFamily: 'LED-Dot-Matrix', color: black),
+          headlineMedium:
+              const TextStyle(fontFamily: 'LED-Dot-Matrix', color: black),
+          headlineSmall:
+              const TextStyle(fontFamily: 'LED-Dot-Matrix', color: black),
+          titleLarge:
+              const TextStyle(fontFamily: 'LED-Dot-Matrix', color: black),
+          titleMedium:
+              const TextStyle(fontFamily: 'LED-Dot-Matrix', color: black),
+          titleSmall:
+              const TextStyle(fontFamily: 'LED-Dot-Matrix', color: black),
+          bodyLarge:
+              const TextStyle(fontFamily: 'LED-Dot-Matrix', color: black),
+          bodyMedium:
+              const TextStyle(fontFamily: 'LED-Dot-Matrix', color: black),
+          bodySmall:
+              const TextStyle(fontFamily: 'LED-Dot-Matrix', color: black),
+          labelLarge:
+              const TextStyle(fontFamily: 'LED-Dot-Matrix', color: black),
+          labelMedium:
+              const TextStyle(fontFamily: 'LED-Dot-Matrix', color: black),
+          labelSmall:
+              const TextStyle(fontFamily: 'LED-Dot-Matrix', color: black),
         ),
   );
 
@@ -41,21 +57,36 @@ class ThemeClass {
       backgroundColor: Colors.black,
     ),
     textTheme: ThemeData.light().textTheme.copyWith(
-          displayLarge: const TextStyle(fontFamily: 'LED-Dot-Matrix'),
-          displayMedium: const TextStyle(fontFamily: 'LED-Dot-Matrix'),
-          displaySmall: const TextStyle(fontFamily: 'LED-Dot-Matrix'),
-          headlineLarge: const TextStyle(fontFamily: 'LED-Dot-Matrix'),
-          headlineMedium: const TextStyle(fontFamily: 'LED-Dot-Matrix'),
-          headlineSmall: const TextStyle(fontFamily: 'LED-Dot-Matrix'),
-          titleLarge: const TextStyle(fontFamily: 'LED-Dot-Matrix'),
-          titleMedium: const TextStyle(fontFamily: 'LED-Dot-Matrix'),
-          titleSmall: const TextStyle(fontFamily: 'LED-Dot-Matrix'),
-          bodyLarge: const TextStyle(fontFamily: 'LED-Dot-Matrix'),
-          bodyMedium: const TextStyle(fontFamily: 'LED-Dot-Matrix'),
-          bodySmall: const TextStyle(fontFamily: 'LED-Dot-Matrix'),
-          labelLarge: const TextStyle(fontFamily: 'LED-Dot-Matrix'),
-          labelMedium: const TextStyle(fontFamily: 'LED-Dot-Matrix'),
-          labelSmall: const TextStyle(fontFamily: 'LED-Dot-Matrix'),
+          displayLarge:
+              const TextStyle(fontFamily: 'LED-Dot-Matrix', color: white),
+          displayMedium:
+              const TextStyle(fontFamily: 'LED-Dot-Matrix', color: white),
+          displaySmall:
+              const TextStyle(fontFamily: 'LED-Dot-Matrix', color: white),
+          headlineLarge:
+              const TextStyle(fontFamily: 'LED-Dot-Matrix', color: white),
+          headlineMedium:
+              const TextStyle(fontFamily: 'LED-Dot-Matrix', color: white),
+          headlineSmall:
+              const TextStyle(fontFamily: 'LED-Dot-Matrix', color: white),
+          titleLarge:
+              const TextStyle(fontFamily: 'LED-Dot-Matrix', color: white),
+          titleMedium:
+              const TextStyle(fontFamily: 'LED-Dot-Matrix', color: white),
+          titleSmall:
+              const TextStyle(fontFamily: 'LED-Dot-Matrix', color: white),
+          bodyLarge:
+              const TextStyle(fontFamily: 'LED-Dot-Matrix', color: white),
+          bodyMedium:
+              const TextStyle(fontFamily: 'LED-Dot-Matrix', color: white),
+          bodySmall:
+              const TextStyle(fontFamily: 'LED-Dot-Matrix', color: white),
+          labelLarge:
+              const TextStyle(fontFamily: 'LED-Dot-Matrix', color: white),
+          labelMedium:
+              const TextStyle(fontFamily: 'LED-Dot-Matrix', color: white),
+          labelSmall:
+              const TextStyle(fontFamily: 'LED-Dot-Matrix', color: white),
         ),
   );
 }
