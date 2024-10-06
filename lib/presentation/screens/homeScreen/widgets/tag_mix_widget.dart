@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/bloc/FeatchSong/featch_song_cubit.dart';
 import 'package:musiq/core/colors.dart';
+import 'package:musiq/core/sized.dart';
 
 class TagMixGrid extends StatelessWidget {
   final List tagMixes;
@@ -23,12 +24,16 @@ class TagMixGrid extends StatelessWidget {
       padding: EdgeInsets.all(10),
       child: GridView.builder(
         physics: NeverScrollableScrollPhysics(),
-        itemCount: itemCount > tagMixes.length ? tagMixes.length : itemCount,
+        itemCount: isMobile(context)
+            ? itemCount > tagMixes.length
+                ? tagMixes.length
+                : itemCount
+            : tagMixes.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisSpacing: 16,
-          crossAxisSpacing: 10,
-          childAspectRatio: 1.9,
+          crossAxisCount: isMobile(context) ? 2 : 4,
+          mainAxisSpacing: isMobile(context) ? 16 : 20,
+          crossAxisSpacing: isMobile(context) ? 10 : 16,
+          childAspectRatio: isMobile(context) ? 1.9 : 3,
         ),
         itemBuilder: (context, index) {
           final tagMix = tagMixes[index];
@@ -77,16 +82,17 @@ class TagMixGrid extends StatelessWidget {
                     ),
                   ),
                   Align(
-                    alignment: index == 0 || index == 1
-                        ? Alignment.topRight
-                        : Alignment.topLeft,
+                    alignment:
+                        index == 0 || index == 1 || index == 2 || index == 3
+                            ? Alignment.topRight
+                            : Alignment.topLeft,
                     child: Container(
                       margin: EdgeInsets.only(
                         top: 10,
                         left: 5,
                         right: 5,
                       ),
-                      width: 90,
+                      width: isMobile(context) ? 90 : 150,
                       child: Text(
                         "${tagMix.title} : ${tagMix.type}",
                         style: TextStyle(fontSize: 16, color: white),
@@ -94,9 +100,10 @@ class TagMixGrid extends StatelessWidget {
                     ),
                   ),
                   Align(
-                    alignment: index == 0 || index == 1
-                        ? Alignment.centerLeft
-                        : Alignment.centerRight,
+                    alignment:
+                        index == 0 || index == 1 || index == 2 || index == 3
+                            ? Alignment.centerLeft
+                            : Alignment.centerRight,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: CachedNetworkImage(

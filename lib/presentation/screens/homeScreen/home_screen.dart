@@ -141,7 +141,7 @@ class HomeScreen extends StatelessWidget {
                         TagMixGrid(
                           tagMixes: state.homeScreenModel.tagMixes,
                           itemCount: 4,
-                          containerHeight: 280,
+                          containerHeight: isMobile(context) ? 280 : 350,
                         ),
                         constHeight10,
                         CarouselSlider(
@@ -192,7 +192,7 @@ class HomeScreen extends StatelessWidget {
                                 ? 2
                                 : isTablet(context)
                                     ? 5
-                                    : 12,
+                                    : 6,
                             enlargeCenterPage: true,
                             viewportFraction: isMobile(context) ? 0.5 : 0.2,
                           ),
@@ -334,11 +334,14 @@ class HomeScreen extends StatelessWidget {
                           boderRadius: 20,
                         ),
                         constHeight20,
-                        TagMixGrid(
-                          tagMixes: state.homeScreenModel.tagMixes.sublist(4),
-                          itemCount: 4,
-                          containerHeight: 280,
-                        ),
+                        isMobile(context)
+                            ? TagMixGrid(
+                                tagMixes:
+                                    state.homeScreenModel.tagMixes.sublist(4),
+                                itemCount: 4,
+                                containerHeight: 280,
+                              )
+                            : SizedBox(),
 
 //----------------------top played --------------------------------
                         constHeight20,

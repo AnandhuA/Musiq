@@ -1,4 +1,4 @@
-import 'dart:developer';
+import 'dart:math';
 import 'package:audio_service/audio_service.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:musiq/data/hive_funtion.dart';
@@ -10,6 +10,7 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   final AudioPlayer _player;
   List<MediaItem> _mediaItems = [];
   List<SongModel> _songList = [];
+  bool _isShuffled = false;
 
   AudioPlayerHandler() : _player = AudioPlayer() {
     _initializePlayer();
@@ -43,6 +44,10 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
     await play();
   }
 
+  void toggleShuffle() {
+    _isShuffled = !_isShuffled;
+  }
+
   @override
   Future<void> play() async {
     await _player.play();
@@ -65,9 +70,12 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
 
   @override
   Future<void> skipToNext() async {
-    if (currentSongIndex < _mediaItems.length - 1) {
+    if (_isShuffled) {
+      currentSongIndex = _getRandomSongIndex();
+      lastplayedSongNotifier.value = _songList;
+      await playCurrentSong();
+    } else if (currentSongIndex < _mediaItems.length - 1) {
       currentSongIndex++;
-      log("Skip to next: $currentSongIndex");
       lastplayedSongNotifier.value = _songList;
       await playCurrentSong();
     }
@@ -77,9 +85,14 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   Future<void> skipToPrevious() async {
     if (currentSongIndex > 0) {
       currentSongIndex--;
-      log("Skip to previous: $currentSongIndex");
+
       await playCurrentSong();
     }
+  }
+
+  int _getRandomSongIndex() {
+    final random = Random();
+    return random.nextInt(_mediaItems.length);
   }
 
   Future<void> playCurrentSong() async {
@@ -89,7 +102,6 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
       LastPlayedRepo.addToLastPlayedSong(_songList[currentSongIndex]);
       lastplayedSongNotifier.value = _songList;
       await _playUrl(newMediaItem.id);
-      
     }
   }
 

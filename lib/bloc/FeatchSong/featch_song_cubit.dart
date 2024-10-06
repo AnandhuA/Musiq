@@ -1,11 +1,9 @@
 import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:musiq/data/saavn_data.dart';
 import 'package:musiq/models/library_model.dart';
 import 'package:musiq/models/song_model.dart';
-
 part 'featch_song_state.dart';
 
 class FeatchSongCubit extends Cubit<FeatchSongState> {
@@ -28,6 +26,7 @@ class FeatchSongCubit extends Cubit<FeatchSongState> {
       log("$id");
       featchPlaylist(
           playlistId: id, imageUrl: imageUrl, title: title, type: "mix");
+      // featchTagMix(tagMixId: id);
     } else if (type == "Artist") {
       feachArtistSong(artistName: id, imageUrl: imageUrl, title: title);
     }
@@ -76,17 +75,18 @@ class FeatchSongCubit extends Cubit<FeatchSongState> {
       log("Failed to fetch album: $error");
     }
   }
-//--------- is playlist -------
 
-  void featchPlaylist(
-      {required String playlistId,
-      required String? imageUrl,
-      required String title,
-      required String type}) async {
+//--------- is playlist -------
+  void featchPlaylist({
+    required String playlistId,
+    required String? imageUrl,
+    required String title,
+    required String type,
+  }) async {
     emit(FeatchSongLoading());
     try {
       final playlistData = await SaavnAPI().fetchPlaylistSongs(playlistId);
-      // log("$playlistData");
+      log("plylistid---------$playlistId");
       List<SongModel> songList = (playlistData['songs'] as List)
           .map((songJson) => SongModel.fromJson(songJson))
           .toList();
@@ -138,5 +138,14 @@ class FeatchSongCubit extends Cubit<FeatchSongState> {
     } catch (e) {
       log("Failed to fetch playlist: $e");
     }
+  }
+}
+
+void featchTagMix({required String tagMixId}) async {
+  try {
+    final tagMix = await SaavnAPI().getReco(tagMixId);
+    log("-------------$tagMix");
+  } catch (e) {
+    log("------------------$e");
   }
 }

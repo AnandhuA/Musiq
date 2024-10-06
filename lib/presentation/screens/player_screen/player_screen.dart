@@ -38,6 +38,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
   late ScrollController _scrollController;
   late StreamSubscription<PlaybackState> _playbackStateSubscription;
   bool hasPlayed = false;
+  bool _shuffle = false;
   // bool _loading = false;
 
   SongModel get currentSong => widget.songs[currentSongIndex];
@@ -53,8 +54,8 @@ class _PlayerScreenState extends State<PlayerScreen> {
     });
   }
 
-  Future<void> _initializeAudioHandler() async {
-    if (widget.currentpostion != Duration.zero) {
+  Future<void> _initializeAudioHandler({bool chage = true}) async {
+    if (widget.currentpostion != Duration.zero && chage) {
       _playbackStateSubscription =
           audioHandler.playbackState.listen((playbackState) {
         if (!mounted) return;
@@ -138,6 +139,13 @@ class _PlayerScreenState extends State<PlayerScreen> {
       _scrollToCurrentSong();
       setState(() {});
     }
+  }
+
+  void _toggleShuffle() {
+    setState(() {
+      _shuffle = !_shuffle;
+    });
+    audioHandler.toggleShuffle();
   }
 
   void _scrollToCurrentSong() {
@@ -245,7 +253,18 @@ class _PlayerScreenState extends State<PlayerScreen> {
                               overflow: TextOverflow.fade,
                               softWrap: false,
                             ),
-                            SizedBox(height: isMobile(context) ? 35 : 30),
+                            constHeight10,
+                            Row(
+                              children: [
+                                Spacer(),
+                                IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(Icons.add_circle_outline_sharp),
+                                ),
+                                FavoriteIcon(song: currentSong),
+                              ],
+                            ),
+                            constHeight10,
                             BlocBuilder<ProgressBarCubit, ProgressBarState>(
                               builder: (context, state) {
                                 if (state is ProgressBarInitial) {
@@ -271,7 +290,14 @@ class _PlayerScreenState extends State<PlayerScreen> {
                             SizedBox(height: isMobile(context) ? 15 : 20),
                             Row(
                               children: [
-                                FavoriteIcon(song: currentSong),
+                                IconButton(
+                                    onPressed: _toggleShuffle,
+                                    icon: Icon(
+                                      Icons.shuffle,
+                                      color: _shuffle
+                                          ? Colors.white
+                                          : Colors.grey.shade900,
+                                    )),
                                 const Spacer(),
                                 IconButton(
                                   onPressed: _playPrevious,
@@ -469,7 +495,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                 currentSongIndex = index;
                                 hasPlayed = false;
                               });
-                              _initializeAudioHandler();
+                              _initializeAudioHandler(chage: false);
                               _scrollToCurrentSong();
                             }
                           },
@@ -582,7 +608,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                   currentSongIndex = index;
                   hasPlayed = false;
                 });
-                _initializeAudioHandler();
+                _initializeAudioHandler(chage: false);
                 _scrollToCurrentSong();
               }
             },

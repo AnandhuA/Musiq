@@ -329,8 +329,8 @@ class SaavnAPI {
 //------------top search --------------
   Future<List<String>> getTopSearches() async {
     try {
-      final res = await getResponse(endpoints['topSearches']!, useProxy: true);
-      // log("${res.body}");
+      final res = await getResponse(endpoints['topSearches']!, useProxy: false);
+      log("${res.body}");
       if (res.statusCode == 200) {
         final List getMain = json.decode(res.body) as List;
         return getMain.map((element) {
@@ -372,6 +372,38 @@ class SaavnAPI {
       return {
         'songs': List.empty(),
         'error': e,
+      };
+    }
+  }
+
+  //-----------------Tag mix data-----------
+
+  // Your existing fields and methods...
+
+  // Method to fetch tag mix details based on ID
+  Future<Map<String, dynamic>> fetchTagMixDetails(String tagMixId) async {
+    final String encodedTagMixId = Uri.encodeComponent(tagMixId);
+    log("----$tagMixId");
+    final String params =
+        'id=$encodedTagMixId&${endpoints["endTagMixDetails"]}';
+
+    try {
+      final res = await getResponse(params);
+
+      if (res.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(res.body);
+        log("Success: Fetched Tag Mix Details: $data");
+        return data;
+      } else {
+        log('API returned an error: ${res.body}');
+        return {
+          'error': 'API returned an error: ${res.body}',
+        };
+      }
+    } catch (e) {
+      log('Error in fetchTagMixDetails: $e');
+      return {
+        'error': 'Exception caught: $e',
       };
     }
   }
