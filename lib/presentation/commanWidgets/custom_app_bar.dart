@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:musiq/bloc/favorite_bloc/favorite_bloc.dart';
+import 'package:musiq/core/colors.dart';
 
 class CustomAppBar extends StatelessWidget {
   final String title;
@@ -10,6 +11,7 @@ class CustomAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return SizedBox(
       height: 60,
       child: Row(
@@ -18,16 +20,26 @@ class CustomAppBar extends StatelessWidget {
             onPressed: () {
               Navigator.pop(context);
             },
-            icon: const Icon(Icons.arrow_back_ios_new_sharp),
+            icon: Icon(
+              Icons.arrow_back_ios_new_sharp,
+              color: theme.brightness == Brightness.dark ? white : black,
+            ),
           ),
           Expanded(
-              child: Text(
-            title,
-            style: const TextStyle(
-              fontSize: 25,
+            child: Text(
+              title,
+              style: TextStyle(
+                fontSize: 25,
+              ),
+              maxLines: 1,
             ),
-            maxLines: 1,
-          ))
+          ),
+          IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.more_vert_sharp,
+                color: theme.brightness == Brightness.dark ? white : black,
+              ))
         ],
       ),
     );
