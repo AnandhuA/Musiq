@@ -67,6 +67,7 @@ class FavoriteScreen extends StatelessWidget {
                                 builder: (context) => PlayerScreen(
                                   songs: sortedFavorites,
                                   initialIndex: index,
+                                    shuffle: audioHandler.isShuffleOn(),
                                 ),
                               ),
                             ),

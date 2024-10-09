@@ -44,7 +44,7 @@ class LibraryScreen extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (context) => PlayerScreen(
                     songs: state.songModel,
-                   
+                   shuffle: audioHandler.isShuffleOn(),
                   ),
                 ));
           } else if (state is FeatchAlbumOrPlayList) {

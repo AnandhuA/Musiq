@@ -283,6 +283,7 @@ class SearchScreenState extends State<SearchScreen> {
                                               builder: (context) =>
                                                   PlayerScreen(
                                                 songs: [song],
+                                                shuffle: audioHandler.isShuffleOn(),
                                               ),
                                             ));
                                       },

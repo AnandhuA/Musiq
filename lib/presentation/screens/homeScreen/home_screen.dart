@@ -52,6 +52,7 @@ class HomeScreen extends StatelessWidget {
                             MaterialPageRoute(
                               builder: (context) => PlayerScreen(
                                 songs: state.songModel,
+                                  shuffle: audioHandler.isShuffleOn(),
                               ),
                             ));
                       } else if (state is FeatchAlbumOrPlayList) {
@@ -302,6 +303,8 @@ class HomeScreen extends StatelessWidget {
                                                         PlayerScreen(
                                                       songs: state.lastplayed,
                                                       initialIndex: index,
+                                                        shuffle: audioHandler
+                                                          .isShuffleOn(),
                                                     ),
                                                   ),
                                                 );

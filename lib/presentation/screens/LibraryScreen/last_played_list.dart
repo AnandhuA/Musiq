@@ -65,7 +65,7 @@ class _LastPlayedListState extends State<LastPlayedList> {
                             builder: (context) => PlayerScreen(
                               songs: lastplayed,
                               initialIndex: index,
-                             
+                               shuffle: audioHandler.isShuffleOn(),
                             ),
 
                           ),

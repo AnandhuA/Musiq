@@ -29,7 +29,7 @@ class PlayerScreen extends StatefulWidget {
     required this.songs,
     this.initialIndex = 0,
     this.currentpostion = Duration.zero,
-    this.shuffle = false,
+    required this.shuffle,
   });
 
   @override

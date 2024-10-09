@@ -197,6 +197,8 @@ class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
                                           MaterialPageRoute(
                                             builder: (context) => PlayerScreen(
                                               songs: widget.songModel,
+                                                shuffle:
+                                                  audioHandler.isShuffleOn(),
                                             ),
                                           ))
                                       : null;
@@ -238,6 +240,7 @@ class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
                               builder: (context) => PlayerScreen(
                                 songs: widget.songModel,
                                 initialIndex: index,
+                                  shuffle: audioHandler.isShuffleOn(),
                               ),
                             ));
                       },
