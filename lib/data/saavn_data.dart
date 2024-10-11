@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/io_client.dart';
+import 'package:musiq/core/sized.dart';
 import 'package:musiq/data/responce_format.dart';
 
 class SaavnAPI {
@@ -33,15 +35,66 @@ class SaavnAPI {
   };
 //------------header------------
   Map<String, String> headers = {
-    'Accept': '*/*',
-    'User-Agent': 'Mozilla/5.0',
+    'Accept': 'application/json, text/plain, */*',
+    'Accept-Encoding': 'gzip, deflate, br, zstd',
+    'Accept-Language': 'en-US,en;q=0.6',
+    'Connection': 'keep-alive',
+    'Cookie':
+        'geo=111.92.126.178%2CIN%2CKerala%2CKochi%2C682018; mm_latlong=9.9185%2C76.2558; CH=G03%2CA07%2CO00%2CL03; DL=english; B=28ccd14da31bf4314c7d817903d0b60f; CT=MTc0ODAxMzE%3D; AKA_A2=A; L=hindi',
+    'User-Agent':
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36',
+    'Referer': 'https://www.jiosaavn.com/',
+    'Origin': 'https://www.jiosaavn.com',
+    'Host': 'www.jiosaavn.com',
+    'sec-fetch-dest': 'empty',
+    'sec-fetch-mode': 'cors',
+    'sec-fetch-site': 'same-origin',
+    'sec-gpc': '1',
+    'sec-ch-ua': '"Brave";v="129", "Not=A?Brand";v="8", "Chromium";v="129"',
+    'sec-ch-ua-mobile': '?0',
+    'sec-ch-ua-platform': '"Windows"',
   };
 
 //----------- responce ---------------
+  // Future<http.Response> getResponse(
+  //   String params, {
+  //   bool usev4 = true,
+  //   bool useProxy = false,
+  // }) async {
+  //   Uri url;
+  //   if (!usev4) {
+  //     url = Uri.https(
+  //       baseUrl,
+  //       '$apiStr&$params'.replaceAll('&api_version=4', ''),
+  //     );
+  //   } else {
+  //     url = Uri.https(baseUrl, '$apiStr&$params');
+  //   }
+  //   preferredLanguages =
+  //       preferredLanguages.map((lang) => lang.toLowerCase()).toList();
+  //   final String languageHeader = 'L=${preferredLanguages.join('%2C')}';
+  //   headers = {'cookie': languageHeader, 'Accept': '*/*'};
+
+  //   if (useProxy) {
+  //     final proxyIP = '192.168.1.1';
+  //     final proxyPort = '8080';
+  //     final HttpClient httpClient = HttpClient();
+  //     httpClient.findProxy = (uri) {
+  //       return 'PROXY $proxyIP:$proxyPort;';
+  //     };
+  //     httpClient.badCertificateCallback =
+  //         (X509Certificate cert, String host, int port) => Platform.isAndroid;
+  //     final IOClient myClient = IOClient(httpClient);
+  //     return myClient.get(url, headers: headers);
+  //   }
+  //   return http.get(url, headers: headers).onError((error, stackTrace) {
+  //     return http.Response(error.toString(), 404);
+  //   });
+  // }
+
   Future<http.Response> getResponse(
     String params, {
     bool usev4 = true,
-    bool useProxy = false,
   }) async {
     Uri url;
     if (!usev4) {
@@ -52,37 +105,55 @@ class SaavnAPI {
     } else {
       url = Uri.https(baseUrl, '$apiStr&$params');
     }
-    preferredLanguages =
-        preferredLanguages.map((lang) => lang.toLowerCase()).toList();
-    final String languageHeader = 'L=${preferredLanguages.join('%2C')}';
-    headers = {'cookie': languageHeader, 'Accept': '*/*'};
 
-    if (useProxy) {
-      final proxyIP = '192.168.1.1';
-      final proxyPort = '8080';
-      final HttpClient httpClient = HttpClient();
-      httpClient.findProxy = (uri) {
-        return 'PROXY $proxyIP:$proxyPort;';
-      };
-      httpClient.badCertificateCallback =
-          (X509Certificate cert, String host, int port) => Platform.isAndroid;
-      final IOClient myClient = IOClient(httpClient);
-      return myClient.get(url, headers: headers);
+    // Update cookie with language
+    headers['Cookie'] =
+        'geo=111.92.126.178%2CIN%2CKerala%2CKochi%2C682018; mm_latlong=9.9185%2C76.2558; CH=G03%2CA07%2CO00%2CL03; DL=english; B=28ccd14da31bf4314c7d817903d0b60f; CT=MTc0ODAxMzE%3D; AKA_A2=A; L=${preferredLanguages.join('%2C')}';
+
+    try {
+      log("Sending request to: $url");
+      log("Request Headers: $headers");
+
+      final response = await http.get(url, headers: headers);
+      log("Response Status: ${response.statusCode}");
+      log("Response Body: ${response.body}");
+
+      if (response.statusCode != 200) {
+        log("Error: ${response.statusCode} - ${response.reasonPhrase} - ${response.body}");
+      } else {
+        if (!Platform.isWindows) {
+          Fluttertoast.showToast(
+            msg: "StatusCode:::${response.statusCode}\nBody:::${response.body}",
+          );
+        }
+      }
+
+      return response;
+    } catch (error) {
+      log("Request failed: $error");
+      return http.Response('Error: $error', 404);
     }
-    return http.get(url, headers: headers).onError((error, stackTrace) {
-      return http.Response(error.toString(), 404);
-    });
   }
 
 //-------- fetch home page data --------------------
   Future<Map> fetchHomePageData() async {
+    log("------------------steart");
     Map result = {};
     try {
       final res = await getResponse(endpoints['homeData']!);
+      log("---------------${res.statusCode}");
+      log("---------------${res.body}");
       if (res.statusCode == 200) {
         final Map data = json.decode(res.body) as Map;
         result = await formatHomePageData(data);
+        log("------------$result");
         return result;
+      } else {
+        if (!Platform.isWindows) {
+          Fluttertoast.showToast(
+            msg: "StatusCode:::${res.statusCode}\nBody:::${res.body}",
+          );
+        }
       }
     } catch (e) {
       print('Error in fetchHomePageData: $e');
@@ -102,6 +173,12 @@ class SaavnAPI {
         );
         print("--------------------------$map");
         return map;
+      } else {
+        if (!Platform.isWindows) {
+          Fluttertoast.showToast(
+            msg: "StatusCode:::${res.statusCode}\nBody:::${res.body}",
+          );
+        }
       }
     } catch (e) {
       print('Error in fetchSongDetails: $e');
@@ -134,6 +211,12 @@ class SaavnAPI {
       final getMain = json.decode(res.body);
       final List responseList = getMain['results'] as List;
       return formatAlbumResponse(responseList, type);
+    } else {
+      if (!Platform.isWindows) {
+        Fluttertoast.showToast(
+          msg: "StatusCode:::${res.statusCode}\nBody:::${res.body}",
+        );
+      }
     }
     return List.empty();
   }
@@ -150,6 +233,11 @@ class SaavnAPI {
           'error': '',
         };
       } else {
+        if (!Platform.isWindows) {
+          Fluttertoast.showToast(
+            msg: "StatusCode:::${res.statusCode}\nBody:::${res.body}",
+          );
+        }
         return {
           'songs': List.empty(),
           'error': res.body,
@@ -188,6 +276,11 @@ class SaavnAPI {
           'error': '',
         };
       } else {
+        if (!Platform.isWindows) {
+          Fluttertoast.showToast(
+            msg: "StatusCode:::${res.statusCode}\nBody:::${res.body}",
+          );
+        }
         return {
           'songs': List.empty(),
           'error': res.body,
@@ -211,6 +304,12 @@ class SaavnAPI {
     if (res.statusCode == 200) {
       // final List getMain = json.decode(res.body) as List;
       // return formatSongsResponse(getMain, 'song');
+    } else {
+      if (!Platform.isWindows) {
+        Fluttertoast.showToast(
+          msg: "StatusCode:::${res.statusCode}\nBody:::${res.body}",
+        );
+      }
     }
     return List.empty();
   }
@@ -234,8 +333,14 @@ class SaavnAPI {
           responseList.add(getMain[i.toString()]['song']);
         }
         return formatSongsResponse(responseList, 'song');
+      } else {
+        if (!Platform.isWindows) {
+          Fluttertoast.showToast(
+            msg: "StatusCode:::${res.statusCode}\nBody:::${res.body}",
+          );
+        }
+        return [];
       }
-      return [];
     }
     return [];
   }
@@ -253,7 +358,10 @@ class SaavnAPI {
     final String params =
         '__call=autocomplete.get&cc=in&includeMetaTags=1&query=$searchQuery';
 
-    final res = await getResponse(params, usev4: false, useProxy: false);
+    final res = await getResponse(
+      params,
+      usev4: false,
+    );
     // log("search --${res.body}");
     if (res.statusCode == 200) {
       final getMain = json.decode(res.body);
@@ -321,6 +429,12 @@ class SaavnAPI {
           position[getMain['songs']['position'] as int] = 'Songs';
         }
       }
+    } else {
+      if (!Platform.isWindows) {
+        Fluttertoast.showToast(
+          msg: "StatusCode:::${res.statusCode}\nBody:::${res.body}",
+        );
+      }
     }
     // log("${[result, position]}");
     return [result, position];
@@ -329,13 +443,21 @@ class SaavnAPI {
 //------------top search --------------
   Future<List<String>> getTopSearches() async {
     try {
-      final res = await getResponse(endpoints['topSearches']!, useProxy: false);
+      final res = await getResponse(
+        endpoints['topSearches']!,
+      );
       log("${res.body}");
       if (res.statusCode == 200) {
         final List getMain = json.decode(res.body) as List;
         return getMain.map((element) {
           return element['title'].toString();
         }).toList();
+      } else {
+        if (!Platform.isWindows) {
+          Fluttertoast.showToast(
+            msg: "StatusCode:::${res.statusCode}\nBody:::${res.body}",
+          );
+        }
       }
     } catch (e) {
       log('Error in getTopSearches: $e');
@@ -353,7 +475,9 @@ class SaavnAPI {
         "p=$page&q=$searchQuery&n=$count&${endpoints['getResults']}";
 
     try {
-      final res = await getResponse(params, useProxy: false);
+      final res = await getResponse(
+        params,
+      );
       if (res.statusCode == 200) {
         final Map getMain = json.decode(res.body) as Map;
         final List responseList = getMain['results'] as List;
@@ -362,6 +486,9 @@ class SaavnAPI {
           'error': '',
         };
       } else {
+        Fluttertoast.showToast(
+          msg: "StatusCode:::${res.statusCode}\nBody:::${res.body}",
+        );
         return {
           'songs': List.empty(),
           'error': res.body,
@@ -395,6 +522,11 @@ class SaavnAPI {
         log("Success: Fetched Tag Mix Details: $data");
         return data;
       } else {
+        if (!Platform.isWindows) {
+          Fluttertoast.showToast(
+            msg: "StatusCode:::${res.statusCode}\nBody:::${res.body}",
+          );
+        }
         log('API returned an error: ${res.body}');
         return {
           'error': 'API returned an error: ${res.body}',

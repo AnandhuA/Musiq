@@ -52,7 +52,7 @@ class HomeScreen extends StatelessWidget {
                             MaterialPageRoute(
                               builder: (context) => PlayerScreen(
                                 songs: state.songModel,
-                                  shuffle: audioHandler.isShuffleOn(),
+                                shuffle: audioHandler.isShuffleOn(),
                               ),
                             ));
                       } else if (state is FeatchAlbumOrPlayList) {
@@ -139,11 +139,12 @@ class HomeScreen extends StatelessWidget {
                           ),
                         ),
                         constHeight10,
-                        TagMixGrid(
-                          tagMixes: state.homeScreenModel.tagMixes,
-                          itemCount: 4,
-                          containerHeight: isMobile(context) ? 280 : 350,
-                        ),
+                        if (state.homeScreenModel.tagMixes.isNotEmpty)
+                          TagMixGrid(
+                            tagMixes: state.homeScreenModel.tagMixes,
+                            itemCount: 4,
+                            containerHeight: isMobile(context) ? 280 : 350,
+                          ),
                         constHeight10,
                         CarouselSlider(
                           items: List.generate(
@@ -303,7 +304,7 @@ class HomeScreen extends StatelessWidget {
                                                         PlayerScreen(
                                                       songs: state.lastplayed,
                                                       initialIndex: index,
-                                                        shuffle: audioHandler
+                                                      shuffle: audioHandler
                                                           .isShuffleOn(),
                                                     ),
                                                   ),
@@ -337,14 +338,15 @@ class HomeScreen extends StatelessWidget {
                           boderRadius: 20,
                         ),
                         constHeight20,
-                        isMobile(context)
-                            ? TagMixGrid(
-                                tagMixes:
-                                    state.homeScreenModel.tagMixes.sublist(4),
-                                itemCount: 4,
-                                containerHeight: 280,
-                              )
-                            : SizedBox(),
+                        if (state.homeScreenModel.tagMixes.isNotEmpty)
+                          isMobile(context)
+                              ? TagMixGrid(
+                                  tagMixes:
+                                      state.homeScreenModel.tagMixes.sublist(4),
+                                  itemCount: 4,
+                                  containerHeight: 280,
+                                )
+                              : SizedBox(),
 
 //----------------------top played --------------------------------
                         constHeight20,

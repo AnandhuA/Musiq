@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'dart:io';
 import 'package:audio_service/audio_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -70,11 +70,13 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _initDeepLinkListener() {
-    _linkSubscription = linkStream.listen((String? link) {
-      if (link != null) {
-        _handleDeepLink(link);
-      }
-    });
+    if (Platform.isAndroid || Platform.isIOS) {
+      _linkSubscription = linkStream.listen((String? link) {
+        if (link != null) {
+          _handleDeepLink(link);
+        }
+      });
+    }
   }
 
   void _handleDeepLink(String link) {
