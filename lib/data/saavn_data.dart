@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:http/io_client.dart';
 import 'package:musiq/data/responce_format.dart';
 
 class SaavnAPI {
@@ -11,6 +9,7 @@ class SaavnAPI {
   String apiStr = '/api.php?_format=json&_marker=0&api_version=4&ctx=web6dot0';
 //--------languages ---------------
   List<String> preferredLanguages = ['Malayalam', 'Tamil', 'Hindi', 'English'];
+
 //---------End points -----------
   Map<String, String> endpoints = {
     'homeData': '__call=webapi.getLaunchData',
@@ -31,17 +30,29 @@ class SaavnAPI {
     'getAlbumReco': '__call=reco.getAlbumReco',
     'artistOtherTopSongs': '__call=search.artistOtherTopSongs',
   };
+
+  //https://www.jiosaavn.com/api.php?__call=library.getAll&api_version=4&_format=json&_marker=0&ctx=wap6dot0
+  //https://www.jiosaavn.com/api.php?__call=playlist.list&all_playlists=true&contents=1&onlypids=true&api_version=4&_format=json&_marker=0&ctx=wap6dot0
+  //https://www.jiosaavn.com/api.php?__call=webapi.get&token=%2Falbum%2Fraanjhan-from-do-patti%2F1aZHC5JSGhQ_&type=playlist&p=1&n=50&includeMetaTags=0&ctx=wap6dot0&api_version=4&_format=json&_marker=0
+//
 //------------header------------
   Map<String, String> headers = {
-    'Accept': '*/*',
-    'User-Agent': 'Mozilla/5.0',
+    'Accept': 'application/json, text/plain, */*',
+    'Accept-Encoding': 'gzip, deflate, br',
+    'Accept-Language': 'en-US,en;q=0.9',
+    'Cache-Control': 'no-cache',
+    'Pragma': 'no-cache',
+    'Referer': 'https://www.jiosaavn.com/',
+    'User-Agent':
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36',
+    'Cookie': 'DL=english; B=your-cookie-here;',
+    'X-Requested-With': 'XMLHttpRequest'
   };
 
 //----------- responce ---------------
   Future<http.Response> getResponse(
     String params, {
     bool usev4 = true,
-    bool useProxy = false,
   }) async {
     Uri url;
     if (!usev4) {
@@ -57,18 +68,6 @@ class SaavnAPI {
     final String languageHeader = 'L=${preferredLanguages.join('%2C')}';
     headers = {'cookie': languageHeader, 'Accept': '*/*'};
 
-    if (useProxy) {
-      final proxyIP = '192.168.1.1';
-      final proxyPort = '8080';
-      final HttpClient httpClient = HttpClient();
-      httpClient.findProxy = (uri) {
-        return 'PROXY $proxyIP:$proxyPort;';
-      };
-      httpClient.badCertificateCallback =
-          (X509Certificate cert, String host, int port) => Platform.isAndroid;
-      final IOClient myClient = IOClient(httpClient);
-      return myClient.get(url, headers: headers);
-    }
     return http.get(url, headers: headers).onError((error, stackTrace) {
       return http.Response(error.toString(), 404);
     });
@@ -83,6 +82,9 @@ class SaavnAPI {
         final Map data = json.decode(res.body) as Map;
         result = await formatHomePageData(data);
         return result;
+      } else {
+        log("${res.statusCode}");
+        log("${res.body}");
       }
     } catch (e) {
       print('Error in fetchHomePageData: $e');
@@ -253,7 +255,10 @@ class SaavnAPI {
     final String params =
         '__call=autocomplete.get&cc=in&includeMetaTags=1&query=$searchQuery';
 
-    final res = await getResponse(params, usev4: false, useProxy: false);
+    final res = await getResponse(
+      params,
+      usev4: false,
+    );
     // log("search --${res.body}");
     if (res.statusCode == 200) {
       final getMain = json.decode(res.body);
@@ -329,7 +334,9 @@ class SaavnAPI {
 //------------top search --------------
   Future<List<String>> getTopSearches() async {
     try {
-      final res = await getResponse(endpoints['topSearches']!, useProxy: false);
+      final res = await getResponse(
+        endpoints['topSearches']!,
+      );
       log("${res.body}");
       if (res.statusCode == 200) {
         final List getMain = json.decode(res.body) as List;
@@ -353,7 +360,9 @@ class SaavnAPI {
         "p=$page&q=$searchQuery&n=$count&${endpoints['getResults']}";
 
     try {
-      final res = await getResponse(params, useProxy: false);
+      final res = await getResponse(
+        params,
+      );
       if (res.statusCode == 200) {
         final Map getMain = json.decode(res.body) as Map;
         final List responseList = getMain['results'] as List;

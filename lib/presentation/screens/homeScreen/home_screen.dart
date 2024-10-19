@@ -334,14 +334,15 @@ class HomeScreen extends StatelessWidget {
                           boderRadius: 20,
                         ),
                         constHeight20,
-                        isMobile(context)
-                            ? TagMixGrid(
-                                tagMixes:
-                                    state.homeScreenModel.tagMixes.sublist(4),
-                                itemCount: 4,
-                                containerHeight: 280,
-                              )
-                            : SizedBox(),
+                        if (state.homeScreenModel.tagMixes.isNotEmpty)
+                          isMobile(context)
+                              ? TagMixGrid(
+                                  tagMixes:
+                                      state.homeScreenModel.tagMixes.sublist(4),
+                                  itemCount: 4,
+                                  containerHeight: 280,
+                                )
+                              : SizedBox(),
 
 //----------------------top played --------------------------------
                         constHeight20,

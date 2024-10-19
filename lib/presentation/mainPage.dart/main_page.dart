@@ -8,6 +8,7 @@ import 'package:musiq/bloc/favorite_bloc/favorite_bloc.dart';
 import 'package:musiq/main.dart';
 import 'package:musiq/models/song_model.dart';
 import 'package:musiq/presentation/commanWidgets/textfeild.dart';
+import 'package:musiq/presentation/screens/newHomeScreen/newHomeScreen.dart';
 import 'package:musiq/presentation/screens/player_screen/bottomPlayer/bottom_player.dart';
 import 'package:musiq/presentation/screens/LibraryScreen/library_screen.dart';
 import 'package:musiq/presentation/screens/homeScreen/home_screen.dart';
@@ -29,6 +30,7 @@ class MainPageState extends State<MainPage> {
 
   static final List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
+    Newhomescreen(),
     LibraryScreen(),
   ];
 
@@ -117,6 +119,10 @@ class MainPageState extends State<MainPage> {
                               label: Text('Home'),
                             ),
                             NavigationRailDestination(
+                              icon: Icon(Icons.newspaper),
+                              label: Text('New Home'), // New Home Tab
+                            ),
+                            NavigationRailDestination(
                               icon: Icon(Icons.library_music_sharp),
                               label: Text('Library'),
                             ),
@@ -151,7 +157,7 @@ class MainPageState extends State<MainPage> {
                         ),
                       ],
                     ),
-                  ValueListenableBuilder<List<SongModel>>(
+                    ValueListenableBuilder<List<SongModel>>(
                       valueListenable: lastplayedSongNotifier,
                       builder: (context, lastPlayedSongs, _) {
                         if (lastPlayedSongs.isNotEmpty) {
@@ -208,7 +214,7 @@ class MainPageState extends State<MainPage> {
                         child: _widgetOptions.elementAt(_selectedIndex),
                       ),
                     ),
-                   ValueListenableBuilder<List<SongModel>>(
+                    ValueListenableBuilder<List<SongModel>>(
                       valueListenable: lastplayedSongNotifier,
                       builder: (context, lastPlayedSongs, _) {
                         if (lastPlayedSongs.isNotEmpty) {
@@ -235,6 +241,10 @@ class MainPageState extends State<MainPage> {
                     GButton(
                       icon: Icons.home,
                       text: 'Home',
+                    ),
+                    GButton(
+                      icon: Icons.newspaper,
+                      text: 'New Home', // New Home Tab
                     ),
                     GButton(
                       icon: Icons.library_music_sharp,
