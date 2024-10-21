@@ -26,7 +26,6 @@ class Newhomescreen extends StatelessWidget {
               ),
             );
           } else if (state is HomeScreenLoaded) {
-            log("-------${state.newHomeScreenModel!.songdata!.trending!.data!.length}");
             return BlocListener<FeatchAlbumAndPlayListCubit,
                 FeatchAlbumAndPlayListState>(
               listener: (context, state) {

@@ -2,6 +2,7 @@ import 'package:http/http.dart' as http;
 import 'package:musiq/core/api_urls.dart';
 
 class Saavan2 {
+//------- ---------- featch home page data -------------
   static Future<http.Response?> featchHomeScreenModel() async {
     try {
       final responce = await http.get(Uri.parse(ApiUrls.homeData));
@@ -11,6 +12,7 @@ class Saavan2 {
     }
   }
 
+// ------------------ featch album by id ------------------
   static Future<http.Response?> featchAlbum({required String albumId}) async {
     try {
       final responce = await http.get(Uri.parse("${ApiUrls.album}$albumId"));
@@ -20,6 +22,7 @@ class Saavan2 {
     }
   }
 
+// ----------------- featch play list from id ------------
   static Future<http.Response?> featchPlayList(
       {required String playlistId}) async {
     try {
@@ -31,6 +34,7 @@ class Saavan2 {
     }
   }
 
+// ---------------- search all ---------------
   static Future<http.Response?> featchglobalSearch(
       {required String query}) async {
     try {
@@ -42,6 +46,7 @@ class Saavan2 {
     }
   }
 
+// ---------------- search song -------------
   static Future<http.Response?> featchSearchSong(
       {required String query}) async {
     try {
@@ -52,6 +57,7 @@ class Saavan2 {
     }
   }
 
+//--------------- search albums ---------------
   static Future<http.Response?> featchSearchAlbums(
       {required String query}) async {
     try {
@@ -63,6 +69,7 @@ class Saavan2 {
     }
   }
 
+// -------------- search artists -----------------
   static Future<http.Response?> featchSearchArtists(
       {required String query}) async {
     try {
@@ -74,6 +81,7 @@ class Saavan2 {
     }
   }
 
+//------------------- search playlist -----------------
   static Future<http.Response?> featchSearchPlayList(
       {required String query}) async {
     try {
