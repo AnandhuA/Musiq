@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:musiq/core/colors.dart';
@@ -8,6 +6,7 @@ import 'package:musiq/main.dart';
 import 'package:musiq/models/album_model/album_model.dart';
 import 'package:musiq/models/play_list_model/play_list_model.dart';
 import 'package:musiq/models/song_model/song.dart';
+import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 
 class NewAlbumOrPlaylistScreen extends StatefulWidget {
   final PlayListModel? playListModel;
@@ -185,15 +184,15 @@ class _NewAlbumOrPlaylistScreenState extends State<NewAlbumOrPlaylistScreen> {
                           Spacer(),
                           GestureDetector(
                             onTap: () {
-                              // widget.songModel.isNotEmpty
-                              //     ? Navigator.push(
-                              //         context,
-                              //         MaterialPageRoute(
-                              //           builder: (context) => PlayerScreen(
-                              //             songs: widget.songModel,
-                              //           ),
-                              //         ))
-                              //     : null;
+                              songList.isNotEmpty
+                                  ? Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => PlayerScreen(
+                                          songs: songList,
+                                        ),
+                                      ))
+                                  : null;
                             },
                             child: CircleAvatar(
                               backgroundColor: colorList[colorIndex],
@@ -227,14 +226,14 @@ class _NewAlbumOrPlaylistScreenState extends State<NewAlbumOrPlaylistScreen> {
 
                 return ListTile(
                   onTap: () {
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) => PlayerScreen(
-                    //         songs: widget.songModel,
-                    //         initialIndex: index,
-                    //       ),
-                    //     ));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PlayerScreen(
+                            songs: songList,
+                            initialIndex: index,
+                          ),
+                        ));
                   },
                   leading: ClipRRect(
                     borderRadius: BorderRadius.circular(5),

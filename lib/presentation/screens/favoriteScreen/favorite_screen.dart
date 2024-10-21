@@ -3,14 +3,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/main.dart';
-import 'package:musiq/models/song_model.dart';
+import 'package:musiq/models/song_model/song.dart';
 import 'package:musiq/presentation/commanWidgets/custom_app_bar.dart';
 import 'package:musiq/presentation/commanWidgets/favorite_icon.dart';
 import 'package:musiq/bloc/favorite_bloc/favorite_bloc.dart';
 import 'package:musiq/presentation/screens/player_screen/bottomPlayer/bottom_player.dart';
-import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 
 class FavoriteScreen extends StatelessWidget {
   FavoriteScreen({super.key});
@@ -49,7 +47,7 @@ class FavoriteScreen extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           } else if (state is FeatchFavoriteSuccess) {
-            List<SongModel> sortedFavorites = _sortFavorites(state.favorites);
+            List<Song> sortedFavorites = _sortFavorites(state.favorites);
 
             return sortedFavorites.isEmpty
                 ? const Center(
@@ -61,15 +59,15 @@ class FavoriteScreen extends StatelessWidget {
                         itemCount: sortedFavorites.length,
                         itemBuilder: (context, index) {
                           return ListTile(
-                            onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => PlayerScreen(
-                                  songs: sortedFavorites,
-                                  initialIndex: index,
-                                ),
-                              ),
-                            ),
+                            // onTap: () => Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => PlayerScreen(
+                            //       songs: sortedFavorites,
+                            //       initialIndex: index,
+                            //     ),
+                            //   ),
+                            // ),
                             trailing: FavoriteIcon(
                               song: sortedFavorites[index],
                             ),
@@ -79,7 +77,7 @@ class FavoriteScreen extends StatelessWidget {
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                   image: CachedNetworkImageProvider(
-                                    sortedFavorites[index].imageUrl,
+                                    sortedFavorites[index].image?.last.imageUrl??"",
                                   ),
                                   fit: BoxFit.fill,
                                 ),
@@ -87,11 +85,11 @@ class FavoriteScreen extends StatelessWidget {
                               ),
                             ),
                             title: Text(
-                              sortedFavorites[index].title,
+                              sortedFavorites[index].name??"No",
                               maxLines: 1,
                             ),
                             subtitle: Text(
-                              sortedFavorites[index].album,
+                              sortedFavorites[index].album?.name??"No",
                               maxLines: 1,
                             ),
                           );
@@ -101,18 +99,18 @@ class FavoriteScreen extends StatelessWidget {
                         right: 45,
                         bottom: 145,
                         child: GestureDetector(
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => PlayerScreen(
-                                songs: sortedFavorites,
-                                initialIndex: getRandomSongIndex(
-                                  songList: sortedFavorites,
-                                ),
-                                shuffle: true,
-                              ),
-                            ),
-                          ),
+                          // onTap: () => Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) => PlayerScreen(
+                          //       songs: sortedFavorites,
+                          //       initialIndex: getRandomSongIndex(
+                          //         songList: sortedFavorites,
+                          //       ),
+                          //       shuffle: true,
+                          //     ),
+                          //   ),
+                          // ),
                           child: Container(
                             padding: EdgeInsets.all(14),
                             decoration: BoxDecoration(
@@ -131,7 +129,7 @@ class FavoriteScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      ValueListenableBuilder<List<SongModel>>(
+                      ValueListenableBuilder<List<Song>>(
                         valueListenable: lastplayedSongNotifier,
                         builder: (context, lastPlayedSongs, _) {
                           if (lastPlayedSongs.isNotEmpty) {
@@ -154,15 +152,15 @@ class FavoriteScreen extends StatelessWidget {
     );
   }
 
-  List<SongModel> _sortFavorites(List<SongModel> favorites) {
-    List<SongModel> sortedFavorites = List.from(favorites);
+  List<Song> _sortFavorites(List<Song> favorites) {
+    List<Song> sortedFavorites = List.from(favorites);
 
     switch (_currentSortOption) {
       case 'name_asc':
-        sortedFavorites.sort((a, b) => a.title.compareTo(b.title));
+        sortedFavorites.sort((a, b) => a.name!.compareTo(b.name!));
         break;
       case 'name_desc':
-        sortedFavorites.sort((a, b) => b.title.compareTo(a.title));
+        sortedFavorites.sort((a, b) => b.name!.compareTo(a.name!));
         break;
       case 'time_asc':
         sortedFavorites.sort(

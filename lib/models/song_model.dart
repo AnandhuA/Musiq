@@ -1,7 +1,6 @@
 
 import 'package:hive/hive.dart';
 
-part 'song_model.g.dart'; // Generated adapter file
 
 @HiveType(typeId: 1)
 class SongModel extends HiveObject {

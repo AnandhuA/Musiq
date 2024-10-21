@@ -7,11 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:musiq/core/colors.dart';
+import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/main.dart';
-import 'package:musiq/models/song_model.dart';
+import 'package:musiq/models/song_model/song.dart';
 import 'package:musiq/presentation/commanWidgets/custom_app_bar.dart';
-import 'package:musiq/presentation/commanWidgets/favorite_icon.dart';
 import 'package:musiq/presentation/screens/player_screen/cubit/PlayAndPause/play_and_pause_cubit.dart';
 import 'package:musiq/presentation/screens/player_screen/cubit/ProgressBar/progress_bar_cubit.dart';
 import 'package:musiq/presentation/screens/player_screen/widgets/progress_bar_widget.dart';
@@ -19,7 +19,7 @@ import 'package:musiq/presentation/screens/player_screen/widgets/progress_bar_wi
 int currentSongIndex = 0;
 
 class PlayerScreen extends StatefulWidget {
-  final List<SongModel> songs;
+  final List<Song> songs;
   final int initialIndex;
   final Duration currentpostion;
   final bool shuffle;
@@ -43,7 +43,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
   late bool _shuffle;
   // bool _loading = false;
 
-  SongModel get currentSong => widget.songs[currentSongIndex];
+  Song get currentSong => widget.songs[currentSongIndex];
 
   @override
   void initState() {
@@ -89,13 +89,13 @@ class _PlayerScreenState extends State<PlayerScreen> {
     audioHandler.setMediaItems(
       mediaItems: widget.songs
           .map((song) => MediaItem(
-                id: song.url,
-                album: song.album,
-                title: song.title,
-                displayTitle: song.title,
-                duration: Duration(seconds: song.duration),
-                artist: song.subtitle,
-                artUri: Uri.parse(song.imageUrl),
+                id: song.downloadUrl?.last.link ?? "",
+                album: song.album?.name ?? "No ",
+                title: song.label ?? "No ",
+                displayTitle: song.name,
+                duration: Duration(seconds: song.duration ?? 0),
+                artUri: Uri.parse(song.image?.last.imageUrl ??
+                    errorImage()),
               ))
           .toList(),
       currentIndex: currentSongIndex,
@@ -126,7 +126,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
     _playSong(widget.songs[currentSongIndex]);
   }
 
-  void _playSong(SongModel song) async {
+  void _playSong(Song song) async {
     await audioHandler.stop();
     await audioHandler.playCurrentSong();
   }
@@ -200,7 +200,9 @@ class _PlayerScreenState extends State<PlayerScreen> {
                 height: double.infinity,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: CachedNetworkImageProvider(currentSong.imageUrl),
+                    image: CachedNetworkImageProvider(currentSong
+                            .image?.first.imageUrl ??
+                        errorImage()),
                     alignment: isMobile(context)
                         ? const Alignment(1, -2)
                         : const Alignment(1, 20),
@@ -223,7 +225,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
-                            CustomAppBar(title: currentSong.album),
+                            CustomAppBar(title: currentSong.label ?? "NO"),
                             constHeight30,
                             Container(
                               height: screenHeight * 0.3,
@@ -233,7 +235,8 @@ class _PlayerScreenState extends State<PlayerScreen> {
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                   image: CachedNetworkImageProvider(
-                                    currentSong.imageUrl,
+                                    currentSong.image?.last.imageUrl ??
+                                        errorImage(),
                                   ),
                                   fit: BoxFit.fill,
                                 ),
@@ -244,7 +247,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                             ),
                             SizedBox(height: isMobile(context) ? 40 : 20),
                             Text(
-                              currentSong.title,
+                              currentSong.name ?? "NO",
                               style: TextStyle(
                                 fontSize: isMobile(context) ? 35 : 50,
                               ),
@@ -254,7 +257,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                             ),
                             SizedBox(height: isMobile(context) ? 15 : 10),
                             Text(
-                              currentSong.subtitle,
+                              currentSong.label ?? "No",
                               maxLines: 1,
                               overflow: TextOverflow.fade,
                               softWrap: false,
@@ -267,7 +270,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                   onPressed: () {},
                                   icon: Icon(Icons.add_circle_outline_sharp),
                                 ),
-                                FavoriteIcon(song: currentSong),
+                                // FavoriteIcon(song: currentSong),
                               ],
                             ),
                             constHeight10,
@@ -276,8 +279,9 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                 if (state is ProgressBarInitial) {
                                   return ProgressBarWidget(
                                     songDuration: Duration(
-                                      seconds: widget
-                                          .songs[currentSongIndex].duration,
+                                      seconds: widget.songs[currentSongIndex]
+                                              .duration ??
+                                          0,
                                     ),
                                     audioPlayer: audioHandler,
                                     progressDuration: state.progressDuration,
@@ -285,8 +289,9 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                 }
                                 return ProgressBarWidget(
                                   songDuration: Duration(
-                                    seconds:
-                                        widget.songs[currentSongIndex].duration,
+                                    seconds: widget
+                                            .songs[currentSongIndex].duration ??
+                                        0,
                                   ),
                                   audioPlayer: audioHandler,
                                   progressDuration: Duration.zero,
@@ -477,13 +482,15 @@ class _PlayerScreenState extends State<PlayerScreen> {
                         audioHandler.setMediaItems(
                           mediaItems: widget.songs
                               .map((song) => MediaItem(
-                                    id: song.url,
-                                    album: song.album,
-                                    title: song.title,
-                                    displayTitle: song.title,
-                                    duration: Duration(seconds: song.duration),
-                                    artist: song.subtitle,
-                                    artUri: Uri.parse(song.imageUrl),
+                                    id: song.downloadUrl?.last.link ?? "",
+                                    album: song.album?.name ?? "No ",
+                                    title: song.label ?? "No ",
+                                    displayTitle: song.name,
+                                    duration:
+                                        Duration(seconds: song.duration ?? 0),
+                                    artUri: Uri.parse(song
+                                            .image?.last.imageUrl ??
+                                        errorImage()),
                                   ))
                               .toList(),
                           currentIndex: currentSongIndex,
@@ -521,7 +528,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                       width: 50,
                                     )
                                   : const SizedBox(),
-                              FavoriteIcon(song: widget.songs[index]),
+                              // FavoriteIcon(song: widget.songs[index]),
                             ],
                           ),
                           leading: Container(
@@ -529,14 +536,15 @@ class _PlayerScreenState extends State<PlayerScreen> {
                             decoration: BoxDecoration(
                               image: DecorationImage(
                                 image: CachedNetworkImageProvider(
-                                    widget.songs[index].imageUrl),
+                                    widget.songs[index].image?.last.imageUrl ??
+                                        ""),
                                 fit: BoxFit.fill,
                               ),
                               borderRadius: BorderRadius.circular(5),
                             ),
                           ),
                           title: Text(
-                            widget.songs[index].title,
+                            widget.songs[index].name ?? "No",
                             maxLines: 1,
                             style: TextStyle(
                               color: currentSongIndex == index
@@ -545,7 +553,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                             ),
                           ),
                           subtitle: Text(
-                            widget.songs[index].subtitle,
+                            widget.songs[index].label ?? "No",
                             maxLines: 1,
                             style: TextStyle(
                               color: currentSongIndex == index
@@ -591,13 +599,13 @@ class _PlayerScreenState extends State<PlayerScreen> {
             audioHandler.setMediaItems(
                 mediaItems: widget.songs
                     .map((song) => MediaItem(
-                          id: song.url,
-                          album: song.album,
-                          title: song.title,
-                          displayTitle: song.title,
-                          duration: Duration(seconds: song.duration),
-                          artist: song.subtitle,
-                          artUri: Uri.parse(song.imageUrl),
+                          id: song.downloadUrl?.last.link ?? "",
+                          album: song.album?.name ?? "No ",
+                          title: song.label ?? "No ",
+                          displayTitle: song.name,
+                          duration: Duration(seconds: song.duration ?? 0),
+                          artUri: Uri.parse(song.image?.last.imageUrl ??
+                              errorImage()),
                         ))
                     .toList(),
                 currentIndex: currentSongIndex,
@@ -632,9 +640,9 @@ class _PlayerScreenState extends State<PlayerScreen> {
                         height: 50,
                         width: 50)
                     : const SizedBox(),
-                FavoriteIcon(
-                  song: widget.songs[index],
-                ),
+                // FavoriteIcon(
+                //   song: widget.songs[index],
+                // ),
               ],
             ),
             leading: Container(
@@ -642,7 +650,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: CachedNetworkImageProvider(
-                    widget.songs[index].imageUrl,
+                    widget.songs[index].image?.last.imageUrl ?? "",
                   ),
                   fit: BoxFit.fill,
                 ),
@@ -650,14 +658,14 @@ class _PlayerScreenState extends State<PlayerScreen> {
               ),
             ),
             title: Text(
-              widget.songs[index].title,
+              widget.songs[index].name ?? "No",
               maxLines: 1,
               style: TextStyle(
                 color: currentSongIndex == index ? colorList[colorIndex] : null,
               ),
             ),
             subtitle: Text(
-              widget.songs[index].subtitle,
+              widget.songs[index].label ?? "No",
               maxLines: 1,
               style: TextStyle(
                 color: currentSongIndex == index ? colorList[colorIndex] : null,

@@ -5,11 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/bloc/FeatchSong/featch_song_cubit.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/main.dart';
-import 'package:musiq/models/song_model.dart';
+import 'package:musiq/models/song_model/song.dart';
 import 'package:musiq/presentation/commanWidgets/textfeild.dart';
-import 'package:musiq/presentation/screens/player_screen/bottomPlayer/bottom_player.dart';
-import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 import 'package:musiq/bloc/SearchSong/search_song_bloc.dart';
+import 'package:musiq/presentation/screens/player_screen/bottomPlayer/bottom_player.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -229,65 +228,65 @@ class SearchScreenState extends State<SearchScreen> {
                           return Center(child: Text('Error occurred.'));
                         } else if (state is SearchSongSuccess) {
                           final searchResult = state.searchResult;
-                          final songList = state.songModel;
+                          // final songList = state.songModel;
 
                           return ListView(
                             children: [
                               // Show Songs if "All" or "Songs" is selected
-                              if ((selectedFilter == "All" ||
-                                      selectedFilter == "Songs") &&
-                                  songList.isNotEmpty) ...[
-                                Text(
-                                  '   Songs',
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: colorList[colorIndex]),
-                                ),
-                                ...songList.map((song) => ListTile(
-                                      title: Text(
-                                        song.title,
-                                        maxLines: 1,
-                                      ),
-                                      subtitle: Text(
-                                        song.subtitle,
-                                        maxLines: 1,
-                                      ),
-                                      leading: CachedNetworkImage(
-                                        imageUrl: song.imageUrl,
-                                        placeholder: (context, url) => song
-                                                    .type ==
-                                                "Artist"
-                                            ? Image.asset(
-                                                "assets/images/artist.png")
-                                            : song.type == "album"
-                                                ? Image.asset(
-                                                    "assets/images/album.png")
-                                                : Image.asset(
-                                                    "assets/images/song.png"),
-                                        errorWidget: (context, url, error) => song
-                                                    .type ==
-                                                "Artist"
-                                            ? Image.asset(
-                                                "assets/images/artist.png")
-                                            : song.type == "album"
-                                                ? Image.asset(
-                                                    "assets/images/album.png")
-                                                : Image.asset(
-                                                    "assets/images/song.png"),
-                                      ),
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  PlayerScreen(
-                                                songs: [song],
-                                              ),
-                                            ));
-                                      },
-                                    )),
-                              ],
+                              // if ((selectedFilter == "All" ||
+                              //         selectedFilter == "Songs") &&
+                              //     songList.isNotEmpty) ...[
+                              //   Text(
+                              //     '   Songs',
+                              //     style: TextStyle(
+                              //         fontSize: 18,
+                              //         fontWeight: FontWeight.bold,
+                              //         color: colorList[colorIndex]),
+                              //   ),
+                              //   ...songList.map((song) => ListTile(
+                              //         title: Text(
+                              //           song.title,
+                              //           maxLines: 1,
+                              //         ),
+                              //         subtitle: Text(
+                              //           song.subtitle,
+                              //           maxLines: 1,
+                              //         ),
+                              //         leading: CachedNetworkImage(
+                              //           imageUrl: song.imageUrl,
+                              //           placeholder: (context, url) => song
+                              //                       .type ==
+                              //                   "Artist"
+                              //               ? Image.asset(
+                              //                   "assets/images/artist.png")
+                              //               : song.type == "album"
+                              //                   ? Image.asset(
+                              //                       "assets/images/album.png")
+                              //                   : Image.asset(
+                              //                       "assets/images/song.png"),
+                              //           errorWidget: (context, url, error) => song
+                              //                       .type ==
+                              //                   "Artist"
+                              //               ? Image.asset(
+                              //                   "assets/images/artist.png")
+                              //               : song.type == "album"
+                              //                   ? Image.asset(
+                              //                       "assets/images/album.png")
+                              //                   : Image.asset(
+                              //                       "assets/images/song.png"),
+                              //         ),
+                              //         onTap: () {
+                              //           // Navigator.push(
+                              //           //     context,
+                              //           //     MaterialPageRoute(
+                              //           //       builder: (context) =>
+                              //           //           PlayerScreen(
+                              //           //         songs: [song],
+                              //           //       ),
+                              //           //     ));
+                              //         },
+                              //       )),
+                              // ],
                               // Show Albums if "All" or "Albums" is selected
                               if ((selectedFilter == "All" ||
                                       selectedFilter == "Albums") &&
@@ -410,7 +409,7 @@ class SearchScreenState extends State<SearchScreen> {
                 ],
               ),
             ),
-            ValueListenableBuilder<List<SongModel>>(
+            ValueListenableBuilder<List<Song>>(
               valueListenable: lastplayedSongNotifier,
               builder: (context, lastPlayedSongs, _) {
                 if (lastPlayedSongs.isNotEmpty) {

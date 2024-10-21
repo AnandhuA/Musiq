@@ -8,11 +8,9 @@ import 'package:musiq/bloc/FeatchSong/featch_song_cubit.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/main.dart';
-import 'package:musiq/presentation/screens/LibraryScreen/last_played_list.dart';
 import 'package:musiq/presentation/screens/album_or_playlist_screen/album_or_playlist_screen.dart';
 import 'package:musiq/presentation/screens/favoriteScreen/favorite_screen.dart';
 import 'package:musiq/presentation/screens/loginScreen/login_screen.dart';
-import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 
 class LibraryScreen extends StatelessWidget {
   const LibraryScreen({super.key});
@@ -39,14 +37,14 @@ class LibraryScreen extends StatelessWidget {
             );
           } else if (state is FeatchSongLoaded) {
             Navigator.pop(context); // for close loading
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PlayerScreen(
-                    songs: state.songModel,
+            // Navigator.push(
+            //     context,
+            //     MaterialPageRoute(
+            //       builder: (context) => PlayerScreen(
+            //         songs: state.songModel,
                    
-                  ),
-                ));
+            //       ),
+            //     ));
           } else if (state is FeatchAlbumOrPlayList) {
             Navigator.pop(context); // for close loading
             Navigator.push(
@@ -100,18 +98,18 @@ class LibraryScreen extends StatelessWidget {
                     title: Text("Favorite Songs"),
                   ),
                   constHeight10,
-                  ListTile(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => LastPlayedList(),
-                        ),
-                      );
-                    },
-                    leading: Icon(Icons.history),
-                    title: Text("Last Played"),
-                  ),
+                  // ListTile(
+                  //   onTap: () {
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //         builder: (context) => LastPlayedList(),
+                  //       ),
+                  //     );
+                  //   },
+                  //   leading: Icon(Icons.history),
+                  //   title: Text("Last Played"),
+                  // ),
                   Divider(),
                   constHeight10,
                   Expanded(

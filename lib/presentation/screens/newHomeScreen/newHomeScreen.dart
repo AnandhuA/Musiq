@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/bloc/FeatchAlbumAndPlayList/featch_album_and_play_list_cubit.dart';
 import 'package:musiq/bloc/home_screen_cubit/home_screen_cubit.dart';
 import 'package:musiq/core/colors.dart';
+import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/data/savan_2.0.dart';
 import 'package:musiq/main.dart';
 import 'package:musiq/presentation/screens/album_or_playlist_screen/new_album_or_playlist_screen.dart';
@@ -75,13 +76,14 @@ class Newhomescreen extends StatelessWidget {
                             return GestureDetector(
                               onTap: () {
                                 log("${data.type}");
+                               
                                 context
                                     .read<FeatchAlbumAndPlayListCubit>()
                                     .fetchData(
                                         type: data.type ?? "",
                                         id: data.id ?? "0",
                                         imageUrl: data.image!.last.imageUrl ??
-                                            "https://e7.pngegg.com/pngimages/945/333/png-clipart-music-songwriter-logo-art-black-miscellaneous-text-thumbnail.png");
+                                           errorImage());
                               },
                               child: Container(
                                 margin: EdgeInsets.all(10),

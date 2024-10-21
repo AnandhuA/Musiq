@@ -6,7 +6,7 @@ import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/bloc/favorite_bloc/favorite_bloc.dart';
 import 'package:musiq/main.dart';
-import 'package:musiq/models/song_model.dart';
+import 'package:musiq/models/song_model/song.dart';
 import 'package:musiq/presentation/commanWidgets/textfeild.dart';
 import 'package:musiq/presentation/screens/newHomeScreen/newHomeScreen.dart';
 import 'package:musiq/presentation/screens/player_screen/bottomPlayer/bottom_player.dart';
@@ -157,7 +157,7 @@ class MainPageState extends State<MainPage> {
                         ),
                       ],
                     ),
-                    ValueListenableBuilder<List<SongModel>>(
+                    ValueListenableBuilder<List<Song>>(
                       valueListenable: lastplayedSongNotifier,
                       builder: (context, lastPlayedSongs, _) {
                         if (lastPlayedSongs.isNotEmpty) {
@@ -214,7 +214,7 @@ class MainPageState extends State<MainPage> {
                         child: _widgetOptions.elementAt(_selectedIndex),
                       ),
                     ),
-                    ValueListenableBuilder<List<SongModel>>(
+                    ValueListenableBuilder<List<Song>>(
                       valueListenable: lastplayedSongNotifier,
                       builder: (context, lastPlayedSongs, _) {
                         if (lastPlayedSongs.isNotEmpty) {

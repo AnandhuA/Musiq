@@ -23,6 +23,7 @@ class Song {
   Artists? artists;
   List<Image>? image;
   List<DownloadUrl>? downloadUrl;
+    DateTime? addedAt;
 
   Song({
     this.id,
@@ -43,6 +44,7 @@ class Song {
     this.artists,
     this.image,
     this.downloadUrl,
+    this.addedAt,
   });
 
   factory Song.fromJson(Map<String, dynamic> json) => Song(
@@ -72,6 +74,9 @@ class Song {
         downloadUrl: (json['downloadUrl'] as List<dynamic>?)
             ?.map((e) => DownloadUrl.fromJson(e as Map<String, dynamic>))
             .toList(),
+            addedAt: json['addedAt'] != null
+            ? DateTime.parse(json['addedAt']) // Parse if exists
+            : null,
       );
 
   Map<String, dynamic> toJson() => {
@@ -93,5 +98,6 @@ class Song {
         'artists': artists?.toJson(),
         'image': image?.map((e) => e.toJson()).toList(),
         'downloadUrl': downloadUrl?.map((e) => e.toJson()).toList(),
+         'addedAt': addedAt?.toIso8601String(),
       };
 }

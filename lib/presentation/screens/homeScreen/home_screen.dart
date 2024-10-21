@@ -11,7 +11,6 @@ import 'package:musiq/presentation/screens/album_or_playlist_screen/album_or_pla
 import 'package:musiq/bloc/FeatchSong/featch_song_cubit.dart';
 import 'package:musiq/presentation/screens/homeScreen/widgets/horzontal_song_list_widget.dart';
 import 'package:musiq/presentation/screens/homeScreen/widgets/tag_mix_widget.dart';
-import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 import 'package:musiq/bloc/ThemeCubit/theme_cubit.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -46,14 +45,14 @@ class HomeScreen extends StatelessWidget {
                           },
                         );
                       } else if (state is FeatchSongLoaded) {
-                        Navigator.pop(context); // for close loading
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => PlayerScreen(
-                                songs: state.songModel,
-                              ),
-                            ));
+                        // Navigator.pop(context); // for close loading
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //       builder: (context) => PlayerScreen(
+                        //         songs: state.songModel,
+                        //       ),
+                        //     ));
                       } else if (state is FeatchAlbumOrPlayList) {
                         Navigator.pop(context); // for close loading
                         Navigator.push(
@@ -295,16 +294,16 @@ class HomeScreen extends StatelessWidget {
                                                 maxLines: 1,
                                               ),
                                               onTap: () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        PlayerScreen(
-                                                      songs: state.lastplayed,
-                                                      initialIndex: index,
-                                                    ),
-                                                  ),
-                                                );
+                                                // Navigator.push(
+                                                //   context,
+                                                //   MaterialPageRoute(
+                                                //     builder: (context) =>
+                                                //         PlayerScreen(
+                                                //       songs: state.lastplayed,
+                                                //       initialIndex: index,
+                                                //     ),
+                                                //   ),
+                                                // );
                                               },
                                               trailing: IconButton(
                                                   onPressed: () {},

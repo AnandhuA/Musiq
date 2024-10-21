@@ -6,10 +6,9 @@ import 'package:musiq/data/add_to_library_funtions.dart';
 import 'package:musiq/main.dart';
 import 'package:musiq/models/library_model.dart';
 import 'package:musiq/models/song_model.dart';
-import 'package:musiq/presentation/commanWidgets/favorite_icon.dart';
+import 'package:musiq/models/song_model/song.dart';
 import 'package:musiq/presentation/commanWidgets/snack_bar.dart';
 import 'package:musiq/presentation/screens/player_screen/bottomPlayer/bottom_player.dart';
-import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 
 class AlbumOrPlaylistScreen extends StatefulWidget {
   final List<SongModel> songModel;
@@ -191,15 +190,15 @@ class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
                               Spacer(),
                               GestureDetector(
                                 onTap: () {
-                                  widget.songModel.isNotEmpty
-                                      ? Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => PlayerScreen(
-                                              songs: widget.songModel,
-                                            ),
-                                          ))
-                                      : null;
+                                  // widget.songModel.isNotEmpty
+                                  //     ? Navigator.push(
+                                  //         context,
+                                  //         MaterialPageRoute(
+                                  //           builder: (context) => PlayerScreen(
+                                  //             songs: widget.songModel,
+                                  //           ),
+                                  //         ))
+                                  //     : null;
                                 },
                                 child: CircleAvatar(
                                   backgroundColor: colorList[colorIndex],
@@ -232,14 +231,14 @@ class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
                     final song = widget.songModel[index];
                     return ListTile(
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => PlayerScreen(
-                                songs: widget.songModel,
-                                initialIndex: index,
-                              ),
-                            ));
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //       builder: (context) => PlayerScreen(
+                        //         songs: widget.songModel,
+                        //         initialIndex: index,
+                        //       ),
+                        //     ));
                       },
                       leading: ClipRRect(
                         borderRadius: BorderRadius.circular(5),
@@ -267,14 +266,14 @@ class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
                         song.subtitle,
                         maxLines: 1,
                       ),
-                      trailing: FavoriteIcon(song: song),
+                      // trailing: FavoriteIcon(song: song),
                     );
                   },
                 ),
               ),
             ],
           ),
-          ValueListenableBuilder<List<SongModel>>(
+          ValueListenableBuilder<List<Song>>(
             valueListenable: lastplayedSongNotifier,
             builder: (context, lastPlayedSongs, _) {
               if (lastPlayedSongs.isNotEmpty) {

@@ -30,3 +30,7 @@ int getRandomSongIndex({required List songList}) {
   final random = Random();
   return random.nextInt(songList.length);
 }
+
+String errorImage() {
+  return "https://e7.pngegg.com/pngimages/945/333/png-clipart-music-songwriter-logo-art-black-miscellaneous-text-thumbnail.png";
+}

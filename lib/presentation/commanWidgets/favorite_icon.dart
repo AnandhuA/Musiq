@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/main.dart';
-import 'package:musiq/models/song_model.dart';
 import 'package:musiq/bloc/favorite_bloc/favorite_bloc.dart';
+import 'package:musiq/models/song_model/song.dart';
 import 'package:musiq/presentation/screens/loginScreen/login_screen.dart';
 
 class FavoriteIcon extends StatelessWidget {
-  final SongModel song;
+  final Song song;
   const FavoriteIcon({
     super.key,
     required this.song,

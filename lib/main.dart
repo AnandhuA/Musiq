@@ -4,13 +4,12 @@ import 'package:audio_service/audio_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive_flutter/adapters.dart';
 import 'package:musiq/bloc/FeatchAlbumAndPlayList/featch_album_and_play_list_cubit.dart';
 import 'package:musiq/bloc/FeatchLibraty/featch_library_cubit.dart';
 import 'package:musiq/core/theme.dart';
-import 'package:musiq/models/song_model.dart';
 import 'package:musiq/bloc/favorite_bloc/favorite_bloc.dart';
 import 'package:musiq/bloc/home_screen_cubit/home_screen_cubit.dart';
+import 'package:musiq/models/song_model/song.dart';
 import 'package:musiq/presentation/screens/loginScreen/bloc/login_bloc.dart';
 import 'package:musiq/bloc/FeatchSong/featch_song_cubit.dart';
 import 'package:musiq/presentation/screens/player_screen/cubit/PlayAndPause/play_and_pause_cubit.dart';
@@ -25,7 +24,7 @@ import 'package:uni_links2/uni_links.dart';
 String? theme;
 int colorIndex = 0;
 String? userIsLoggedIn;
-ValueNotifier<List<SongModel>> lastplayedSongNotifier = ValueNotifier([]);
+ValueNotifier<List<Song>> lastplayedSongNotifier = ValueNotifier([]);
 late final AudioPlayerHandler audioHandler;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,9 +32,9 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await Hive.initFlutter();
-  Hive.registerAdapter(SongModelAdapter());
-  await Hive.openBox<SongModel>('lastPlayedBox');
+  // await Hive.initFlutter();
+  // // Hive.registerAdapter(SongModelAdapter());
+  // await Hive.openBox<SongModel>('lastPlayedBox');
 
   runApp(const MyApp());
 }

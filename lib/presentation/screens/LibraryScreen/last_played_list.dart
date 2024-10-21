@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/data/hive_funtion.dart';
 import 'package:musiq/main.dart';
-import 'package:musiq/models/song_model.dart';
-import 'package:musiq/presentation/commanWidgets/favorite_icon.dart';
+import 'package:musiq/models/song_model/song.dart';
 import 'package:musiq/presentation/screens/player_screen/bottomPlayer/bottom_player.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 
@@ -16,7 +16,7 @@ class LastPlayedList extends StatefulWidget {
 
 class _LastPlayedListState extends State<LastPlayedList> {
   final TextEditingController searchController = TextEditingController();
-  List<SongModel> lastplayed = [];
+  List<Song> lastplayed = [];
   @override
   void initState() {
     featchLastplayed();
@@ -24,7 +24,7 @@ class _LastPlayedListState extends State<LastPlayedList> {
   }
 
   featchLastplayed() async {
-    lastplayed = await LastPlayedRepo.fetchLastPlayed();
+    // lastplayed = await LastPlayedRepo.fetchLastPlayed();
     setState(() {});
   }
 
@@ -73,9 +73,9 @@ class _LastPlayedListState extends State<LastPlayedList> {
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            FavoriteIcon(
-                              song: lastplayed[index],
-                            ),
+                            // FavoriteIcon(
+                            //   song: lastplayed[index],
+                            // ),
                             IconButton(
                                 onPressed: () {}, icon: Icon(Icons.more_vert)),
                           ],
@@ -86,7 +86,7 @@ class _LastPlayedListState extends State<LastPlayedList> {
                           decoration: BoxDecoration(
                             image: DecorationImage(
                               image: CachedNetworkImageProvider(
-                                lastplayed[index].imageUrl,
+                                lastplayed[index].image?.last.imageUrl??errorImage(),
                               ),
                               fit: BoxFit.fill,
                             ),
@@ -94,17 +94,17 @@ class _LastPlayedListState extends State<LastPlayedList> {
                           ),
                         ),
                         title: Text(
-                          lastplayed[index].title,
+                          lastplayed[index].name??"No",
                           maxLines: 1,
                         ),
                         subtitle: Text(
-                          lastplayed[index].album,
+                          lastplayed[index].label??"No",
                           maxLines: 1,
                         ),
                       );
                     },
                   ),
-             ValueListenableBuilder<List<SongModel>>(
+             ValueListenableBuilder<List<Song>>(
               valueListenable: lastplayedSongNotifier,
               builder: (context, lastPlayedSongs, _) {
                

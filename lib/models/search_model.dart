@@ -1,10 +1,10 @@
-import 'package:musiq/models/song_model.dart';
+import 'package:musiq/models/song_model/song.dart';
 
 class SearchModel {
   final List<Album>? albums;
   final List<Playlist>? playlists;
   final List<Artist>? artists;
-  final List<SongModel>? songs;
+  final List<Song>? songs;
   final Map<dynamic, String>? categories;
 
   SearchModel({
@@ -28,8 +28,7 @@ class SearchModel {
           ? List<Artist>.from(json[0]['Artists'].map((x) => Artist.fromJson(x)))
           : null,
       songs: json[0]['Songs'] != null
-          ? List<SongModel>.from(
-              json[0]['Songs'].map((x) => SongModel.fromJson(x)))
+          ? List<Song>.from(json[0]['Songs'].map((x) => Song.fromJson(x)))
           : null,
       categories: json[1] != null
           ? Map<String, String>.from(

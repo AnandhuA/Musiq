@@ -3,13 +3,13 @@ import 'package:just_audio/just_audio.dart';
 import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/data/hive_funtion.dart';
 import 'package:musiq/main.dart';
-import 'package:musiq/models/song_model.dart';
+import 'package:musiq/models/song_model/song.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 
 class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   final AudioPlayer _player;
   List<MediaItem> _mediaItems = [];
-  List<SongModel> _songList = [];
+  List<Song> _songList = [];
   bool _isShuffled = false;
 
   AudioPlayerHandler() : _player = AudioPlayer() {
@@ -108,7 +108,7 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   void setMediaItems({
     required List<MediaItem> mediaItems,
     required int currentIndex,
-    required List<SongModel> songList,
+    required List<Song> songList,
   }) {
     _mediaItems = mediaItems;
     currentSongIndex = currentIndex;

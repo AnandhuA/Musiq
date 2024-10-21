@@ -6,6 +6,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:musiq/core/colors.dart';
+import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/main.dart';
 import 'package:musiq/presentation/screens/player_screen/cubit/PlayAndPause/play_and_pause_cubit.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
@@ -69,10 +70,10 @@ class _MiniPlayerState extends State<MiniPlayer> {
 
   void _updateCurrentSongInfo() {
     if (lastplayedSongNotifier.value.isNotEmpty) {
-      _currentSongTitle = lastplayedSongNotifier.value[currentSongIndex].title;
+      _currentSongTitle = lastplayedSongNotifier.value[currentSongIndex].name??"No";
       _currentSongSubTitle =
-          lastplayedSongNotifier.value[currentSongIndex].subtitle;
-      _imgUrl = lastplayedSongNotifier.value[currentSongIndex].imageUrl;
+          lastplayedSongNotifier.value[currentSongIndex].label??"No";
+      _imgUrl = lastplayedSongNotifier.value[currentSongIndex].image?.last.imageUrl??errorImage();
     }
   }
 

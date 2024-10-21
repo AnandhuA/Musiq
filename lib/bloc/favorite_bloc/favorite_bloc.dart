@@ -2,14 +2,13 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:musiq/data/favorite_song_functions.dart';
-import 'package:musiq/models/song_model.dart';
+import 'package:musiq/models/song_model/song.dart';
 
 part 'favorite_event.dart';
 part 'favorite_state.dart';
 
 class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
-  List<SongModel> _favorites = [];
+  List<Song> _favorites = [];
   FavoriteBloc() : super(FavoriteInitial()) {
     on<FeatchFavoriteSongEvent>(_featchFavorite);
     on<AddFavoriteEvent>(_addFavorite);
@@ -23,7 +22,7 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
     Emitter<FavoriteState> emit,
   ) async {
     emit(FavoriteLoading());
-    _favorites = await FavoriteSongRepo.fetchFavorites();
+    // _favorites = await FavoriteSongRepo.fetchFavorites();
     emit(FeatchFavoriteSuccess(favorites: _favorites));
   }
 
@@ -33,7 +32,7 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
   ) async {
     emit(FavoriteLoading());
     _favorites.add(event.song);
-    FavoriteSongRepo.addFavorite(song: event.song);
+    // FavoriteSongRepo.addFavorite(song: event.song);
     emit(FeatchFavoriteSuccess(favorites: _favorites));
   }
 
@@ -43,9 +42,9 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
   ) async {
     emit(FavoriteLoading());
     _favorites.remove(event.song);
-    FavoriteSongRepo.removeFavorite(
-      songID: event.song.id,
-    );
+    // FavoriteSongRepo.removeFavorite(
+    //   songID: event.song.id,
+    // );
     emit(FeatchFavoriteSuccess(favorites: _favorites));
   }
 
@@ -57,7 +56,7 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
 
     final query = event.query.toLowerCase();
     final filteredFavorites = _favorites
-        .where((song) => song.id.toLowerCase().contains(query))
+        .where((song) => song.id!.toLowerCase().contains(query))
         .toList();
 
     emit(FeatchFavoriteSuccess(favorites: filteredFavorites));
@@ -70,8 +69,8 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
 
     if (event.sortType == SortType.name) {
       _favorites.sort((a, b) => event.ascending
-          ? a.title.compareTo(b.title)
-          : b.title.compareTo(a.title));
+          ? a.name!.compareTo(b.name!)
+          : b.name!.compareTo(a.name!));
     } else if (event.sortType == SortType.time) {
       _favorites.sort((a, b) {
         final aTime = a.addedAt ??
