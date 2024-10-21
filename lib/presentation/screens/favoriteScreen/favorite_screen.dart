@@ -3,7 +3,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:musiq/main.dart';
+import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/models/song_model/song.dart';
 import 'package:musiq/presentation/commanWidgets/custom_app_bar.dart';
 import 'package:musiq/presentation/commanWidgets/favorite_icon.dart';
@@ -77,7 +77,11 @@ class FavoriteScreen extends StatelessWidget {
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                   image: CachedNetworkImageProvider(
-                                    sortedFavorites[index].image?.last.imageUrl??"",
+                                    sortedFavorites[index]
+                                            .image
+                                            ?.last
+                                            .imageUrl ??
+                                        "",
                                   ),
                                   fit: BoxFit.fill,
                                 ),
@@ -85,11 +89,11 @@ class FavoriteScreen extends StatelessWidget {
                               ),
                             ),
                             title: Text(
-                              sortedFavorites[index].name??"No",
+                              sortedFavorites[index].name ?? "No",
                               maxLines: 1,
                             ),
                             subtitle: Text(
-                              sortedFavorites[index].album?.name??"No",
+                              sortedFavorites[index].album?.name ?? "No",
                               maxLines: 1,
                             ),
                           );
@@ -130,7 +134,7 @@ class FavoriteScreen extends StatelessWidget {
                         ),
                       ),
                       ValueListenableBuilder<List<Song>>(
-                        valueListenable: lastplayedSongNotifier,
+                        valueListenable: AppGlobals().lastPlayedSongNotifier,
                         builder: (context, lastPlayedSongs, _) {
                           if (lastPlayedSongs.isNotEmpty) {
                             return MiniPlayer(

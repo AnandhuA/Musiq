@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/data/shared_preference.dart';
-import 'package:musiq/main.dart';
-import 'package:musiq/presentation/mainPage.dart/main_page.dart';
+import 'package:musiq/presentation/LayoutPage/layout_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -33,14 +33,14 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void _startApp() async {
     // await SharedPreference.clearAllPreferences();
-    theme = await SharedPreference.getTheme();
-    colorIndex = await SharedPreference.getColorIndex() ?? 0;
-    userIsLoggedIn = FirebaseAuth.instance.currentUser?.email;
+    AppGlobals().theme = await SharedPreference.getTheme();
+    AppGlobals().colorIndex = await SharedPreference.getColorIndex() ?? 0;
+    AppGlobals().userIsLoggedIn = FirebaseAuth.instance.currentUser?.email;
 
     if (!mounted) return;
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
-        builder: (context) => const MainPage(),
+        builder: (context) => const LayOutPage(),
       ),
       (route) => false,
     );

@@ -1,8 +1,8 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/data/hive_funtion.dart';
-import 'package:musiq/main.dart';
 import 'package:musiq/models/song_model/song.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 
@@ -47,7 +47,8 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   void toggleShuffle() {
     _isShuffled = !_isShuffled;
   }
-    bool isShuffleOn() {
+
+  bool isShuffleOn() {
     return _isShuffled;
   }
 
@@ -75,11 +76,11 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   Future<void> skipToNext() async {
     if (_isShuffled) {
       currentSongIndex = getRandomSongIndex(songList: _mediaItems);
-      lastplayedSongNotifier.value = _songList;
+      AppGlobals().lastPlayedSongNotifier.value = _songList;
       await playCurrentSong();
     } else if (currentSongIndex < _mediaItems.length - 1) {
       currentSongIndex++;
-      lastplayedSongNotifier.value = _songList;
+      AppGlobals().lastPlayedSongNotifier.value = _songList;
       await playCurrentSong();
     }
   }
@@ -93,14 +94,12 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
     }
   }
 
-  
-
   Future<void> playCurrentSong() async {
     if (_mediaItems.isNotEmpty) {
       final newMediaItem = _mediaItems[currentSongIndex];
       mediaItem.add(newMediaItem);
       LastPlayedRepo.addToLastPlayedSong(_songList[currentSongIndex]);
-      lastplayedSongNotifier.value = _songList;
+      AppGlobals().lastPlayedSongNotifier.value = _songList;
       await _playUrl(newMediaItem.id);
     }
   }

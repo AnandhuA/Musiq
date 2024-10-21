@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/bloc/FeatchSong/featch_song_cubit.dart';
 import 'package:musiq/core/colors.dart';
-import 'package:musiq/main.dart';
+import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/models/song_model/song.dart';
 import 'package:musiq/presentation/commanWidgets/textfeild.dart';
 import 'package:musiq/bloc/SearchSong/search_song_bloc.dart';
@@ -100,7 +100,7 @@ class SearchScreenState extends State<SearchScreen> {
                           "All",
                           style: TextStyle(
                             color: selectedFilter == "All"
-                                ? colorList[colorIndex]
+                                ? colorList[AppGlobals().colorIndex]
                                 : theme.brightness == Brightness.dark
                                     ? Colors.white
                                     : Colors.black,
@@ -131,7 +131,7 @@ class SearchScreenState extends State<SearchScreen> {
                           "Albums",
                           style: TextStyle(
                             color: selectedFilter == "Albums"
-                                ? colorList[colorIndex]
+                                ? colorList[AppGlobals().colorIndex]
                                 : theme.brightness == Brightness.dark
                                     ? Colors.white
                                     : Colors.black,
@@ -162,7 +162,7 @@ class SearchScreenState extends State<SearchScreen> {
                           "Playlists",
                           style: TextStyle(
                             color: selectedFilter == "Playlists"
-                                ? colorList[colorIndex]
+                                ? colorList[AppGlobals().colorIndex]
                                 : theme.brightness == Brightness.dark
                                     ? Colors.white
                                     : Colors.black,
@@ -193,7 +193,7 @@ class SearchScreenState extends State<SearchScreen> {
                           "Songs",
                           style: TextStyle(
                             color: selectedFilter == "Songs"
-                                ? colorList[colorIndex]
+                                ? colorList[AppGlobals().colorIndex]
                                 : theme.brightness == Brightness.dark
                                     ? Colors.white
                                     : Colors.black,
@@ -297,7 +297,8 @@ class SearchScreenState extends State<SearchScreen> {
                                   style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
-                                      color: colorList[colorIndex]),
+                                      color:
+                                          colorList[AppGlobals().colorIndex]),
                                 ),
                                 ...searchResult.albums!.map((album) => ListTile(
                                       title: Text(
@@ -352,7 +353,8 @@ class SearchScreenState extends State<SearchScreen> {
                                   style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
-                                      color: colorList[colorIndex]),
+                                      color:
+                                          colorList[AppGlobals().colorIndex]),
                                 ),
                                 ...searchResult.playlists!
                                     .map((playlist) => ListTile(
@@ -410,7 +412,7 @@ class SearchScreenState extends State<SearchScreen> {
               ),
             ),
             ValueListenableBuilder<List<Song>>(
-              valueListenable: lastplayedSongNotifier,
+              valueListenable: AppGlobals().lastPlayedSongNotifier,
               builder: (context, lastPlayedSongs, _) {
                 if (lastPlayedSongs.isNotEmpty) {
                   return MiniPlayer(

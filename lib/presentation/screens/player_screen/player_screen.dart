@@ -7,14 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:musiq/core/colors.dart';
+import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/core/sized.dart';
-import 'package:musiq/main.dart';
 import 'package:musiq/models/song_model/song.dart';
 import 'package:musiq/presentation/commanWidgets/custom_app_bar.dart';
 import 'package:musiq/presentation/screens/player_screen/cubit/PlayAndPause/play_and_pause_cubit.dart';
 import 'package:musiq/presentation/screens/player_screen/cubit/ProgressBar/progress_bar_cubit.dart';
 import 'package:musiq/presentation/screens/player_screen/widgets/progress_bar_widget.dart';
+
 
 int currentSongIndex = 0;
 
@@ -49,8 +50,8 @@ class _PlayerScreenState extends State<PlayerScreen> {
   void initState() {
     super.initState();
     _shuffle = widget.shuffle;
-    if (widget.shuffle && !audioHandler.isShuffleOn()) {
-      audioHandler.toggleShuffle();
+    if (widget.shuffle && !AppGlobals().audioHandler.isShuffleOn()) {
+      AppGlobals().audioHandler.toggleShuffle();
     }
     currentSongIndex = widget.initialIndex;
     _scrollController = ScrollController();
@@ -63,7 +64,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
   Future<void> _initializeAudioHandler({bool chage = true}) async {
     if (widget.currentpostion != Duration.zero && chage) {
       _playbackStateSubscription =
-          audioHandler.playbackState.listen((playbackState) {
+          AppGlobals().audioHandler.playbackState.listen((playbackState) {
         if (!mounted) return;
         bool isPlaying = playbackState.playing;
         Duration position = playbackState.updatePosition;
@@ -86,7 +87,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
     }
 
     // Initialize if not already set
-    audioHandler.setMediaItems(
+    AppGlobals().audioHandler.setMediaItems(
       mediaItems: widget.songs
           .map((song) => MediaItem(
                 id: song.downloadUrl?.last.link ?? "",
@@ -103,7 +104,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
     );
 
     _playbackStateSubscription =
-        audioHandler.playbackState.listen((playbackState) {
+       AppGlobals(). audioHandler.playbackState.listen((playbackState) {
       if (!mounted) return;
       bool isPlaying = playbackState.playing;
       Duration position = playbackState.updatePosition;
@@ -127,13 +128,13 @@ class _PlayerScreenState extends State<PlayerScreen> {
   }
 
   void _playSong(Song song) async {
-    await audioHandler.stop();
-    await audioHandler.playCurrentSong();
+    await AppGlobals(). audioHandler.stop();
+    await AppGlobals().audioHandler.playCurrentSong();
   }
 
   void _playNext() async {
     if (currentSongIndex < widget.songs.length - 1) {
-      await audioHandler.skipToNext();
+      await AppGlobals().audioHandler.skipToNext();
       _scrollToCurrentSong();
       setState(() {});
     }
@@ -141,7 +142,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
 
   void _playPrevious() async {
     if (currentSongIndex > 0) {
-      await audioHandler.skipToPrevious();
+      await AppGlobals().audioHandler.skipToPrevious();
       _scrollToCurrentSong();
       setState(() {});
     }
@@ -151,7 +152,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
     setState(() {
       _shuffle = !_shuffle;
     });
-    audioHandler.toggleShuffle();
+    AppGlobals().audioHandler.toggleShuffle();
   }
 
   void _scrollToCurrentSong() {
@@ -283,7 +284,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                               .duration ??
                                           0,
                                     ),
-                                    audioPlayer: audioHandler,
+                                    audioPlayer: AppGlobals().audioHandler,
                                     progressDuration: state.progressDuration,
                                   );
                                 }
@@ -293,7 +294,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                             .songs[currentSongIndex].duration ??
                                         0,
                                   ),
-                                  audioPlayer: audioHandler,
+                                  audioPlayer: AppGlobals().audioHandler,
                                   progressDuration: Duration.zero,
                                 );
                               },
@@ -331,7 +332,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                     if (state is PlayingState) {
                                       return IconButton(
                                         onPressed: () {
-                                          audioHandler.play();
+                                          AppGlobals().audioHandler.play();
                                         },
                                         icon: Icon(
                                           Icons.play_circle_fill_rounded,
@@ -342,7 +343,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                     if (state is PausedState) {
                                       return IconButton(
                                         onPressed: () {
-                                          audioHandler.pause();
+                                          AppGlobals().audioHandler.pause();
                                         },
                                         icon: Icon(
                                           Icons.pause_circle_filled,
@@ -479,7 +480,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                           currentSongIndex++;
                         }
 
-                        audioHandler.setMediaItems(
+                        AppGlobals().audioHandler.setMediaItems(
                           mediaItems: widget.songs
                               .map((song) => MediaItem(
                                     id: song.downloadUrl?.last.link ?? "",
@@ -506,7 +507,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                           onTap: () {
                             Navigator.of(context).pop();
                             if (index != currentSongIndex) {
-                              audioHandler.stop();
+                              AppGlobals().audioHandler.stop();
                               setState(() {
                                 currentSongIndex = index;
                                 hasPlayed = false;
@@ -548,7 +549,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                             maxLines: 1,
                             style: TextStyle(
                               color: currentSongIndex == index
-                                  ? colorList[colorIndex]
+                                  ? colorList[AppGlobals().colorIndex]
                                   : null,
                             ),
                           ),
@@ -557,7 +558,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                             maxLines: 1,
                             style: TextStyle(
                               color: currentSongIndex == index
-                                  ? colorList[colorIndex]
+                                  ? colorList[AppGlobals().colorIndex]
                                   : null,
                             ),
                           ),
@@ -596,7 +597,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                 currentSongIndex >= newIndex) {
               currentSongIndex++;
             }
-            audioHandler.setMediaItems(
+            AppGlobals().audioHandler.setMediaItems(
                 mediaItems: widget.songs
                     .map((song) => MediaItem(
                           id: song.downloadUrl?.last.link ?? "",
@@ -620,7 +621,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
             key: ValueKey(widget.songs[index].id),
             onTap: () {
               if (index != currentSongIndex) {
-                audioHandler.stop();
+                AppGlobals().audioHandler.stop();
                 setState(() {
                   currentSongIndex = index;
                   hasPlayed = false;
@@ -661,14 +662,14 @@ class _PlayerScreenState extends State<PlayerScreen> {
               widget.songs[index].name ?? "No",
               maxLines: 1,
               style: TextStyle(
-                color: currentSongIndex == index ? colorList[colorIndex] : null,
+                color: currentSongIndex == index ? colorList[AppGlobals().colorIndex] : null,
               ),
             ),
             subtitle: Text(
               widget.songs[index].label ?? "No",
               maxLines: 1,
               style: TextStyle(
-                color: currentSongIndex == index ? colorList[colorIndex] : null,
+                color: currentSongIndex == index ? colorList[AppGlobals().colorIndex] : null,
               ),
             ),
           );

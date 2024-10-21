@@ -6,8 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/bloc/FeatchLibraty/featch_library_cubit.dart';
 import 'package:musiq/bloc/FeatchSong/featch_song_cubit.dart';
 import 'package:musiq/core/colors.dart';
+import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/sized.dart';
-import 'package:musiq/main.dart';
 import 'package:musiq/presentation/screens/album_or_playlist_screen/album_or_playlist_screen.dart';
 import 'package:musiq/presentation/screens/favoriteScreen/favorite_screen.dart';
 import 'package:musiq/presentation/screens/loginScreen/login_screen.dart';
@@ -29,7 +29,7 @@ class LibraryScreen extends StatelessWidget {
                   backgroundColor: Colors.transparent,
                   content: Center(
                     child: CircularProgressIndicator(
-                      color: colorList[colorIndex],
+                      color: colorList[AppGlobals().colorIndex],
                     ),
                   ),
                 );
@@ -59,11 +59,11 @@ class LibraryScreen extends StatelessWidget {
                 ));
           }
         },
-        child: userIsLoggedIn == null
+        child: AppGlobals().userIsLoggedIn == null
             ? Center(
                 child: TextButton(
                   style: TextButton.styleFrom(
-                      backgroundColor: colorList[colorIndex],
+                      backgroundColor: colorList[AppGlobals().colorIndex],
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -120,7 +120,7 @@ class LibraryScreen extends StatelessWidget {
                         if (state is FeatchLibraryLaodingState) {
                           return Center(
                             child: CircularProgressIndicator(
-                              color: colorList[colorIndex],
+                              color: colorList[AppGlobals().colorIndex],
                             ),
                           );
                         } else if (state is FeatchLibrarySuccessState) {

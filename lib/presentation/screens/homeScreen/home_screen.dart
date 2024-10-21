@@ -3,9 +3,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/core/colors.dart';
+import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/core/sized.dart';
-import 'package:musiq/main.dart';
 import 'package:musiq/bloc/home_screen_cubit/home_screen_cubit.dart';
 import 'package:musiq/presentation/screens/album_or_playlist_screen/album_or_playlist_screen.dart';
 import 'package:musiq/bloc/FeatchSong/featch_song_cubit.dart';
@@ -38,7 +38,7 @@ class HomeScreen extends StatelessWidget {
                               backgroundColor: Colors.transparent,
                               content: Center(
                                 child: CircularProgressIndicator(
-                                  color: colorList[colorIndex],
+                                  color: colorList[AppGlobals().colorIndex],
                                 ),
                               ),
                             );
@@ -77,7 +77,7 @@ class HomeScreen extends StatelessWidget {
                               letterSpacing: 3,
                               height: 2,
                               fontWeight: FontWeight.bold,
-                              color: colorList[colorIndex]),
+                              color: colorList[AppGlobals().colorIndex]),
                         ),
                         Container(
                           height: 100,
@@ -111,7 +111,7 @@ class HomeScreen extends StatelessWidget {
                                 child: Container(
                                   decoration: BoxDecoration(
                                       border: Border.all(
-                                        color: colorList[colorIndex],
+                                        color: colorList[AppGlobals().colorIndex],
                                         width: 0,
                                       ),
                                       borderRadius: BorderRadius.circular(50)),
@@ -205,7 +205,7 @@ class HomeScreen extends StatelessWidget {
                                     letterSpacing: 3,
                                     height: 2,
                                     fontWeight: FontWeight.bold,
-                                    color: colorList[colorIndex]),
+                                    color: colorList[AppGlobals().colorIndex]),
                               )
                             : SizedBox(),
                         state.lastplayed.isNotEmpty
@@ -325,7 +325,7 @@ class HomeScreen extends StatelessWidget {
                               letterSpacing: 3,
                               height: 2,
                               fontWeight: FontWeight.bold,
-                              color: colorList[colorIndex]),
+                              color: colorList[AppGlobals().colorIndex]),
                         ),
                         constHeight20,
                         HorizontalSongList(
@@ -353,7 +353,7 @@ class HomeScreen extends StatelessWidget {
                                     letterSpacing: 3,
                                     height: 2,
                                     fontWeight: FontWeight.bold,
-                                    color: colorList[colorIndex]),
+                                    color: colorList[AppGlobals().colorIndex]),
                               )
                             : SizedBox(),
                         songList.isNotEmpty
@@ -469,7 +469,7 @@ class HomeScreen extends StatelessWidget {
                               letterSpacing: 3,
                               height: 2,
                               fontWeight: FontWeight.bold,
-                              color: colorList[colorIndex]),
+                              color: colorList[AppGlobals().colorIndex]),
                         ),
                         constHeight20,
                         HorizontalSongList(
@@ -484,7 +484,7 @@ class HomeScreen extends StatelessWidget {
                               letterSpacing: 3,
                               height: 2,
                               fontWeight: FontWeight.bold,
-                              color: colorList[colorIndex]),
+                              color: colorList[AppGlobals().colorIndex]),
                         ),
                         constHeight20,
                         HorizontalSongList(
@@ -499,7 +499,7 @@ class HomeScreen extends StatelessWidget {
                               letterSpacing: 3,
                               height: 2,
                               fontWeight: FontWeight.bold,
-                              color: colorList[colorIndex]),
+                              color: colorList[AppGlobals().colorIndex]),
                         ),
                         constHeight20,
                         HorizontalSongList(
@@ -534,7 +534,7 @@ class HomeScreen extends StatelessWidget {
                 return SizedBox(
                   child: Center(
                       child: CircularProgressIndicator(
-                    color: colorList[colorIndex],
+                    color: colorList[AppGlobals().colorIndex],
                   )),
                 );
               }

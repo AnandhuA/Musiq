@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:musiq/core/colors.dart';
+import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/data/add_to_library_funtions.dart';
-import 'package:musiq/main.dart';
 import 'package:musiq/models/library_model.dart';
 import 'package:musiq/models/song_model.dart';
 import 'package:musiq/models/song_model/song.dart';
@@ -104,7 +104,7 @@ class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
                             style: TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
-                              color: colorList[colorIndex],
+                              color: colorList[AppGlobals().colorIndex],
                             ),
                           ),
                           Text(
@@ -175,7 +175,7 @@ class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     border: Border.all(
-                                      color: colorList[colorIndex],
+                                      color: colorList[AppGlobals().colorIndex],
                                       width: 2.0,
                                     ),
                                   ),
@@ -201,7 +201,7 @@ class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
                                   //     : null;
                                 },
                                 child: CircleAvatar(
-                                  backgroundColor: colorList[colorIndex],
+                                  backgroundColor: colorList[AppGlobals().colorIndex],
                                   radius: 28,
                                   child: Center(
                                     child: Icon(
@@ -274,7 +274,7 @@ class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
             ],
           ),
           ValueListenableBuilder<List<Song>>(
-            valueListenable: lastplayedSongNotifier,
+            valueListenable: AppGlobals().lastPlayedSongNotifier,
             builder: (context, lastPlayedSongs, _) {
               if (lastPlayedSongs.isNotEmpty) {
                 return MiniPlayer(

@@ -6,9 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/bloc/FeatchAlbumAndPlayList/featch_album_and_play_list_cubit.dart';
 import 'package:musiq/bloc/home_screen_cubit/home_screen_cubit.dart';
 import 'package:musiq/core/colors.dart';
+import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/data/savan_2.0.dart';
-import 'package:musiq/main.dart';
 import 'package:musiq/presentation/screens/album_or_playlist_screen/new_album_or_playlist_screen.dart';
 
 class Newhomescreen extends StatelessWidget {
@@ -22,7 +22,7 @@ class Newhomescreen extends StatelessWidget {
           if (state is HomeScreenLoading) {
             Center(
               child: CircularProgressIndicator(
-                color: colorList[colorIndex],
+                color: colorList[AppGlobals().colorIndex],
               ),
             );
           } else if (state is HomeScreenLoaded) {
@@ -38,7 +38,7 @@ class Newhomescreen extends StatelessWidget {
                         backgroundColor: Colors.transparent,
                         content: Center(
                           child: CircularProgressIndicator(
-                            color: colorList[colorIndex],
+                            color: colorList[AppGlobals().colorIndex],
                           ),
                         ),
                       );

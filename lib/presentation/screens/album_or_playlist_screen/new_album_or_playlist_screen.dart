@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:musiq/core/colors.dart';
+import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/sized.dart';
-import 'package:musiq/main.dart';
 import 'package:musiq/models/album_model/album_model.dart';
 import 'package:musiq/models/play_list_model/play_list_model.dart';
 import 'package:musiq/models/song_model/song.dart';
@@ -95,7 +95,7 @@ class _NewAlbumOrPlaylistScreenState extends State<NewAlbumOrPlaylistScreen> {
                         style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
-                          color: colorList[colorIndex],
+                          color: colorList[AppGlobals().colorIndex],
                         ),
                       ),
                       Text(
@@ -168,7 +168,7 @@ class _NewAlbumOrPlaylistScreenState extends State<NewAlbumOrPlaylistScreen> {
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 border: Border.all(
-                                  color: colorList[colorIndex],
+                                  color: colorList[AppGlobals().colorIndex],
                                   width: 2.0,
                                 ),
                               ),
@@ -195,7 +195,7 @@ class _NewAlbumOrPlaylistScreenState extends State<NewAlbumOrPlaylistScreen> {
                                   : null;
                             },
                             child: CircleAvatar(
-                              backgroundColor: colorList[colorIndex],
+                              backgroundColor: colorList[AppGlobals().colorIndex],
                               radius: 28,
                               child: Center(
                                 child: Icon(

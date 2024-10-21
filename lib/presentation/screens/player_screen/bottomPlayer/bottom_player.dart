@@ -6,8 +6,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:musiq/core/colors.dart';
+import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/helper_funtions.dart';
-import 'package:musiq/main.dart';
 import 'package:musiq/presentation/screens/player_screen/cubit/PlayAndPause/play_and_pause_cubit.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 
@@ -36,11 +36,11 @@ class _MiniPlayerState extends State<MiniPlayer> {
     super.initState();
     _updateCurrentSongInfo();
     _playbackStateSubscription =
-        audioHandler.playbackState.listen((playbackState) {
+        AppGlobals().audioHandler.playbackState.listen((playbackState) {
       bool isPlaying = playbackState.playing;
       Duration position = playbackState.updatePosition;
       Duration totalDuration =
-          audioHandler.mediaItem.value?.duration ?? Duration.zero;
+          AppGlobals().audioHandler.mediaItem.value?.duration ?? Duration.zero;
 
       context.read<PlayAndPauseCubit>().togglePlayerState(
             isPlaying: isPlaying,
@@ -69,11 +69,13 @@ class _MiniPlayerState extends State<MiniPlayer> {
   }
 
   void _updateCurrentSongInfo() {
-    if (lastplayedSongNotifier.value.isNotEmpty) {
-      _currentSongTitle = lastplayedSongNotifier.value[currentSongIndex].name??"No";
+    if (AppGlobals().lastPlayedSongNotifier.value.isNotEmpty) {
+      _currentSongTitle =  AppGlobals().lastPlayedSongNotifier.value[currentSongIndex].name??"No";
       _currentSongSubTitle =
-          lastplayedSongNotifier.value[currentSongIndex].label??"No";
-      _imgUrl = lastplayedSongNotifier.value[currentSongIndex].image?.last.imageUrl??errorImage();
+           AppGlobals().lastPlayedSongNotifier.value[currentSongIndex].label??"No";
+      _imgUrl =  AppGlobals()
+              .lastPlayedSongNotifier
+              .value[currentSongIndex].image?.last.imageUrl??errorImage();
     }
   }
 
@@ -103,10 +105,10 @@ class _MiniPlayerState extends State<MiniPlayer> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => PlayerScreen(
-                        songs: lastplayedSongNotifier.value,
+                        songs:  AppGlobals().lastPlayedSongNotifier.value,
                         currentpostion: _currentPosition,
                         initialIndex: currentSongIndex,
-                        shuffle: audioHandler.isShuffleOn(),
+                        shuffle: AppGlobals().audioHandler.isShuffleOn(),
                       ),
                     ));
               },
@@ -134,7 +136,7 @@ class _MiniPlayerState extends State<MiniPlayer> {
                 children: [
                   IconButton(
                       onPressed: () async {
-                        await audioHandler.skipToPrevious();
+                        await AppGlobals().audioHandler.skipToPrevious();
                       },
                       icon: Icon(
                         Icons.fast_rewind_sharp,
@@ -157,7 +159,7 @@ class _MiniPlayerState extends State<MiniPlayer> {
                             size: 40,
                           ),
                           onPressed: () {
-                            audioHandler.play();
+                            AppGlobals().audioHandler.play();
                           },
                         );
                       } else if (state is PausedState) {
@@ -167,7 +169,7 @@ class _MiniPlayerState extends State<MiniPlayer> {
                             size: 40,
                           ),
                           onPressed: () {
-                            audioHandler.pause();
+                            AppGlobals().audioHandler.pause();
                           },
                         );
                       }
@@ -179,7 +181,7 @@ class _MiniPlayerState extends State<MiniPlayer> {
                   ),
                   IconButton(
                       onPressed: () async {
-                        await audioHandler.skipToNext();
+                        await AppGlobals().audioHandler.skipToNext();
                       },
                       icon: Icon(
                         Icons.fast_forward_sharp,
@@ -196,10 +198,10 @@ class _MiniPlayerState extends State<MiniPlayer> {
                 thumbRadius: 3,
                 timeLabelLocation: TimeLabelLocation.none,
                 total: _songDuration,
-                thumbColor: colorList[colorIndex],
-                progressBarColor: colorList[colorIndex],
+                thumbColor: colorList[AppGlobals().colorIndex],
+                progressBarColor: colorList[AppGlobals().colorIndex],
                 onSeek: (duration) {
-                  audioHandler.seek(duration);
+                  AppGlobals().audioHandler.seek(duration);
                 },
               ),
             ),

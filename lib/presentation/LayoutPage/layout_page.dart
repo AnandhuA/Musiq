@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:musiq/bloc/FeatchLibraty/featch_library_cubit.dart';
 import 'package:musiq/core/colors.dart';
+import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/bloc/favorite_bloc/favorite_bloc.dart';
-import 'package:musiq/main.dart';
 import 'package:musiq/models/song_model/song.dart';
 import 'package:musiq/presentation/commanWidgets/textfeild.dart';
 import 'package:musiq/presentation/screens/newHomeScreen/newHomeScreen.dart';
@@ -18,14 +18,14 @@ import 'package:musiq/presentation/screens/homeScreen/widgets/drawer_widget.dart
 import 'package:musiq/presentation/screens/searchScreen/search_screen.dart';
 import 'package:musiq/presentation/screens/settingsScreen/setting_screen.dart';
 
-class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+class LayOutPage extends StatefulWidget {
+  const LayOutPage({super.key});
 
   @override
-  MainPageState createState() => MainPageState();
+  LayOutPageState createState() => LayOutPageState();
 }
 
-class MainPageState extends State<MainPage> {
+class LayOutPageState extends State<LayOutPage> {
   int _selectedIndex = 0;
 
   static final List<Widget> _widgetOptions = <Widget>[
@@ -89,7 +89,7 @@ class MainPageState extends State<MainPage> {
                                       hintText: "Search",
                                       icon: Icon(
                                         Icons.search,
-                                        color: colorList[colorIndex],
+                                        color: colorList[AppGlobals().colorIndex],
                                       ),
                                     ),
                                   ),
@@ -114,7 +114,7 @@ class MainPageState extends State<MainPage> {
                           labelType: NavigationRailLabelType.selected,
                           destinations: <NavigationRailDestination>[
                             NavigationRailDestination(
-                              indicatorColor: colorList[colorIndex],
+                              indicatorColor: colorList[AppGlobals().colorIndex],
                               icon: Icon(Icons.home),
                               label: Text('Home'),
                             ),
@@ -128,7 +128,7 @@ class MainPageState extends State<MainPage> {
                             ),
                           ],
                           selectedIconTheme: IconThemeData(
-                            color: colorList[colorIndex],
+                            color: colorList[AppGlobals().colorIndex],
                           ),
                           trailing: IconButton(
                             icon: Icon(Icons.settings),
@@ -158,7 +158,7 @@ class MainPageState extends State<MainPage> {
                       ],
                     ),
                     ValueListenableBuilder<List<Song>>(
-                      valueListenable: lastplayedSongNotifier,
+                      valueListenable: AppGlobals().lastPlayedSongNotifier,
                       builder: (context, lastPlayedSongs, _) {
                         if (lastPlayedSongs.isNotEmpty) {
                           return MiniPlayer(
@@ -195,7 +195,7 @@ class MainPageState extends State<MainPage> {
                                     hintText: "Search",
                                     icon: Icon(
                                       Icons.search,
-                                      color: colorList[colorIndex],
+                                      color: colorList[AppGlobals().colorIndex],
                                     ),
                                   ),
                                 ),
@@ -215,7 +215,7 @@ class MainPageState extends State<MainPage> {
                       ),
                     ),
                     ValueListenableBuilder<List<Song>>(
-                      valueListenable: lastplayedSongNotifier,
+                      valueListenable: AppGlobals().lastPlayedSongNotifier,
                       builder: (context, lastPlayedSongs, _) {
                         if (lastPlayedSongs.isNotEmpty) {
                           return MiniPlayer(
@@ -232,8 +232,8 @@ class MainPageState extends State<MainPage> {
                   backgroundColor: Colors.transparent,
                   color: Colors.grey[800],
                   haptic: true,
-                  activeColor: colorList[colorIndex],
-                  tabBackgroundColor: colorList[colorIndex].withOpacity(0.1),
+                  activeColor: colorList[AppGlobals().colorIndex],
+                  tabBackgroundColor: colorList[AppGlobals().colorIndex].withOpacity(0.1),
                   gap: 5,
                   padding: const EdgeInsets.all(10),
                   tabMargin: const EdgeInsets.all(14),

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:musiq/core/colors.dart';
+import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/sized.dart';
-import 'package:musiq/main.dart';
 import 'package:musiq/bloc/ThemeCubit/theme_cubit.dart';
 import 'package:musiq/presentation/screens/settingsScreen/widgets/list_tile_widget.dart';
 import 'package:musiq/data/shared_preference.dart';
@@ -39,11 +39,11 @@ class _ThemeScreenState extends State<ThemeScreen> {
             onTap: () {
               setState(() {
                 SharedPreference.setTheme(theme: "System");
-                theme = "System";
-                context.read<ThemeCubit>().chanheTheme(theme: theme);
+                AppGlobals().theme = "System";
+                context.read<ThemeCubit>().chanheTheme(theme: AppGlobals().theme);
               });
             },
-            endWidget: theme == "System" || theme == null
+            endWidget: AppGlobals().theme == "System" || AppGlobals().theme == null
                 ? const CircleAvatar(
                     radius: 12,
                     child: Icon(
@@ -62,18 +62,18 @@ class _ThemeScreenState extends State<ThemeScreen> {
             onTap1: () {
               setState(() {
                 SharedPreference.setTheme(theme: "Dark");
-                theme = "Dark";
-                context.read<ThemeCubit>().chanheTheme(theme: theme);
+                AppGlobals().theme = "Dark";
+                context.read<ThemeCubit>().chanheTheme(theme: AppGlobals().theme);
               });
             },
             onTap2: () {
               setState(() {
                 SharedPreference.setTheme(theme: "Light");
-                theme = "Light";
-                context.read<ThemeCubit>().chanheTheme(theme: theme);
+                AppGlobals().theme = "Light";
+                context.read<ThemeCubit>().chanheTheme(theme: AppGlobals().theme);
               });
             },
-            endWidget1: theme == "Dark"
+            endWidget1: AppGlobals().theme == "Dark"
                 ? const CircleAvatar(
                     radius: 12,
                     child: Icon(
@@ -82,7 +82,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
                     ),
                   )
                 : const SizedBox(),
-            endWidget2: theme == "Light"
+            endWidget2: AppGlobals().theme == "Light"
                 ? const CircleAvatar(
                     radius: 12,
                     child: Icon(
@@ -111,13 +111,13 @@ class _ThemeScreenState extends State<ThemeScreen> {
                       colorIndex: index,
                     );
                     setState(() {
-                      colorIndex = index;
+                      AppGlobals().colorIndex = index;
                     });
-                    context.read<ThemeCubit>().chanheTheme(theme: theme);
+                    context.read<ThemeCubit>().chanheTheme(theme: AppGlobals().theme);
                   },
                   child: CircleAvatar(
                     backgroundColor: colorList[index],
-                    child: colorIndex == index
+                    child: AppGlobals().colorIndex == index
                         ? const Icon(
                             Icons.check,
                             color: Colors.black,
