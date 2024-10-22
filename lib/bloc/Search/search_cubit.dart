@@ -7,6 +7,7 @@ import 'package:meta/meta.dart';
 import 'package:musiq/data/savan_2.0.dart';
 import 'package:musiq/models/global_search_model/global_search_model.dart';
 import 'package:musiq/models/search_album_model/search_album_model.dart';
+import 'package:musiq/models/search_artist_model/search_artist_model.dart';
 import 'package:musiq/models/search_play_list_model/search_play_list_model.dart';
 import 'package:musiq/models/search_song_model/search_song_model.dart';
 
@@ -20,7 +21,7 @@ class SearchCubit extends Cubit<SearchState> {
     if (response != null && response.statusCode == 200) {
       final data = jsonDecode(response.body);
       final GlobalSearchModel model = GlobalSearchModel.fromJson(data);
-      log("-------${model.data?.songs?.results?.length}");
+      log("Global-------${model.data?.songs?.results?.length}");
     }
   }
 
@@ -30,7 +31,7 @@ class SearchCubit extends Cubit<SearchState> {
     if (responce != null && responce.statusCode == 200) {
       final data = jsonDecode(responce.body);
       final SearchSongModel model = SearchSongModel.fromJson(data);
-      log("------------${model.data?.results?.length}");
+      log("Song------------${model.data?.results?.length}");
     }
   }
 
@@ -40,7 +41,7 @@ class SearchCubit extends Cubit<SearchState> {
     if (responce != null && responce.statusCode == 200) {
       final data = jsonDecode(responce.body);
       final SearchAlbumModel model = SearchAlbumModel.fromJson(data);
-      log("------------${model.data?.results?.length}");
+      log("Album------------${model.data?.results?.length}");
     }
   }
 
@@ -50,7 +51,16 @@ class SearchCubit extends Cubit<SearchState> {
     if (responce != null && responce.statusCode == 200) {
       final data = jsonDecode(responce.body);
       final SearchPlayListModel model = SearchPlayListModel.fromJson(data);
-      log("------------${model.data?.results?.length}");
+      log("PlayList------------${model.data?.results?.length}");
+    }
+  }
+
+  void searchArtist({required String query}) async {
+    final Response? responce = await Saavan2.featchSearchArtists(query: query);
+    if (responce != null && responce.statusCode == 200) {
+      final data = jsonDecode(responce.body);
+      final SearchArtistModel model = SearchArtistModel.fromJson(data);
+      log("Artist------------${model.data?.results?.length}");
     }
   }
 }

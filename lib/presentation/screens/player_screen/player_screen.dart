@@ -12,6 +12,7 @@ import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/models/song_model/song.dart';
 import 'package:musiq/presentation/commanWidgets/custom_app_bar.dart';
+import 'package:musiq/presentation/commanWidgets/favorite_icon.dart';
 import 'package:musiq/presentation/screens/player_screen/cubit/PlayAndPause/play_and_pause_cubit.dart';
 import 'package:musiq/presentation/screens/player_screen/cubit/ProgressBar/progress_bar_cubit.dart';
 import 'package:musiq/presentation/screens/player_screen/widgets/progress_bar_widget.dart';
@@ -269,7 +270,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                   onPressed: () {},
                                   icon: Icon(Icons.add_circle_outline_sharp),
                                 ),
-                                // FavoriteIcon(song: currentSong),
+                                FavoriteIcon(song: currentSong),
                               ],
                             ),
                             constHeight10,

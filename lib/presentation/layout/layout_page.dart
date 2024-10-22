@@ -29,11 +29,20 @@ class LayOutPage extends StatefulWidget {
 class LayOutPageState extends State<LayOutPage> {
   int _selectedIndex = 0;
 
+//--------widget list -----------
   static final List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
     Newhomescreen(),
     NewSearchScreen(),
     LibraryScreen(),
+  ];
+
+//------ titles list ---------
+  final List<String> _titles = [
+    "Home",
+    "New Home",
+    "Search",
+    "Library",
   ];
 
   void _onItemTapped(int index) {
@@ -101,7 +110,7 @@ class LayOutPageState extends State<LayOutPage> {
                             ],
                           ),
                         )
-                      : const Text("Library"),
+                      : Text(_titles[_selectedIndex]),
                 ),
                 body: Stack(
                   children: [
@@ -211,7 +220,7 @@ class LayOutPageState extends State<LayOutPage> {
                             ),
                           ],
                         )
-                      : const Text("Library"),
+                      : Text(_titles[_selectedIndex]),
                 ),
                 drawer: isMobile(context) ? const DrawerWidget() : null,
                 body: Stack(
