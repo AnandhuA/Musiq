@@ -8,7 +8,7 @@ final class FeatchLibraryInitial extends FeatchLibraryState {}
 final class FeatchLibraryLaodingState extends FeatchLibraryState {}
 
 final class FeatchLibrarySuccessState extends FeatchLibraryState {
-  final List< LibraryModel> libraryModel;
+  final List<LibraryModel> libraryModel;
 
   FeatchLibrarySuccessState({required this.libraryModel});
 }

@@ -16,7 +16,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           email: event.email,
           password: event.password,
         );
-        AppGlobals().userIsLoggedIn = event.email;
+        AppGlobals().setUserLoggedInStatus(event.email);
         emit(LoginSuccess());
       } on FirebaseAuthException catch (e) {
         String errorMessage;

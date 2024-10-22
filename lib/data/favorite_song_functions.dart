@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musiq/models/song_model/song.dart';
@@ -6,7 +5,7 @@ import 'package:musiq/models/song_model/song.dart';
 class FavoriteSongRepo {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
   static final FirebaseFirestore firestore = FirebaseFirestore.instance;
- static Future<String> addFavorite({required Song song}) async {
+  static Future<String> addFavorite({required Song song}) async {
     try {
       if (_auth.currentUser?.email != null) {
         final userId = _auth.currentUser!.email;
@@ -15,8 +14,7 @@ class FavoriteSongRepo {
             firestore.collection('users').doc(userId).collection('favorite');
 
         Map<String, dynamic> favoriteData = song.toJson();
-        favoriteData['addedAt'] =
-            DateTime.now().toIso8601String(); 
+        favoriteData['addedAt'] = DateTime.now().toIso8601String();
 
         await favoriteCollection.add(favoriteData);
         return "true";
@@ -28,7 +26,6 @@ class FavoriteSongRepo {
       return "false";
     }
   }
-
 
   static Future<bool> removeFavorite({required String songID}) async {
     try {
@@ -63,8 +60,7 @@ class FavoriteSongRepo {
 
         QuerySnapshot querySnapshot = await favoriteCollection.get();
         for (var doc in querySnapshot.docs) {
-          favoriteSongs
-              .add(Song.fromJson(doc.data() as Map<String, dynamic>));
+          favoriteSongs.add(Song.fromJson(doc.data() as Map<String, dynamic>));
         }
       }
     } catch (e) {
@@ -72,6 +68,4 @@ class FavoriteSongRepo {
     }
     return favoriteSongs;
   }
-
-  
 }

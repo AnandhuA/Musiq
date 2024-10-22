@@ -52,7 +52,7 @@ class LoginScreen extends StatelessWidget {
                     ? 20
                     : isTablet(context)
                         ? 50
-                        : screenWidth * 0.3+5,
+                        : screenWidth * 0.3 + 5,
               ),
               child: Form(
                 key: _formKey,

@@ -75,14 +75,14 @@ class Newhomescreen extends StatelessWidget {
                             return GestureDetector(
                               onTap: () {
                                 log("${data.type}");
-                               
+
                                 context
                                     .read<FeatchAlbumAndPlayListCubit>()
                                     .fetchData(
                                         type: data.type ?? "",
                                         id: data.id ?? "0",
                                         imageUrl: data.image!.last.imageUrl ??
-                                           errorImage());
+                                            errorImage());
                               },
                               child: Container(
                                 margin: EdgeInsets.all(10),

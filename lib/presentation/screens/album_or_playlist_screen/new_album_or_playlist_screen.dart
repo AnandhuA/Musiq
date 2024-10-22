@@ -195,7 +195,8 @@ class _NewAlbumOrPlaylistScreenState extends State<NewAlbumOrPlaylistScreen> {
                                   : null;
                             },
                             child: CircleAvatar(
-                              backgroundColor: colorList[AppGlobals().colorIndex],
+                              backgroundColor:
+                                  colorList[AppGlobals().colorIndex],
                               radius: 28,
                               child: Center(
                                 child: Icon(

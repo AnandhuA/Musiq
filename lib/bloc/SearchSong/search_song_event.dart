@@ -5,5 +5,3 @@ class SearchSongEvent {
 
   SearchSongEvent({required this.searchQuery});
 }
-
-

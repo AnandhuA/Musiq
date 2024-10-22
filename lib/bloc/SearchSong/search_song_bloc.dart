@@ -19,11 +19,11 @@ class SearchSongBloc extends Bloc<SearchSongEvent, SearchSongState> {
         final searchSongData = await SaavnAPI()
             .fetchSongSearchResults(searchQuery: event.searchQuery);
         final searchModel = SearchModel.fromJson(searchData);
-         List<SongModel> songList = (searchSongData['songs'] as List)
+        List<SongModel> songList = (searchSongData['songs'] as List)
             .map((songJson) => SongModel.fromJson(songJson))
             .toList();
 
-        emit(SearchSongSuccess(searchResult: searchModel,songModel: songList));
+        emit(SearchSongSuccess(searchResult: searchModel, songModel: songList));
       } catch (e) {
         log("Error fetching search results: $e");
         emit(SearchSongError());

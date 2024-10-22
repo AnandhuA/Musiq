@@ -1,4 +1,3 @@
-
 import 'album.dart';
 import 'artists.dart';
 import 'download_url.dart';
@@ -23,7 +22,7 @@ class Song {
   Artists? artists;
   List<Image>? image;
   List<DownloadUrl>? downloadUrl;
-    DateTime? addedAt;
+  DateTime? addedAt;
 
   Song({
     this.id,
@@ -64,7 +63,7 @@ class Song {
         copyright: json['copyright'].toString() as String?,
         album: (json['album'] is Map<String, dynamic>)
             ? Album.fromJson(json['album'] as Map<String, dynamic>)
-            : null, 
+            : null,
         artists: (json['artists'] is Map<String, dynamic>)
             ? Artists.fromJson(json['artists'] as Map<String, dynamic>)
             : null,
@@ -74,7 +73,7 @@ class Song {
         downloadUrl: (json['downloadUrl'] as List<dynamic>?)
             ?.map((e) => DownloadUrl.fromJson(e as Map<String, dynamic>))
             .toList(),
-            addedAt: json['addedAt'] != null
+        addedAt: json['addedAt'] != null
             ? DateTime.parse(json['addedAt']) // Parse if exists
             : null,
       );
@@ -98,6 +97,6 @@ class Song {
         'artists': artists?.toJson(),
         'image': image?.map((e) => e.toJson()).toList(),
         'downloadUrl': downloadUrl?.map((e) => e.toJson()).toList(),
-         'addedAt': addedAt?.toIso8601String(),
+        'addedAt': addedAt?.toIso8601String(),
       };
 }

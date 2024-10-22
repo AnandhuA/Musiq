@@ -16,6 +16,7 @@ import 'package:musiq/bloc/home_screen_cubit/home_screen_cubit.dart';
 import 'package:musiq/bloc/ThemeCubit/theme_cubit.dart';
 import 'package:musiq/presentation/screens/homeScreen/widgets/drawer_widget.dart';
 import 'package:musiq/presentation/screens/searchScreen/search_screen.dart';
+import 'package:musiq/presentation/screens/search_screen/search_screen.dart';
 import 'package:musiq/presentation/screens/settingsScreen/setting_screen.dart';
 
 class LayOutPage extends StatefulWidget {
@@ -31,6 +32,7 @@ class LayOutPageState extends State<LayOutPage> {
   static final List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
     Newhomescreen(),
+    NewSearchScreen(),
     LibraryScreen(),
   ];
 
@@ -89,7 +91,8 @@ class LayOutPageState extends State<LayOutPage> {
                                       hintText: "Search",
                                       icon: Icon(
                                         Icons.search,
-                                        color: colorList[AppGlobals().colorIndex],
+                                        color:
+                                            colorList[AppGlobals().colorIndex],
                                       ),
                                     ),
                                   ),
@@ -114,13 +117,18 @@ class LayOutPageState extends State<LayOutPage> {
                           labelType: NavigationRailLabelType.selected,
                           destinations: <NavigationRailDestination>[
                             NavigationRailDestination(
-                              indicatorColor: colorList[AppGlobals().colorIndex],
+                              indicatorColor:
+                                  colorList[AppGlobals().colorIndex],
                               icon: Icon(Icons.home),
                               label: Text('Home'),
                             ),
                             NavigationRailDestination(
                               icon: Icon(Icons.newspaper),
                               label: Text('New Home'), // New Home Tab
+                            ),
+                            NavigationRailDestination(
+                              icon: Icon(Icons.search),
+                              label: Text('Search'), // New Home Tab
                             ),
                             NavigationRailDestination(
                               icon: Icon(Icons.library_music_sharp),
@@ -233,7 +241,8 @@ class LayOutPageState extends State<LayOutPage> {
                   color: Colors.grey[800],
                   haptic: true,
                   activeColor: colorList[AppGlobals().colorIndex],
-                  tabBackgroundColor: colorList[AppGlobals().colorIndex].withOpacity(0.1),
+                  tabBackgroundColor:
+                      colorList[AppGlobals().colorIndex].withOpacity(0.1),
                   gap: 5,
                   padding: const EdgeInsets.all(10),
                   tabMargin: const EdgeInsets.all(14),
@@ -244,7 +253,11 @@ class LayOutPageState extends State<LayOutPage> {
                     ),
                     GButton(
                       icon: Icons.newspaper,
-                      text: 'New Home', // New Home Tab
+                      text: 'New Home',
+                    ),
+                    GButton(
+                      icon: Icons.search,
+                      text: 'Search',
                     ),
                     GButton(
                       icon: Icons.library_music_sharp,

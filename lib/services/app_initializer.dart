@@ -6,8 +6,6 @@ import 'package:musiq/presentation/screens/splashScreen/splash_screen.dart';
 import 'package:musiq/services/audio_handler.dart';
 import 'package:uni_links2/uni_links.dart';
 
-
-
 class AppInitializer {
   StreamSubscription? _linkSubscription;
 
@@ -17,7 +15,7 @@ class AppInitializer {
   }
 
   Future<void> _audioPlayerInit() async {
-   AppGlobals().audioHandler = await AudioService.init(
+    AppGlobals().audioHandler = await AudioService.init(
       builder: () => AudioPlayerHandler(),
       config: AudioServiceConfig(
         androidNotificationChannelId: 'com.example.musiq.channel.audio',

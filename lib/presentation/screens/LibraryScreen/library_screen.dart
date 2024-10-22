@@ -42,7 +42,7 @@ class LibraryScreen extends StatelessWidget {
             //     MaterialPageRoute(
             //       builder: (context) => PlayerScreen(
             //         songs: state.songModel,
-                   
+
             //       ),
             //     ));
           } else if (state is FeatchAlbumOrPlayList) {

@@ -1,6 +1,4 @@
 class ApiUrls {
-
-
   static const String homeData = "https://jiosaavn-api-rs.vercel.app/modules";
   static const String album = "https://jiosaavn-api-rs.vercel.app/album?id=";
   static const String playlist = "https://saavn.dev/api/playlists?id=";

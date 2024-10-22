@@ -11,7 +11,7 @@ class ProgressBarCubit extends Cubit<ProgressBarState> {
     emit(ProgressBarInitial(progressDuration: progress));
   }
 
-   void reset() {
+  void reset() {
     emit(ProgressBarInitial(progressDuration: Duration.zero));
   }
 }

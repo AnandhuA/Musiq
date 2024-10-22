@@ -140,8 +140,8 @@ class HomeScreenModel {
           : List<dynamic>.from(json["history"]!.map((x) => x)),
       newTrending: json["new_trending"] == null
           ? []
-          : List<NewTrending>.from(json["new_trending"]!
-              .map((x) => NewTrending.fromJson(x ))),
+          : List<NewTrending>.from(
+              json["new_trending"]!.map((x) => NewTrending.fromJson(x))),
       topPlaylists: json["top_playlists"] == null
           ? []
           : List<TopPlaylist>.from(

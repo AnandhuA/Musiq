@@ -19,7 +19,7 @@ class SettingsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Settings"),
-          automaticallyImplyLeading: false,
+        automaticallyImplyLeading: false,
         leading: IconButton(
             onPressed: () {
               Navigator.pop(context);

@@ -111,7 +111,8 @@ class HomeScreen extends StatelessWidget {
                                 child: Container(
                                   decoration: BoxDecoration(
                                       border: Border.all(
-                                        color: colorList[AppGlobals().colorIndex],
+                                        color:
+                                            colorList[AppGlobals().colorIndex],
                                         width: 0,
                                       ),
                                       borderRadius: BorderRadius.circular(50)),

@@ -81,7 +81,6 @@ Future<List> formatSongsInList(
 //------------------
 
 Future<Map> formatSingleSongResponse(Map response) async {
-
   try {
     final List artistNames = [];
     if (response['more_info']?['artistMap']?['primary_artists'] == null ||
@@ -144,7 +143,6 @@ Future<Map> formatSingleSongResponse(Map response) async {
       'url': decode(response['more_info']['encrypted_media_url'].toString()),
     };
   } catch (e) {
-
     return {'Error': e};
   }
 }
@@ -334,7 +332,6 @@ Future<Map> formatSingleShowResponse(Map response) async {
     return {'Error': e};
   }
 }
-
 
 Future<List> formatSongsResponse(
   List responseList,

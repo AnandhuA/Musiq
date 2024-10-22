@@ -18,7 +18,6 @@ class _BaseDES {
   }
 }
 
-
 class DES {
   static const BLOCK_SIZE = 8;
   static const IV_ZEROS = [0, 0, 0, 0, 0, 0, 0, 0];
@@ -1127,8 +1126,6 @@ class DES {
       DESPadding.unpad(crypt(data, _DECRYPT), paddingType);
 }
 
-
-
 class DESPadding {
   static List<int> pad(List<int> data, DESPaddingType paddingType) {
     if (paddingType == DESPaddingType.OneAndZeroes) {
@@ -1153,7 +1150,6 @@ class DESPadding {
 
     return block;
   }
-
 
   static List<int> _oneAndZerosPad(List<int> data) {
     final padding = [0x80] + List.generate(7, (index) => 0);

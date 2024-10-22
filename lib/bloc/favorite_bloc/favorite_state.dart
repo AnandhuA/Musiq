@@ -10,11 +10,13 @@ final class FavoriteLoading extends FavoriteState {}
 final class FavoriteError extends FavoriteState {}
 
 final class FeatchFavoriteSuccess extends FavoriteState {
-  final  List<Song> favorites;
+  final List<Song> favorites;
 
-   FeatchFavoriteSuccess({required this.favorites });
+  FeatchFavoriteSuccess({required this.favorites});
 }
+
 final class AddFavoriteSuccess extends FavoriteState {}
+
 final class RemoveFavoriteSuccess extends FavoriteState {}
 
 // final class UserNotLoggedIn extends FavoriteState {}

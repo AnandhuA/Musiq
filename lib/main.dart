@@ -9,15 +9,9 @@ import 'package:musiq/presentation/screens/splashScreen/splash_screen.dart';
 import 'package:musiq/services/app_initializer.dart';
 import 'package:musiq/services/bloc_provider.dart';
 
-// String? theme;
-// int colorIndex = 0;
-// String? userIsLoggedIn;
-// ValueNotifier<List<Song>>  AppGlobals().lastPlayedSongNotifier = ValueNotifier([]);
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 

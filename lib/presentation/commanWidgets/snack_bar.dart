@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
-customSnackbar(
-    {required BuildContext context,
-    required String message,
-    required Color bgColor,
-    required Color textColor,}) {
+customSnackbar({
+  required BuildContext context,
+  required String message,
+  required Color bgColor,
+  required Color textColor,
+}) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Text(

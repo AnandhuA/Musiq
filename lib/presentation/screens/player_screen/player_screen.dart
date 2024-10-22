@@ -16,7 +16,6 @@ import 'package:musiq/presentation/screens/player_screen/cubit/PlayAndPause/play
 import 'package:musiq/presentation/screens/player_screen/cubit/ProgressBar/progress_bar_cubit.dart';
 import 'package:musiq/presentation/screens/player_screen/widgets/progress_bar_widget.dart';
 
-
 int currentSongIndex = 0;
 
 class PlayerScreen extends StatefulWidget {
@@ -88,23 +87,23 @@ class _PlayerScreenState extends State<PlayerScreen> {
 
     // Initialize if not already set
     AppGlobals().audioHandler.setMediaItems(
-      mediaItems: widget.songs
-          .map((song) => MediaItem(
-                id: song.downloadUrl?.last.link ?? "",
-                album: song.album?.name ?? "No ",
-                title: song.label ?? "No ",
-                displayTitle: song.name,
-                duration: Duration(seconds: song.duration ?? 0),
-                artUri: Uri.parse(song.image?.last.imageUrl ??
-                    errorImage()),
-              ))
-          .toList(),
-      currentIndex: currentSongIndex,
-      songList: widget.songs,
-    );
+          mediaItems: widget.songs
+              .map((song) => MediaItem(
+                    id: song.downloadUrl?.last.link ?? "",
+                    album: song.album?.name ?? "No ",
+                    title: song.label ?? "No ",
+                    displayTitle: song.name,
+                    duration: Duration(seconds: song.duration ?? 0),
+                    artUri:
+                        Uri.parse(song.image?.last.imageUrl ?? errorImage()),
+                  ))
+              .toList(),
+          currentIndex: currentSongIndex,
+          songList: widget.songs,
+        );
 
     _playbackStateSubscription =
-       AppGlobals(). audioHandler.playbackState.listen((playbackState) {
+        AppGlobals().audioHandler.playbackState.listen((playbackState) {
       if (!mounted) return;
       bool isPlaying = playbackState.playing;
       Duration position = playbackState.updatePosition;
@@ -128,7 +127,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
   }
 
   void _playSong(Song song) async {
-    await AppGlobals(). audioHandler.stop();
+    await AppGlobals().audioHandler.stop();
     await AppGlobals().audioHandler.playCurrentSong();
   }
 
@@ -201,9 +200,8 @@ class _PlayerScreenState extends State<PlayerScreen> {
                 height: double.infinity,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: CachedNetworkImageProvider(currentSong
-                            .image?.first.imageUrl ??
-                        errorImage()),
+                    image: CachedNetworkImageProvider(
+                        currentSong.image?.first.imageUrl ?? errorImage()),
                     alignment: isMobile(context)
                         ? const Alignment(1, -2)
                         : const Alignment(1, 20),
@@ -481,22 +479,22 @@ class _PlayerScreenState extends State<PlayerScreen> {
                         }
 
                         AppGlobals().audioHandler.setMediaItems(
-                          mediaItems: widget.songs
-                              .map((song) => MediaItem(
-                                    id: song.downloadUrl?.last.link ?? "",
-                                    album: song.album?.name ?? "No ",
-                                    title: song.label ?? "No ",
-                                    displayTitle: song.name,
-                                    duration:
-                                        Duration(seconds: song.duration ?? 0),
-                                    artUri: Uri.parse(song
-                                            .image?.last.imageUrl ??
-                                        errorImage()),
-                                  ))
-                              .toList(),
-                          currentIndex: currentSongIndex,
-                          songList: widget.songs,
-                        );
+                              mediaItems: widget.songs
+                                  .map((song) => MediaItem(
+                                        id: song.downloadUrl?.last.link ?? "",
+                                        album: song.album?.name ?? "No ",
+                                        title: song.label ?? "No ",
+                                        displayTitle: song.name,
+                                        duration: Duration(
+                                            seconds: song.duration ?? 0),
+                                        artUri: Uri.parse(
+                                            song.image?.last.imageUrl ??
+                                                errorImage()),
+                                      ))
+                                  .toList(),
+                              currentIndex: currentSongIndex,
+                              songList: widget.songs,
+                            );
                       });
                     },
                     children: List.generate(
@@ -605,8 +603,8 @@ class _PlayerScreenState extends State<PlayerScreen> {
                           title: song.label ?? "No ",
                           displayTitle: song.name,
                           duration: Duration(seconds: song.duration ?? 0),
-                          artUri: Uri.parse(song.image?.last.imageUrl ??
-                              errorImage()),
+                          artUri: Uri.parse(
+                              song.image?.last.imageUrl ?? errorImage()),
                         ))
                     .toList(),
                 currentIndex: currentSongIndex,
@@ -662,14 +660,18 @@ class _PlayerScreenState extends State<PlayerScreen> {
               widget.songs[index].name ?? "No",
               maxLines: 1,
               style: TextStyle(
-                color: currentSongIndex == index ? colorList[AppGlobals().colorIndex] : null,
+                color: currentSongIndex == index
+                    ? colorList[AppGlobals().colorIndex]
+                    : null,
               ),
             ),
             subtitle: Text(
               widget.songs[index].label ?? "No",
               maxLines: 1,
               style: TextStyle(
-                color: currentSongIndex == index ? colorList[AppGlobals().colorIndex] : null,
+                color: currentSongIndex == index
+                    ? colorList[AppGlobals().colorIndex]
+                    : null,
               ),
             ),
           );

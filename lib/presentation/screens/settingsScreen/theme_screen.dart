@@ -40,18 +40,21 @@ class _ThemeScreenState extends State<ThemeScreen> {
               setState(() {
                 SharedPreference.setTheme(theme: "System");
                 AppGlobals().theme = "System";
-                context.read<ThemeCubit>().chanheTheme(theme: AppGlobals().theme);
+                context
+                    .read<ThemeCubit>()
+                    .chanheTheme(theme: AppGlobals().theme);
               });
             },
-            endWidget: AppGlobals().theme == "System" || AppGlobals().theme == null
-                ? const CircleAvatar(
-                    radius: 12,
-                    child: Icon(
-                      Icons.check,
-                      size: 15,
-                    ),
-                  )
-                : const SizedBox(),
+            endWidget:
+                AppGlobals().theme == "System" || AppGlobals().theme == null
+                    ? const CircleAvatar(
+                        radius: 12,
+                        child: Icon(
+                          Icons.check,
+                          size: 15,
+                        ),
+                      )
+                    : const SizedBox(),
           ),
           constHeight20,
           MultiListTileWidget(
@@ -63,14 +66,18 @@ class _ThemeScreenState extends State<ThemeScreen> {
               setState(() {
                 SharedPreference.setTheme(theme: "Dark");
                 AppGlobals().theme = "Dark";
-                context.read<ThemeCubit>().chanheTheme(theme: AppGlobals().theme);
+                context
+                    .read<ThemeCubit>()
+                    .chanheTheme(theme: AppGlobals().theme);
               });
             },
             onTap2: () {
               setState(() {
                 SharedPreference.setTheme(theme: "Light");
                 AppGlobals().theme = "Light";
-                context.read<ThemeCubit>().chanheTheme(theme: AppGlobals().theme);
+                context
+                    .read<ThemeCubit>()
+                    .chanheTheme(theme: AppGlobals().theme);
               });
             },
             endWidget1: AppGlobals().theme == "Dark"
@@ -113,7 +120,9 @@ class _ThemeScreenState extends State<ThemeScreen> {
                     setState(() {
                       AppGlobals().colorIndex = index;
                     });
-                    context.read<ThemeCubit>().chanheTheme(theme: AppGlobals().theme);
+                    context
+                        .read<ThemeCubit>()
+                        .chanheTheme(theme: AppGlobals().theme);
                   },
                   child: CircleAvatar(
                     backgroundColor: colorList[index],

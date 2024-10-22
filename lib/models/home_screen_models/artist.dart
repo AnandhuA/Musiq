@@ -1,6 +1,5 @@
 import 'package:musiq/models/song_model/image.dart';
 
-
 class Artist {
   String? id;
   List<Image>? image;

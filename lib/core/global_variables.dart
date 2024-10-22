@@ -5,12 +5,10 @@ import 'package:musiq/services/audio_handler.dart';
 class AppGlobals {
   static final AppGlobals _instance = AppGlobals._internal();
 
-  // Factory constructor to return the same instance
   factory AppGlobals() {
     return _instance;
   }
 
-  // Private constructor to prevent external instantiation
   AppGlobals._internal();
 
   // Global variables
@@ -21,7 +19,7 @@ class AppGlobals {
   late AudioPlayerHandler audioHandler;
 
   // You can add methods here to manipulate or retrieve the state if needed
-  void updateTheme(String newTheme) {
+  void updateTheme(String? newTheme) {
     theme = newTheme;
   }
 
@@ -29,7 +27,7 @@ class AppGlobals {
     colorIndex = index;
   }
 
-  void setUserLoggedInStatus(String status) {
+  void setUserLoggedInStatus(String? status) {
     userIsLoggedIn = status;
   }
 }
