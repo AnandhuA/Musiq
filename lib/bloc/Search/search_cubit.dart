@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:http/http.dart';
 import 'package:meta/meta.dart';
@@ -21,7 +19,7 @@ class SearchCubit extends Cubit<SearchState> {
     if (response != null && response.statusCode == 200) {
       final data = jsonDecode(response.body);
       final GlobalSearchModel model = GlobalSearchModel.fromJson(data);
-      log("Global-------${model.data?.songs?.results?.length}");
+      emit(GobalSearchState(model: model));
     }
   }
 
@@ -31,7 +29,7 @@ class SearchCubit extends Cubit<SearchState> {
     if (responce != null && responce.statusCode == 200) {
       final data = jsonDecode(responce.body);
       final SearchSongModel model = SearchSongModel.fromJson(data);
-      log("Song------------${model.data?.results?.length}");
+      emit(SongSearchState(model: model));
     }
   }
 
@@ -41,7 +39,7 @@ class SearchCubit extends Cubit<SearchState> {
     if (responce != null && responce.statusCode == 200) {
       final data = jsonDecode(responce.body);
       final SearchAlbumModel model = SearchAlbumModel.fromJson(data);
-      log("Album------------${model.data?.results?.length}");
+      emit(AlbumSearchState(model: model));
     }
   }
 
@@ -51,7 +49,7 @@ class SearchCubit extends Cubit<SearchState> {
     if (responce != null && responce.statusCode == 200) {
       final data = jsonDecode(responce.body);
       final SearchPlayListModel model = SearchPlayListModel.fromJson(data);
-      log("PlayList------------${model.data?.results?.length}");
+      emit(PlayListSearchState(model: model));
     }
   }
 
@@ -60,7 +58,7 @@ class SearchCubit extends Cubit<SearchState> {
     if (responce != null && responce.statusCode == 200) {
       final data = jsonDecode(responce.body);
       final SearchArtistModel model = SearchArtistModel.fromJson(data);
-      log("Artist------------${model.data?.results?.length}");
+      emit(ArtistSearchState(model: model));
     }
   }
 }

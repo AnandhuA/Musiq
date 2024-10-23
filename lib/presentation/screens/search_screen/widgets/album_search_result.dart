@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:musiq/bloc/Search/search_cubit.dart';
+import 'package:musiq/core/colors.dart';
+import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/presentation/commanWidgets/empty_screen.dart';
 
 class AlbumSearchResult extends StatelessWidget {
@@ -6,14 +10,35 @@ class AlbumSearchResult extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return emptyScreen(
-      context: context,
-      text1: "show",
-      size1: 15,
-      text2: "Nothing",
-      size2: 20,
-      text3: "Album",
-      size3: 20,
+    return BlocBuilder<SearchCubit, SearchState>(
+      builder: (context, state) {
+        if (state is SearchLoadingState) {
+          Center(
+            child: CircularProgressIndicator(
+              color: colorList[AppGlobals().colorIndex],
+            ),
+          );
+        } else if (state is AlbumSearchState) {
+          ListView.builder(
+            itemCount: state.model.data?.results?.length ?? 0,
+            itemBuilder: (context, index) {
+              final song = state.model.data?.results?[index];
+              return ListTile(
+                title: Text(song?.name ?? "No"),
+              );
+            },
+          );
+        }
+        return emptyScreen(
+          context: context,
+          text1: "show",
+          size1: 15,
+          text2: "Nothing",
+          size2: 20,
+          text3: "All",
+          size3: 20,
+        );
+      },
     );
   }
 }
