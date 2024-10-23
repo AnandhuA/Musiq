@@ -95,7 +95,7 @@ class HomeScreen extends StatelessWidget {
                                         .feachArtistSong(
                                           artistName: artist.title ?? "",
                                           imageUrl: artist.image ??
-                                              "https://static.vecteezy.com/system/resources/thumbnails/037/044/052/small_2x/ai-generated-studio-shot-of-black-headphones-over-music-note-explosion-background-with-empty-space-for-text-photo.jpg",
+                                             errorImage(),
                                           title: artist.title ?? "",
                                         );
                                   } else {
@@ -103,7 +103,7 @@ class HomeScreen extends StatelessWidget {
                                           type: artist.type ?? "",
                                           id: artist.id ?? "0",
                                           imageUrl: artist.image ??
-                                              "https://static.vecteezy.com/system/resources/thumbnails/037/044/052/small_2x/ai-generated-studio-shot-of-black-headphones-over-music-note-explosion-background-with-empty-space-for-text-photo.jpg",
+                                              errorImage(),
                                           title: artist.title ?? "",
                                         );
                                   }
@@ -123,7 +123,7 @@ class HomeScreen extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(50),
                                     child: CachedNetworkImage(
                                       imageUrl: artist.image ??
-                                          "https://static.vecteezy.com/system/resources/thumbnails/037/044/052/small_2x/ai-generated-studio-shot-of-black-headphones-over-music-note-explosion-background-with-empty-space-for-text-photo.jpg",
+                                          errorImage(),
                                       errorWidget: (context, url, error) =>
                                           Image.asset(
                                               "assets/images/artist.png"),
@@ -158,7 +158,7 @@ class HomeScreen extends StatelessWidget {
                                         .feachArtistSong(
                                           artistName: playList.title ?? "",
                                           imageUrl: playList.image ??
-                                              "https://static.vecteezy.com/system/resources/thumbnails/037/044/052/small_2x/ai-generated-studio-shot-of-black-headphones-over-music-note-explosion-background-with-empty-space-for-text-photo.jpg",
+                                             errorImage(),
                                           title: playList.title ?? "",
                                         );
                                   } else {
@@ -166,7 +166,7 @@ class HomeScreen extends StatelessWidget {
                                           type: playList.type ?? "",
                                           id: playList.id ?? "0",
                                           imageUrl: playList.image ??
-                                              "https://static.vecteezy.com/system/resources/thumbnails/037/044/052/small_2x/ai-generated-studio-shot-of-black-headphones-over-music-note-explosion-background-with-empty-space-for-text-photo.jpg",
+                                             errorImage(),
                                           title: playList.title ?? "",
                                         );
                                   }
@@ -175,7 +175,7 @@ class HomeScreen extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(10),
                                   child: CachedNetworkImage(
                                     imageUrl: playList.image ??
-                                        "https://static.vecteezy.com/system/resources/thumbnails/037/044/052/small_2x/ai-generated-studio-shot-of-black-headphones-over-music-note-explosion-background-with-empty-space-for-text-photo.jpg",
+                                       errorImage(),
                                     errorWidget: (context, url, error) =>
                                         Image.asset("assets/images/album.png"),
                                     placeholder: (context, url) =>
@@ -391,7 +391,7 @@ class HomeScreen extends StatelessWidget {
                                                 child: CachedNetworkImage(
                                                   imageUrl: songList[index]
                                                           .image ??
-                                                      "https://static.vecteezy.com/system/resources/thumbnails/037/044/052/small_2x/ai-generated-studio-shot-of-black-headphones-over-music-note-explosion-background-with-empty-space-for-text-photo.jpg",
+                                                     errorImage(),
                                                   placeholder: (context, url) {
                                                     // Placeholder logic
                                                     return songList[index]

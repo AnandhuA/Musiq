@@ -64,7 +64,7 @@ class _NewSearchScreenState extends State<NewSearchScreen> {
     );
   }
 
-  //-------- build widget according "_searchValue" -----
+  // build widget based on the current value of "_searchValue"  -----
 
   Widget _buildSearchResults() {
     switch (_searchValue) {
@@ -81,7 +81,7 @@ class _NewSearchScreenState extends State<NewSearchScreen> {
     }
   }
 
-//--------  button --------
+//--------  button  --------
   Widget _buildButton(String title, ThemeData theme) {
     return TextButton(
       onPressed: () {

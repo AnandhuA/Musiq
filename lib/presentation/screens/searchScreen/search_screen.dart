@@ -6,6 +6,7 @@ import 'package:musiq/bloc/FeatchSong/featch_song_cubit.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/models/song_model/song.dart';
+import 'package:musiq/presentation/commanWidgets/empty_screen.dart';
 import 'package:musiq/presentation/commanWidgets/textfeild.dart';
 import 'package:musiq/bloc/SearchSong/search_song_bloc.dart';
 import 'package:musiq/presentation/screens/player_screen/bottomPlayer/bottom_player.dart';
@@ -403,7 +404,15 @@ class SearchScreenState extends State<SearchScreen> {
                             ],
                           );
                         } else {
-                          return Center(child: Text('No data available.'));
+                          return  emptyScreen(
+                            context: context,
+                            text1: "show",
+                            size1: 15,
+                            text2: "Nothing",
+                            size2: 20,
+                            text3: "no data",
+                            size3: 20,
+                          );
                         }
                       },
                     ),

@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/models/song_model/song.dart';
 import 'package:musiq/presentation/commanWidgets/custom_app_bar.dart';
+import 'package:musiq/presentation/commanWidgets/empty_screen.dart';
 import 'package:musiq/presentation/commanWidgets/favorite_icon.dart';
 import 'package:musiq/bloc/favorite_bloc/favorite_bloc.dart';
 import 'package:musiq/presentation/screens/player_screen/bottomPlayer/bottom_player.dart';
@@ -50,8 +51,14 @@ class FavoriteScreen extends StatelessWidget {
             List<Song> sortedFavorites = _sortFavorites(state.favorites);
 
             return sortedFavorites.isEmpty
-                ? const Center(
-                    child: Text("No Favorite"),
+                ? emptyScreen(
+                    context: context,
+                    text1: "show",
+                    size1: 15,
+                    text2: "Nothing",
+                    size2: 20,
+                    text3: "Songs",
+                    size3: 20,
                   )
                 : Stack(
                     children: [
@@ -147,8 +154,14 @@ class FavoriteScreen extends StatelessWidget {
                     ],
                   );
           } else {
-            return const Center(
-              child: Text("Error"),
+            return emptyScreen(
+              context: context,
+              text1: "show",
+              size1: 15,
+              text2: "Nothing",
+              size2: 20,
+              text3: "Error",
+              size3: 20,
             );
           }
         },

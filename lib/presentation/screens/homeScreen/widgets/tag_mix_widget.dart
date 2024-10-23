@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/bloc/FeatchSong/featch_song_cubit.dart';
 import 'package:musiq/core/colors.dart';
+import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/core/sized.dart';
 
 class TagMixGrid extends StatelessWidget {
@@ -37,8 +38,7 @@ class TagMixGrid extends StatelessWidget {
         ),
         itemBuilder: (context, index) {
           final tagMix = tagMixes[index];
-          final fallbackImageUrl =
-              "https://static.vecteezy.com/system/resources/thumbnails/037/044/052/small_2x/ai-generated-studio-shot-of-black-headphones-over-music-note-explosion-background-with-empty-space-for-text-photo.jpg";
+          final fallbackImageUrl = errorImage();
 
           return GestureDetector(
             onTap: () {

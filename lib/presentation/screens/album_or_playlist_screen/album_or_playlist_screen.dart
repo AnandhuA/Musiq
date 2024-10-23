@@ -7,6 +7,7 @@ import 'package:musiq/data/add_to_library_funtions.dart';
 import 'package:musiq/models/library_model.dart';
 import 'package:musiq/models/song_model.dart';
 import 'package:musiq/models/song_model/song.dart';
+import 'package:musiq/presentation/commanWidgets/empty_screen.dart';
 import 'package:musiq/presentation/commanWidgets/snack_bar.dart';
 import 'package:musiq/presentation/screens/player_screen/bottomPlayer/bottom_player.dart';
 
@@ -225,53 +226,65 @@ class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
                 ),
               ),
               constHeight30,
-              Expanded(
-                child: ListView.builder(
-                  itemCount: widget.songModel.length,
-                  itemBuilder: (context, index) {
-                    final song = widget.songModel[index];
-                    return ListTile(
-                      onTap: () {
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //       builder: (context) => PlayerScreen(
-                        //         songs: widget.songModel,
-                        //         initialIndex: index,
-                        //       ),
-                        //     ));
-                      },
-                      leading: ClipRRect(
-                        borderRadius: BorderRadius.circular(5),
-                        child: CachedNetworkImage(
-                          imageUrl: song.imageUrl,
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) => song.type == "Artist"
-                              ? Image.asset("assets/images/artist.png")
-                              : song.type == "album"
-                                  ? Image.asset("assets/images/album.png")
-                                  : Image.asset("assets/images/song.png"),
-                          errorWidget: (context, url, error) =>
-                              song.type == "Artist"
-                                  ? Image.asset("assets/images/artist.png")
-                                  : song.type == "album"
-                                      ? Image.asset("assets/images/album.png")
-                                      : Image.asset("assets/images/song.png"),
-                        ),
+              widget.songModel.isEmpty
+                  ? emptyScreen(
+                      context: context,
+                      text1: "show",
+                      size1: 15,
+                      text2: "Nothing",
+                      size2: 20,
+                      text3: "Songs",
+                      size3: 20,
+                    )
+                  : Expanded(
+                      child: ListView.builder(
+                        itemCount: widget.songModel.length,
+                        itemBuilder: (context, index) {
+                          final song = widget.songModel[index];
+                          return ListTile(
+                            onTap: () {
+                              // Navigator.push(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //       builder: (context) => PlayerScreen(
+                              //         songs: widget.songModel,
+                              //         initialIndex: index,
+                              //       ),
+                              //     ));
+                            },
+                            leading: ClipRRect(
+                              borderRadius: BorderRadius.circular(5),
+                              child: CachedNetworkImage(
+                                imageUrl: song.imageUrl,
+                                fit: BoxFit.cover,
+                                placeholder: (context, url) => song.type ==
+                                        "Artist"
+                                    ? Image.asset("assets/images/artist.png")
+                                    : song.type == "album"
+                                        ? Image.asset("assets/images/album.png")
+                                        : Image.asset("assets/images/song.png"),
+                                errorWidget: (context, url, error) => song
+                                            .type ==
+                                        "Artist"
+                                    ? Image.asset("assets/images/artist.png")
+                                    : song.type == "album"
+                                        ? Image.asset("assets/images/album.png")
+                                        : Image.asset("assets/images/song.png"),
+                              ),
+                            ),
+                            title: Text(
+                              song.title,
+                              maxLines: 1,
+                            ),
+                            subtitle: Text(
+                              song.subtitle,
+                              maxLines: 1,
+                            ),
+                            // trailing: FavoriteIcon(song: song),
+                          );
+                        },
                       ),
-                      title: Text(
-                        song.title,
-                        maxLines: 1,
-                      ),
-                      subtitle: Text(
-                        song.subtitle,
-                        maxLines: 1,
-                      ),
-                      // trailing: FavoriteIcon(song: song),
-                    );
-                  },
-                ),
-              ),
+                    ),
             ],
           ),
           ValueListenableBuilder<List<Song>>(

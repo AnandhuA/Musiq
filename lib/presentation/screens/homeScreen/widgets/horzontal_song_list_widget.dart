@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/bloc/FeatchSong/featch_song_cubit.dart';
+import 'package:musiq/core/helper_funtions.dart';
 
 class HorizontalSongList extends StatelessWidget {
   final List model;
@@ -48,7 +49,7 @@ class HorizontalSongList extends StatelessWidget {
                       borderRadius: BorderRadius.circular(boderRadius),
                       child: CachedNetworkImage(
                         imageUrl: data.image ??
-                            "https://static.vecteezy.com/system/resources/thumbnails/037/044/052/small_2x/ai-generated-studio-shot-of-black-headphones-over-music-note-explosion-background-with-empty-space-for-text-photo.jpg",
+                            errorImage(),
                         fit: BoxFit.cover,
                         placeholder: (context, url) => data.type == "Artist"
                             ? Image.asset("assets/images/artist.png")

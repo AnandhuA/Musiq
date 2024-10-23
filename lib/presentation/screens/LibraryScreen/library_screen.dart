@@ -8,6 +8,7 @@ import 'package:musiq/bloc/FeatchSong/featch_song_cubit.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/sized.dart';
+import 'package:musiq/presentation/commanWidgets/empty_screen.dart';
 import 'package:musiq/presentation/screens/album_or_playlist_screen/album_or_playlist_screen.dart';
 import 'package:musiq/presentation/screens/favoriteScreen/favorite_screen.dart';
 import 'package:musiq/presentation/screens/loginScreen/login_screen.dart';
@@ -168,14 +169,26 @@ class LibraryScreen extends StatelessWidget {
                             },
                           );
                         } else if (state is FeatchLibraryErrorState) {
-                          return Center(
-                            child: Text('Error fetching data'),
+                          return emptyScreen(
+                            context: context,
+                            text1: "show",
+                            size1: 15,
+                            text2: "Nothing",
+                            size2: 20,
+                            text3: "Error",
+                            size3: 20,
                           );
                         }
 
                         // Default case if no state matches
-                        return Center(
-                          child: Text('No data available'),
+                        return emptyScreen(
+                          context: context,
+                          text1: "show",
+                          size1: 15,
+                          text2: "Nothing",
+                          size2: 20,
+                          text3: "No Data",
+                          size3: 20,
                         );
                       },
                     ),

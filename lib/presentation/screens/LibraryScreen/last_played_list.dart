@@ -4,6 +4,7 @@ import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/data/hive_funtion.dart';
 import 'package:musiq/models/song_model/song.dart';
+import 'package:musiq/presentation/commanWidgets/empty_screen.dart';
 import 'package:musiq/presentation/screens/player_screen/bottomPlayer/bottom_player.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 
@@ -53,8 +54,14 @@ class _LastPlayedListState extends State<LastPlayedList> {
         body: Stack(
           children: [
             lastplayed.isEmpty
-                ? const Center(
-                    child: Text("No Songs"),
+                ? emptyScreen(
+                    context: context,
+                    text1: "show",
+                    size1: 15,
+                    text2: "Nothing",
+                    size2: 20,
+                    text3: "Songs",
+                    size3: 20,
                   )
                 : ListView.builder(
                     itemCount: lastplayed.length,

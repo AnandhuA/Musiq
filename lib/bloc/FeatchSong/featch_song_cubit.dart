@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/data/saavn_data.dart';
 import 'package:musiq/models/library_model.dart';
 import 'package:musiq/models/song_model.dart';
@@ -59,7 +60,7 @@ class FeatchSongCubit extends Cubit<FeatchSongState> {
       final LibraryModel liModel = LibraryModel(
         id: albumId,
         imageUrl: imageUrl ??
-            "https://static.vecteezy.com/system/resources/thumbnails/037/044/052/small_2x/ai-generated-studio-shot-of-black-headphones-over-music-note-explosion-background-with-empty-space-for-text-photo.jpg",
+           errorImage(),
         title: title,
         type: type,
       );
@@ -93,7 +94,7 @@ class FeatchSongCubit extends Cubit<FeatchSongState> {
       final LibraryModel liModel = LibraryModel(
         id: playlistId,
         imageUrl: imageUrl ??
-            "https://static.vecteezy.com/system/resources/thumbnails/037/044/052/small_2x/ai-generated-studio-shot-of-black-headphones-over-music-note-explosion-background-with-empty-space-for-text-photo.jpg",
+           errorImage(),
         title: title,
         type: type,
       );
