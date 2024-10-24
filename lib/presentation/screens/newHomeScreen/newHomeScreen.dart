@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -71,11 +69,9 @@ class Newhomescreen extends StatelessWidget {
                           itemBuilder: (context, index) {
                             final data = state.newHomeScreenModel!.songdata!
                                 .trending!.data![index];
-                            log("${data.type}");
+
                             return GestureDetector(
                               onTap: () {
-                                log("${data.type}");
-
                                 context
                                     .read<FeatchAlbumAndPlayListCubit>()
                                     .fetchData(

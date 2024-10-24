@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/bloc/Search/search_cubit.dart';
@@ -27,6 +26,7 @@ class _NewSearchScreenState extends State<NewSearchScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
     return Scaffold(
       body: Column(
         children: [
@@ -88,6 +88,7 @@ class _NewSearchScreenState extends State<NewSearchScreen> {
         setState(() {
           _searchValue = title;
         });
+        _onSearchChanged(_searchController.text);
       },
       child: Text(
         title,
@@ -118,20 +119,25 @@ class _NewSearchScreenState extends State<NewSearchScreen> {
     _debounce = Timer(const Duration(milliseconds: 500), () {
       switch (_searchValue) {
         case "Song":
-          context.read<SearchCubit>().searchSong(query: value);
+          if (value.isNotEmpty)
+            context.read<SearchCubit>().searchSong(query: value);
           break;
         case "Album":
-          context.read<SearchCubit>().searchAlbum(query: value);
+          if (value.isNotEmpty)
+            context.read<SearchCubit>().searchAlbum(query: value);
           break;
         case "Artist":
-          context.read<SearchCubit>().searchArtist(query: value);
+          if (value.isNotEmpty)
+            context.read<SearchCubit>().searchArtist(query: value);
           break;
         case "PlayList":
-          context.read<SearchCubit>().searchPlayList(query: value);
+          if (value.isNotEmpty)
+            context.read<SearchCubit>().searchPlayList(query: value);
           break;
         case "All":
         default:
-          context.read<SearchCubit>().searchGobal(query: value);
+          if (value.isNotEmpty)
+            context.read<SearchCubit>().searchGobal(query: value);
           break;
       }
     });

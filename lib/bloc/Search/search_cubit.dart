@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:http/http.dart';
 import 'package:meta/meta.dart';
@@ -15,6 +16,7 @@ class SearchCubit extends Cubit<SearchState> {
   SearchCubit() : super(SearchInitial());
 // ----- gobal search -------------
   void searchGobal({required String query}) async {
+    emit(SearchLoadingState());
     final Response? response = await Saavan2.featchglobalSearch(query: query);
     if (response != null && response.statusCode == 200) {
       final data = jsonDecode(response.body);
@@ -25,16 +27,19 @@ class SearchCubit extends Cubit<SearchState> {
 
 // --------- search song --------------
   void searchSong({required String query}) async {
+    emit(SearchLoadingState());
     final Response? responce = await Saavan2.featchSearchSong(query: query);
     if (responce != null && responce.statusCode == 200) {
       final data = jsonDecode(responce.body);
       final SearchSongModel model = SearchSongModel.fromJson(data);
+      log("bloc --${model.data?.results?.length}");
       emit(SongSearchState(model: model));
     }
   }
 
 // ---------- search album -----------
   void searchAlbum({required String query}) async {
+    emit(SearchLoadingState());
     final Response? responce = await Saavan2.featchSearchAlbums(query: query);
     if (responce != null && responce.statusCode == 200) {
       final data = jsonDecode(responce.body);
@@ -45,6 +50,7 @@ class SearchCubit extends Cubit<SearchState> {
 
 //--------------- search playList ----------
   void searchPlayList({required String query}) async {
+    emit(SearchLoadingState());
     final Response? responce = await Saavan2.featchSearchPlayList(query: query);
     if (responce != null && responce.statusCode == 200) {
       final data = jsonDecode(responce.body);
@@ -54,6 +60,7 @@ class SearchCubit extends Cubit<SearchState> {
   }
 
   void searchArtist({required String query}) async {
+    emit(SearchLoadingState());
     final Response? responce = await Saavan2.featchSearchArtists(query: query);
     if (responce != null && responce.statusCode == 200) {
       final data = jsonDecode(responce.body);
