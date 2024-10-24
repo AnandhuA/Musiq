@@ -1,7 +1,7 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:musiq/bloc/FeatchAlbumAndPlayList/featch_album_and_play_list_cubit.dart';
 import 'package:musiq/bloc/Search/search_cubit.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/global_variables.dart';
@@ -33,7 +33,8 @@ class AllSearchResult extends StatelessWidget {
               state.model.data?.albums?.results ?? [];
           final List<Result> artistResults =
               state.model.data?.artists?.results ?? [];
-          final playlistResults = state.model.data?.playlists?.results ?? [];
+          final List<Result> playlistResults =
+              state.model.data?.playlists?.results ?? [];
 
           return ListView(
             children: [
@@ -73,7 +74,7 @@ class AllSearchResult extends StatelessWidget {
   }
 
   // Helper method to build category section
-  Widget _buildCategorySection(String title, List<dynamic> results) {
+  Widget _buildCategorySection(String title, List<Result> results) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -94,8 +95,14 @@ class AllSearchResult extends StatelessWidget {
           itemBuilder: (context, index) {
             final result = results[index];
             return ListTile(
+              onTap: () {
+                context.read<FeatchAlbumAndPlayListCubit>().fetchData(
+                    type: result.type ?? "",
+                    id: result.id ?? "",
+                    imageUrl: result.image?.last.url ?? errorImage());
+              },
               leading: CachedNetworkImage(
-                imageUrl: result?.image?.last.url ?? errorImage(),
+                imageUrl: result.image?.last.url ?? errorImage(),
                 placeholder: (context, url) =>
                     Image.asset("assets/images/song.png"),
                 errorWidget: (context, url, error) =>
