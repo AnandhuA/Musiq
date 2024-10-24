@@ -36,7 +36,7 @@ class LoginScreen extends StatelessWidget {
                 context: context,
                 message: state.errorMessage,
                 bgColor: Colors.red,
-                textColor: white);
+                textColor: AppColors.white);
           }
         },
         child: SafeArea(
@@ -58,12 +58,12 @@ class LoginScreen extends StatelessWidget {
                 key: _formKey,
                 child: Column(
                   children: [
-                    constHeight30,
+                    AppSpacing.height30,
                     const Text(
                       "Login",
                       style: TextStyle(fontSize: 100),
                     ),
-                    constHeight40,
+                    AppSpacing.height40,
                     TextFormField(
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -83,7 +83,7 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    constHeight20,
+                    AppSpacing.height20,
                     TextFormField(
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -101,14 +101,14 @@ class LoginScreen extends StatelessWidget {
                       ),
                       obscureText: true,
                     ),
-                    constHeight20,
+                    AppSpacing.height20,
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.all(5),
                       decoration: BoxDecoration(
                         color: Theme.of(context).brightness == Brightness.dark
-                            ? Colors.white
-                            : Colors.black,
+                            ? AppColors.white
+                            : AppColors.black,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: BlocBuilder<LoginBloc, LoginState>(
@@ -123,8 +123,8 @@ class LoginScreen extends StatelessWidget {
                                     style: TextStyle(
                                       color: Theme.of(context).brightness ==
                                               Brightness.dark
-                                          ? Colors.black
-                                          : Colors.white,
+                                          ? AppColors.black
+                                          : AppColors.white,
                                     ),
                                   ),
                             onPressed: () {

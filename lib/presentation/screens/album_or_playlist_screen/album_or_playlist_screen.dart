@@ -93,7 +93,7 @@ class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
                         ),
                       ),
                     ),
-                    constWidth20,
+                    AppSpacing.width20,
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,7 +105,8 @@ class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
                             style: TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
-                              color: colorList[AppGlobals().colorIndex],
+                              color:
+                                  AppColors.colorList[AppGlobals().colorIndex],
                             ),
                           ),
                           Text(
@@ -127,7 +128,7 @@ class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
                                   maxLines: 5,
                                 )
                               : SizedBox(),
-                          constHeight10,
+                          AppSpacing.height10,
                           Row(
                             children: [
                               GestureDetector(
@@ -141,12 +142,12 @@ class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
                                       message: "Add to Library",
                                       bgColor: Theme.of(context).brightness ==
                                               Brightness.dark
-                                          ? white
-                                          : black,
+                                          ? AppColors.white
+                                          : AppColors.black,
                                       textColor: Theme.of(context).brightness ==
                                               Brightness.dark
-                                          ? black
-                                          : white,
+                                          ? AppColors.black
+                                          : AppColors.white,
                                     );
                                   } else {
                                     await AddToLibrary.deleteLibraryItem(
@@ -158,12 +159,12 @@ class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
                                       message: "removed from the library",
                                       bgColor: Theme.of(context).brightness ==
                                               Brightness.dark
-                                          ? white
-                                          : black,
+                                          ? AppColors.white
+                                          : AppColors.black,
                                       textColor: Theme.of(context).brightness ==
                                               Brightness.dark
-                                          ? black
-                                          : white,
+                                          ? AppColors.black
+                                          : AppColors.white,
                                     );
                                   }
                                   setState(() {
@@ -176,7 +177,8 @@ class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     border: Border.all(
-                                      color: colorList[AppGlobals().colorIndex],
+                                      color: AppColors
+                                          .colorList[AppGlobals().colorIndex],
                                       width: 2.0,
                                     ),
                                   ),
@@ -202,21 +204,21 @@ class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
                                   //     : null;
                                 },
                                 child: CircleAvatar(
-                                  backgroundColor:
-                                      colorList[AppGlobals().colorIndex],
+                                  backgroundColor: AppColors
+                                      .colorList[AppGlobals().colorIndex],
                                   radius: 28,
                                   child: Center(
                                     child: Icon(
                                       Icons.play_arrow_sharp,
                                       size: 35,
                                       color: theme.brightness == Brightness.dark
-                                          ? Colors.black
-                                          : Colors.white,
+                                          ? AppColors.black
+                                          : AppColors.white,
                                     ),
                                   ),
                                 ),
                               ),
-                              constWidth20
+                              AppSpacing.width20
                             ],
                           )
                         ],
@@ -225,7 +227,7 @@ class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
                   ],
                 ),
               ),
-              constHeight30,
+              AppSpacing.height30,
               widget.songModel.isEmpty
                   ? emptyScreen(
                       context: context,

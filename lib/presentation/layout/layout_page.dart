@@ -100,8 +100,8 @@ class LayOutPageState extends State<LayOutPage> {
                                       hintText: "Search",
                                       icon: Icon(
                                         Icons.search,
-                                        color:
-                                            colorList[AppGlobals().colorIndex],
+                                        color: AppColors
+                                            .colorList[AppGlobals().colorIndex],
                                       ),
                                     ),
                                   ),
@@ -119,15 +119,15 @@ class LayOutPageState extends State<LayOutPage> {
                         NavigationRail(
                           backgroundColor:
                               Theme.of(context).brightness == Brightness.dark
-                                  ? black
-                                  : white,
+                                  ? AppColors.black
+                                  : AppColors.white,
                           selectedIndex: _selectedIndex,
                           onDestinationSelected: _onItemTapped,
                           labelType: NavigationRailLabelType.selected,
                           destinations: <NavigationRailDestination>[
                             NavigationRailDestination(
                               indicatorColor:
-                                  colorList[AppGlobals().colorIndex],
+                                  AppColors.colorList[AppGlobals().colorIndex],
                               icon: Icon(Icons.home),
                               label: Text('Home'),
                             ),
@@ -145,7 +145,7 @@ class LayOutPageState extends State<LayOutPage> {
                             ),
                           ],
                           selectedIconTheme: IconThemeData(
-                            color: colorList[AppGlobals().colorIndex],
+                            color: AppColors.colorList[AppGlobals().colorIndex],
                           ),
                           trailing: IconButton(
                             icon: Icon(Icons.settings),
@@ -212,7 +212,8 @@ class LayOutPageState extends State<LayOutPage> {
                                     hintText: "Search",
                                     icon: Icon(
                                       Icons.search,
-                                      color: colorList[AppGlobals().colorIndex],
+                                      color: AppColors
+                                          .colorList[AppGlobals().colorIndex],
                                     ),
                                   ),
                                 ),
@@ -249,9 +250,10 @@ class LayOutPageState extends State<LayOutPage> {
                   backgroundColor: Colors.transparent,
                   color: Colors.grey[800],
                   haptic: true,
-                  activeColor: colorList[AppGlobals().colorIndex],
-                  tabBackgroundColor:
-                      colorList[AppGlobals().colorIndex].withOpacity(0.1),
+                  activeColor: AppColors.colorList[AppGlobals().colorIndex],
+                  tabBackgroundColor: AppColors
+                      .colorList[AppGlobals().colorIndex]
+                      .withOpacity(0.1),
                   gap: 5,
                   padding: const EdgeInsets.all(10),
                   tabMargin: const EdgeInsets.all(14),

@@ -44,7 +44,7 @@ class _NewSearchScreenState extends State<NewSearchScreen> {
               onChanged: _onSearchChanged,
             ),
           ),
-          constHeight20,
+          AppSpacing.height20,
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -55,7 +55,7 @@ class _NewSearchScreenState extends State<NewSearchScreen> {
               _buildButton("PlayList", theme),
             ],
           ),
-          constHeight20,
+          AppSpacing.height20,
           Expanded(
             child: _buildSearchResults(),
           ),
@@ -93,16 +93,16 @@ class _NewSearchScreenState extends State<NewSearchScreen> {
         title,
         style: TextStyle(
           color: _searchValue == title
-              ? colorList[AppGlobals().colorIndex]
+              ? AppColors.colorList[AppGlobals().colorIndex]
               : theme.brightness == Brightness.dark
-                  ? Colors.white
-                  : Colors.black,
+                  ? AppColors.white
+                  : AppColors.black,
         ),
       ),
       style: TextButton.styleFrom(
         backgroundColor: theme.brightness == Brightness.dark
-            ? Colors.white.withOpacity(0.1)
-            : Colors.black.withOpacity(0.1),
+            ? AppColors.white.withOpacity(0.1)
+            : AppColors.black.withOpacity(0.1),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),

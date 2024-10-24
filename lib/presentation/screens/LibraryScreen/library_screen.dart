@@ -30,7 +30,7 @@ class LibraryScreen extends StatelessWidget {
                   backgroundColor: Colors.transparent,
                   content: Center(
                     child: CircularProgressIndicator(
-                      color: colorList[AppGlobals().colorIndex],
+                      color: AppColors.colorList[AppGlobals().colorIndex],
                     ),
                   ),
                 );
@@ -64,7 +64,8 @@ class LibraryScreen extends StatelessWidget {
             ? Center(
                 child: TextButton(
                   style: TextButton.styleFrom(
-                      backgroundColor: colorList[AppGlobals().colorIndex],
+                      backgroundColor:
+                          AppColors.colorList[AppGlobals().colorIndex],
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -79,7 +80,7 @@ class LibraryScreen extends StatelessWidget {
                   child: const Text(
                     "LogIn",
                     style: TextStyle(
-                      color: Colors.black,
+                      color: AppColors.black,
                     ),
                   ),
                 ),
@@ -98,7 +99,7 @@ class LibraryScreen extends StatelessWidget {
                     leading: Icon(Icons.favorite),
                     title: Text("Favorite Songs"),
                   ),
-                  constHeight10,
+                  AppSpacing.height10,
                   // ListTile(
                   //   onTap: () {
                   //     Navigator.push(
@@ -112,7 +113,7 @@ class LibraryScreen extends StatelessWidget {
                   //   title: Text("Last Played"),
                   // ),
                   Divider(),
-                  constHeight10,
+                  AppSpacing.height10,
                   Expanded(
                     child: BlocBuilder<FeatchLibraryCubit, FeatchLibraryState>(
                       builder: (context, state) {
@@ -121,12 +122,14 @@ class LibraryScreen extends StatelessWidget {
                         if (state is FeatchLibraryLaodingState) {
                           return Center(
                             child: CircularProgressIndicator(
-                              color: colorList[AppGlobals().colorIndex],
+                              color:
+                                  AppColors.colorList[AppGlobals().colorIndex],
                             ),
                           );
                         } else if (state is FeatchLibrarySuccessState) {
                           return ListView.separated(
-                            separatorBuilder: (context, index) => constHeight20,
+                            separatorBuilder: (context, index) =>
+                                AppSpacing.height20,
                             itemCount: state.libraryModel.length,
                             itemBuilder: (context, index) {
                               final library = state.libraryModel[index];

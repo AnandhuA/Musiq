@@ -15,7 +15,7 @@ class SongSearchResult extends StatelessWidget {
         if (state is SearchLoadingState) {
           Center(
             child: CircularProgressIndicator(
-              color: colorList[AppGlobals().colorIndex],
+              color: AppColors.colorList[AppGlobals().colorIndex],
             ),
           );
         } else if (state is SongSearchState) {

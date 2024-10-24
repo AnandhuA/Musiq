@@ -31,7 +31,7 @@ class SettingsScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          constHeight30,
+          AppSpacing.height30,
           MultiListTileWidget(
             icon1: const Icon(Icons.info_outline),
             title1: "About",
@@ -44,7 +44,7 @@ class SettingsScreen extends StatelessWidget {
               log("privcy");
             },
           ),
-          constHeight20,
+          AppSpacing.height20,
           ListTileWidget(
             icon: const Icon(Icons.dark_mode_outlined),
             title: "Theme",
@@ -57,7 +57,7 @@ class SettingsScreen extends StatelessWidget {
               );
             },
           ),
-          constHeight20,
+          AppSpacing.height20,
           AppGlobals().userIsLoggedIn != null
               ? ListTileWidget(
                   icon: const Icon(
@@ -104,7 +104,7 @@ class SettingsScreen extends StatelessWidget {
             "v1.0",
             style: theme.textTheme.titleMedium,
           ),
-          constHeight50,
+          AppSpacing.height50,
         ],
       ),
     );

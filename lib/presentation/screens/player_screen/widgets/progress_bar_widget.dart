@@ -27,8 +27,12 @@ class ProgressBarWidget extends StatelessWidget {
       bufferedBarColor: Colors.grey,
       timeLabelType: TimeLabelType.totalTime,
       total: songDuration,
-      thumbColor: theme.brightness == Brightness.dark ? white : black,
-      progressBarColor: theme.brightness == Brightness.dark ? white : black,
+      thumbColor: theme.brightness == Brightness.dark
+          ? AppColors.white
+          : AppColors.black,
+      progressBarColor: theme.brightness == Brightness.dark
+          ? AppColors.white
+          : AppColors.black,
       onSeek: (duration) {
         _audioPlayer.seek(duration);
       },

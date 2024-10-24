@@ -22,7 +22,9 @@ class CustomAppBar extends StatelessWidget {
             },
             icon: Icon(
               Icons.arrow_back_ios_new_sharp,
-              color: theme.brightness == Brightness.dark ? white : black,
+              color: theme.brightness == Brightness.dark
+                  ? AppColors.white
+                  : AppColors.black,
             ),
           ),
           Expanded(
@@ -38,7 +40,9 @@ class CustomAppBar extends StatelessWidget {
               onPressed: () {},
               icon: Icon(
                 Icons.more_vert_sharp,
-                color: theme.brightness == Brightness.dark ? white : black,
+                color: theme.brightness == Brightness.dark
+                    ? AppColors.white
+                    : AppColors.black,
               ))
         ],
       ),

@@ -100,8 +100,9 @@ class _MiniPlayerState extends State<MiniPlayer> {
                 ? Colors.grey.shade800
                 : Colors.grey.shade400,
           ),
-          color:
-              Theme.of(context).brightness == Brightness.dark ? black : white,
+          color: Theme.of(context).brightness == Brightness.dark
+              ? AppColors.black
+              : AppColors.white,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Column(
@@ -205,8 +206,8 @@ class _MiniPlayerState extends State<MiniPlayer> {
                 thumbRadius: 3,
                 timeLabelLocation: TimeLabelLocation.none,
                 total: _songDuration,
-                thumbColor: colorList[AppGlobals().colorIndex],
-                progressBarColor: colorList[AppGlobals().colorIndex],
+                thumbColor: AppColors.colorList[AppGlobals().colorIndex],
+                progressBarColor: AppColors.colorList[AppGlobals().colorIndex],
                 onSeek: (duration) {
                   AppGlobals().audioHandler.seek(duration);
                 },

@@ -32,9 +32,9 @@ class ListTileWidget extends StatelessWidget {
         onTap: () => onTap(),
         child: Row(
           children: [
-            constWidth10,
+            AppSpacing.width10,
             icon,
-            constWidth10,
+            AppSpacing.width10,
             Text(
               title,
               style: logout
@@ -45,7 +45,7 @@ class ListTileWidget extends StatelessWidget {
             ),
             const Spacer(),
             endWidget,
-            constWidth10
+            AppSpacing.width10
           ],
         ),
       ),
@@ -92,16 +92,16 @@ class MultiListTileWidget extends StatelessWidget {
             onTap: () => onTap1(),
             child: Row(
               children: [
-                constWidth10,
+                AppSpacing.width10,
                 icon1,
-                constWidth10,
+                AppSpacing.width10,
                 Text(
                   title1,
                   style: theme.textTheme.titleMedium,
                 ),
                 const Spacer(),
                 endWidget1,
-                constWidth10
+                AppSpacing.width10
               ],
             ),
           ),
@@ -113,16 +113,16 @@ class MultiListTileWidget extends StatelessWidget {
             onTap: () => onTap2(),
             child: Row(
               children: [
-                constWidth10,
+                AppSpacing.width10,
                 icon2,
-                constWidth10,
+                AppSpacing.width10,
                 Text(
                   title2,
                   style: theme.textTheme.titleMedium,
                 ),
                 const Spacer(),
                 endWidget2,
-                constWidth10
+                AppSpacing.width10
               ],
             ),
           ),

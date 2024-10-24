@@ -101,21 +101,21 @@ class SearchScreenState extends State<SearchScreen> {
                           "All",
                           style: TextStyle(
                             color: selectedFilter == "All"
-                                ? colorList[AppGlobals().colorIndex]
+                                ? AppColors.colorList[AppGlobals().colorIndex]
                                 : theme.brightness == Brightness.dark
-                                    ? Colors.white
-                                    : Colors.black,
+                                    ? AppColors.white
+                                    : AppColors.black,
                           ),
                         ),
                         style: TextButton.styleFrom(
                           backgroundColor: theme.brightness == Brightness.dark
-                              ? Colors.white.withOpacity(0.1)
-                              : Colors.black.withOpacity(0.1),
+                              ? AppColors.white.withOpacity(0.1)
+                              : AppColors.black.withOpacity(0.1),
                           padding: EdgeInsets.symmetric(
                               horizontal: 20, vertical: 12),
                           shape: RoundedRectangleBorder(
                             // side: selectedFilter == "All"
-                            //     ? BorderSide(color: colorList[colorIndex])
+                            //     ? BorderSide(color: AppColors.colorList[colorIndex])
                             //     : BorderSide.none,
                             borderRadius: BorderRadius.circular(15),
                             // Rounded corners
@@ -132,21 +132,21 @@ class SearchScreenState extends State<SearchScreen> {
                           "Albums",
                           style: TextStyle(
                             color: selectedFilter == "Albums"
-                                ? colorList[AppGlobals().colorIndex]
+                                ? AppColors.colorList[AppGlobals().colorIndex]
                                 : theme.brightness == Brightness.dark
-                                    ? Colors.white
-                                    : Colors.black,
+                                    ? AppColors.white
+                                    : AppColors.black,
                           ),
                         ),
                         style: TextButton.styleFrom(
                           backgroundColor: theme.brightness == Brightness.dark
-                              ? Colors.white.withOpacity(0.1)
-                              : Colors.black.withOpacity(0.1),
+                              ? AppColors.white.withOpacity(0.1)
+                              : AppColors.black.withOpacity(0.1),
                           padding: EdgeInsets.symmetric(
                               horizontal: 20, vertical: 12),
                           shape: RoundedRectangleBorder(
                             // side: selectedFilter == "Albums"
-                            //     ? BorderSide(color: colorList[colorIndex])
+                            //     ? BorderSide(color: AppColors.colorList[colorIndex])
                             //     : BorderSide.none,
                             borderRadius: BorderRadius.circular(15),
                             // Rounded corners
@@ -163,21 +163,21 @@ class SearchScreenState extends State<SearchScreen> {
                           "Playlists",
                           style: TextStyle(
                             color: selectedFilter == "Playlists"
-                                ? colorList[AppGlobals().colorIndex]
+                                ? AppColors.colorList[AppGlobals().colorIndex]
                                 : theme.brightness == Brightness.dark
-                                    ? Colors.white
-                                    : Colors.black,
+                                    ? AppColors.white
+                                    : AppColors.black,
                           ),
                         ),
                         style: TextButton.styleFrom(
                           backgroundColor: theme.brightness == Brightness.dark
-                              ? Colors.white.withOpacity(0.1)
-                              : Colors.black.withOpacity(0.1),
+                              ? AppColors.white.withOpacity(0.1)
+                              : AppColors.black.withOpacity(0.1),
                           padding: EdgeInsets.symmetric(
                               horizontal: 20, vertical: 12),
                           shape: RoundedRectangleBorder(
                             // side: selectedFilter == "Artists"
-                            //     ? BorderSide(color: colorList[colorIndex])
+                            //     ? BorderSide(color: AppColors.colorList[colorIndex])
                             //     : BorderSide.none,
                             borderRadius: BorderRadius.circular(15),
                             // Rounded corners
@@ -194,21 +194,21 @@ class SearchScreenState extends State<SearchScreen> {
                           "Songs",
                           style: TextStyle(
                             color: selectedFilter == "Songs"
-                                ? colorList[AppGlobals().colorIndex]
+                                ? AppColors.colorList[AppGlobals().colorIndex]
                                 : theme.brightness == Brightness.dark
-                                    ? Colors.white
-                                    : Colors.black,
+                                    ? AppColors.white
+                                    : AppColors.black,
                           ),
                         ),
                         style: TextButton.styleFrom(
                           backgroundColor: theme.brightness == Brightness.dark
-                              ? Colors.white.withOpacity(0.1)
-                              : Colors.black.withOpacity(0.1),
+                              ? AppColors.white.withOpacity(0.1)
+                              : AppColors.black.withOpacity(0.1),
                           padding: EdgeInsets.symmetric(
                               horizontal: 20, vertical: 12),
                           shape: RoundedRectangleBorder(
                             // side: selectedFilter == "Songs"
-                            //     ? BorderSide(color: colorList[colorIndex])
+                            //     ? BorderSide(color: AppColors.colorList[colorIndex])
                             //     : BorderSide.none,
                             borderRadius: BorderRadius.circular(15),
                             // Rounded corners
@@ -242,7 +242,7 @@ class SearchScreenState extends State<SearchScreen> {
                               //     style: TextStyle(
                               //         fontSize: 18,
                               //         fontWeight: FontWeight.bold,
-                              //         color: colorList[colorIndex]),
+                              //         color: AppColors.colorList[colorIndex]),
                               //   ),
                               //   ...songList.map((song) => ListTile(
                               //         title: Text(
@@ -298,8 +298,8 @@ class SearchScreenState extends State<SearchScreen> {
                                   style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
-                                      color:
-                                          colorList[AppGlobals().colorIndex]),
+                                      color: AppColors
+                                          .colorList[AppGlobals().colorIndex]),
                                 ),
                                 ...searchResult.albums!.map((album) => ListTile(
                                       title: Text(
@@ -354,8 +354,8 @@ class SearchScreenState extends State<SearchScreen> {
                                   style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
-                                      color:
-                                          colorList[AppGlobals().colorIndex]),
+                                      color: AppColors
+                                          .colorList[AppGlobals().colorIndex]),
                                 ),
                                 ...searchResult.playlists!
                                     .map((playlist) => ListTile(
@@ -404,7 +404,7 @@ class SearchScreenState extends State<SearchScreen> {
                             ],
                           );
                         } else {
-                          return  emptyScreen(
+                          return emptyScreen(
                             context: context,
                             text1: "show",
                             size1: 15,

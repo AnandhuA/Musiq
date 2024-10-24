@@ -56,7 +56,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
                       )
                     : const SizedBox(),
           ),
-          constHeight20,
+          AppSpacing.height20,
           MultiListTileWidget(
             icon1: const Icon(Icons.dark_mode),
             title1: "Dark Mode",
@@ -99,9 +99,9 @@ class _ThemeScreenState extends State<ThemeScreen> {
                   )
                 : const SizedBox(),
           ),
-          constHeight30,
+          AppSpacing.height30,
           const Text("Chose your color"),
-          constHeight20,
+          AppSpacing.height20,
           Expanded(
             child: GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -110,7 +110,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
                 mainAxisSpacing: 12.0,
                 crossAxisSpacing: 8.0,
               ),
-              itemCount: colorList.length,
+              itemCount: AppColors.colorList.length,
               itemBuilder: (context, index) {
                 return InkWell(
                   onTap: () {
@@ -125,11 +125,11 @@ class _ThemeScreenState extends State<ThemeScreen> {
                         .chanheTheme(theme: AppGlobals().theme);
                   },
                   child: CircleAvatar(
-                    backgroundColor: colorList[index],
+                    backgroundColor: AppColors.colorList[index],
                     child: AppGlobals().colorIndex == index
                         ? const Icon(
                             Icons.check,
-                            color: Colors.black,
+                            color: AppColors.black,
                             size: 35,
                           )
                         : const SizedBox(),

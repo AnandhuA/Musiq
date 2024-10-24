@@ -45,7 +45,8 @@ class FavoriteIcon extends StatelessWidget {
             },
             icon: Icon(
               isFav ? Icons.favorite : Icons.favorite_border,
-              color: isFav ? colorList[AppGlobals().colorIndex] : null,
+              color:
+                  isFav ? AppColors.colorList[AppGlobals().colorIndex] : null,
             ),
           );
         }

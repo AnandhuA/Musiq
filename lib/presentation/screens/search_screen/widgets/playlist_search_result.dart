@@ -9,13 +9,13 @@ class PlaylistSearchResult extends StatelessWidget {
   const PlaylistSearchResult({super.key});
 
   @override
-   Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     return BlocBuilder<SearchCubit, SearchState>(
       builder: (context, state) {
         if (state is SearchLoadingState) {
           Center(
             child: CircularProgressIndicator(
-              color: colorList[AppGlobals().colorIndex],
+              color: AppColors.colorList[AppGlobals().colorIndex],
             ),
           );
         } else if (state is PlayListSearchState) {

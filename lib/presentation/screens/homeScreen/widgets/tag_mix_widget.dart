@@ -95,7 +95,7 @@ class TagMixGrid extends StatelessWidget {
                       width: isMobile(context) ? 90 : 150,
                       child: Text(
                         "${tagMix.title} : ${tagMix.type}",
-                        style: TextStyle(fontSize: 16, color: white),
+                        style: TextStyle(fontSize: 16, color: AppColors.white),
                       ),
                     ),
                   ),

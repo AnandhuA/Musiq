@@ -226,7 +226,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                         child: Column(
                           children: [
                             CustomAppBar(title: currentSong.label ?? "NO"),
-                            constHeight30,
+                            AppSpacing.height30,
                             Container(
                               height: screenHeight * 0.3,
                               width: imageSize,
@@ -262,7 +262,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                               overflow: TextOverflow.fade,
                               softWrap: false,
                             ),
-                            constHeight10,
+                            AppSpacing.height10,
                             Row(
                               children: [
                                 Spacer(),
@@ -273,7 +273,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                 FavoriteIcon(song: currentSong),
                               ],
                             ),
-                            constHeight10,
+                            AppSpacing.height10,
                             BlocBuilder<ProgressBarCubit, ProgressBarState>(
                               builder: (context, state) {
                                 if (state is ProgressBarInitial) {
@@ -307,10 +307,10 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                       Icons.shuffle,
                                       color: theme.brightness == Brightness.dark
                                           ? _shuffle
-                                              ? white
+                                              ? AppColors.white
                                               : Colors.grey.shade700
                                           : _shuffle
-                                              ? black
+                                              ? AppColors.black
                                               : Colors.grey,
                                     )),
                                 const Spacer(),
@@ -432,8 +432,8 @@ class _PlayerScreenState extends State<PlayerScreen> {
 
         showModalBottomSheet(
           backgroundColor: theme.brightness == Brightness.dark
-              ? Colors.black.withOpacity(0.7)
-              : Colors.white.withOpacity(0.7),
+              ? AppColors.black.withOpacity(0.7)
+              : AppColors.white.withOpacity(0.7),
           context: context,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
@@ -548,7 +548,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                             maxLines: 1,
                             style: TextStyle(
                               color: currentSongIndex == index
-                                  ? colorList[AppGlobals().colorIndex]
+                                  ? AppColors.colorList[AppGlobals().colorIndex]
                                   : null,
                             ),
                           ),
@@ -557,7 +557,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                             maxLines: 1,
                             style: TextStyle(
                               color: currentSongIndex == index
-                                  ? colorList[AppGlobals().colorIndex]
+                                  ? AppColors.colorList[AppGlobals().colorIndex]
                                   : null,
                             ),
                           ),
@@ -662,7 +662,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
               maxLines: 1,
               style: TextStyle(
                 color: currentSongIndex == index
-                    ? colorList[AppGlobals().colorIndex]
+                    ? AppColors.colorList[AppGlobals().colorIndex]
                     : null,
               ),
             ),
@@ -671,7 +671,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
               maxLines: 1,
               style: TextStyle(
                 color: currentSongIndex == index
-                    ? colorList[AppGlobals().colorIndex]
+                    ? AppColors.colorList[AppGlobals().colorIndex]
                     : null,
               ),
             ),

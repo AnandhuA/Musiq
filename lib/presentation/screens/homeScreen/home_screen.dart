@@ -38,7 +38,8 @@ class HomeScreen extends StatelessWidget {
                               backgroundColor: Colors.transparent,
                               content: Center(
                                 child: CircularProgressIndicator(
-                                  color: colorList[AppGlobals().colorIndex],
+                                  color: AppColors
+                                      .colorList[AppGlobals().colorIndex],
                                 ),
                               ),
                             );
@@ -77,7 +78,8 @@ class HomeScreen extends StatelessWidget {
                               letterSpacing: 3,
                               height: 2,
                               fontWeight: FontWeight.bold,
-                              color: colorList[AppGlobals().colorIndex]),
+                              color:
+                                  AppColors.colorList[AppGlobals().colorIndex]),
                         ),
                         Container(
                           height: 100,
@@ -94,16 +96,16 @@ class HomeScreen extends StatelessWidget {
                                         .read<FeatchSongCubit>()
                                         .feachArtistSong(
                                           artistName: artist.title ?? "",
-                                          imageUrl: artist.image ??
-                                             errorImage(),
+                                          imageUrl:
+                                              artist.image ?? errorImage(),
                                           title: artist.title ?? "",
                                         );
                                   } else {
                                     context.read<FeatchSongCubit>().clickSong(
                                           type: artist.type ?? "",
                                           id: artist.id ?? "0",
-                                          imageUrl: artist.image ??
-                                              errorImage(),
+                                          imageUrl:
+                                              artist.image ?? errorImage(),
                                           title: artist.title ?? "",
                                         );
                                   }
@@ -111,8 +113,8 @@ class HomeScreen extends StatelessWidget {
                                 child: Container(
                                   decoration: BoxDecoration(
                                       border: Border.all(
-                                        color:
-                                            colorList[AppGlobals().colorIndex],
+                                        color: AppColors
+                                            .colorList[AppGlobals().colorIndex],
                                         width: 0,
                                       ),
                                       borderRadius: BorderRadius.circular(50)),
@@ -122,8 +124,7 @@ class HomeScreen extends StatelessWidget {
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(50),
                                     child: CachedNetworkImage(
-                                      imageUrl: artist.image ??
-                                          errorImage(),
+                                      imageUrl: artist.image ?? errorImage(),
                                       errorWidget: (context, url, error) =>
                                           Image.asset(
                                               "assets/images/artist.png"),
@@ -137,13 +138,13 @@ class HomeScreen extends StatelessWidget {
                             },
                           ),
                         ),
-                        constHeight10,
+                        AppSpacing.height10,
                         TagMixGrid(
                           tagMixes: state.homeScreenModel.tagMixes,
                           itemCount: 4,
                           containerHeight: isMobile(context) ? 280 : 350,
                         ),
-                        constHeight10,
+                        AppSpacing.height10,
                         CarouselSlider(
                           items: List.generate(
                             state.homeScreenModel.charts.length,
@@ -157,16 +158,16 @@ class HomeScreen extends StatelessWidget {
                                         .read<FeatchSongCubit>()
                                         .feachArtistSong(
                                           artistName: playList.title ?? "",
-                                          imageUrl: playList.image ??
-                                             errorImage(),
+                                          imageUrl:
+                                              playList.image ?? errorImage(),
                                           title: playList.title ?? "",
                                         );
                                   } else {
                                     context.read<FeatchSongCubit>().clickSong(
                                           type: playList.type ?? "",
                                           id: playList.id ?? "0",
-                                          imageUrl: playList.image ??
-                                             errorImage(),
+                                          imageUrl:
+                                              playList.image ?? errorImage(),
                                           title: playList.title ?? "",
                                         );
                                   }
@@ -174,8 +175,7 @@ class HomeScreen extends StatelessWidget {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
                                   child: CachedNetworkImage(
-                                    imageUrl: playList.image ??
-                                       errorImage(),
+                                    imageUrl: playList.image ?? errorImage(),
                                     errorWidget: (context, url, error) =>
                                         Image.asset("assets/images/album.png"),
                                     placeholder: (context, url) =>
@@ -197,7 +197,7 @@ class HomeScreen extends StatelessWidget {
                             viewportFraction: isMobile(context) ? 0.5 : 0.2,
                           ),
                         ),
-                        constHeight10,
+                        AppSpacing.height10,
                         state.lastplayed.isNotEmpty
                             ? Text(
                                 " Last Played Songs",
@@ -206,7 +206,8 @@ class HomeScreen extends StatelessWidget {
                                     letterSpacing: 3,
                                     height: 2,
                                     fontWeight: FontWeight.bold,
-                                    color: colorList[AppGlobals().colorIndex]),
+                                    color: AppColors
+                                        .colorList[AppGlobals().colorIndex]),
                               )
                             : SizedBox(),
                         state.lastplayed.isNotEmpty
@@ -326,14 +327,15 @@ class HomeScreen extends StatelessWidget {
                               letterSpacing: 3,
                               height: 2,
                               fontWeight: FontWeight.bold,
-                              color: colorList[AppGlobals().colorIndex]),
+                              color:
+                                  AppColors.colorList[AppGlobals().colorIndex]),
                         ),
-                        constHeight20,
+                        AppSpacing.height20,
                         HorizontalSongList(
                           model: state.homeScreenModel.topPlaylists,
                           boderRadius: 20,
                         ),
-                        constHeight20,
+                        AppSpacing.height20,
                         if (state.homeScreenModel.tagMixes.isNotEmpty)
                           isMobile(context)
                               ? TagMixGrid(
@@ -345,7 +347,7 @@ class HomeScreen extends StatelessWidget {
                               : SizedBox(),
 
 //----------------------top played --------------------------------
-                        constHeight20,
+                        AppSpacing.height20,
                         songList.isNotEmpty
                             ? Text(
                                 "  Top Played Songs",
@@ -354,7 +356,8 @@ class HomeScreen extends StatelessWidget {
                                     letterSpacing: 3,
                                     height: 2,
                                     fontWeight: FontWeight.bold,
-                                    color: colorList[AppGlobals().colorIndex]),
+                                    color: AppColors
+                                        .colorList[AppGlobals().colorIndex]),
                               )
                             : SizedBox(),
                         songList.isNotEmpty
@@ -389,9 +392,9 @@ class HomeScreen extends StatelessWidget {
                                                 borderRadius:
                                                     BorderRadius.circular(5),
                                                 child: CachedNetworkImage(
-                                                  imageUrl: songList[index]
-                                                          .image ??
-                                                     errorImage(),
+                                                  imageUrl:
+                                                      songList[index].image ??
+                                                          errorImage(),
                                                   placeholder: (context, url) {
                                                     // Placeholder logic
                                                     return songList[index]
@@ -470,9 +473,10 @@ class HomeScreen extends StatelessWidget {
                               letterSpacing: 3,
                               height: 2,
                               fontWeight: FontWeight.bold,
-                              color: colorList[AppGlobals().colorIndex]),
+                              color:
+                                  AppColors.colorList[AppGlobals().colorIndex]),
                         ),
-                        constHeight20,
+                        AppSpacing.height20,
                         HorizontalSongList(
                           model: state.homeScreenModel.newTrending,
                           boderRadius: 10,
@@ -485,14 +489,15 @@ class HomeScreen extends StatelessWidget {
                               letterSpacing: 3,
                               height: 2,
                               fontWeight: FontWeight.bold,
-                              color: colorList[AppGlobals().colorIndex]),
+                              color:
+                                  AppColors.colorList[AppGlobals().colorIndex]),
                         ),
-                        constHeight20,
+                        AppSpacing.height20,
                         HorizontalSongList(
                           model: state.homeScreenModel.newAlbums,
                           boderRadius: 10,
                         ),
-                        constHeight20,
+                        AppSpacing.height20,
                         Text(
                           " BrowseDiscover",
                           style: TextStyle(
@@ -500,29 +505,30 @@ class HomeScreen extends StatelessWidget {
                               letterSpacing: 3,
                               height: 2,
                               fontWeight: FontWeight.bold,
-                              color: colorList[AppGlobals().colorIndex]),
+                              color:
+                                  AppColors.colorList[AppGlobals().colorIndex]),
                         ),
-                        constHeight20,
+                        AppSpacing.height20,
                         HorizontalSongList(
                           model: state.homeScreenModel.promoVxData122,
                           boderRadius: 20,
                         ),
-                        constHeight10,
+                        AppSpacing.height20,
                         HorizontalSongList(
                           model: state.homeScreenModel.promoVxData113,
                           boderRadius: 20,
                         ),
-                        constHeight10,
+                        AppSpacing.height20,
                         HorizontalSongList(
                           model: state.homeScreenModel.promoVxData117,
                           boderRadius: 20,
                         ),
-                        constHeight10,
+                        AppSpacing.height20,
                         HorizontalSongList(
                           model: state.homeScreenModel.promoVxData116,
                           boderRadius: 20,
                         ),
-                        constHeight10,
+                        AppSpacing.height10,
                         HorizontalSongList(
                           model: state.homeScreenModel.promoVxData118,
                           boderRadius: 20,
@@ -535,7 +541,7 @@ class HomeScreen extends StatelessWidget {
                 return SizedBox(
                   child: Center(
                       child: CircularProgressIndicator(
-                    color: colorList[AppGlobals().colorIndex],
+                    color: AppColors.colorList[AppGlobals().colorIndex],
                   )),
                 );
               }

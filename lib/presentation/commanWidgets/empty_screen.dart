@@ -10,7 +10,7 @@ Widget emptyScreen({
   required double size2,
   required String text3,
   required double size3,
-  bool useWhite = false,
+  bool usewhite = false,
   int turns = 3,
 }) {
   return Column(
@@ -26,9 +26,9 @@ Widget emptyScreen({
               textAlign: TextAlign.start,
               style: TextStyle(
                 fontSize: size1,
-                color: useWhite
-                    ? Colors.white
-                    : colorList[AppGlobals().colorIndex],
+                color: usewhite
+                    ? AppColors.white
+                    : AppColors.colorList[AppGlobals().colorIndex],
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -39,9 +39,9 @@ Widget emptyScreen({
                 text2,
                 style: TextStyle(
                   fontSize: size2,
-                  color: useWhite
-                      ? Colors.white
-                      : colorList[AppGlobals().colorIndex],
+                  color: usewhite
+                      ? AppColors.white
+                      : AppColors.colorList[AppGlobals().colorIndex],
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -50,7 +50,7 @@ Widget emptyScreen({
                 style: TextStyle(
                   fontSize: size3,
                   fontWeight: FontWeight.w600,
-                  color: useWhite ? Colors.white : null,
+                  color: usewhite ? AppColors.white : null,
                 ),
               ),
             ],

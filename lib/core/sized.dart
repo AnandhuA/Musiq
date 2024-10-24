@@ -15,20 +15,23 @@ bool isTablet(BuildContext context) =>
 bool isDesktop(BuildContext context) =>
     MediaQuery.of(context).size.width >= ScreenBreakpoints.tablet;
 
-//----------------height--------------
-const constHeight3 = SizedBox(height: 3);
-const constHeight5 = SizedBox(height: 5);
-const constHeight10 = SizedBox(height: 10);
-const constHeight20 = SizedBox(height: 20);
-const constHeight30 = SizedBox(height: 30);
-const constHeight40 = SizedBox(height: 40);
-const constHeight50 = SizedBox(height: 50);
 
-//------------------width--------------
 
-const constWidth5 = SizedBox(width: 5);
-const constWidth10 = SizedBox(width: 10);
-const constWidth20 = SizedBox(width: 20);
-const constWidth30 = SizedBox(width: 30);
-const constWidth40 = SizedBox(width: 40);
-const constWidth50 = SizedBox(width: 50);
+class AppSpacing {
+  // Height constants
+  static const SizedBox height3 = SizedBox(height: 3);
+  static const SizedBox height5 = SizedBox(height: 5);
+  static const SizedBox height10 = SizedBox(height: 10);
+  static const SizedBox height20 = SizedBox(height: 20);
+  static const SizedBox height30 = SizedBox(height: 30);
+  static const SizedBox height40 = SizedBox(height: 40);
+  static const SizedBox height50 = SizedBox(height: 50);
+
+  // Width constants
+  static const SizedBox width5 = SizedBox(width: 5);
+  static const SizedBox width10 = SizedBox(width: 10);
+  static const SizedBox width20 = SizedBox(width: 20);
+  static const SizedBox width30 = SizedBox(width: 30);
+  static const SizedBox width40 = SizedBox(width: 40);
+  static const SizedBox width50 = SizedBox(width: 50);
+}
