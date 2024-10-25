@@ -19,4 +19,10 @@ final class FeatchAlbumAndPlayListLoaded extends FeatchAlbumAndPlayListState {
   });
 }
 
+final class FeatchSongByIDLoaded extends FeatchAlbumAndPlayListState {
+  final List<Song> songs;
+
+  FeatchSongByIDLoaded({required this.songs});
+}
+
 final class FeatchAlbumAndPlayListError extends FeatchAlbumAndPlayListState {}

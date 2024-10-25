@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:musiq/core/colors.dart';
@@ -239,6 +241,7 @@ class _NewAlbumOrPlaylistScreenState extends State<NewAlbumOrPlaylistScreen> {
 
                       return ListTile(
                         onTap: () {
+                          log("song link ---${songList[index].downloadUrl?.last.link}");
                           Navigator.push(
                               context,
                               MaterialPageRoute(

@@ -17,19 +17,19 @@ class PlaylistSearchResult extends StatelessWidget {
     return BlocBuilder<SearchCubit, SearchState>(
       builder: (context, state) {
         if (state is SearchLoadingState) {
-        return  Center(
+          return Center(
             child: CircularProgressIndicator(
               color: AppColors.colorList[AppGlobals().colorIndex],
             ),
           );
         } else if (state is PlayListSearchState) {
-        return  ListView.separated(
-          separatorBuilder: (context, index) => AppSpacing.height20,
+          return ListView.separated(
+            separatorBuilder: (context, index) => AppSpacing.height20,
             itemCount: state.model.data?.results?.length ?? 0,
             itemBuilder: (context, index) {
               final song = state.model.data?.results?[index];
               return ListTile(
-                  onTap: () {
+                onTap: () {
                   context.read<FeatchAlbumAndPlayListCubit>().fetchData(
                       type: song?.type ?? "",
                       id: song?.id ?? "",

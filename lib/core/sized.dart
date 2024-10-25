@@ -15,8 +15,6 @@ bool isTablet(BuildContext context) =>
 bool isDesktop(BuildContext context) =>
     MediaQuery.of(context).size.width >= ScreenBreakpoints.tablet;
 
-
-
 class AppSpacing {
   // Height constants
   static const SizedBox height3 = SizedBox(height: 3);

@@ -48,8 +48,7 @@ class HorizontalSongList extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(boderRadius),
                       child: CachedNetworkImage(
-                        imageUrl: data.image ??
-                            errorImage(),
+                        imageUrl: data.image ?? errorImage(),
                         fit: BoxFit.cover,
                         placeholder: (context, url) => data.type == "Artist"
                             ? Image.asset("assets/images/artist.png")

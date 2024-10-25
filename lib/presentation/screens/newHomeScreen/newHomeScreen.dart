@@ -25,7 +25,7 @@ class Newhomescreen extends StatelessWidget {
             );
           } else if (state is HomeScreenLoaded) {
             return BlocListener<FeatchAlbumAndPlayListCubit,
-                 FeatchAlbumAndPlayListState>(
+                FeatchAlbumAndPlayListState>(
               listener: (context, state) {
                 if (state is FeatchAlbumAndPlayListLoading) {
                   showDialog(

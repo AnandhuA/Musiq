@@ -59,8 +59,7 @@ class FeatchSongCubit extends Cubit<FeatchSongState> {
           .toList();
       final LibraryModel liModel = LibraryModel(
         id: albumId,
-        imageUrl: imageUrl ??
-           errorImage(),
+        imageUrl: imageUrl ?? errorImage(),
         title: title,
         type: type,
       );
@@ -93,8 +92,7 @@ class FeatchSongCubit extends Cubit<FeatchSongState> {
           .toList();
       final LibraryModel liModel = LibraryModel(
         id: playlistId,
-        imageUrl: imageUrl ??
-           errorImage(),
+        imageUrl: imageUrl ?? errorImage(),
         title: title,
         type: type,
       );

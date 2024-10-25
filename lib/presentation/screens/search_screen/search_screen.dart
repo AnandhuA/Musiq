@@ -7,6 +7,7 @@ import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/presentation/screens/album_or_playlist_screen/new_album_or_playlist_screen.dart';
+import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 import 'package:musiq/presentation/screens/search_screen/widgets/album_search_result.dart';
 import 'package:musiq/presentation/screens/search_screen/widgets/all_search_result.dart';
 import 'package:musiq/presentation/screens/search_screen/widgets/artist_search_result.dart';
@@ -57,6 +58,15 @@ class _NewSearchScreenState extends State<NewSearchScreen> {
                     albumModel: state.albumModel,
                     playListModel: state.playListModel,
                     imageUrl: state.imageUrl,
+                  ),
+                ));
+          } else if (state is FeatchSongByIDLoaded) {
+            Navigator.pop(context); // for closing loading
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PlayerScreen(
+                    songs: state.songs,
                   ),
                 ));
           }

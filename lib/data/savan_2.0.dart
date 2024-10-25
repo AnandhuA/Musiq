@@ -12,6 +12,17 @@ class Saavan2 {
     }
   }
 
+  //-------------------- featch song by id -----------------
+
+  static Future<http.Response?> featchSong({required String songId}) async {
+    try {
+      final responce = await http.get(Uri.parse("${ApiUrls.song}$songId"));
+      return responce;
+    } catch (e) {
+      return null;
+    }
+  }
+
 // ------------------ featch album by id ------------------
   static Future<http.Response?> featchAlbum({required String albumId}) async {
     try {
@@ -28,6 +39,16 @@ class Saavan2 {
     try {
       final responce =
           await http.get(Uri.parse("${ApiUrls.playlist}$playlistId"));
+      return responce;
+    } catch (e) {
+      return null;
+    }
+  }
+
+//--------------------featch artist by id -----------
+  static Future<http.Response?> featchArtist({required String artistId}) async {
+    try {
+      final responce = await http.get(Uri.parse("${ApiUrls.artist}$artistId"));
       return responce;
     } catch (e) {
       return null;

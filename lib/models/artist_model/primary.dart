@@ -1,6 +1,6 @@
-import 'package:musiq/models/song_model/image.dart';
+import 'image.dart';
 
-class Result {
+class Primary {
   String? id;
   String? name;
   String? role;
@@ -8,9 +8,9 @@ class Result {
   String? type;
   String? url;
 
-  Result({this.id, this.name, this.role, this.image, this.type, this.url});
+  Primary({this.id, this.name, this.role, this.image, this.type, this.url});
 
-  factory Result.fromJson(Map<String, dynamic> json) => Result(
+  factory Primary.fromJson(Map<String, dynamic> json) => Primary(
         id: json['id'] as String?,
         name: json['name'] as String?,
         role: json['role'] as String?,

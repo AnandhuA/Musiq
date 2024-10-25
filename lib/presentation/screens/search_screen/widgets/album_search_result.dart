@@ -29,9 +29,9 @@ class AlbumSearchResult extends StatelessWidget {
             itemBuilder: (context, index) {
               final song = state.model.data?.results?[index];
               return ListTile(
-                 onTap: () {
+                onTap: () {
                   context.read<FeatchAlbumAndPlayListCubit>().fetchData(
-                      type: song?.type?? "",
+                      type: song?.type ?? "",
                       id: song?.id ?? "",
                       imageUrl: song?.image?.last.imageUrl ?? errorImage());
                 },

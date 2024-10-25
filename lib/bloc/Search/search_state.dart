@@ -15,7 +15,6 @@ final class GobalSearchState extends SearchState {
   final GlobalSearchModel model;
 
   GobalSearchState({required this.model});
-  
 }
 
 final class SongSearchState extends SearchState {
