@@ -161,7 +161,8 @@ class ArtistScreen extends StatelessWidget {
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
                                     child: CachedNetworkImage(
-                                      imageUrl: data.image?.last.url ?? errorImage(),
+                                      imageUrl:
+                                          data.image?.last.url ?? errorImage(),
                                       errorWidget: (context, url, error) =>
                                           Image.asset(
                                               "assets/images/album.png"),
@@ -211,15 +212,12 @@ class ArtistScreen extends StatelessWidget {
                           padding: const EdgeInsets.only(bottom: 10),
                           child: ListTile(
                             onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => PlayerScreen(
-                                      songs: model.data!.singles!,
-                                      initialIndex:
-                                          model.data!.singles!.indexOf(song),
-                                    ),
-                                  ));
+                              context.read<FeatchSongCubit>().fetchData(
+                                    type: song.type ?? "",
+                                    id: song.id ?? "0",
+                                    imageUrl: song.image?.last.imageUrl ??
+                                        errorImage(),
+                                  );
                             },
                             leading: CachedNetworkImage(
                               imageUrl:
@@ -230,7 +228,7 @@ class ArtistScreen extends StatelessWidget {
                                   Image.asset("assets/images/song.png"),
                             ),
                             title: Text(song.name ?? "Null"),
-                            subtitle: Text(song.album?.name ?? "Null"),
+                            subtitle: Text(song.language ?? "Null"),
                           ),
                         );
                       }).toList() ??
@@ -276,7 +274,8 @@ class ArtistScreen extends StatelessWidget {
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(100),
                                     child: CachedNetworkImage(
-                                      imageUrl: data.image?.last.url ?? errorImage(),
+                                      imageUrl:
+                                          data.image?.last.url ?? errorImage(),
                                       errorWidget: (context, url, error) =>
                                           Image.asset(
                                               "assets/images/album.png"),
