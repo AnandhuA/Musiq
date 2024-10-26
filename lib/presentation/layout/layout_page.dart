@@ -8,7 +8,7 @@ import 'package:musiq/bloc/favorite_bloc/favorite_bloc.dart';
 import 'package:musiq/models/song_model/song.dart';
 import 'package:musiq/presentation/screens/homeScreen/homeScreen.dart';
 import 'package:musiq/presentation/screens/player_screen/bottomPlayer/bottom_player.dart';
-import 'package:musiq/presentation/screens/LibraryScreen/library_screen.dart';
+import 'package:musiq/presentation/screens/libraryScreen/library_screen.dart';
 import 'package:musiq/bloc/home_screen_cubit/home_screen_cubit.dart';
 import 'package:musiq/bloc/ThemeCubit/theme_cubit.dart';
 import 'package:musiq/presentation/screens/homeScreen/widgets/drawer_widget.dart';

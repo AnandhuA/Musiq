@@ -2,6 +2,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/helper_funtions.dart';
+import 'package:musiq/data/hive_funtion.dart';
 import 'package:musiq/models/song_model/song.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 
@@ -97,7 +98,7 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
     if (_mediaItems.isNotEmpty) {
       final newMediaItem = _mediaItems[currentSongIndex];
       mediaItem.add(newMediaItem);
-      // LastPlayedRepo.addToLastPlayedSong(_songList[currentSongIndex]);
+      LastPlayedRepo.addToLastPlayedSong(_songList[currentSongIndex]);
       AppGlobals().lastPlayedSongNotifier.value = _songList;
       await _playUrl(newMediaItem.id);
     }

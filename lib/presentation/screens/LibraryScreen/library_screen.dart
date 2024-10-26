@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:musiq/presentation/commanWidgets/empty_screen.dart';
+import 'package:musiq/presentation/screens/LibraryScreen/last_played_list.dart';
+import 'package:musiq/presentation/screens/favoriteScreen/favorite_screen.dart';
 
 class LibraryScreen extends StatelessWidget {
   const LibraryScreen({super.key});
@@ -7,14 +8,31 @@ class LibraryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: emptyScreen(
-        context: context,
-        text1: "show",
-        size1: 15,
-        text2: "Nothing",
-        size2: 20,
-        text3: "result",
-        size3: 20,
+      body: Column(
+        children: [
+          ListTile(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => FavoriteScreen(),
+                  ));
+            },
+            leading: Icon(Icons.favorite),
+            title: Text("Favorite"),
+          ),
+          ListTile(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LastPlayedList(),
+                  ));
+            },
+            leading: Icon(Icons.history_sharp),
+            title: Text("Last Played"),
+          )
+        ],
       ),
     );
   }

@@ -534,7 +534,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                       width: 50,
                                     )
                                   : const SizedBox(),
-                              // FavoriteIcon(song: widget.songs[index]),
+                              FavoriteIcon(song: widget.songs[index]),
                             ],
                           ),
                           leading: Container(
@@ -646,9 +646,9 @@ class _PlayerScreenState extends State<PlayerScreen> {
                         height: 50,
                         width: 50)
                     : const SizedBox(),
-                // FavoriteIcon(
-                //   song: widget.songs[index],
-                // ),
+                FavoriteIcon(
+                  song: widget.songs[index],
+                ),
               ],
             ),
             leading: Container(

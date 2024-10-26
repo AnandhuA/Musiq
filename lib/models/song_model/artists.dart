@@ -1,9 +1,18 @@
-import '../play_list_model/all.dart';
-import '../play_list_model/primary.dart';
+import 'package:hive/hive.dart';
+import 'all.dart';
+import 'primary.dart';
 
+part 'artists.g.dart'; // Required for Hive code generation
+
+@HiveType(typeId: 3) // Assign a unique typeId for the Artists class
 class Artists {
+  @HiveField(0)
   List<Primary>? primary;
+
+  @HiveField(1)
   List<dynamic>? featured;
+
+  @HiveField(2)
   List<All>? all;
 
   Artists({this.primary, this.featured, this.all});
@@ -15,10 +24,10 @@ class Artists {
         featured: json['featured'] as List<dynamic>?,
         all: (json['all'] as List<dynamic>?)
                 ?.map((e) => All.fromJson(e as Map<String, dynamic>))
-                .toList() ?? // Using null-aware operator and fallback
+                .toList() ??
             (json['artists'] as List<dynamic>?)
                 ?.map((e) => All.fromJson(e as Map<String, dynamic>))
-                .toList(), // Correctly parsing from artists if all is not found
+                .toList(),
       );
 
   Map<String, dynamic> toJson() => {

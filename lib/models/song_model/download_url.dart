@@ -1,5 +1,13 @@
+import 'package:hive/hive.dart';
+
+part 'download_url.g.dart'; // Required for Hive code generation
+
+@HiveType(typeId: 2) // Assign a unique typeId for the DownloadUrl class
 class DownloadUrl {
+  @HiveField(0)
   final String link;
+
+  @HiveField(1)
   final String quality;
 
   // Constructor for DownloadUrl class

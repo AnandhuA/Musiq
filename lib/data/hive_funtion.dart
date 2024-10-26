@@ -21,7 +21,7 @@ class LastPlayedRepo {
       await box.add(song);
       log("Song added: ${song.name}");
 
-      if (box.length > 14) {
+      if (box.length > 18) {
         await box.deleteAt(0);
         log("Oldest song removed to maintain limit.");
       }

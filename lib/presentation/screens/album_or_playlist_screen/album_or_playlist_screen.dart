@@ -9,6 +9,7 @@ import 'package:musiq/models/album_model/album_model.dart';
 import 'package:musiq/models/play_list_model/play_list_model.dart';
 import 'package:musiq/models/song_model/song.dart';
 import 'package:musiq/presentation/commanWidgets/empty_screen.dart';
+import 'package:musiq/presentation/commanWidgets/favorite_icon.dart';
 import 'package:musiq/presentation/screens/player_screen/bottomPlayer/bottom_player.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 
@@ -284,7 +285,7 @@ class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
                               song.label ?? "no",
                               maxLines: 1,
                             ),
-                            // trailing: FavoriteIcon(song: song),
+                            trailing: FavoriteIcon(song: song),
                           );
                         },
                       ),

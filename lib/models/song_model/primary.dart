@@ -1,16 +1,31 @@
-import '../song_model/image.dart';
+import 'package:hive/hive.dart';
+import 'image.dart';
 
-class All {
+part 'primary.g.dart'; // This will be generated
+
+@HiveType(typeId: 5) // Use a unique ID for the Primary class
+class Primary {
+  @HiveField(0)
   String? id;
+
+  @HiveField(1)
   String? name;
+
+  @HiveField(2)
   String? role;
-  List<Image>? image;
+
+  @HiveField(3)
+  List<Image>? image; // Assuming you have an Image adapter registered.
+
+  @HiveField(4)
   String? type;
+
+  @HiveField(5)
   String? url;
 
-  All({this.id, this.name, this.role, this.image, this.type, this.url});
+  Primary({this.id, this.name, this.role, this.image, this.type, this.url});
 
-  factory All.fromJson(Map<String, dynamic> json) => All(
+  factory Primary.fromJson(Map<String, dynamic> json) => Primary(
         id: json['id'] as String?,
         name: json['name'] as String?,
         role: json['role'] as String?,

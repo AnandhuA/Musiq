@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musiq/models/song_model/song.dart';
@@ -64,7 +66,7 @@ class FavoriteSongRepo {
         }
       }
     } catch (e) {
-      print('Error fetching favorites: $e');
+      log('Error fetching favorites: $e');
     }
     return favoriteSongs;
   }

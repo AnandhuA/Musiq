@@ -8,7 +8,7 @@ int getRandomSongIndex({required List songList}) {
 
 //---error image ---------
 String errorImage() {
-  return "https://e7.pngegg.com/pngimages/945/333/png-clipart-music-songwriter-logo-art-AppColors.black-miscellaneous-text-thumbnail.png";
+  return "https://cdn.dribbble.com/users/3547568/screenshots/14395014/media/0b94c75b97182946d495f34c16eab987.jpg?resize=1000x750&vertical=center";
 }
 
 // --- find error from status code ------

@@ -41,7 +41,6 @@ class FeatchSongCubit extends Cubit<FeatchSongState> {
     if (responce != null && responce.statusCode == 200) {
       final data = jsonDecode(responce.body);
       AlbumModel model = AlbumModel.fromJson(data);
-      log("${responce.body}");
       emit(FeatchAlbumAndPlayListLoaded(
           albumModel: model, playListModel: null, imageUrl: imageUrl));
     }

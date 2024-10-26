@@ -17,29 +17,26 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
 
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? cachedHomeScreenData = prefs.getString('homeScreenData');
-    final String? cachedNewHomeScreenData =
-        prefs.getString('newHomeScreenData');
+
     final String? lastUpdated = prefs.getString('lastUpdated');
 
     final DateTime now = DateTime.now();
     final DateTime today = DateTime(now.year, now.month, now.day);
-    // final List<SongModel> lastplayed = await LastPlayedRepo.fetchLastPlayed();
+    // final List<Song> lastplayed = await LastPlayedRepo.fetchLastPlayed();
 
     if (lastUpdated != null) {
       final DateTime lastUpdateDate = DateTime.parse(lastUpdated);
 
       // Check if data was updated today
       if (lastUpdateDate.isAtSameMomentAs(today) &&
-          cachedHomeScreenData != null &&
-          cachedNewHomeScreenData != null) {
+          cachedHomeScreenData != null) {
         // Load from cache
-      
+
         final newHomeScreenModel =
-            NewHomeScreenModel.fromJson(jsonDecode(cachedNewHomeScreenData));
+            NewHomeScreenModel.fromJson(jsonDecode(cachedHomeScreenData));
 
         log("---------load from cache----------");
         emit(HomeScreenLoaded(
-       
           newHomeScreenModel: newHomeScreenModel,
         ));
         return;
@@ -49,7 +46,6 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
     // If no cache or cache is outdated, fetch new data
     NewHomeScreenModel? newHomeScreenModel;
     final data = await Saavan2.featchHomeScreenModel();
-  
 
     if (data != null && data.statusCode == 200) {
       final jsonData = jsonDecode(data.body);
@@ -57,7 +53,7 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
       log("-----------${newHomeScreenModel.songdata!.albums!.data!.first.image!.last.imageUrl}");
 
       // Cache the newHomeScreenModel
-      prefs.setString('newHomeScreenData', data.body);
+      prefs.setString('homeScreenData', data.body);
     }
 
     // Cache the last update date
@@ -66,7 +62,6 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
     // Emit the loaded state
     log("---------load from response ----------");
     emit(HomeScreenLoaded(
-   
       newHomeScreenModel: newHomeScreenModel,
     ));
   }
