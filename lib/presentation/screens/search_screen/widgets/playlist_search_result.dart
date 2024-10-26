@@ -24,6 +24,7 @@ class PlaylistSearchResult extends StatelessWidget {
           );
         } else if (state is PlayListSearchState) {
           return ListView.separated(
+             padding: EdgeInsets.only(bottom: 100),
             separatorBuilder: (context, index) => AppSpacing.height20,
             itemCount: state.model.data?.results?.length ?? 0,
             itemBuilder: (context, index) {

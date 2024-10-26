@@ -59,6 +59,7 @@ class FavoriteScreen extends StatelessWidget {
                 : Stack(
                     children: [
                       ListView.builder(
+                        padding: EdgeInsets.only(bottom: 100),
                         itemCount: state.favorites.length,
                         itemBuilder: (context, index) {
                           log("${state.favorites[index].image?.last.imageUrl}");
