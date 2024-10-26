@@ -37,6 +37,7 @@ class AllSearchResult extends StatelessWidget {
               state.model.data?.playlists?.results ?? [];
 
           return ListView(
+             padding: EdgeInsets.only(bottom: 100),
             children: [
               // Top Query Results
               if (topQueryResults.isNotEmpty)
@@ -89,6 +90,7 @@ class AllSearchResult extends StatelessWidget {
           ),
         ),
         ListView.builder(
+
           shrinkWrap: true, // Important for nested ListView
           physics: NeverScrollableScrollPhysics(),
           itemCount: results.length,

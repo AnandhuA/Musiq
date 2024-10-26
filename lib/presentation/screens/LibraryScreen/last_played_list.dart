@@ -65,6 +65,7 @@ class _LastPlayedListState extends State<LastPlayedList> {
                     size3: 20,
                   )
                 : ListView.builder(
+                    padding: EdgeInsets.only(bottom: 100),
                     itemCount: lastplayed.length,
                     itemBuilder: (context, index) {
                       return ListTile(

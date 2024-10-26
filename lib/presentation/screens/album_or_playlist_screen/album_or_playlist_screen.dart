@@ -25,8 +25,7 @@ class AlbumOrPlaylistScreen extends StatefulWidget {
   });
 
   @override
-  State<AlbumOrPlaylistScreen> createState() =>
-      _AlbumOrPlaylistScreenState();
+  State<AlbumOrPlaylistScreen> createState() => _AlbumOrPlaylistScreenState();
 }
 
 class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {

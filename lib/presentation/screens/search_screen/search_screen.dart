@@ -7,6 +7,7 @@ import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/presentation/screens/album_or_playlist_screen/album_or_playlist_screen.dart';
+import 'package:musiq/presentation/screens/artist/artist_screen.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 import 'package:musiq/presentation/screens/search_screen/widgets/album_search_result.dart';
 import 'package:musiq/presentation/screens/search_screen/widgets/all_search_result.dart';
@@ -32,8 +33,7 @@ class _NewSearchScreenState extends State<NewSearchScreen> {
 
     return Scaffold(
 // ---------------- listener --------------
-      body: BlocListener<FeatchSongCubit,
-          FeatchSongState>(
+      body: BlocListener<FeatchSongCubit, FeatchSongState>(
         listener: (context, state) {
 // -------------- loading ------------------
           if (state is FeatchSongLoading) {
@@ -74,6 +74,15 @@ class _NewSearchScreenState extends State<NewSearchScreen> {
                   builder: (context) => PlayerScreen(
                     songs: state.songs,
                   ),
+                ));
+          }
+//------------------ type is Artist ------------
+          else if (state is FeatchArtistLoadedState) {
+            Navigator.pop(context); //for closing loading
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ArtistScreen(model: state.model),
                 ));
           }
         },
