@@ -66,8 +66,7 @@ class FeatchSongCubit extends Cubit<FeatchSongState> {
     if (responce != null && responce.statusCode == 200) {
       final data = jsonDecode(responce.body);
       ArtistModel model = ArtistModel.fromJson(data);
-      log("song ::${model.data?.topSongs?.length}");
-      log("ablum ::${model.data?.topAlbums?.length}");
+      emit(FeatchArtistLoadedState(model: model));
     }
   }
 

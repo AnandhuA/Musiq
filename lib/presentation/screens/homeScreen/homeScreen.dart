@@ -211,7 +211,7 @@ class Homescreen extends StatelessWidget {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10),
                           child: CachedNetworkImage(
-                            imageUrl: data.image?.last.imageUrl ?? "",
+                            imageUrl: data.image?.last.imageUrl ?? errorImage(),
                             errorWidget: (context, url, error) =>
                                 Image.asset("assets/images/album.png"),
                             placeholder: (context, url) =>

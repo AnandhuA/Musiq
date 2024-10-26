@@ -19,6 +19,12 @@ final class FeatchAlbumAndPlayListLoaded extends FeatchSongState {
   });
 }
 
+final class FeatchArtistLoadedState extends FeatchSongState {
+  final ArtistModel model;
+
+  FeatchArtistLoadedState({required this.model});
+}
+
 final class FeatchSongByIDLoaded extends FeatchSongState {
   final List<Song> songs;
 
