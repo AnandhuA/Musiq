@@ -1,150 +1,93 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'package:bloc/bloc.dart';
+import 'package:http/http.dart';
 import 'package:meta/meta.dart';
-import 'package:musiq/core/helper_funtions.dart';
-import 'package:musiq/data/saavn_data.dart';
-import 'package:musiq/models/library_model.dart';
-import 'package:musiq/models/song_model.dart';
+import 'package:musiq/data/savan_2.0.dart';
+import 'package:musiq/models/album_model/album_model.dart';
+import 'package:musiq/models/artist_model/artist_model.dart';
+import 'package:musiq/models/play_list_model/play_list_model.dart';
+import 'package:musiq/models/song_model/song.dart';
+
 part 'featch_song_state.dart';
 
 class FeatchSongCubit extends Cubit<FeatchSongState> {
   FeatchSongCubit() : super(FeatchSongInitial());
-
-  void clickSong({
-    required String type,
-    required String id,
-    required String imageUrl,
-    required String title,
-  }) {
-    if (type == "song") {
-      fetchSong(songId: id);
-    } else if (type == "album") {
-      featchAlbum(albumId: id, imageUrl: imageUrl, title: title, type: "album");
-    } else if (type == "playlist") {
-      featchPlaylist(
-          playlistId: id, imageUrl: imageUrl, title: title, type: "playlist");
-    } else if (type == "mix") {
-      log("$id");
-      featchPlaylist(
-          playlistId: id, imageUrl: imageUrl, title: title, type: "mix");
-      // featchTagMix(tagMixId: id);
-    } else if (type == "Artist") {
-      feachArtistSong(artistName: id, imageUrl: imageUrl, title: title);
+//------- check funtion by type -----------
+  void fetchData(
+      {required String type, required String id, required String imageUrl}) {
+    log("$type");
+    switch (type) {
+      case 'album':
+        fetchAlbum(id: id, imageUrl: imageUrl);
+        break;
+      case 'playlist':
+        fetchPlayList(id: id, imageUrl: imageUrl);
+        break;
+      case 'song':
+        fetchSongById(id: id);
+      case 'artist':
+        featchArtistSongs(id: id, imageUrl: imageUrl);
+      default:
+        print('Unknown type: $type');
+        break;
     }
   }
 
-//-----------is song----------
-  void fetchSong({required String songId}) async {
+//-------- featch album by id --------------
+  void fetchAlbum({required String id, required String imageUrl}) async {
     emit(FeatchSongLoading());
-    final songData = await SaavnAPI().fetchSongDetails(songId);
-    final SongModel songModel = SongModel.fromJson(songData);
-    // log("${songModel.artist}");
-    emit(FeatchSongLoaded(songModel: [songModel]));
-  }
-
-//------------ is album-------------
-
-  void featchAlbum({
-    required String albumId,
-    String? imageUrl,
-    required String title,
-    required String type,
-  }) async {
-    emit(FeatchSongLoading());
-    try {
-      final albumData = await SaavnAPI().fetchAlbumSongs(albumId);
-      // log("--------$albumData--------");
-      List<SongModel> songList = (albumData['songs'] as List)
-          .map((songJson) => SongModel.fromJson(songJson))
-          .toList();
-      final LibraryModel liModel = LibraryModel(
-        id: albumId,
-        imageUrl: imageUrl ?? errorImage(),
-        title: title,
-        type: type,
-      );
-      emit(
-        FeatchAlbumOrPlayList(
-          songModel: songList,
-          imageUrl: imageUrl,
-          title: title,
-          libraryModel: liModel,
-        ),
-      );
-    } catch (error) {
-      log("Failed to fetch album: $error");
+    final Response? responce = await Saavan2.featchAlbum(albumId: id);
+    if (responce != null && responce.statusCode == 200) {
+      final data = jsonDecode(responce.body);
+      AlbumModel model = AlbumModel.fromJson(data);
+      log("${responce.body}");
+      emit(FeatchAlbumAndPlayListLoaded(
+          albumModel: model, playListModel: null, imageUrl: imageUrl));
     }
   }
 
-//--------- is playlist -------
-  void featchPlaylist({
-    required String playlistId,
-    required String? imageUrl,
-    required String title,
-    required String type,
-  }) async {
+//----------featch playlist by id ---------------
+  void fetchPlayList({required String id, required String imageUrl}) async {
     emit(FeatchSongLoading());
-    try {
-      final playlistData = await SaavnAPI().fetchPlaylistSongs(playlistId);
-      log("plylistid---------$playlistId");
-      List<SongModel> songList = (playlistData['songs'] as List)
-          .map((songJson) => SongModel.fromJson(songJson))
-          .toList();
-      final LibraryModel liModel = LibraryModel(
-        id: playlistId,
-        imageUrl: imageUrl ?? errorImage(),
-        title: title,
-        type: type,
-      );
-      emit(FeatchAlbumOrPlayList(
-        songModel: songList,
-        imageUrl: imageUrl,
-        title: title,
-        libraryModel: liModel,
-      ));
-    } catch (error) {
-      log("Failed to fetch playlist: $error");
+    final Response? responce = await Saavan2.featchPlayList(playlistId: id);
+    if (responce != null && responce.statusCode == 200) {
+      final data = jsonDecode(responce.body);
+      PlayListModel model = PlayListModel.fromJson(data);
+      log("${model.data?.songs?.length}");
+      emit(FeatchAlbumAndPlayListLoaded(
+          albumModel: null, playListModel: model, imageUrl: imageUrl));
     }
   }
 
-//----------is artist ----------
-  void feachArtistSong({
-    required String artistName,
-    required String imageUrl,
-    required String title,
-  }) async {
+//---------- featch Artis by id ------------
+  void featchArtistSongs({required String id, required String imageUrl}) async {
     emit(FeatchSongLoading());
-    try {
-      final songdata = await SaavnAPI()
-          .fetchSongSearchResults(searchQuery: "$artistName songs", count: 50);
-
-      List<SongModel> songList = (songdata['songs'] as List)
-          .map((songJson) => SongModel.fromJson(songJson))
-          .toList();
-      final LibraryModel liModel = LibraryModel(
-        id: artistName,
-        imageUrl: imageUrl,
-        title: title,
-        type: "Artist",
-      );
-      emit(FeatchAlbumOrPlayList(
-        songModel: songList,
-        imageUrl: imageUrl,
-        title: title,
-        libraryModel: liModel,
-      ));
-      // log("${songdata}");
-    } catch (e) {
-      log("Failed to fetch playlist: $e");
+    final Response? responce = await Saavan2.featchArtist(artistId: id);
+    if (responce != null && responce.statusCode == 200) {
+      final data = jsonDecode(responce.body);
+      ArtistModel model = ArtistModel.fromJson(data);
+      log("song ::${model.data?.topSongs?.length}");
+      log("ablum ::${model.data?.topAlbums?.length}");
     }
   }
-}
 
-void featchTagMix({required String tagMixId}) async {
-  try {
-    final tagMix = await SaavnAPI().getReco(tagMixId);
-    log("-------------$tagMix");
-  } catch (e) {
-    log("------------------$e");
+//---------- featch song by id ------------
+  void fetchSongById({required String id}) async {
+    log("----song");
+    emit(FeatchSongLoading());
+    final Response? responce = await Saavan2.featchSong(songId: id);
+    if (responce != null && responce.statusCode == 200) {
+      final data = jsonDecode(responce.body);
+      if (data["data"] is List) {
+        List<Song> songs = (data["data"] as List)
+            .map((songJson) => Song.fromJson(songJson as Map<String, dynamic>))
+            .toList();
+        emit(FeatchSongByIDLoaded(songs: songs));
+      } else {
+        final Song model = Song.fromJson(data["data"]);
+        emit(FeatchSongByIDLoaded(songs: [model]));
+      }
+    }
   }
 }

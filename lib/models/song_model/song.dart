@@ -63,12 +63,14 @@ class Song {
       lyricsId: json['lyricsId'] as dynamic,
       url: json['url'].toString() as String?,
       copyright: json['copyright'].toString() as String?,
-      album: (json['album'] is Map<String, dynamic>)
+      album: json['album'] is Map<String, dynamic>
           ? Album.fromJson(json['album'] as Map<String, dynamic>)
-          : null,
+          : json['album'] is String
+              ? Album(name: json['album'])
+              : null,
       artists: (json['artists'] is Map<String, dynamic>)
           ? Artists.fromJson(json['artists'] as Map<String, dynamic>)
-          : null,
+          : Artists.fromJson(json['artistMap'] as Map<String, dynamic>),
       image: (json['image'] as List<dynamic>?)
           ?.map((e) => Image.fromJson(e as Map<String, dynamic>))
           .toList(),

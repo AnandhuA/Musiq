@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:musiq/bloc/FeatchAlbumAndPlayList/featch_album_and_play_list_cubit.dart';
+import 'package:musiq/bloc/featchSong/featch_song_cubit.dart';
 import 'package:musiq/bloc/Search/search_cubit.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/global_variables.dart';
@@ -30,7 +30,7 @@ class PlaylistSearchResult extends StatelessWidget {
               final song = state.model.data?.results?[index];
               return ListTile(
                 onTap: () {
-                  context.read<FeatchAlbumAndPlayListCubit>().fetchData(
+                  context.read<FeatchSongCubit>().fetchData(
                       type: song?.type ?? "",
                       id: song?.id ?? "",
                       imageUrl: song?.image?.last.imageUrl ?? errorImage());

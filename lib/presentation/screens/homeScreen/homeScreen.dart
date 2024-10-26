@@ -1,16 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:musiq/bloc/FeatchAlbumAndPlayList/featch_album_and_play_list_cubit.dart';
+import 'package:musiq/bloc/featchSong/featch_song_cubit.dart';
 import 'package:musiq/bloc/home_screen_cubit/home_screen_cubit.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/presentation/commanWidgets/empty_screen.dart';
-import 'package:musiq/presentation/screens/album_or_playlist_screen/new_album_or_playlist_screen.dart';
+import 'package:musiq/presentation/screens/album_or_playlist_screen/album_or_playlist_screen.dart';
+import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 
-class Newhomescreen extends StatelessWidget {
-  const Newhomescreen({super.key});
+class Homescreen extends StatelessWidget {
+  const Homescreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,10 +25,11 @@ class Newhomescreen extends StatelessWidget {
               ),
             );
           } else if (state is HomeScreenLoaded) {
-            return BlocListener<FeatchAlbumAndPlayListCubit,
-                FeatchAlbumAndPlayListState>(
+// ---------------- listener --------------
+            return BlocListener<FeatchSongCubit, FeatchSongState>(
               listener: (context, state) {
-                if (state is FeatchAlbumAndPlayListLoading) {
+// -------------- loading ------------------
+                if (state is FeatchSongLoading) {
                   showDialog(
                     context: context,
                     barrierDismissible: false,
@@ -42,17 +44,32 @@ class Newhomescreen extends StatelessWidget {
                       );
                     },
                   );
-                } else if (state is FeatchAlbumAndPlayListLoaded) {
+                }
+//------------------- type is album or playlist ----------------
+                else if (state is FeatchAlbumAndPlayListLoaded) {
                   Navigator.pop(context); // for closing loading
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => NewAlbumOrPlaylistScreen(
-                          albumModel: state.albumModel,
-                          playListModel: state.playListModel,
-                          imageUrl: state.imageUrl,
-                        ),
-                      ));
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AlbumOrPlaylistScreen(
+                        albumModel: state.albumModel,
+                        playListModel: state.playListModel,
+                        imageUrl: state.imageUrl,
+                      ),
+                    ),
+                  );
+                }
+//------------------type is song ----------------------
+                else if (state is FeatchSongByIDLoaded) {
+                  Navigator.pop(context); // for closing loading
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PlayerScreen(
+                        songs: state.songs,
+                      ),
+                    ),
+                  );
                 }
               },
               child: SingleChildScrollView(
@@ -180,7 +197,7 @@ class Newhomescreen extends StatelessWidget {
 
               return GestureDetector(
                 onTap: () {
-                  context.read<FeatchAlbumAndPlayListCubit>().fetchData(
+                  context.read<FeatchSongCubit>().fetchData(
                       type: data.type ?? "",
                       id: data.id ?? "0",
                       imageUrl: data.image?.last.imageUrl ?? errorImage());

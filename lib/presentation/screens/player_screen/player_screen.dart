@@ -225,7 +225,8 @@ class _PlayerScreenState extends State<PlayerScreen> {
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
-                            CustomAppBar(title: currentSong.label ?? "NO"),
+                            CustomAppBar(
+                                title: currentSong.album?.name ?? "NO"),
                             AppSpacing.height30,
                             Container(
                               height: screenHeight * 0.3,
@@ -257,7 +258,12 @@ class _PlayerScreenState extends State<PlayerScreen> {
                             ),
                             SizedBox(height: isMobile(context) ? 15 : 10),
                             Text(
-                              currentSong.label ?? "No",
+                              currentSong.artists?.all != null &&
+                                      currentSong.artists!.all!.isNotEmpty
+                                  ? currentSong.artists!.all!
+                                      .map((artist) => artist.name)
+                                      .join(", ")
+                                  : "No Artists Available",
                               maxLines: 1,
                               overflow: TextOverflow.fade,
                               softWrap: false,

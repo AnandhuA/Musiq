@@ -1,13 +1,17 @@
 class Album {
   String? id;
-  String? name;
+  String name;
   String? url;
 
-  Album({this.id, this.name, this.url});
+  Album({
+    this.id,
+    required this.name,
+    this.url,
+  });
 
   factory Album.fromJson(Map<String, dynamic> json) => Album(
         id: json['id'] as String?,
-        name: json['name'] as String?,
+        name: json['name'] ?? "null" ,
         url: json['url'] as String?,
       );
 

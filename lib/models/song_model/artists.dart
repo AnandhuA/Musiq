@@ -14,8 +14,11 @@ class Artists {
             .toList(),
         featured: json['featured'] as List<dynamic>?,
         all: (json['all'] as List<dynamic>?)
-            ?.map((e) => All.fromJson(e as Map<String, dynamic>))
-            .toList(),
+                ?.map((e) => All.fromJson(e as Map<String, dynamic>))
+                .toList() ?? // Using null-aware operator and fallback
+            (json['artists'] as List<dynamic>?)
+                ?.map((e) => All.fromJson(e as Map<String, dynamic>))
+                .toList(), // Correctly parsing from artists if all is not found
       );
 
   Map<String, dynamic> toJson() => {

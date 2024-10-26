@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:musiq/bloc/FeatchAlbumAndPlayList/featch_album_and_play_list_cubit.dart';
+import 'package:musiq/bloc/featchSong/featch_song_cubit.dart';
 import 'package:musiq/bloc/Search/search_cubit.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/sized.dart';
-import 'package:musiq/presentation/screens/album_or_playlist_screen/new_album_or_playlist_screen.dart';
+import 'package:musiq/presentation/screens/album_or_playlist_screen/album_or_playlist_screen.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 import 'package:musiq/presentation/screens/search_screen/widgets/album_search_result.dart';
 import 'package:musiq/presentation/screens/search_screen/widgets/all_search_result.dart';
@@ -31,10 +31,12 @@ class _NewSearchScreenState extends State<NewSearchScreen> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      body: BlocListener<FeatchAlbumAndPlayListCubit,
-          FeatchAlbumAndPlayListState>(
+// ---------------- listener --------------
+      body: BlocListener<FeatchSongCubit,
+          FeatchSongState>(
         listener: (context, state) {
-          if (state is FeatchAlbumAndPlayListLoading) {
+// -------------- loading ------------------
+          if (state is FeatchSongLoading) {
             showDialog(
               context: context,
               barrierDismissible: false,
@@ -49,18 +51,22 @@ class _NewSearchScreenState extends State<NewSearchScreen> {
                 );
               },
             );
-          } else if (state is FeatchAlbumAndPlayListLoaded) {
+          }
+//------------------- type is album or playlist ----------------
+          else if (state is FeatchAlbumAndPlayListLoaded) {
             Navigator.pop(context); // for closing loading
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => NewAlbumOrPlaylistScreen(
+                  builder: (context) => AlbumOrPlaylistScreen(
                     albumModel: state.albumModel,
                     playListModel: state.playListModel,
                     imageUrl: state.imageUrl,
                   ),
                 ));
-          } else if (state is FeatchSongByIDLoaded) {
+          }
+//------------------type is song ----------------------
+          else if (state is FeatchSongByIDLoaded) {
             Navigator.pop(context); // for closing loading
             Navigator.push(
                 context,
