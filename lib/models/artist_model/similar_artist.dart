@@ -1,4 +1,6 @@
-import 'image.dart';
+
+import 'package:musiq/models/song_model/image.dart';
+
 import 'languages.dart';
 
 class SimilarArtist {

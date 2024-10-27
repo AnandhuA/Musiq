@@ -43,6 +43,8 @@ class FeatchSongCubit extends Cubit<FeatchSongState> {
       AlbumModel model = AlbumModel.fromJson(data);
       emit(FeatchAlbumAndPlayListLoaded(
           albumModel: model, playListModel: null, imageUrl: imageUrl));
+    } else {
+      log("error--${responce?.statusCode}");
     }
   }
 
@@ -56,17 +58,23 @@ class FeatchSongCubit extends Cubit<FeatchSongState> {
       log("${model.data?.songs?.length}");
       emit(FeatchAlbumAndPlayListLoaded(
           albumModel: null, playListModel: model, imageUrl: imageUrl));
+    } else {
+      log("error--${responce?.statusCode}");
     }
   }
 
 //---------- featch Artis by id ------------
   void featchArtistSongs({required String id, required String imageUrl}) async {
     emit(FeatchSongLoading());
+    log("set");
     final Response? responce = await Saavan2.featchArtist(artistId: id);
+    log("----------${responce?.statusCode}");
     if (responce != null && responce.statusCode == 200) {
       final data = jsonDecode(responce.body);
       ArtistModel model = ArtistModel.fromJson(data);
       emit(FeatchArtistLoadedState(model: model));
+    } else {
+      log("error--${responce?.statusCode}");
     }
   }
 
@@ -86,6 +94,8 @@ class FeatchSongCubit extends Cubit<FeatchSongState> {
         final Song model = Song.fromJson(data["data"]);
         emit(FeatchSongByIDLoaded(songs: [model]));
       }
+    } else {
+      log("error--${responce?.statusCode}");
     }
   }
 }

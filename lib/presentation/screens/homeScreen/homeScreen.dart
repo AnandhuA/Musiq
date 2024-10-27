@@ -8,6 +8,7 @@ import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/presentation/commanWidgets/empty_screen.dart';
 import 'package:musiq/presentation/screens/album_or_playlist_screen/album_or_playlist_screen.dart';
+import 'package:musiq/presentation/screens/artist/artist_screen.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 
 class Homescreen extends StatelessWidget {
@@ -70,6 +71,15 @@ class Homescreen extends StatelessWidget {
                       ),
                     ),
                   );
+                }
+//------------------ type is Artist ------------
+                else if (state is FeatchArtistLoadedState) {
+                  Navigator.pop(context); //for closing loading
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ArtistScreen(model: state.model),
+                      ));
                 }
               },
               child: SingleChildScrollView(
@@ -215,7 +225,7 @@ class Homescreen extends StatelessWidget {
                             errorWidget: (context, url, error) =>
                                 albumImagePlaceholder(),
                             placeholder: (context, url) =>
-                               albumImagePlaceholder(),
+                                albumImagePlaceholder(),
                           ),
                         ),
                       ),

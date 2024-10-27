@@ -1,6 +1,7 @@
+import 'package:musiq/models/song_model/image.dart';
 import 'package:musiq/models/song_model/song.dart';
 
-import 'image.dart';
+
 import 'similar_artist.dart';
 import 'top_album.dart';
 

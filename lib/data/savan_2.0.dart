@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:http/http.dart' as http;
 import 'package:musiq/core/api_urls.dart';
 
@@ -51,6 +53,7 @@ class Saavan2 {
       final responce = await http.get(Uri.parse("${ApiUrls.artist}$artistId"));
       return responce;
     } catch (e) {
+      log("${e.toString()}");
       return null;
     }
   }

@@ -11,6 +11,7 @@ import 'package:musiq/models/play_list_model/play_list_model.dart';
 import 'package:musiq/models/song_model/song.dart';
 import 'package:musiq/presentation/commanWidgets/empty_screen.dart';
 import 'package:musiq/presentation/commanWidgets/favorite_icon.dart';
+import 'package:musiq/presentation/screens/artist/widgets/artist_horizontal_listview.dart';
 import 'package:musiq/presentation/screens/player_screen/bottomPlayer/bottom_player.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 
@@ -84,9 +85,9 @@ class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
                           imageUrl: widget.imageUrl,
                           fit: BoxFit.cover,
                           errorWidget: (context, url, error) =>
-                             albumImagePlaceholder(),
+                              albumImagePlaceholder(),
                           placeholder: (context, url) =>
-                             albumImagePlaceholder(),
+                              albumImagePlaceholder(),
                         ),
                       ),
                     ),
@@ -241,10 +242,33 @@ class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
                     )
                   : Expanded(
                       child: ListView.builder(
-                        itemCount: songList.length,
+                        padding: EdgeInsets.only(bottom: 100),
+                        itemCount: songList.length + (isPlayList ? 1 : 0),
                         itemBuilder: (context, index) {
+                          if (isPlayList && index == songList.length) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "  Similar Artists",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: AppColors
+                                          .colorList[AppGlobals().colorIndex],
+                                    ),
+                                  ),
+                                  ArtistHorizontalListview(
+                                    dataList:
+                                        widget.playListModel?.data?.artists ??
+                                            [],
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
                           final song = songList[index];
-
                           return ListTile(
                             onTap: () {
                               log("song link ---${songList[index].downloadUrl?.last.link}");
@@ -262,19 +286,18 @@ class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
                               child: CachedNetworkImage(
                                 imageUrl: song.image?.last.imageUrl ?? "",
                                 fit: BoxFit.cover,
-                                placeholder: (context, url) => song.type ==
-                                        "Artist"
-                                    ? artistImagePlaceholder()
-                                    : song.type == "album"
-                                        ? albumImagePlaceholder()
-                                        :songImagePlaceholder(),
-                                errorWidget: (context, url, error) => song
-                                            .type ==
-                                        "Artist"
-                                    ? artistImagePlaceholder()
-                                    : song.type == "album"
-                                        ? albumImagePlaceholder()
-                                        : songImagePlaceholder(),
+                                placeholder: (context, url) =>
+                                    song.type == "Artist"
+                                        ? artistImagePlaceholder()
+                                        : song.type == "album"
+                                            ? albumImagePlaceholder()
+                                            : songImagePlaceholder(),
+                                errorWidget: (context, url, error) =>
+                                    song.type == "Artist"
+                                        ? artistImagePlaceholder()
+                                        : song.type == "album"
+                                            ? albumImagePlaceholder()
+                                            : songImagePlaceholder(),
                               ),
                             ),
                             title: Text(
