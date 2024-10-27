@@ -3,8 +3,10 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:musiq/data/hive_funtion.dart';
 import 'package:musiq/data/savan_2.0.dart';
 import 'package:musiq/models/home_screen_models/newHomeScreenModel.dart';
+import 'package:musiq/models/song_model/song.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'home_screen_state.dart';
@@ -22,7 +24,7 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
 
     final DateTime now = DateTime.now();
     final DateTime today = DateTime(now.year, now.month, now.day);
-    // final List<Song> lastplayed = await LastPlayedRepo.fetchLastPlayed();
+    final List<Song> lastplayed = await LastPlayedRepo.fetchLastPlayed();
 
     if (lastUpdated != null) {
       final DateTime lastUpdateDate = DateTime.parse(lastUpdated);
@@ -38,6 +40,7 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
         log("---------load from cache----------");
         emit(HomeScreenLoaded(
           newHomeScreenModel: newHomeScreenModel,
+          lastPlayedSongList: lastplayed,
         ));
         return;
       }
@@ -64,6 +67,7 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
     log("---------load from response ----------");
     emit(HomeScreenLoaded(
       newHomeScreenModel: newHomeScreenModel,
+      lastPlayedSongList: lastplayed,
     ));
   }
 }

@@ -29,8 +29,9 @@ class HomepageHorizontalListview extends StatelessWidget {
           child: Text(
             sectionTitle,
             style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
+              fontSize: 20,
+              letterSpacing: 2,
+              fontWeight: FontWeight.w500,
               color: AppColors.colorList[AppGlobals().colorIndex],
             ),
           ),

@@ -266,7 +266,6 @@ class ArtistScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-
                 GridView.builder(
                   physics:
                       NeverScrollableScrollPhysics(), // Prevent inner scrolling
@@ -323,35 +322,6 @@ class ArtistScreen extends StatelessWidget {
                     );
                   },
                 ),
-
-                // Column(
-                //   children: model.data?.singles?.map((song) {
-                //         return Padding(
-                //           padding: const EdgeInsets.only(bottom: 10),
-                //           child: ListTile(
-                //             onTap: () {
-                //               context.read<FeatchSongCubit>().fetchData(
-                //                     type: song.type ?? "",
-                //                     id: song.id ?? "0",
-                //                     imageUrl: song.image?.last.imageUrl ??
-                //                         errorImage(),
-                //                   );
-                //             },
-                //             leading: CachedNetworkImage(
-                //               imageUrl:
-                //                   song.image?.last.imageUrl ?? errorImage(),
-                //               placeholder: (context, url) =>
-                //                   songImagePlaceholder(),
-                //               errorWidget: (context, url, error) =>
-                //                   songImagePlaceholder(),
-                //             ),
-                //             title: Text(song.name ?? "Null"),
-                //             subtitle: Text(song.language ?? "Null"),
-                //           ),
-                //         );
-                //       }).toList() ??
-                //       [],
-                // ),
                 AppSpacing.height50,
                 AppSpacing.height50
               ],
