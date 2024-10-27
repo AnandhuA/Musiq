@@ -39,10 +39,12 @@ class ArtistScreen extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    CircleAvatar(
+                   CircleAvatar(
                       radius: 60,
                       backgroundImage: CachedNetworkImageProvider(
-                        model.data?.image?.last.imageUrl ?? errorImage(),
+                        (model.data?.image?.isNotEmpty ?? false)
+                            ? model.data!.image!.last.imageUrl
+                            : errorImage(),
                       ),
                     ),
                     AppSpacing.width30,

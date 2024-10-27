@@ -16,7 +16,7 @@ class FeatchSongCubit extends Cubit<FeatchSongState> {
 //------- check funtion by type -----------
   void fetchData(
       {required String type, required String id, required String imageUrl}) {
-    log("$type");
+    log("type::$type id::$id");
     switch (type) {
       case 'album':
         fetchAlbum(id: id, imageUrl: imageUrl);
@@ -28,6 +28,13 @@ class FeatchSongCubit extends Cubit<FeatchSongState> {
         fetchSongById(id: id);
       case 'artist':
         featchArtistSongs(id: id, imageUrl: imageUrl);
+      case 'radio_station':
+        featchArtistSongs(id: id, imageUrl: imageUrl);
+      case 'channel':
+        featchArtistSongs(id: id, imageUrl: imageUrl);
+      case 'show':
+        featchArtistSongs(id: id, imageUrl: imageUrl);
+     
       default:
         print('Unknown type: $type');
         break;
@@ -98,4 +105,5 @@ class FeatchSongCubit extends Cubit<FeatchSongState> {
       log("error--${responce?.statusCode}");
     }
   }
+
 }

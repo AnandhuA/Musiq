@@ -1,14 +1,14 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/bloc/featchSong/featch_song_cubit.dart';
 import 'package:musiq/bloc/home_screen_cubit/home_screen_cubit.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/global_variables.dart';
-import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/presentation/commanWidgets/empty_screen.dart';
 import 'package:musiq/presentation/screens/album_or_playlist_screen/album_or_playlist_screen.dart';
 import 'package:musiq/presentation/screens/artist/artist_screen.dart';
+import 'package:musiq/presentation/screens/homeScreen/widgets/homepage_horizontal_listview.dart';
+import 'package:musiq/presentation/screens/homeScreen/widgets/mix_list_view.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 
 class Homescreen extends StatelessWidget {
@@ -85,79 +85,163 @@ class Homescreen extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    _buildHorizontalListView(
-                        context,
-                        "Trending",
-                        state.newHomeScreenModel?.songdata?.trending?.data ??
+                    HomepageHorizontalListview(
+                        sectionTitle: state.newHomeScreenModel?.songdata
+                                ?.trending?.title ??
+                            "Trending",
+                        dataList: state
+                                .newHomeScreenModel?.songdata?.trending?.data ??
                             []),
-                    _buildHorizontalListView(context, "Mixes",
-                        state.newHomeScreenModel?.songdata?.mixes?.data ?? []),
-                    _buildHorizontalListView(
-                        context,
-                        "Playlists",
-                        state.newHomeScreenModel?.songdata?.playlists?.data ??
+                    MixListView(
+                      mixData: state.newHomeScreenModel?.songdata?.mixes,
+                    ),
+                    HomepageHorizontalListview(
+                        sectionTitle: state.newHomeScreenModel?.songdata
+                                ?.playlists?.title ??
+                            "Playlists",
+                        dataList: state.newHomeScreenModel?.songdata?.playlists
+                                ?.data ??
                             []),
-                    _buildHorizontalListView(context, "Albums",
-                        state.newHomeScreenModel?.songdata?.albums?.data ?? []),
-                    _buildHorizontalListView(
-                        context,
-                        "ArtistRecos",
-                        state.newHomeScreenModel?.songdata?.artistRecos?.data ??
+                    HomepageHorizontalListview(
+                        sectionTitle:
+                            state.newHomeScreenModel?.songdata?.albums?.title ??
+                                "Albums",
+                        dataList:
+                            state.newHomeScreenModel?.songdata?.albums?.data ??
+                                []),
+                    HomepageHorizontalListview(
+                        sectionTitle: state.newHomeScreenModel?.songdata
+                                ?.artistRecos?.title ??
+                            "ArtistRecos",
+                        dataList: state.newHomeScreenModel?.songdata
+                                ?.artistRecos?.data ??
                             []),
-                    _buildHorizontalListView(context, "Charts",
-                        state.newHomeScreenModel?.songdata?.charts?.data ?? []),
-                    _buildHorizontalListView(
-                        context,
-                        "CityMod",
-                        state.newHomeScreenModel?.songdata?.cityMod?.data ??
+                    HomepageHorizontalListview(
+                        sectionTitle:
+                            state.newHomeScreenModel?.songdata?.charts?.title ??
+                                "Charts",
+                        dataList:
+                            state.newHomeScreenModel?.songdata?.charts?.data ??
+                                []),
+                    HomepageHorizontalListview(
+                        sectionTitle: state
+                                .newHomeScreenModel?.songdata?.cityMod?.title ??
+                            "CityMod",
+                        dataList:
+                            state.newHomeScreenModel?.songdata?.cityMod?.data ??
+                                []),
+                    HomepageHorizontalListview(
+                        sectionTitle: state.newHomeScreenModel?.songdata
+                                ?.discover?.title ??
+                            "Discover",
+                        dataList: state
+                                .newHomeScreenModel?.songdata?.discover?.data ??
                             []),
-                    _buildHorizontalListView(
-                        context,
-                        "Discover",
-                        state.newHomeScreenModel?.songdata?.discover?.data ??
-                            []),
-                    _buildHorizontalListView(context, "Radio",
-                        state.newHomeScreenModel?.songdata?.radio?.data ?? []),
-                    _buildHorizontalListView(context, "Promo0",
-                        state.newHomeScreenModel?.songdata?.promo0?.data ?? []),
-                    _buildHorizontalListView(context, "Promo1",
-                        state.newHomeScreenModel?.songdata?.promo1?.data ?? []),
-                    _buildHorizontalListView(context, "Promo2",
-                        state.newHomeScreenModel?.songdata?.promo2?.data ?? []),
-                    _buildHorizontalListView(context, "Promo3",
-                        state.newHomeScreenModel?.songdata?.promo3?.data ?? []),
-                    _buildHorizontalListView(context, "Promo4",
-                        state.newHomeScreenModel?.songdata?.promo4?.data ?? []),
-                    _buildHorizontalListView(context, "Promo5",
-                        state.newHomeScreenModel?.songdata?.promo5?.data ?? []),
-                    _buildHorizontalListView(context, "Promo6",
-                        state.newHomeScreenModel?.songdata?.promo6?.data ?? []),
-                    _buildHorizontalListView(context, "Promo7",
-                        state.newHomeScreenModel?.songdata?.promo7?.data ?? []),
-                    _buildHorizontalListView(context, "Promo8",
-                        state.newHomeScreenModel?.songdata?.promo8?.data ?? []),
-                    _buildHorizontalListView(context, "Promo9",
-                        state.newHomeScreenModel?.songdata?.promo9?.data ?? []),
-                    _buildHorizontalListView(
-                        context,
-                        "Promo10",
-                        state.newHomeScreenModel?.songdata?.promo10?.data ??
-                            []),
-                    _buildHorizontalListView(
-                        context,
-                        "Promo11",
-                        state.newHomeScreenModel?.songdata?.promo11?.data ??
-                            []),
-                    _buildHorizontalListView(
-                        context,
-                        "Promo12",
-                        state.newHomeScreenModel?.songdata?.promo12?.data ??
-                            []),
-                    _buildHorizontalListView(
-                        context,
-                        "Promo13",
-                        state.newHomeScreenModel?.songdata?.promo13?.data ??
-                            []),
+                    HomepageHorizontalListview(
+                        sectionTitle:
+                            state.newHomeScreenModel?.songdata?.radio?.title ??
+                                "Radio",
+                        dataList:
+                            state.newHomeScreenModel?.songdata?.radio?.data ??
+                                []),
+                    HomepageHorizontalListview(
+                        sectionTitle:
+                            state.newHomeScreenModel?.songdata?.promo0?.title ??
+                                "Promo0",
+                        dataList:
+                            state.newHomeScreenModel?.songdata?.promo0?.data ??
+                                []),
+                    HomepageHorizontalListview(
+                        sectionTitle:
+                            state.newHomeScreenModel?.songdata?.promo1?.title ??
+                                "Promo1",
+                        dataList:
+                            state.newHomeScreenModel?.songdata?.promo1?.data ??
+                                []),
+                    HomepageHorizontalListview(
+                        sectionTitle:
+                            state.newHomeScreenModel?.songdata?.promo2?.title ??
+                                "Promo2",
+                        dataList:
+                            state.newHomeScreenModel?.songdata?.promo2?.data ??
+                                []),
+                    HomepageHorizontalListview(
+                        sectionTitle:
+                            state.newHomeScreenModel?.songdata?.promo3?.title ??
+                                "Promo3",
+                        dataList:
+                            state.newHomeScreenModel?.songdata?.promo3?.data ??
+                                []),
+                    HomepageHorizontalListview(
+                        sectionTitle:
+                            state.newHomeScreenModel?.songdata?.promo4?.title ??
+                                "Promo4",
+                        dataList:
+                            state.newHomeScreenModel?.songdata?.promo4?.data ??
+                                []),
+                    HomepageHorizontalListview(
+                        sectionTitle:
+                            state.newHomeScreenModel?.songdata?.promo5?.title ??
+                                "Promo5",
+                        dataList:
+                            state.newHomeScreenModel?.songdata?.promo5?.data ??
+                                []),
+                    HomepageHorizontalListview(
+                        sectionTitle:
+                            state.newHomeScreenModel?.songdata?.promo6?.title ??
+                                "Promo6",
+                        dataList:
+                            state.newHomeScreenModel?.songdata?.promo6?.data ??
+                                []),
+                    HomepageHorizontalListview(
+                        sectionTitle:
+                            state.newHomeScreenModel?.songdata?.promo7?.title ??
+                                "Promo7",
+                        dataList:
+                            state.newHomeScreenModel?.songdata?.promo7?.data ??
+                                []),
+                    HomepageHorizontalListview(
+                        sectionTitle:
+                            state.newHomeScreenModel?.songdata?.promo8?.title ??
+                                "Promo8",
+                        dataList:
+                            state.newHomeScreenModel?.songdata?.promo8?.data ??
+                                []),
+                    HomepageHorizontalListview(
+                        sectionTitle:
+                            state.newHomeScreenModel?.songdata?.promo9?.title ??
+                                "Promo9",
+                        dataList:
+                            state.newHomeScreenModel?.songdata?.promo9?.data ??
+                                []),
+                    HomepageHorizontalListview(
+                        sectionTitle: state
+                                .newHomeScreenModel?.songdata?.promo10?.title ??
+                            "Promo10",
+                        dataList:
+                            state.newHomeScreenModel?.songdata?.promo10?.data ??
+                                []),
+                    HomepageHorizontalListview(
+                        sectionTitle: state
+                                .newHomeScreenModel?.songdata?.promo11?.title ??
+                            "Promo11",
+                        dataList:
+                            state.newHomeScreenModel?.songdata?.promo11?.data ??
+                                []),
+                    HomepageHorizontalListview(
+                        sectionTitle: state
+                                .newHomeScreenModel?.songdata?.promo12?.title ??
+                            "Promo12",
+                        dataList:
+                            state.newHomeScreenModel?.songdata?.promo12?.data ??
+                                []),
+                    HomepageHorizontalListview(
+                        sectionTitle: state
+                                .newHomeScreenModel?.songdata?.promo13?.title ??
+                            "Promo13",
+                        dataList:
+                            state.newHomeScreenModel?.songdata?.promo13?.data ??
+                                []),
                   ],
                 ),
               ),
@@ -174,84 +258,6 @@ class Homescreen extends StatelessWidget {
           );
         },
       ),
-    );
-  }
-
-  Widget _buildHorizontalListView(
-      BuildContext context, String sectionTitle, List<dynamic> dataList) {
-    if (dataList.isEmpty) {
-      return SizedBox.shrink();
-    }
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          child: Text(
-            sectionTitle,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: AppColors.colorList[AppGlobals().colorIndex],
-            ),
-          ),
-        ),
-        Container(
-          height: 200,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: dataList.length,
-            itemBuilder: (context, index) {
-              final data = dataList[index];
-
-              return GestureDetector(
-                onTap: () {
-                  context.read<FeatchSongCubit>().fetchData(
-                      type: data.type ?? "",
-                      id: data.id ?? "0",
-                      imageUrl: data.image?.last.imageUrl ?? errorImage());
-                },
-                child: Container(
-                  margin: const EdgeInsets.all(10),
-                  width: 150,
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: CachedNetworkImage(
-                            imageUrl: data.image?.last.imageUrl ?? errorImage(),
-                            errorWidget: (context, url, error) =>
-                                albumImagePlaceholder(),
-                            placeholder: (context, url) =>
-                                albumImagePlaceholder(),
-                          ),
-                        ),
-                      ),
-                      Text(
-                        data.name ?? "null",
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontSize: 14),
-                      ),
-                      Text(
-                        data.type ?? "null",
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey.withOpacity(0.8),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-      ],
     );
   }
 }
