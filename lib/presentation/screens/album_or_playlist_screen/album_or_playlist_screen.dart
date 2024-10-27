@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/global_variables.dart';
+import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/models/album_model/album_model.dart';
 import 'package:musiq/models/play_list_model/play_list_model.dart';
@@ -83,9 +84,9 @@ class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
                           imageUrl: widget.imageUrl,
                           fit: BoxFit.cover,
                           errorWidget: (context, url, error) =>
-                              Image.asset("assets/images/album.png"),
+                             albumImagePlaceholder(),
                           placeholder: (context, url) =>
-                              Image.asset("assets/images/album.png"),
+                             albumImagePlaceholder(),
                         ),
                       ),
                     ),
@@ -263,17 +264,17 @@ class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
                                 fit: BoxFit.cover,
                                 placeholder: (context, url) => song.type ==
                                         "Artist"
-                                    ? Image.asset("assets/images/artist.png")
+                                    ? artistImagePlaceholder()
                                     : song.type == "album"
-                                        ? Image.asset("assets/images/album.png")
-                                        : Image.asset("assets/images/song.png"),
+                                        ? albumImagePlaceholder()
+                                        :songImagePlaceholder(),
                                 errorWidget: (context, url, error) => song
                                             .type ==
                                         "Artist"
-                                    ? Image.asset("assets/images/artist.png")
+                                    ? artistImagePlaceholder()
                                     : song.type == "album"
-                                        ? Image.asset("assets/images/album.png")
-                                        : Image.asset("assets/images/song.png"),
+                                        ? albumImagePlaceholder()
+                                        : songImagePlaceholder(),
                               ),
                             ),
                             title: Text(

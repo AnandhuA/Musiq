@@ -126,9 +126,9 @@ class _MiniPlayerState extends State<MiniPlayer> {
                   imageUrl: _imgUrl,
                   fit: BoxFit.cover,
                   placeholder: (context, url) =>
-                      Image.asset("assets/images/song.png"),
+                     songImagePlaceholder(),
                   errorWidget: (context, url, error) =>
-                      Image.asset("assets/images/song.png"),
+                      songImagePlaceholder(),
                 ),
               ),
               title: Text(

@@ -110,9 +110,9 @@ class ArtistScreen extends StatelessWidget {
                               imageUrl:
                                   song.image?.last.imageUrl ?? errorImage(),
                               placeholder: (context, url) =>
-                                  Image.asset("assets/images/song.png"),
+                                  songImagePlaceholder(),
                               errorWidget: (context, url, error) =>
-                                  Image.asset("assets/images/song.png"),
+                                  songImagePlaceholder(),
                             ),
                             title: Text(song.name ?? "Null"),
                             subtitle: Text(song.album?.name ?? "Null"),
@@ -164,11 +164,9 @@ class ArtistScreen extends StatelessWidget {
                                       imageUrl:
                                           data.image?.last.url ?? errorImage(),
                                       errorWidget: (context, url, error) =>
-                                          Image.asset(
-                                              "assets/images/album.png"),
+                                          albumImagePlaceholder(),
                                       placeholder: (context, url) =>
-                                          Image.asset(
-                                              "assets/images/album.png"),
+                                          albumImagePlaceholder(),
                                     ),
                                   ),
                                 ),
@@ -223,9 +221,9 @@ class ArtistScreen extends StatelessWidget {
                               imageUrl:
                                   song.image?.last.imageUrl ?? errorImage(),
                               placeholder: (context, url) =>
-                                  Image.asset("assets/images/song.png"),
+                                 songImagePlaceholder(),
                               errorWidget: (context, url, error) =>
-                                  Image.asset("assets/images/song.png"),
+                                 songImagePlaceholder(),
                             ),
                             title: Text(song.name ?? "Null"),
                             subtitle: Text(song.language ?? "Null"),
@@ -277,11 +275,9 @@ class ArtistScreen extends StatelessWidget {
                                       imageUrl:
                                           data.image?.last.url ?? errorImage(),
                                       errorWidget: (context, url, error) =>
-                                          Image.asset(
-                                              "assets/images/album.png"),
+                                         albumImagePlaceholder(),
                                       placeholder: (context, url) =>
-                                          Image.asset(
-                                              "assets/images/album.png"),
+                                          albumImagePlaceholder(),
                                     ),
                                   ),
                                 ),

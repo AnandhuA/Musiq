@@ -213,9 +213,9 @@ class Homescreen extends StatelessWidget {
                           child: CachedNetworkImage(
                             imageUrl: data.image?.last.imageUrl ?? errorImage(),
                             errorWidget: (context, url, error) =>
-                                Image.asset("assets/images/album.png"),
+                                albumImagePlaceholder(),
                             placeholder: (context, url) =>
-                                Image.asset("assets/images/album.png"),
+                               albumImagePlaceholder(),
                           ),
                         ),
                       ),

@@ -106,9 +106,9 @@ class AllSearchResult extends StatelessWidget {
               leading: CachedNetworkImage(
                 imageUrl: result.image?.last.url ?? errorImage(),
                 placeholder: (context, url) =>
-                    Image.asset("assets/images/song.png"),
+                    songImagePlaceholder(),
                 errorWidget: (context, url, error) =>
-                    Image.asset("assets/images/song.png"),
+                    songImagePlaceholder(),
               ),
               title: Text(result.title ?? "No Title"),
               subtitle: Text(result.description ?? ""),
