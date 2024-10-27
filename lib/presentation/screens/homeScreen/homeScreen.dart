@@ -8,6 +8,7 @@ import 'package:musiq/presentation/commanWidgets/empty_screen.dart';
 import 'package:musiq/presentation/screens/album_or_playlist_screen/album_or_playlist_screen.dart';
 import 'package:musiq/presentation/screens/artist/artist_screen.dart';
 import 'package:musiq/presentation/screens/homeScreen/widgets/homepage_horizontal_listview.dart';
+import 'package:musiq/presentation/screens/homeScreen/widgets/homepage_lastplayed_widget.dart';
 import 'package:musiq/presentation/screens/homeScreen/widgets/mix_list_view.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 
@@ -85,6 +86,9 @@ class Homescreen extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
+                    HomepageLastplayedWidget(
+                      songList: state.lastPlayedSongList,
+                    ),
                     HomepageHorizontalListview(
                         sectionTitle: state.newHomeScreenModel?.songdata
                                 ?.trending?.title ??

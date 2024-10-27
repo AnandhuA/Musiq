@@ -29,8 +29,9 @@ class MixListView extends StatelessWidget {
                 Text(
                   "Mixes",
                   style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                    letterSpacing: 2,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
                     color: AppColors.colorList[AppGlobals().colorIndex],
                   ),
                 ),

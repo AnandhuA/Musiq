@@ -23,6 +23,7 @@ class ArtistScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
+        title: Text(model.data?.type ?? "Artist"),
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
@@ -39,7 +40,7 @@ class ArtistScreen extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                   CircleAvatar(
+                    CircleAvatar(
                       radius: 60,
                       backgroundImage: CachedNetworkImageProvider(
                         (model.data?.image?.isNotEmpty ?? false)
@@ -97,37 +98,75 @@ class ArtistScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                Column(
-                  children: model.data?.topSongs?.map((song) {
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
-                          child: ListTile(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => PlayerScreen(
-                                      songs: model.data!.topSongs!,
-                                      initialIndex:
-                                          model.data!.topSongs!.indexOf(song),
+                if (model.data?.topSongs?.length != null)
+                  Container(
+                    height: 230,
+                    child: PageView.builder(
+                      itemCount:
+                          ((model.data!.topSongs!.length + 2) / 3).floor(),
+                      pageSnapping: true,
+                      controller: PageController(
+                        viewportFraction: 0.9,
+                      ),
+                      itemBuilder: (context, pageIndex) {
+                        return Transform.translate(
+                          offset: Offset(
+                              isMobile(context)
+                                  ? -22
+                                  : isTablet(context)
+                                      ? -38
+                                      : -70,
+                              0),
+                          child: Column(
+                            children: List.generate(3, (itemIndex) {
+                              final index = pageIndex * 3 + itemIndex;
+                              if (index >= model.data!.topSongs!.length) {
+                                return SizedBox();
+                              }
+                              return Container(
+                                child: ListTile(
+                                  leading: ClipRRect(
+                                    borderRadius: BorderRadius.circular(5),
+                                    child: CachedNetworkImage(
+                                      imageUrl: model.data!.topSongs![index]
+                                              .image?.last.imageUrl ??
+                                          errorImage(),
+                                      placeholder: (context, url) =>
+                                          songImagePlaceholder(),
+                                      errorWidget: (context, url, error) =>
+                                          songImagePlaceholder(),
                                     ),
-                                  ));
-                            },
-                            leading: CachedNetworkImage(
-                              imageUrl:
-                                  song.image?.last.imageUrl ?? errorImage(),
-                              placeholder: (context, url) =>
-                                  songImagePlaceholder(),
-                              errorWidget: (context, url, error) =>
-                                  songImagePlaceholder(),
-                            ),
-                            title: Text(song.name ?? "Null"),
-                            subtitle: Text(song.album?.name ?? "Null"),
+                                  ),
+                                  title: Text(
+                                    model.data!.topSongs![index].name ?? "No",
+                                    maxLines: 1,
+                                  ),
+                                  subtitle: Text(
+                                    model.data!.topSongs![index].album?.name ??
+                                        "No",
+                                    maxLines: 1,
+                                  ),
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => PlayerScreen(
+                                            songs: model.data!.topSongs!,
+                                            initialIndex: index,
+                                          ),
+                                        ));
+                                  },
+                                  trailing: IconButton(
+                                      onPressed: () {},
+                                      icon: Icon(Icons.more_vert)),
+                                ),
+                              );
+                            }),
                           ),
                         );
-                      }).toList() ??
-                      [],
-                ),
+                      },
+                    ),
+                  ),
                 if (model.data?.topAlbums != null &&
                     model.data!.topAlbums!.isNotEmpty)
                   Padding(
@@ -227,7 +266,6 @@ class ArtistScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-
                 GridView.builder(
                   physics:
                       NeverScrollableScrollPhysics(), // Prevent inner scrolling
@@ -284,35 +322,6 @@ class ArtistScreen extends StatelessWidget {
                     );
                   },
                 ),
-
-                // Column(
-                //   children: model.data?.singles?.map((song) {
-                //         return Padding(
-                //           padding: const EdgeInsets.only(bottom: 10),
-                //           child: ListTile(
-                //             onTap: () {
-                //               context.read<FeatchSongCubit>().fetchData(
-                //                     type: song.type ?? "",
-                //                     id: song.id ?? "0",
-                //                     imageUrl: song.image?.last.imageUrl ??
-                //                         errorImage(),
-                //                   );
-                //             },
-                //             leading: CachedNetworkImage(
-                //               imageUrl:
-                //                   song.image?.last.imageUrl ?? errorImage(),
-                //               placeholder: (context, url) =>
-                //                   songImagePlaceholder(),
-                //               errorWidget: (context, url, error) =>
-                //                   songImagePlaceholder(),
-                //             ),
-                //             title: Text(song.name ?? "Null"),
-                //             subtitle: Text(song.language ?? "Null"),
-                //           ),
-                //         );
-                //       }).toList() ??
-                //       [],
-                // ),
                 AppSpacing.height50,
                 AppSpacing.height50
               ],
