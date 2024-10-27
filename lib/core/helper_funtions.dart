@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:flutter/material.dart';
+
 //get random number for Shuffle
 int getRandomSongIndex({required List songList}) {
   final random = Random();
@@ -9,6 +11,17 @@ int getRandomSongIndex({required List songList}) {
 //---error image ---------
 String errorImage() {
   return "https://cdn.dribbble.com/users/3547568/screenshots/14395014/media/0b94c75b97182946d495f34c16eab987.jpg?resize=1000x750&vertical=center";
+}
+
+Widget songImagePlaceholder() {
+  return Image.asset("assets/images/song.png");
+}
+Widget albumImagePlaceholder() {
+  return Image.asset("assets/images/album.png");
+}
+
+Widget artistImagePlaceholder() {
+  return Image.asset("assets/images/artist.png");
 }
 
 // --- find error from status code ------

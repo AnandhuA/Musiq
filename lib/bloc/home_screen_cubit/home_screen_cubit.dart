@@ -49,6 +49,7 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
 
     if (data != null && data.statusCode == 200) {
       final jsonData = jsonDecode(data.body);
+      log(data.body);
       newHomeScreenModel = NewHomeScreenModel.fromJson(jsonData);
       log("-----------${newHomeScreenModel.songdata!.albums!.data!.first.image!.last.imageUrl}");
 

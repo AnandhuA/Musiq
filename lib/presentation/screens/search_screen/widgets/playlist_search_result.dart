@@ -39,9 +39,9 @@ class PlaylistSearchResult extends StatelessWidget {
                 leading: CachedNetworkImage(
                   imageUrl: song?.image?.last.imageUrl ?? errorImage(),
                   placeholder: (context, url) =>
-                      Image.asset("assets/images/song.png"),
+                     songImagePlaceholder(),
                   errorWidget: (context, url, error) =>
-                      Image.asset("assets/images/song.png"),
+                     songImagePlaceholder(),
                 ),
                 title: Text(song?.name ?? "No"),
               );

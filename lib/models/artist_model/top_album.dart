@@ -1,5 +1,8 @@
-import 'artists.dart';
-import 'image.dart';
+import 'package:musiq/models/song_model/artists.dart';
+import 'package:musiq/models/song_model/image.dart';
+
+
+
 
 class TopAlbum {
   String? id;

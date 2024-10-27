@@ -24,7 +24,7 @@ class SongSearchResult extends StatelessWidget {
           );
         } else if (state is SongSearchState) {
           return ListView.separated(
-             padding: EdgeInsets.only(bottom: 100),
+            padding: EdgeInsets.only(bottom: 100),
             separatorBuilder: (context, index) => AppSpacing.height20,
             itemCount: state.model.data?.results?.length ?? 0,
             itemBuilder: (context, index) {
@@ -38,10 +38,8 @@ class SongSearchResult extends StatelessWidget {
                 },
                 leading: CachedNetworkImage(
                   imageUrl: song?.image?.last.imageUrl ?? errorImage(),
-                  placeholder: (context, url) =>
-                      Image.asset("assets/images/song.png"),
-                  errorWidget: (context, url, error) =>
-                      Image.asset("assets/images/song.png"),
+                  placeholder: (context, url) => songImagePlaceholder(),
+                  errorWidget: (context, url, error) => songImagePlaceholder(),
                 ),
                 title: Text(song?.name ?? "No"),
               );
