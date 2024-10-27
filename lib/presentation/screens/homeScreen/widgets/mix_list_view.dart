@@ -1,13 +1,15 @@
-import 'dart:developer';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:musiq/bloc/Search/search_cubit.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/models/home_screen_models/mixes.dart';
+import 'package:musiq/presentation/tag_mix/tag_mix.dart';
 
 class MixListView extends StatelessWidget {
   final Mixes? mixData;
@@ -47,8 +49,20 @@ class MixListView extends StatelessWidget {
                     final tagMix = mixData!.data![index];
                     return GestureDetector(
                       onTap: () {
-                        log("sours::${mixData?.position}");
-                        log("::${tagMix.url}");
+                        if (mixData?.title != null) {
+                          context
+                              .read<SearchCubit>()
+                              .searchPlayList(query: mixData!.title!);
+                        }
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => TagMix(
+                                imageUrl: tagMix.image?.first.imageUrl ??
+                                    errorImage(),
+                                title: mixData?.title ?? "No",
+                              ),
+                            ));
                       },
                       child: Container(
                         decoration: BoxDecoration(
