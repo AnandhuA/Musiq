@@ -87,134 +87,148 @@ class _MiniPlayerState extends State<MiniPlayer> {
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
     return Positioned(
       bottom: widget.bottomPosition,
       left: 0,
       right: 0,
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 8),
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: Theme.of(context).brightness == Brightness.dark
-                ? Colors.grey.shade800
-                : Colors.grey.shade400,
+      child: Stack(
+        children: [
+          // Background Image
+          Positioned.fill(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(5),
+              child: CachedNetworkImage(
+                imageUrl: _imgUrl,
+                fit: BoxFit.cover,
+                placeholder: (context, url) => songImagePlaceholder(),
+                errorWidget: (context, url, error) => songImagePlaceholder(),
+              ),
+            ),
           ),
-          color: Theme.of(context).brightness == Brightness.dark
-              ? AppColors.black
-              : AppColors.white,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Column(
-          children: [
-            ListTile(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => PlayerScreen(
-                        songs: AppGlobals().lastPlayedSongNotifier.value,
-                        currentpostion: _currentPosition,
-                        initialIndex: currentSongIndex,
-                        shuffle: AppGlobals().audioHandler.isShuffleOn(),
+          Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? AppColors.black.withOpacity(0.7)
+                  : AppColors.white.withOpacity(0.7),
+              borderRadius: BorderRadius.circular(5),
+            ),
+            child: Column(
+              children: [
+                ListTile(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PlayerScreen(
+                          songs: AppGlobals().lastPlayedSongNotifier.value,
+                          currentpostion: _currentPosition,
+                          initialIndex: currentSongIndex,
+                          shuffle: AppGlobals().audioHandler.isShuffleOn(),
+                        ),
                       ),
-                    ));
-              },
-              leading: ClipRRect(
-                borderRadius: BorderRadius.circular(5),
-                child: CachedNetworkImage(
-                  imageUrl: _imgUrl,
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) =>
-                     songImagePlaceholder(),
-                  errorWidget: (context, url, error) =>
-                      songImagePlaceholder(),
+                    );
+                  },
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(5),
+                    child: CachedNetworkImage(
+                      imageUrl: _imgUrl,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => songImagePlaceholder(),
+                      errorWidget: (context, url, error) =>
+                          songImagePlaceholder(),
+                    ),
+                  ),
+                  title: Text(
+                    _currentSongTitle,
+                    maxLines: 1,
+                  ),
+                  subtitle: Text(
+                    _currentSongSubTitle,
+                    maxLines: 1,
+                  ),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        onPressed: () async {
+                          await AppGlobals().audioHandler.skipToPrevious();
+                        },
+                        icon: Icon(
+                          Icons.fast_rewind_sharp,
+                          size: 16,
+                        ),
+                      ),
+                      BlocBuilder<PlayAndPauseCubit, PlayAndPauseState>(
+                        builder: (context, state) {
+                          if (state is LoadingState) {
+                            return Lottie.asset(
+                              Theme.of(context).brightness == Brightness.dark
+                                  ? "assets/animations/light_music_loading.json"
+                                  : "assets/animations/dark_music_loading.json",
+                              width: 60,
+                              height: 60,
+                            );
+                          } else if (state is PlayingState) {
+                            return IconButton(
+                              icon: Icon(
+                                Icons.play_circle_fill_rounded,
+                                size: 40,
+                              ),
+                              onPressed: () {
+                                AppGlobals().audioHandler.play();
+                              },
+                            );
+                          } else if (state is PausedState) {
+                            return IconButton(
+                              icon: Icon(
+                                Icons.pause_circle_filled,
+                                size: 40,
+                              ),
+                              onPressed: () {
+                                AppGlobals().audioHandler.pause();
+                              },
+                            );
+                          }
+                          return IconButton(
+                            icon: Icon(Icons.error_outline_sharp),
+                            onPressed: () {},
+                          );
+                        },
+                      ),
+                      IconButton(
+                        onPressed: () async {
+                          await AppGlobals().audioHandler.skipToNext();
+                        },
+                        icon: Icon(
+                          Icons.fast_forward_sharp,
+                          size: 16,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              title: Text(
-                _currentSongTitle,
-                maxLines: 1,
-              ),
-              subtitle: Text(
-                _currentSongSubTitle,
-                maxLines: 1,
-              ),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                      onPressed: () async {
-                        await AppGlobals().audioHandler.skipToPrevious();
-                      },
-                      icon: Icon(
-                        Icons.fast_rewind_sharp,
-                        size: 16,
-                      )),
-                  BlocBuilder<PlayAndPauseCubit, PlayAndPauseState>(
-                    builder: (context, state) {
-                      if (state is LoadingState) {
-                        return Lottie.asset(
-                          Theme.of(context).brightness == Brightness.dark
-                              ? "assets/animations/light_music_loading.json"
-                              : "assets/animations/dark_music_loading.json",
-                          width: 60,
-                          height: 60,
-                        );
-                      } else if (state is PlayingState) {
-                        return IconButton(
-                          icon: Icon(
-                            Icons.play_circle_fill_rounded,
-                            size: 40,
-                          ),
-                          onPressed: () {
-                            AppGlobals().audioHandler.play();
-                          },
-                        );
-                      } else if (state is PausedState) {
-                        return IconButton(
-                          icon: Icon(
-                            Icons.pause_circle_filled,
-                            size: 40,
-                          ),
-                          onPressed: () {
-                            AppGlobals().audioHandler.pause();
-                          },
-                        );
-                      }
-                      return IconButton(
-                        icon: Icon(Icons.error_outline_sharp),
-                        onPressed: () {},
-                      );
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 2),
+                  child: ProgressBar(
+                    progress: _currentPosition,
+                    barHeight: 1,
+                    thumbRadius: 0,
+                    timeLabelLocation: TimeLabelLocation.none,
+                    total: _songDuration,
+                    thumbColor: AppColors.colorList[AppGlobals().colorIndex],
+                    progressBarColor:
+                        AppColors.colorList[AppGlobals().colorIndex],
+                    onSeek: (duration) {
+                      AppGlobals().audioHandler.seek(duration);
                     },
                   ),
-                  IconButton(
-                      onPressed: () async {
-                        await AppGlobals().audioHandler.skipToNext();
-                      },
-                      icon: Icon(
-                        Icons.fast_forward_sharp,
-                        size: 16,
-                      ))
-                ],
-              ),
+                ),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 2),
-              child: ProgressBar(
-                progress: _currentPosition,
-                barHeight: 1,
-                thumbRadius: 3,
-                timeLabelLocation: TimeLabelLocation.none,
-                total: _songDuration,
-                thumbColor: AppColors.colorList[AppGlobals().colorIndex],
-                progressBarColor: AppColors.colorList[AppGlobals().colorIndex],
-                onSeek: (duration) {
-                  AppGlobals().audioHandler.seek(duration);
-                },
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
