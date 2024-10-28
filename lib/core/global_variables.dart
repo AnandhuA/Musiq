@@ -20,6 +20,7 @@ class AppGlobals {
   ValueNotifier<List<Song>> lastPlayedSongNotifier = ValueNotifier([]);
   late AudioPlayerHandler audioHandler;
   int currentSongIndex = 0;
+
   // You can add methods here to manipulate or retrieve the state if needed
 
   // Method to update the current song index
@@ -27,6 +28,8 @@ class AppGlobals {
     log("----------updated $index");
     currentSongIndex = index;
   }
+
+
 
   void updateTheme(String? newTheme) {
     theme = newTheme;

@@ -12,6 +12,7 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   List<MediaItem> _mediaItems = [];
   List<Song> _songList = [];
   bool _isShuffled = false;
+  int _queueLength = 1;
 
   AudioPlayerHandler() : _player = AudioPlayer() {
     _initializePlayer();
@@ -36,16 +37,12 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
     required MediaItem mediaItem,
     required Song song,
   }) async {
-    // Find the current index in the queue
-    int insertIndex = AppGlobals().currentSongIndex + 1;
-
-    // Insert the song and media item right after the currently playing song
+    int insertIndex = AppGlobals().currentSongIndex + _queueLength;
     _mediaItems.insert(insertIndex, mediaItem);
     _songList.insert(insertIndex, song);
-
-    // Update the queue in the audio handler for UI updates
-    queue.add(_mediaItems);
+    _queueLength++;
     AppGlobals().lastPlayedSongNotifier.value = _songList;
+    log("Add susses");
   }
 
   void _handlePlayerStateChange(PlayerState state) {
@@ -92,13 +89,15 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   @override
   Future<void> skipToNext() async {
     if (_isShuffled) {
+      if (_queueLength != 1) {
+        _queueLength--;
+      }
       AppGlobals()
           .setCurrentSongIndex(getRandomSongIndex(songList: _mediaItems));
       AppGlobals().lastPlayedSongNotifier.value = _songList;
       await playCurrentSong();
     } else if (AppGlobals().currentSongIndex < _mediaItems.length - 1) {
       AppGlobals().setCurrentSongIndex(AppGlobals().currentSongIndex + 1);
-      log("---------${AppGlobals().currentSongIndex}");
       AppGlobals().lastPlayedSongNotifier.value = _songList;
       await playCurrentSong();
     }
@@ -106,8 +105,11 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
 
   @override
   Future<void> skipToPrevious() async {
+    if (_queueLength != 1) {
+      _queueLength++;
+    }
     if (AppGlobals().currentSongIndex > 0) {
-      AppGlobals().setCurrentSongIndex(AppGlobals().currentSongIndex-1);
+      AppGlobals().setCurrentSongIndex(AppGlobals().currentSongIndex - 1);
 
       await playCurrentSong();
     }

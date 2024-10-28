@@ -37,7 +37,7 @@ class AllSearchResult extends StatelessWidget {
               state.model.data?.playlists?.results ?? [];
 
           return ListView(
-             padding: EdgeInsets.only(bottom: 100),
+            padding: EdgeInsets.only(bottom: 100),
             children: [
               // Top Query Results
               if (topQueryResults.isNotEmpty)
@@ -90,7 +90,6 @@ class AllSearchResult extends StatelessWidget {
           ),
         ),
         ListView.builder(
-
           shrinkWrap: true, // Important for nested ListView
           physics: NeverScrollableScrollPhysics(),
           itemCount: results.length,
@@ -105,13 +104,12 @@ class AllSearchResult extends StatelessWidget {
               },
               leading: CachedNetworkImage(
                 imageUrl: result.image?.last.url ?? errorImage(),
-                placeholder: (context, url) =>
-                    songImagePlaceholder(),
-                errorWidget: (context, url, error) =>
-                    songImagePlaceholder(),
+                placeholder: (context, url) => songImagePlaceholder(),
+                errorWidget: (context, url, error) => songImagePlaceholder(),
               ),
               title: Text(result.title ?? "No Title"),
               subtitle: Text(result.description ?? ""),
+             
             );
           },
         ),
