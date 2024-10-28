@@ -6,6 +6,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
+import 'package:musiq/bloc/featchSong/featch_song_cubit.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/helper_funtions.dart';
@@ -15,8 +16,8 @@ import 'package:musiq/presentation/commanWidgets/custom_app_bar.dart';
 import 'package:musiq/presentation/commanWidgets/favorite_icon.dart';
 import 'package:musiq/presentation/screens/player_screen/cubit/PlayAndPause/play_and_pause_cubit.dart';
 import 'package:musiq/presentation/screens/player_screen/cubit/ProgressBar/progress_bar_cubit.dart';
+import 'package:musiq/presentation/screens/player_screen/widgets/pop_up.dart';
 import 'package:musiq/presentation/screens/player_screen/widgets/progress_bar_widget.dart';
-
 
 class PlayerScreen extends StatefulWidget {
   final List<Song> songs;
@@ -224,7 +225,46 @@ class _PlayerScreenState extends State<PlayerScreen> {
                         child: Column(
                           children: [
                             CustomAppBar(
-                                title: currentSong.album?.name ?? "NO"),
+                              title: currentSong.album?.name ?? "NO",
+                              actionButton: PopupMenuButton<int>(
+                                  icon: Icon(Icons.more_vert_sharp),
+                                  onSelected: (value) {
+                                    switch (value) {
+                                      case 0:
+                                        context
+                                            .read<FeatchSongCubit>()
+                                            .fetchAlbum(
+                                                id: currentSong.album?.id ?? "",
+                                                imageUrl: currentSong
+                                                        .image?.last.imageUrl ??
+                                                    errorImage());
+                                        break;
+                                      case 1:
+                                        popUpWiget(
+                                          context: context,
+                                          list: currentSong.artists?.all ?? [],
+                                        );
+                                        break;
+                                      case 2:
+                                        // Handle "Share" action
+                                        break;
+                                    }
+                                  },
+                                  itemBuilder: (context) => [
+                                        PopupMenuItem(
+                                          value: 0,
+                                          child: Text('View Album'),
+                                        ),
+                                        PopupMenuItem(
+                                          value: 1,
+                                          child: Text('View Artist'),
+                                        ),
+                                        PopupMenuItem(
+                                          value: 2,
+                                          child: Text('Add to Playlist'),
+                                        ),
+                                      ]),
+                            ),
                             AppSpacing.height30,
                             Container(
                               height: screenHeight * 0.3,
@@ -483,11 +523,11 @@ class _PlayerScreenState extends State<PlayerScreen> {
                         } else if (AppGlobals().currentSongIndex > oldIndex &&
                             AppGlobals().currentSongIndex <= newIndex) {
                           AppGlobals()
-                              .setColorIndex(AppGlobals().currentSongIndex-1);
+                              .setColorIndex(AppGlobals().currentSongIndex - 1);
                         } else if (AppGlobals().currentSongIndex < oldIndex &&
                             AppGlobals().currentSongIndex >= newIndex) {
                           AppGlobals().setCurrentSongIndex(
-                              AppGlobals().currentSongIndex+1);
+                              AppGlobals().currentSongIndex + 1);
                         }
 
                         AppGlobals().audioHandler.setMediaItems(
@@ -602,10 +642,11 @@ class _PlayerScreenState extends State<PlayerScreen> {
               AppGlobals().setCurrentSongIndex(newIndex);
             } else if (AppGlobals().currentSongIndex > oldIndex &&
                 AppGlobals().currentSongIndex <= newIndex) {
-              AppGlobals().setCurrentSongIndex(AppGlobals().colorIndex-1);
+              AppGlobals().setCurrentSongIndex(AppGlobals().colorIndex - 1);
             } else if (AppGlobals().currentSongIndex < oldIndex &&
                 AppGlobals().currentSongIndex >= newIndex) {
-              AppGlobals().setCurrentSongIndex(AppGlobals().currentSongIndex+1);
+              AppGlobals()
+                  .setCurrentSongIndex(AppGlobals().currentSongIndex + 1);
             }
             AppGlobals().audioHandler.setMediaItems(
                 mediaItems: widget.songs
@@ -643,7 +684,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-               AppGlobals(). currentSongIndex == index
+                AppGlobals().currentSongIndex == index
                     ? Lottie.asset(
                         Theme.of(context).brightness == Brightness.dark
                             ? "assets/animations/musicPlaying_light.json"
@@ -672,7 +713,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
               widget.songs[index].name ?? "No",
               maxLines: 1,
               style: TextStyle(
-                color: AppGlobals(). currentSongIndex == index
+                color: AppGlobals().currentSongIndex == index
                     ? AppColors.colorList[AppGlobals().colorIndex]
                     : null,
               ),
@@ -681,7 +722,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
               widget.songs[index].label ?? "No",
               maxLines: 1,
               style: TextStyle(
-                color: AppGlobals(). currentSongIndex == index
+                color: AppGlobals().currentSongIndex == index
                     ? AppColors.colorList[AppGlobals().colorIndex]
                     : null,
               ),

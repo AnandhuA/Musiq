@@ -16,12 +16,20 @@ String errorImage() {
 Widget songImagePlaceholder() {
   return Image.asset("assets/images/song.png");
 }
+
 Widget albumImagePlaceholder() {
   return Image.asset("assets/images/album.png");
 }
 
 Widget artistImagePlaceholder() {
   return Image.asset("assets/images/artist.png");
+}
+
+bool isValidUrl(String? url) {
+  if (url == null || url.isEmpty) return false;
+
+  final uri = Uri.tryParse(url);
+  return uri != null && uri.hasScheme && uri.host.isNotEmpty;
 }
 
 // --- find error from status code ------

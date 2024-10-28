@@ -339,6 +339,13 @@ class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
 
                                         audioHandler.addToQueue(
                                             mediaItem: mediaItem, song: song);
+                                             customSnackbar(
+                                            context: context,
+                                            message:
+                                                "${song.name} added to queue",
+                                            bgColor: AppColors.white,
+                                            textColor: AppColors.black,
+                                            duration: Duration(seconds: 5));
                                       }
 
                                       break;

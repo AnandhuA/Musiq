@@ -1,14 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:musiq/bloc/featchSong/featch_song_cubit.dart';
 import 'package:musiq/bloc/Search/search_cubit.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/sized.dart';
-import 'package:musiq/presentation/screens/album_or_playlist_screen/album_or_playlist_screen.dart';
-import 'package:musiq/presentation/screens/artist/artist_screen.dart';
-import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 import 'package:musiq/presentation/screens/search_screen/widgets/album_search_result.dart';
 import 'package:musiq/presentation/screens/search_screen/widgets/all_search_result.dart';
 import 'package:musiq/presentation/screens/search_screen/widgets/artist_search_result.dart';
@@ -33,92 +29,38 @@ class _NewSearchScreenState extends State<NewSearchScreen> {
 
     return Scaffold(
 // ---------------- listener --------------
-      body: BlocListener<FeatchSongCubit, FeatchSongState>(
-        listener: (context, state) {
-// -------------- loading ------------------
-          if (state is FeatchSongLoading) {
-            showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  backgroundColor: Colors.transparent,
-                  content: Center(
-                    child: CircularProgressIndicator(
-                      color: AppColors.colorList[AppGlobals().colorIndex],
-                    ),
-                  ),
-                );
-              },
-            );
-          }
-//------------------- type is album or playlist ----------------
-          else if (state is FeatchAlbumAndPlayListLoaded) {
-            Navigator.pop(context); // for closing loading
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AlbumOrPlaylistScreen(
-                    albumModel: state.albumModel,
-                    playListModel: state.playListModel,
-                    imageUrl: state.imageUrl,
-                  ),
-                ));
-          }
-//------------------type is song ----------------------
-          else if (state is FeatchSongByIDLoaded) {
-            Navigator.pop(context); // for closing loading
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PlayerScreen(
-                    songs: state.songs,
-                  ),
-                ));
-          }
-//------------------ type is Artist ------------
-          else if (state is FeatchArtistLoadedState) {
-            Navigator.pop(context); //for closing loading
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ArtistScreen(model: state.model),
-                ));
-          }
-        },
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: TextField(
-                controller: _searchController,
-                decoration: InputDecoration(
-                  hintText: "Search",
-                  prefixIcon: Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
+      body: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                hintText: "Search",
+                prefixIcon: Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
                 ),
-                onChanged: _onSearchChanged,
               ),
+              onChanged: _onSearchChanged,
             ),
-            AppSpacing.height20,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildButton("All", theme),
-                _buildButton("Song", theme),
-                _buildButton("Album", theme),
-                _buildButton("Artist", theme),
-                _buildButton("PlayList", theme),
-              ],
-            ),
-            AppSpacing.height20,
-            Expanded(
-              child: _buildSearchResults(),
-            ),
-          ],
-        ),
+          ),
+          AppSpacing.height20,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildButton("All", theme),
+              _buildButton("Song", theme),
+              _buildButton("Album", theme),
+              _buildButton("Artist", theme),
+              _buildButton("PlayList", theme),
+            ],
+          ),
+          AppSpacing.height20,
+          Expanded(
+            child: _buildSearchResults(),
+          ),
+        ],
       ),
     );
   }
