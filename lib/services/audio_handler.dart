@@ -37,12 +37,37 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
     required MediaItem mediaItem,
     required Song song,
   }) async {
+    log("Queue length before: $_queueLength");
+
+    String? currentPlayingId;
+    if (_mediaItems.isNotEmpty &&
+        AppGlobals().currentSongIndex < _mediaItems.length) {
+      currentPlayingId = _mediaItems[AppGlobals().currentSongIndex].id;
+    }
+
+    bool isCurrentPlaying = currentPlayingId == mediaItem.id;
+    bool itemExists = _mediaItems.any((item) => item.id == mediaItem.id);
+
+    if (isCurrentPlaying) {
+      log("The song is currently playing and will not be added to the queue.");
+      return;
+    }
+
+    if (itemExists) {
+      _queueLength = _queueLength > 1 ? _queueLength - 1 : 1;
+      _mediaItems.removeWhere((item) => item.id == mediaItem.id);
+      _songList.removeWhere((item) => item.id == song.id);
+    }
+
     int insertIndex = AppGlobals().currentSongIndex + _queueLength;
+
     _mediaItems.insert(insertIndex, mediaItem);
     _songList.insert(insertIndex, song);
+
     _queueLength++;
     AppGlobals().lastPlayedSongNotifier.value = _songList;
-    log("Add susses");
+
+    log("Added successfully to queue. New queue length: $_queueLength");
   }
 
   void _handlePlayerStateChange(PlayerState state) {
@@ -88,10 +113,11 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
 
   @override
   Future<void> skipToNext() async {
+    if (_queueLength != 1) {
+      _queueLength--;
+      log("skip to next-----$_queueLength");
+    }
     if (_isShuffled) {
-      if (_queueLength != 1) {
-        _queueLength--;
-      }
       AppGlobals()
           .setCurrentSongIndex(getRandomSongIndex(songList: _mediaItems));
       AppGlobals().lastPlayedSongNotifier.value = _songList;
@@ -107,6 +133,7 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   Future<void> skipToPrevious() async {
     if (_queueLength != 1) {
       _queueLength++;
+      log("skip to perviose-----$_queueLength");
     }
     if (AppGlobals().currentSongIndex > 0) {
       AppGlobals().setCurrentSongIndex(AppGlobals().currentSongIndex - 1);
@@ -133,6 +160,7 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   }) {
     _mediaItems = mediaItems;
     AppGlobals().setCurrentSongIndex(currentIndex);
+    _queueLength = 1;
     _songList = songList;
   }
 }
