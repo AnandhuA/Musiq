@@ -99,7 +99,7 @@ class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
                           Text(
                             title,
                             overflow: TextOverflow.ellipsis,
-                            maxLines: 5,
+                            maxLines: 2,
                             style: TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
@@ -112,14 +112,14 @@ class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
                                 ? "${widget.playListModel?.data?.songs?.length}-songs"
                                 : "${widget.albumModel?.data?.songs?.length}-songs",
                             overflow: TextOverflow.ellipsis,
-                            maxLines: 5,
+                            maxLines: 1,
                           ),
                           Text(
                             isPlayList
                                 ? widget.playListModel?.data?.language ?? "null"
                                 : widget.albumModel?.data?.language ?? "null",
                             overflow: TextOverflow.ellipsis,
-                            maxLines: 5,
+                            maxLines: 2,
                           ),
                           Text(
                             isPlayList
@@ -127,71 +127,11 @@ class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
                                     "null"
                                 : widget.albumModel?.data?.name ?? "null",
                             overflow: TextOverflow.ellipsis,
-                            maxLines: 5,
+                            maxLines: 3,
                           ),
                           AppSpacing.height10,
                           Row(
                             children: [
-                              GestureDetector(
-                                onTap: () async {
-                                  // if (!_addToLibrary) {
-                                  //   await AddToLibrary.addLibraryItem(
-                                  //     libraryModel: widget.libraryModel,
-                                  //   );
-                                  //   customSnackbar(
-                                  //     context: context,
-                                  //     message: "Add to Library",
-                                  //     bgColor: Theme.of(context).brightness ==
-                                  //             Brightness.dark
-                                  //         ? AppColors.white
-                                  //         : AppColors.black,
-                                  //     textColor: Theme.of(context).brightness ==
-                                  //             Brightness.dark
-                                  //         ? AppColors.black
-                                  //         : AppColors.white,
-                                  //   );
-                                  // } else {
-                                  //   await AddToLibrary.deleteLibraryItem(
-                                  //     id: widget.libraryModel.id,
-                                  //     type: widget.libraryModel.type,
-                                  //   );
-                                  //   customSnackbar(
-                                  //     context: context,
-                                  //     message: "removed from the library",
-                                  //     bgColor: Theme.of(context).brightness ==
-                                  //             Brightness.dark
-                                  //         ? AppColors.white
-                                  //         : AppColors.black,
-                                  //     textColor: Theme.of(context).brightness ==
-                                  //             Brightness.dark
-                                  //         ? AppColors.black
-                                  //         : AppColors.white,
-                                  //   );
-                                  // }
-                                  // setState(() {
-                                  //   _addToLibrary = !_addToLibrary;
-                                  // });
-                                },
-                                child: Container(
-                                  width: 34,
-                                  height: 34,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      color: AppColors
-                                          .colorList[AppGlobals().colorIndex],
-                                      width: 2.0,
-                                    ),
-                                  ),
-                                  child: Center(
-                                    child: Icon(
-                                      // _addToLibrary ? Icons.check :
-                                      Icons.add,
-                                      size: 20,
-                                    ),
-                                  ),
-                                ),
-                              ),
                               Spacer(),
                               GestureDetector(
                                 onTap: () {

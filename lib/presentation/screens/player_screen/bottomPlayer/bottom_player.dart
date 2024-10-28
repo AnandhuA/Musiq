@@ -70,15 +70,19 @@ class _MiniPlayerState extends State<MiniPlayer> {
 
   void _updateCurrentSongInfo() {
     if (AppGlobals().lastPlayedSongNotifier.value.isNotEmpty) {
-      _currentSongTitle =
-          AppGlobals().lastPlayedSongNotifier.value[currentSongIndex].name ??
-              "No";
-      _currentSongSubTitle =
-          AppGlobals().lastPlayedSongNotifier.value[currentSongIndex].label ??
-              "No";
+      _currentSongTitle = AppGlobals()
+              .lastPlayedSongNotifier
+              .value[AppGlobals().currentSongIndex]
+              .name ??
+          "No";
+      _currentSongSubTitle = AppGlobals()
+              .lastPlayedSongNotifier
+              .value[AppGlobals().currentSongIndex]
+              .label ??
+          "No";
       _imgUrl = AppGlobals()
               .lastPlayedSongNotifier
-              .value[currentSongIndex]
+              .value[AppGlobals().currentSongIndex]
               .image
               ?.last
               .imageUrl ??
@@ -124,7 +128,7 @@ class _MiniPlayerState extends State<MiniPlayer> {
                         builder: (context) => PlayerScreen(
                           songs: AppGlobals().lastPlayedSongNotifier.value,
                           currentpostion: _currentPosition,
-                          initialIndex: currentSongIndex,
+                          initialIndex: AppGlobals().currentSongIndex,
                           shuffle: AppGlobals().audioHandler.isShuffleOn(),
                         ),
                       ),

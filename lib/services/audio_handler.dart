@@ -1,10 +1,11 @@
+import 'dart:developer';
+
 import 'package:audio_service/audio_service.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/data/hive_funtion.dart';
 import 'package:musiq/models/song_model/song.dart';
-import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 
 class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   final AudioPlayer _player;
@@ -29,6 +30,22 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
         ),
       );
     });
+  }
+
+  Future<void> addToQueue({
+    required MediaItem mediaItem,
+    required Song song,
+  }) async {
+    // Find the current index in the queue
+    int insertIndex = AppGlobals().currentSongIndex + 1;
+
+    // Insert the song and media item right after the currently playing song
+    _mediaItems.insert(insertIndex, mediaItem);
+    _songList.insert(insertIndex, song);
+
+    // Update the queue in the audio handler for UI updates
+    queue.add(_mediaItems);
+    AppGlobals().lastPlayedSongNotifier.value = _songList;
   }
 
   void _handlePlayerStateChange(PlayerState state) {
@@ -75,11 +92,13 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   @override
   Future<void> skipToNext() async {
     if (_isShuffled) {
-      currentSongIndex = getRandomSongIndex(songList: _mediaItems);
+      AppGlobals()
+          .setCurrentSongIndex(getRandomSongIndex(songList: _mediaItems));
       AppGlobals().lastPlayedSongNotifier.value = _songList;
       await playCurrentSong();
-    } else if (currentSongIndex < _mediaItems.length - 1) {
-      currentSongIndex++;
+    } else if (AppGlobals().currentSongIndex < _mediaItems.length - 1) {
+      AppGlobals().setCurrentSongIndex(AppGlobals().currentSongIndex + 1);
+      log("---------${AppGlobals().currentSongIndex}");
       AppGlobals().lastPlayedSongNotifier.value = _songList;
       await playCurrentSong();
     }
@@ -87,8 +106,8 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
 
   @override
   Future<void> skipToPrevious() async {
-    if (currentSongIndex > 0) {
-      currentSongIndex--;
+    if (AppGlobals().currentSongIndex > 0) {
+      AppGlobals().setCurrentSongIndex(AppGlobals().currentSongIndex-1);
 
       await playCurrentSong();
     }
@@ -96,9 +115,10 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
 
   Future<void> playCurrentSong() async {
     if (_mediaItems.isNotEmpty) {
-      final newMediaItem = _mediaItems[currentSongIndex];
+      final newMediaItem = _mediaItems[AppGlobals().currentSongIndex];
       mediaItem.add(newMediaItem);
-      LastPlayedRepo.addToLastPlayedSong(_songList[currentSongIndex]);
+      LastPlayedRepo.addToLastPlayedSong(
+          _songList[AppGlobals().currentSongIndex]);
       AppGlobals().lastPlayedSongNotifier.value = _songList;
       await _playUrl(newMediaItem.id);
     }
@@ -110,7 +130,7 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
     required List<Song> songList,
   }) {
     _mediaItems = mediaItems;
-    currentSongIndex = currentIndex;
+    AppGlobals().setCurrentSongIndex(currentIndex);
     _songList = songList;
   }
 }

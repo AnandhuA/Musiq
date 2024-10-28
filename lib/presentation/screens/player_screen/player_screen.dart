@@ -17,7 +17,6 @@ import 'package:musiq/presentation/screens/player_screen/cubit/PlayAndPause/play
 import 'package:musiq/presentation/screens/player_screen/cubit/ProgressBar/progress_bar_cubit.dart';
 import 'package:musiq/presentation/screens/player_screen/widgets/progress_bar_widget.dart';
 
-int currentSongIndex = 0;
 
 class PlayerScreen extends StatefulWidget {
   final List<Song> songs;
@@ -42,9 +41,8 @@ class _PlayerScreenState extends State<PlayerScreen> {
   late StreamSubscription<PlaybackState> _playbackStateSubscription;
   bool hasPlayed = false;
   late bool _shuffle;
-  // bool _loading = false;
 
-  Song get currentSong => widget.songs[currentSongIndex];
+  Song get currentSong => widget.songs[AppGlobals().currentSongIndex];
 
   @override
   void initState() {
@@ -53,7 +51,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
     if (widget.shuffle && !AppGlobals().audioHandler.isShuffleOn()) {
       AppGlobals().audioHandler.toggleShuffle();
     }
-    currentSongIndex = widget.initialIndex;
+    AppGlobals().setCurrentSongIndex(widget.initialIndex);
     _scrollController = ScrollController();
     _initializeAudioHandler();
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -99,7 +97,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                         Uri.parse(song.image?.last.imageUrl ?? errorImage()),
                   ))
               .toList(),
-          currentIndex: currentSongIndex,
+          currentIndex: AppGlobals().currentSongIndex,
           songList: widget.songs,
         );
 
@@ -124,7 +122,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
       }
     });
 
-    _playSong(widget.songs[currentSongIndex]);
+    _playSong(widget.songs[AppGlobals().currentSongIndex]);
   }
 
   void _playSong(Song song) async {
@@ -133,7 +131,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
   }
 
   void _playNext() async {
-    if (currentSongIndex < widget.songs.length - 1) {
+    if (AppGlobals().currentSongIndex < widget.songs.length - 1) {
       await AppGlobals().audioHandler.skipToNext();
       _scrollToCurrentSong();
       setState(() {});
@@ -141,7 +139,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
   }
 
   void _playPrevious() async {
-    if (currentSongIndex > 0) {
+    if (AppGlobals().currentSongIndex > 0) {
       await AppGlobals().audioHandler.skipToPrevious();
       _scrollToCurrentSong();
       setState(() {});
@@ -159,7 +157,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
     if (_scrollController.hasClients) {
       const double itemHeight = 50;
       final double scrollPosition =
-          (currentSongIndex * itemHeight) - (itemHeight * 1.5);
+          (AppGlobals().currentSongIndex * itemHeight) - (itemHeight * 1.5);
 
       _scrollController.animateTo(
         scrollPosition,
@@ -285,7 +283,9 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                 if (state is ProgressBarInitial) {
                                   return ProgressBarWidget(
                                     songDuration: Duration(
-                                      seconds: widget.songs[currentSongIndex]
+                                      seconds: widget
+                                              .songs[
+                                                  AppGlobals().currentSongIndex]
                                               .duration ??
                                           0,
                                     ),
@@ -296,7 +296,9 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                 return ProgressBarWidget(
                                   songDuration: Duration(
                                     seconds: widget
-                                            .songs[currentSongIndex].duration ??
+                                            .songs[
+                                                AppGlobals().currentSongIndex]
+                                            .duration ??
                                         0,
                                   ),
                                   audioPlayer: AppGlobals().audioHandler,
@@ -325,7 +327,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                   icon: Icon(
                                     Icons.skip_previous_rounded,
                                     size: fontSize,
-                                    color: currentSongIndex == 0
+                                    color: AppGlobals().currentSongIndex == 0
                                         ? const Color.fromARGB(
                                             99, 158, 158, 158)
                                         : null,
@@ -388,7 +390,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                   icon: Icon(
                                     Icons.skip_next_rounded,
                                     size: fontSize,
-                                    color: currentSongIndex ==
+                                    color: AppGlobals().currentSongIndex ==
                                             ((widget.songs.length) - 1)
                                         ? const Color.fromARGB(
                                             99, 158, 158, 158)
@@ -450,7 +452,8 @@ class _PlayerScreenState extends State<PlayerScreen> {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               const double itemHeight = 72;
               final double scrollPosition =
-                  (currentSongIndex * itemHeight) - (itemHeight * 1.5);
+                  (AppGlobals().currentSongIndex * itemHeight) -
+                      (itemHeight * 1.5);
 
               if (modalScrollController.hasClients) {
                 modalScrollController.animateTo(
@@ -475,14 +478,16 @@ class _PlayerScreenState extends State<PlayerScreen> {
                         final moveSong = widget.songs.removeAt(oldIndex);
                         widget.songs.insert(newIndex, moveSong);
 
-                        if (currentSongIndex == oldIndex) {
-                          currentSongIndex = newIndex;
-                        } else if (currentSongIndex > oldIndex &&
-                            currentSongIndex <= newIndex) {
-                          currentSongIndex--;
-                        } else if (currentSongIndex < oldIndex &&
-                            currentSongIndex >= newIndex) {
-                          currentSongIndex++;
+                        if (AppGlobals().currentSongIndex == oldIndex) {
+                          AppGlobals().setCurrentSongIndex(newIndex);
+                        } else if (AppGlobals().currentSongIndex > oldIndex &&
+                            AppGlobals().currentSongIndex <= newIndex) {
+                          AppGlobals()
+                              .setColorIndex(AppGlobals().currentSongIndex-1);
+                        } else if (AppGlobals().currentSongIndex < oldIndex &&
+                            AppGlobals().currentSongIndex >= newIndex) {
+                          AppGlobals().setCurrentSongIndex(
+                              AppGlobals().currentSongIndex+1);
                         }
 
                         AppGlobals().audioHandler.setMediaItems(
@@ -499,7 +504,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                                 errorImage()),
                                       ))
                                   .toList(),
-                              currentIndex: currentSongIndex,
+                              currentIndex: AppGlobals().currentSongIndex,
                               songList: widget.songs,
                             );
                       });
@@ -511,10 +516,10 @@ class _PlayerScreenState extends State<PlayerScreen> {
                           key: ValueKey(widget.songs[index].id),
                           onTap: () {
                             Navigator.of(context).pop();
-                            if (index != currentSongIndex) {
+                            if (index != AppGlobals().currentSongIndex) {
                               AppGlobals().audioHandler.stop();
                               setState(() {
-                                currentSongIndex = index;
+                                AppGlobals().setCurrentSongIndex(index);
                                 hasPlayed = false;
                               });
                               _initializeAudioHandler(chage: false);
@@ -524,7 +529,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              currentSongIndex == index
+                              AppGlobals().currentSongIndex == index
                                   ? Lottie.asset(
                                       Theme.of(context).brightness ==
                                               Brightness.dark
@@ -543,7 +548,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                               image: DecorationImage(
                                 image: CachedNetworkImageProvider(
                                     widget.songs[index].image?.last.imageUrl ??
-                                        ""),
+                                        errorImage()),
                                 fit: BoxFit.fill,
                               ),
                               borderRadius: BorderRadius.circular(5),
@@ -553,7 +558,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                             widget.songs[index].name ?? "No",
                             maxLines: 1,
                             style: TextStyle(
-                              color: currentSongIndex == index
+                              color: AppGlobals().currentSongIndex == index
                                   ? AppColors.colorList[AppGlobals().colorIndex]
                                   : null,
                             ),
@@ -562,7 +567,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                             widget.songs[index].label ?? "No",
                             maxLines: 1,
                             style: TextStyle(
-                              color: currentSongIndex == index
+                              color: AppGlobals().currentSongIndex == index
                                   ? AppColors.colorList[AppGlobals().colorIndex]
                                   : null,
                             ),
@@ -593,14 +598,14 @@ class _PlayerScreenState extends State<PlayerScreen> {
             }
             final moveSong = widget.songs.removeAt(oldIndex);
             widget.songs.insert(newIndex, moveSong);
-            if (currentSongIndex == oldIndex) {
-              currentSongIndex = newIndex;
-            } else if (currentSongIndex > oldIndex &&
-                currentSongIndex <= newIndex) {
-              currentSongIndex--;
-            } else if (currentSongIndex < oldIndex &&
-                currentSongIndex >= newIndex) {
-              currentSongIndex++;
+            if (AppGlobals().currentSongIndex == oldIndex) {
+              AppGlobals().setCurrentSongIndex(newIndex);
+            } else if (AppGlobals().currentSongIndex > oldIndex &&
+                AppGlobals().currentSongIndex <= newIndex) {
+              AppGlobals().setCurrentSongIndex(AppGlobals().colorIndex-1);
+            } else if (AppGlobals().currentSongIndex < oldIndex &&
+                AppGlobals().currentSongIndex >= newIndex) {
+              AppGlobals().setCurrentSongIndex(AppGlobals().currentSongIndex+1);
             }
             AppGlobals().audioHandler.setMediaItems(
                 mediaItems: widget.songs
@@ -614,7 +619,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                               song.image?.last.imageUrl ?? errorImage()),
                         ))
                     .toList(),
-                currentIndex: currentSongIndex,
+                currentIndex: AppGlobals().currentSongIndex,
                 songList: widget.songs);
           },
         );
@@ -625,10 +630,10 @@ class _PlayerScreenState extends State<PlayerScreen> {
           return ListTile(
             key: ValueKey(widget.songs[index].id),
             onTap: () {
-              if (index != currentSongIndex) {
+              if (index != AppGlobals().currentSongIndex) {
                 AppGlobals().audioHandler.stop();
                 setState(() {
-                  currentSongIndex = index;
+                  AppGlobals().setCurrentSongIndex(index);
                   hasPlayed = false;
                 });
                 _initializeAudioHandler(chage: false);
@@ -638,7 +643,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                currentSongIndex == index
+               AppGlobals(). currentSongIndex == index
                     ? Lottie.asset(
                         Theme.of(context).brightness == Brightness.dark
                             ? "assets/animations/musicPlaying_light.json"
@@ -656,7 +661,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: CachedNetworkImageProvider(
-                    widget.songs[index].image?.last.imageUrl ?? "",
+                    widget.songs[index].image?.last.imageUrl ?? errorImage(),
                   ),
                   fit: BoxFit.fill,
                 ),
@@ -667,7 +672,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
               widget.songs[index].name ?? "No",
               maxLines: 1,
               style: TextStyle(
-                color: currentSongIndex == index
+                color: AppGlobals(). currentSongIndex == index
                     ? AppColors.colorList[AppGlobals().colorIndex]
                     : null,
               ),
@@ -676,7 +681,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
               widget.songs[index].label ?? "No",
               maxLines: 1,
               style: TextStyle(
-                color: currentSongIndex == index
+                color: AppGlobals(). currentSongIndex == index
                     ? AppColors.colorList[AppGlobals().colorIndex]
                     : null,
               ),
