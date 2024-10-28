@@ -29,14 +29,18 @@ Future<Widget?> popUpWiget({
               childAspectRatio: 0.8,
             ),
             itemBuilder: (context, index) {
-              log("${list[index].image?.last.imageUrl}");
-              String? imageUrl = list[index].image?.last.imageUrl;
-              log("Processing image URL: $imageUrl");
+              String? imageUrl;
 
-              // Validate the image URL
+              if (list[index].image != null && list[index].image!.isNotEmpty) {
+                imageUrl = list[index].image!.last.imageUrl;
+              } else {
+                log("Image list is null or empty for index $index. Using placeholder image.");
+                imageUrl = errorImage();
+              }
+
               if (!isValidUrl(imageUrl)) {
                 log("Invalid image URL: $imageUrl");
-                imageUrl = errorImage(); // Use a fallback image
+                imageUrl = errorImage();
               }
 
               return GestureDetector(
@@ -50,8 +54,7 @@ Future<Widget?> popUpWiget({
                   child: Column(
                     children: [
                       if (list[index].image != null &&
-                          list[index].image!.isNotEmpty &&
-                          imageUrl != null)
+                          list[index].image!.isNotEmpty)
                         ClipRRect(
                           borderRadius: BorderRadius.circular(100),
                           child: CachedNetworkImage(imageUrl: imageUrl),
