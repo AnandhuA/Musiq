@@ -4,9 +4,11 @@ import 'package:musiq/core/colors.dart';
 
 class CustomAppBar extends StatelessWidget {
   final String title;
+  final Widget actionButton;
   const CustomAppBar({
     super.key,
     required this.title,
+    required this.actionButton
   });
 
   @override
@@ -36,14 +38,7 @@ class CustomAppBar extends StatelessWidget {
               maxLines: 1,
             ),
           ),
-          IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.more_vert_sharp,
-                color: theme.brightness == Brightness.dark
-                    ? AppColors.white
-                    : AppColors.black,
-              ))
+      actionButton
         ],
       ),
     );
