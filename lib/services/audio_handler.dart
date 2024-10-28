@@ -115,7 +115,6 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   Future<void> skipToNext() async {
     if (_queueLength != 1) {
       _queueLength--;
-      log("skip to next-----$_queueLength");
     }
     if (_isShuffled) {
       AppGlobals()
@@ -133,7 +132,6 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   Future<void> skipToPrevious() async {
     if (_queueLength != 1) {
       _queueLength++;
-      log("skip to perviose-----$_queueLength");
     }
     if (AppGlobals().currentSongIndex > 0) {
       AppGlobals().setCurrentSongIndex(AppGlobals().currentSongIndex - 1);

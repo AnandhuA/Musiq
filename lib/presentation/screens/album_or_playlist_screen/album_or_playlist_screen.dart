@@ -11,6 +11,7 @@ import 'package:musiq/models/album_model/album_model.dart';
 import 'package:musiq/models/play_list_model/play_list_model.dart';
 import 'package:musiq/models/song_model/song.dart';
 import 'package:musiq/presentation/commanWidgets/empty_screen.dart';
+import 'package:musiq/presentation/commanWidgets/snack_bar.dart';
 import 'package:musiq/presentation/screens/artist/widgets/artist_horizontal_listview.dart';
 import 'package:musiq/presentation/screens/player_screen/bottomPlayer/bottom_player.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
@@ -209,94 +210,161 @@ class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
                             );
                           }
                           final song = songList[index];
-                          return ListTile(
-                            onTap: () {
-                              log("song link ---${songList[index].downloadUrl?.last.link}");
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => PlayerScreen(
-                                      songs: songList,
-                                      initialIndex: index,
-                                    ),
-                                  ));
+                          return Dismissible(
+                            key: Key(song.id ?? index.toString()),
+                            direction: DismissDirection.horizontal,
+                            confirmDismiss: (direction) async {
+                              final audioHandler = AppGlobals().audioHandler;
+                              // Check if the song is not already in the queue
+                              if (AppGlobals()
+                                  .lastPlayedSongNotifier
+                                  .value
+                                  .isEmpty) {
+                                customSnackbar(
+                                    context: context,
+                                    message: "Play a song",
+                                    bgColor: AppColors.red,
+                                    textColor: AppColors.white);
+                                return false;
+                              }
+
+                              if (AppGlobals()
+                                      .lastPlayedSongNotifier
+                                      .value[AppGlobals().currentSongIndex]
+                                      .id !=
+                                  song.id) {
+                                // Create a MediaItem for the song
+                                final mediaItem = MediaItem(
+                                  id: song.downloadUrl?.last.link ?? "",
+                                  album: song.album?.name ?? "No Album",
+                                  title: song.label ?? "No Label",
+                                  displayTitle: song.name ?? "No Name",
+                                  artUri: Uri.parse(song.image?.last.imageUrl ??
+                                      errorImage()),
+                                );
+
+                                // Add the song to the queue
+                                audioHandler.addToQueue(
+                                    mediaItem: mediaItem, song: song);
+                                customSnackbar(
+                                    context: context,
+                                    message: "${song.name} added to queue",
+                                    bgColor: AppColors.white,
+                                    textColor: AppColors.black,
+                                    duration: Duration(seconds: 5));
+                                return true;
+                              } else {
+                                customSnackbar(
+                                    context: context,
+                                    message:
+                                        "${song.name} is already in the queue",
+                                    bgColor: AppColors.red,
+                                    textColor: AppColors.white);
+                                return false;
+                              }
                             },
-                            leading: ClipRRect(
-                              borderRadius: BorderRadius.circular(5),
-                              child: CachedNetworkImage(
-                                imageUrl: song.image?.last.imageUrl ?? "",
-                                fit: BoxFit.cover,
-                                placeholder: (context, url) =>
-                                    song.type == "Artist"
-                                        ? artistImagePlaceholder()
-                                        : song.type == "album"
-                                            ? albumImagePlaceholder()
-                                            : songImagePlaceholder(),
-                                errorWidget: (context, url, error) =>
-                                    song.type == "Artist"
-                                        ? artistImagePlaceholder()
-                                        : song.type == "album"
-                                            ? albumImagePlaceholder()
-                                            : songImagePlaceholder(),
-                              ),
-                            ),
-                            title: Text(
-                              song.name ?? "no",
-                              maxLines: 1,
-                            ),
-                            subtitle: Text(
-                              song.label ?? "no",
-                              maxLines: 1,
-                            ),
-                            trailing: PopupMenuButton<int>(
-                              icon: Icon(Icons.more_vert_sharp),
-                              onSelected: (value) {
-                                // Handle selected menu action
-                                final audioHandler = AppGlobals().audioHandler;
-
-                                switch (value) {
-                                  case 0:
-                                    if (AppGlobals()
-                                        .lastPlayedSongNotifier
-                                        .value
-                                        .isNotEmpty) {
-                                      final mediaItem = MediaItem(
-                                        id: song.downloadUrl?.last.link ?? "",
-                                        album: song.album?.name ?? "No ",
-                                        title: song.label ?? "No ",
-                                        displayTitle: song.name ?? "",
-                                        artUri: Uri.parse(
-                                            song.image?.last.imageUrl ??
-                                                errorImage()),
-                                      );
-
-                                      audioHandler.addToQueue(
-                                          mediaItem: mediaItem, song: song);
-                                    }
-
-                                    break;
-                                  case 1:
-                                    // Handle "Add to Playlist" action
-                                    break;
-                                  case 2:
-                                    // Handle "Share" action
-                                    break;
-                                }
+                            background: Container(
+                                color: AppColors.green,
+                                alignment: Alignment.centerLeft,
+                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("Add to Queue"),
+                                    Text("Add to Queue"),
+                                  ],
+                                )),
+                            child: ListTile(
+                              onTap: () {
+                                log("song link ---${songList[index].downloadUrl?.last.link}");
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => PlayerScreen(
+                                        songs: songList,
+                                        initialIndex: index,
+                                      ),
+                                    ));
                               },
-                              itemBuilder: (context) => [
-                                PopupMenuItem(
-                                  value: 0,
-                                  child: Text('Add to Queue'),
+                              leading: ClipRRect(
+                                borderRadius: BorderRadius.circular(5),
+                                child: CachedNetworkImage(
+                                  imageUrl: song.image?.last.imageUrl ?? "",
+                                  fit: BoxFit.cover,
+                                  placeholder: (context, url) =>
+                                      song.type == "Artist"
+                                          ? artistImagePlaceholder()
+                                          : song.type == "album"
+                                              ? albumImagePlaceholder()
+                                              : songImagePlaceholder(),
+                                  errorWidget: (context, url, error) =>
+                                      song.type == "Artist"
+                                          ? artistImagePlaceholder()
+                                          : song.type == "album"
+                                              ? albumImagePlaceholder()
+                                              : songImagePlaceholder(),
                                 ),
-                                PopupMenuItem(
-                                  value: 1,
-                                  child: Text('Add to Favorite'),
-                                ),
-                                PopupMenuItem(
-                                  value: 2,
-                                  child: Text('Add to Playlist'),
-                                ),
-                              ],
+                              ),
+                              title: Text(
+                                song.name ?? "no",
+                                maxLines: 1,
+                              ),
+                              subtitle: Text(
+                                song.label ?? "no",
+                                maxLines: 1,
+                              ),
+                              trailing: PopupMenuButton<int>(
+                                icon: Icon(Icons.more_vert_sharp),
+                                onSelected: (value) {
+                                  // Handle selected menu action
+                                  final audioHandler =
+                                      AppGlobals().audioHandler;
+
+                                  switch (value) {
+                                    case 0:
+                                      if (AppGlobals()
+                                          .lastPlayedSongNotifier
+                                          .value
+                                          .isNotEmpty) {
+                                        final mediaItem = MediaItem(
+                                          id: song.downloadUrl?.last.link ?? "",
+                                          album: song.album?.name ?? "No ",
+                                          title: song.label ?? "No ",
+                                          displayTitle: song.name ?? "",
+                                          artUri: Uri.parse(
+                                              song.image?.last.imageUrl ??
+                                                  errorImage()),
+                                        );
+
+                                        audioHandler.addToQueue(
+                                            mediaItem: mediaItem, song: song);
+                                      }
+
+                                      break;
+                                    case 1:
+                                      // Handle "Add to Playlist" action
+                                      break;
+                                    case 2:
+                                      // Handle "Share" action
+                                      break;
+                                  }
+                                },
+                                itemBuilder: (context) => [
+                                  PopupMenuItem(
+                                    value: 0,
+                                    child: Text('Add to Queue'),
+                                  ),
+                                  PopupMenuItem(
+                                    value: 1,
+                                    child: Text('Add to Favorite'),
+                                  ),
+                                  PopupMenuItem(
+                                    value: 2,
+                                    child: Text('Add to Playlist'),
+                                  ),
+                                ],
+                              ),
                             ),
                           );
                         },
