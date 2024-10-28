@@ -1,16 +1,18 @@
+import 'dart:developer';
+
 import 'package:audio_service/audio_service.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/data/hive_funtion.dart';
 import 'package:musiq/models/song_model/song.dart';
-import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 
 class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   final AudioPlayer _player;
   List<MediaItem> _mediaItems = [];
   List<Song> _songList = [];
   bool _isShuffled = false;
+  int _queueLength = 1;
 
   AudioPlayerHandler() : _player = AudioPlayer() {
     _initializePlayer();
@@ -29,6 +31,43 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
         ),
       );
     });
+  }
+
+  Future<void> addToQueue({
+    required MediaItem mediaItem,
+    required Song song,
+  }) async {
+    log("Queue length before: $_queueLength");
+
+    String? currentPlayingId;
+    if (_mediaItems.isNotEmpty &&
+        AppGlobals().currentSongIndex < _mediaItems.length) {
+      currentPlayingId = _mediaItems[AppGlobals().currentSongIndex].id;
+    }
+
+    bool isCurrentPlaying = currentPlayingId == mediaItem.id;
+    bool itemExists = _mediaItems.any((item) => item.id == mediaItem.id);
+
+    if (isCurrentPlaying) {
+      log("The song is currently playing and will not be added to the queue.");
+      return;
+    }
+
+    if (itemExists) {
+      _queueLength = _queueLength > 1 ? _queueLength - 1 : 1;
+      _mediaItems.removeWhere((item) => item.id == mediaItem.id);
+      _songList.removeWhere((item) => item.id == song.id);
+    }
+
+    int insertIndex = AppGlobals().currentSongIndex + _queueLength;
+
+    _mediaItems.insert(insertIndex, mediaItem);
+    _songList.insert(insertIndex, song);
+
+    _queueLength++;
+    AppGlobals().lastPlayedSongNotifier.value = _songList;
+
+    log("Added successfully to queue. New queue length: $_queueLength");
   }
 
   void _handlePlayerStateChange(PlayerState state) {
@@ -74,12 +113,16 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
 
   @override
   Future<void> skipToNext() async {
+    if (_queueLength != 1) {
+      _queueLength--;
+    }
     if (_isShuffled) {
-      currentSongIndex = getRandomSongIndex(songList: _mediaItems);
+      AppGlobals()
+          .setCurrentSongIndex(getRandomSongIndex(songList: _mediaItems));
       AppGlobals().lastPlayedSongNotifier.value = _songList;
       await playCurrentSong();
-    } else if (currentSongIndex < _mediaItems.length - 1) {
-      currentSongIndex++;
+    } else if (AppGlobals().currentSongIndex < _mediaItems.length - 1) {
+      AppGlobals().setCurrentSongIndex(AppGlobals().currentSongIndex + 1);
       AppGlobals().lastPlayedSongNotifier.value = _songList;
       await playCurrentSong();
     }
@@ -87,8 +130,11 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
 
   @override
   Future<void> skipToPrevious() async {
-    if (currentSongIndex > 0) {
-      currentSongIndex--;
+    if (_queueLength != 1) {
+      _queueLength++;
+    }
+    if (AppGlobals().currentSongIndex > 0) {
+      AppGlobals().setCurrentSongIndex(AppGlobals().currentSongIndex - 1);
 
       await playCurrentSong();
     }
@@ -96,9 +142,10 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
 
   Future<void> playCurrentSong() async {
     if (_mediaItems.isNotEmpty) {
-      final newMediaItem = _mediaItems[currentSongIndex];
+      final newMediaItem = _mediaItems[AppGlobals().currentSongIndex];
       mediaItem.add(newMediaItem);
-      LastPlayedRepo.addToLastPlayedSong(_songList[currentSongIndex]);
+      LastPlayedRepo.addToLastPlayedSong(
+          _songList[AppGlobals().currentSongIndex]);
       AppGlobals().lastPlayedSongNotifier.value = _songList;
       await _playUrl(newMediaItem.id);
     }
@@ -110,7 +157,8 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
     required List<Song> songList,
   }) {
     _mediaItems = mediaItems;
-    currentSongIndex = currentIndex;
+    AppGlobals().setCurrentSongIndex(currentIndex);
+    _queueLength = 1;
     _songList = songList;
   }
 }

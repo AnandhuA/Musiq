@@ -5,6 +5,9 @@ customSnackbar({
   required String message,
   required Color bgColor,
   required Color textColor,
+  Duration duration = const Duration(
+    milliseconds: 1200,
+  ),
 }) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
@@ -13,9 +16,7 @@ customSnackbar({
         style: TextStyle(color: textColor),
       ),
       backgroundColor: bgColor,
-      duration: const Duration(
-        milliseconds: 1200,
-      ),
+      duration: duration
     ),
   );
 }

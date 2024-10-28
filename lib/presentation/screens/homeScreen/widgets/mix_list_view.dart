@@ -9,7 +9,7 @@ import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/models/home_screen_models/mixes.dart';
-import 'package:musiq/presentation/tag_mix/tag_mix.dart';
+import 'package:musiq/presentation/screens/tag_mix/tag_mix.dart';
 
 class MixListView extends StatelessWidget {
   final Mixes? mixData;

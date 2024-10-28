@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:audio_service/audio_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -156,9 +157,61 @@ class ArtistScreen extends StatelessWidget {
                                           ),
                                         ));
                                   },
-                                  trailing: IconButton(
-                                      onPressed: () {},
-                                      icon: Icon(Icons.more_vert)),
+                                  trailing: PopupMenuButton<int>(
+                                    icon: Icon(Icons.more_vert_sharp),
+                                    onSelected: (value) {
+                                      final Song song =
+                                          model.data!.topSongs![index];
+                                      // Handle selected menu action
+                                      final audioHandler =
+                                          AppGlobals().audioHandler;
+
+                                      switch (value) {
+                                        case 0:
+                                          if (AppGlobals()
+                                              .lastPlayedSongNotifier
+                                              .value
+                                              .isNotEmpty) {
+                                            final mediaItem = MediaItem(
+                                              id: song.downloadUrl?.last.link ??
+                                                  "",
+                                              album: song.album?.name ?? "No ",
+                                              title: song.label ?? "No ",
+                                              displayTitle: song.name ?? "",
+                                              artUri: Uri.parse(
+                                                  song.image?.last.imageUrl ??
+                                                      errorImage()),
+                                            );
+
+                                            audioHandler.addToQueue(
+                                                mediaItem: mediaItem,
+                                                song: song);
+                                          }
+
+                                          break;
+                                        case 1:
+                                          // Handle "Add to Playlist" action
+                                          break;
+                                        case 2:
+                                          // Handle "Share" action
+                                          break;
+                                      }
+                                    },
+                                    itemBuilder: (context) => [
+                                      PopupMenuItem(
+                                        value: 0,
+                                        child: Text('Add to Queue'),
+                                      ),
+                                      PopupMenuItem(
+                                        value: 1,
+                                        child: Text('Add to Favorite'),
+                                      ),
+                                      PopupMenuItem(
+                                        value: 2,
+                                        child: Text('Add to Playlist'),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               );
                             }),

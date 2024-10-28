@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:musiq/models/song_model/song.dart';
 import 'package:musiq/services/audio_handler.dart';
@@ -17,8 +19,18 @@ class AppGlobals {
   String? userIsLoggedIn;
   ValueNotifier<List<Song>> lastPlayedSongNotifier = ValueNotifier([]);
   late AudioPlayerHandler audioHandler;
+  int currentSongIndex = 0;
 
   // You can add methods here to manipulate or retrieve the state if needed
+
+  // Method to update the current song index
+  void setCurrentSongIndex(int index) {
+    log("----------updated $index");
+    currentSongIndex = index;
+  }
+
+
+
   void updateTheme(String? newTheme) {
     theme = newTheme;
   }
