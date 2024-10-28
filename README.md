@@ -6,8 +6,9 @@ This Flutter-based music app utilizes BLoC for state management and integrates w
 - API Integration: Fetch and display music content from the JioSaavn API.
 - BLoC State Management: Uses BLoC (Business Logic Component) for efficient state management and separation of concerns.
 - Music Playback: Supports playing and pausing
-## Getting Started
 
+## Getting Started
+![Purple App Phone Mockup Sales Marketing Presentation](https://github.com/user-attachments/assets/06a0fe61-d397-478f-ab98-94248b750d1f)
 ### Requirements
 
 - Flutter SDK
