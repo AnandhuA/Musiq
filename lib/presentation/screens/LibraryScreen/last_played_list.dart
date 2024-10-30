@@ -71,6 +71,7 @@ class _LastPlayedListState extends State<LastPlayedList> {
                     padding: EdgeInsets.only(bottom: 100),
                     itemCount: lastplayed.length,
                     itemBuilder: (context, index) {
+                      final Song song = lastplayed[index];
                       return ListTile(
                         onTap: () => Navigator.push(
                           context,
@@ -90,7 +91,6 @@ class _LastPlayedListState extends State<LastPlayedList> {
                             PopupMenuButton<int>(
                               icon: Icon(Icons.more_vert_sharp),
                               onSelected: (value) {
-                                final Song song = lastplayed[index];
                                 // Handle selected menu action
                                 final audioHandler = AppGlobals().audioHandler;
 
@@ -112,7 +112,7 @@ class _LastPlayedListState extends State<LastPlayedList> {
 
                                       audioHandler.addToQueue(
                                           mediaItem: mediaItem, song: song);
-                                           customSnackbar(
+                                      customSnackbar(
                                           context: context,
                                           message:
                                               "${song.name} added to queue",
@@ -136,7 +136,12 @@ class _LastPlayedListState extends State<LastPlayedList> {
                                 ),
                                 PopupMenuItem(
                                   value: 1,
-                                  child: Text('Add to Favorite'),
+                                  child: Row(
+                                    children: [
+                                      FavoriteIcon(song: song),
+                                      Text("Favorite")
+                                    ],
+                                  ),
                                 ),
                                 PopupMenuItem(
                                   value: 2,

@@ -10,6 +10,7 @@ import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/models/song_model/song.dart';
 import 'package:musiq/presentation/commanWidgets/empty_screen.dart';
+import 'package:musiq/presentation/commanWidgets/favorite_icon.dart';
 import 'package:musiq/presentation/commanWidgets/snack_bar.dart';
 
 class SongSearchResult extends StatelessWidget {
@@ -129,7 +130,7 @@ class SongSearchResult extends StatelessWidget {
 
                             audioHandler.addToQueue(
                                 mediaItem: mediaItem, song: song);
-                                 customSnackbar(
+                            customSnackbar(
                                 context: context,
                                 message: "${song.name} added to queue",
                                 bgColor: AppColors.white,
@@ -138,6 +139,7 @@ class SongSearchResult extends StatelessWidget {
                           }
                           break;
                         case 1:
+                        
                           // Handle "Add to Playlist" action
                           break;
                         case 2:
@@ -152,7 +154,12 @@ class SongSearchResult extends StatelessWidget {
                       ),
                       PopupMenuItem(
                         value: 1,
-                        child: Text('Add to Favorite'),
+                        child: Row(
+                          children: [
+                            FavoriteIcon(song: song),
+                            Text("Favorite")
+                          ],
+                        ),
                       ),
                       PopupMenuItem(
                         value: 2,
