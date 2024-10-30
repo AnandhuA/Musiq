@@ -11,6 +11,7 @@ import 'package:musiq/models/album_model/album_model.dart';
 import 'package:musiq/models/play_list_model/play_list_model.dart';
 import 'package:musiq/models/song_model/song.dart';
 import 'package:musiq/presentation/commanWidgets/empty_screen.dart';
+import 'package:musiq/presentation/commanWidgets/favorite_icon.dart';
 import 'package:musiq/presentation/commanWidgets/snack_bar.dart';
 import 'package:musiq/presentation/screens/artist/widgets/artist_horizontal_listview.dart';
 import 'package:musiq/presentation/screens/player_screen/bottomPlayer/bottom_player.dart';
@@ -339,7 +340,7 @@ class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
 
                                         audioHandler.addToQueue(
                                             mediaItem: mediaItem, song: song);
-                                             customSnackbar(
+                                        customSnackbar(
                                             context: context,
                                             message:
                                                 "${song.name} added to queue",
@@ -364,7 +365,12 @@ class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
                                   ),
                                   PopupMenuItem(
                                     value: 1,
-                                    child: Text('Add to Favorite'),
+                                    child: Row(
+                                      children: [
+                                        FavoriteIcon(song: song),
+                                        Text("Favorite")
+                                      ],
+                                    ),
                                   ),
                                   PopupMenuItem(
                                     value: 2,

@@ -23,7 +23,6 @@ class Homescreen extends StatelessWidget {
               ),
             );
           } else if (state is HomeScreenLoaded) {
-// ---------------- listener --------------
             return SingleChildScrollView(
               child: Column(
                 children: [

@@ -10,6 +10,7 @@ import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/models/artist_model/artist_model.dart';
 import 'package:musiq/models/song_model/song.dart';
+import 'package:musiq/presentation/commanWidgets/favorite_icon.dart';
 import 'package:musiq/presentation/commanWidgets/snack_bar.dart';
 import 'package:musiq/presentation/screens/artist/widgets/artist_horizontal_listview.dart';
 import 'package:musiq/presentation/screens/player_screen/bottomPlayer/bottom_player.dart';
@@ -125,6 +126,7 @@ class ArtistScreen extends StatelessWidget {
                               if (index >= model.data!.topSongs!.length) {
                                 return SizedBox();
                               }
+                                final Song song = model.data!.topSongs![index];
                               return Container(
                                 child: ListTile(
                                   leading: ClipRRect(
@@ -161,8 +163,7 @@ class ArtistScreen extends StatelessWidget {
                                   trailing: PopupMenuButton<int>(
                                     icon: Icon(Icons.more_vert_sharp),
                                     onSelected: (value) {
-                                      final Song song =
-                                          model.data!.topSongs![index];
+                                    
                                       // Handle selected menu action
                                       final audioHandler =
                                           AppGlobals().audioHandler;
@@ -212,7 +213,12 @@ class ArtistScreen extends StatelessWidget {
                                       ),
                                       PopupMenuItem(
                                         value: 1,
-                                        child: Text('Add to Favorite'),
+                                        child:  Row(
+                                          children: [
+                                            FavoriteIcon(song: song),
+                                            Text("Favorite")
+                                          ],
+                                        ),
                                       ),
                                       PopupMenuItem(
                                         value: 2,

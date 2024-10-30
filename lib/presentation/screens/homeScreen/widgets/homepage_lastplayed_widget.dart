@@ -6,6 +6,7 @@ import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/models/song_model/song.dart';
+import 'package:musiq/presentation/commanWidgets/favorite_icon.dart';
 import 'package:musiq/presentation/commanWidgets/snack_bar.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 
@@ -54,6 +55,7 @@ class HomepageLastplayedWidget extends StatelessWidget {
                           if (index >= songList.length) {
                             return SizedBox();
                           }
+                          final Song song = songList[index];
                           return Container(
                             child: ListTile(
                               leading: ClipRRect(
@@ -108,7 +110,6 @@ class HomepageLastplayedWidget extends StatelessWidget {
                               trailing: PopupMenuButton<int>(
                                   icon: Icon(Icons.more_vert_sharp),
                                   onSelected: (value) {
-                                    final Song song = songList[index];
                                     // Handle selected menu action
                                     final audioHandler =
                                         AppGlobals().audioHandler;
@@ -132,7 +133,7 @@ class HomepageLastplayedWidget extends StatelessWidget {
 
                                           audioHandler.addToQueue(
                                               mediaItem: mediaItem, song: song);
-                                               customSnackbar(
+                                          customSnackbar(
                                               context: context,
                                               message:
                                                   "${song.name} added to queue",
@@ -157,7 +158,12 @@ class HomepageLastplayedWidget extends StatelessWidget {
                                         ),
                                         PopupMenuItem(
                                           value: 1,
-                                          child: Text('Add to Favorite'),
+                                          child: Row(
+                                            children: [
+                                              FavoriteIcon(song: song),
+                                              Text("Favorite")
+                                            ],
+                                          ),
                                         ),
                                         PopupMenuItem(
                                           value: 2,
