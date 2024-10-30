@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:musiq/bloc/featchSong/featch_song_cubit.dart';
 import 'package:musiq/core/colors.dart';
@@ -117,6 +118,8 @@ class LayOutPageState extends State<LayOutPage> {
                   MaterialPageRoute(
                     builder: (context) => ArtistScreen(model: state.model),
                   ));
+            } else if (state is FeatchSongError) {
+              Fluttertoast.showToast(msg: "${state.error}");
             }
           },
           child: LayoutBuilder(

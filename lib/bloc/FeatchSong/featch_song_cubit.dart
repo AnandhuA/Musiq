@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:http/http.dart';
 import 'package:meta/meta.dart';
+import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/data/savan_2.0.dart';
 import 'package:musiq/models/album_model/album_model.dart';
 import 'package:musiq/models/artist_model/artist_model.dart';
@@ -34,7 +35,7 @@ class FeatchSongCubit extends Cubit<FeatchSongState> {
         featchArtistSongs(id: id, imageUrl: imageUrl);
       case 'show':
         featchArtistSongs(id: id, imageUrl: imageUrl);
-     
+
       default:
         print('Unknown type: $type');
         break;
@@ -50,8 +51,11 @@ class FeatchSongCubit extends Cubit<FeatchSongState> {
       AlbumModel model = AlbumModel.fromJson(data);
       emit(FeatchAlbumAndPlayListLoaded(
           albumModel: model, playListModel: null, imageUrl: imageUrl));
+    } else if (responce != null) {
+      emit(FeatchSongError(
+          error: StatusCodeHandler().getErrorMessage(responce.statusCode)));
     } else {
-      log("error--${responce?.statusCode}");
+      emit(FeatchSongError(error: "Not responding"));
     }
   }
 
@@ -65,8 +69,11 @@ class FeatchSongCubit extends Cubit<FeatchSongState> {
       log("${model.data?.songs?.length}");
       emit(FeatchAlbumAndPlayListLoaded(
           albumModel: null, playListModel: model, imageUrl: imageUrl));
+    } else if (responce != null) {
+      emit(FeatchSongError(
+          error: StatusCodeHandler().getErrorMessage(responce.statusCode)));
     } else {
-      log("error--${responce?.statusCode}");
+      emit(FeatchSongError(error: "Not responding"));
     }
   }
 
@@ -80,8 +87,11 @@ class FeatchSongCubit extends Cubit<FeatchSongState> {
       final data = jsonDecode(responce.body);
       ArtistModel model = ArtistModel.fromJson(data);
       emit(FeatchArtistLoadedState(model: model));
+    } else if (responce != null) {
+      emit(FeatchSongError(
+          error: StatusCodeHandler().getErrorMessage(responce.statusCode)));
     } else {
-      log("error--${responce?.statusCode}");
+      emit(FeatchSongError(error: "Not responding"));
     }
   }
 
@@ -101,9 +111,11 @@ class FeatchSongCubit extends Cubit<FeatchSongState> {
         final Song model = Song.fromJson(data["data"]);
         emit(FeatchSongByIDLoaded(songs: [model]));
       }
+    } else if (responce != null) {
+      emit(FeatchSongError(
+          error: StatusCodeHandler().getErrorMessage(responce.statusCode)));
     } else {
-      log("error--${responce?.statusCode}");
+      emit(FeatchSongError(error: "Not responding"));
     }
   }
-
 }

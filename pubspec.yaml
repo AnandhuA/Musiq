@@ -62,6 +62,7 @@ dependencies:
   just_audio: ^0.9.40
   just_audio_windows: ^0.2.2
   carousel_slider: ^5.0.0
+  fluttertoast: ^8.2.8
   
 
 dev_dependencies:

@@ -17,4 +17,9 @@ final class HomeScreenLoaded extends HomeScreenState {
   });
 }
 
-final class HomeScreenError extends HomeScreenState {}
+final class HomeScreenError extends HomeScreenState {
+  final String error;
+
+  HomeScreenError({required this.error});
+
+}

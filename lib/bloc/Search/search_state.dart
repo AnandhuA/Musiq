@@ -9,7 +9,11 @@ final class SearchLoadingState extends SearchState {}
 
 final class SearchLoadedState extends SearchState {}
 
-final class SearchErrorState extends SearchState {}
+final class SearchErrorState extends SearchState {
+  final String error;
+
+  SearchErrorState({required this.error});
+}
 
 final class GobalSearchState extends SearchState {
   final GlobalSearchModel model;
