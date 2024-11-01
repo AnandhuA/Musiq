@@ -10,7 +10,7 @@ import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/models/song_model/song.dart';
 import 'package:musiq/presentation/commanWidgets/empty_screen.dart';
-import 'package:musiq/presentation/commanWidgets/favorite_icon.dart';
+import 'package:musiq/presentation/commanWidgets/popup_menu.dart';
 import 'package:musiq/presentation/commanWidgets/snack_bar.dart';
 
 class SongSearchResult extends StatelessWidget {
@@ -119,71 +119,7 @@ class SongSearchResult extends StatelessWidget {
                     song.album?.name ?? "no",
                     maxLines: 1,
                   ),
-                  trailing: PopupMenuButton<int>(
-                    icon: Icon(Icons.more_vert_sharp),
-                    onSelected: (value) {
-                      // Handle selected menu action
-                      final audioHandler = AppGlobals().audioHandler;
-
-                      switch (value) {
-                        case 0:
-                          if (AppGlobals()
-                              .lastPlayedSongNotifier
-                              .value
-                              .isNotEmpty) {
-                            final mediaItem = MediaItem(
-                              id: song.downloadUrl?.last.link ?? "",
-                              album: song.album?.name ?? "No ",
-                              title: song.label ?? "No ",
-                              displayTitle: song.name ?? "",
-                              artUri: Uri.parse(
-                                  song.image?.last.imageUrl ?? errorImage()),
-                            );
-
-                            audioHandler.addToQueue(
-                                mediaItem: mediaItem, song: song);
-                            customSnackbar(
-                                context: context,
-                                message: "${song.name} added to queue",
-                                bgColor: AppColors.white,
-                                textColor: AppColors.black,
-                                duration: Duration(seconds: 5));
-                          }
-                          break;
-                        case 1:
-
-                          // Handle "Add to Playlist" action
-                          break;
-                        case 2:
-                          // Handle "Share" action
-                          break;
-                      }
-                    },
-                    itemBuilder: (context) => [
-                      PopupMenuItem(
-                        value: 0,
-                        child: Row(
-                          children: [
-                            Icon(Icons.wrap_text),
-                            Text('Add to Queue'),
-                          ],
-                        ),
-                      ),
-                      PopupMenuItem(
-                        value: 1,
-                        child: Row(
-                          children: [
-                            FavoriteIcon(song: song),
-                            Text("Favorite")
-                          ],
-                        ),
-                      ),
-                      PopupMenuItem(
-                        value: 2,
-                        child: Text('Add to Playlist'),
-                      ),
-                    ],
-                  ),
+                  trailing:SongPopupMenu(song: song, context: context)
                 ),
               );
             },
