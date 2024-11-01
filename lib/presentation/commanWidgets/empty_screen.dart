@@ -34,6 +34,7 @@ Widget emptyScreen({
             ),
           ),
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 text2,

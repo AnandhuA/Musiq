@@ -60,7 +60,7 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
 
     final query = event.query.toLowerCase();
     final filteredFavorites = _favorites
-        .where((song) => song.id!.toLowerCase().contains(query))
+        .where((song) => song.name!.toLowerCase().contains(query))
         .toList();
 
     emit(FeatchFavoriteSuccess(favorites: filteredFavorites));

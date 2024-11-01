@@ -8,7 +8,7 @@ class CustomAppBar extends StatelessWidget {
   const CustomAppBar({
     super.key,
     required this.title,
-    required this.actionButton
+    required this.actionButton,
   });
 
   @override
@@ -38,7 +38,7 @@ class CustomAppBar extends StatelessWidget {
               maxLines: 1,
             ),
           ),
-      actionButton
+          actionButton
         ],
       ),
     );
