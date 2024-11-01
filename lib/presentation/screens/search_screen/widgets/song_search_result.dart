@@ -26,6 +26,18 @@ class SongSearchResult extends StatelessWidget {
               color: AppColors.colorList[AppGlobals().colorIndex],
             ),
           );
+        } else if (state is SearchErrorState) {
+          return Center(
+            child: emptyScreen(
+              context: context,
+              text1: "show",
+              size1: 15,
+              text2: "Nothing",
+              size2: 20,
+              text3: "${state.error}",
+              size3: 20,
+            ),
+          );
         } else if (state is SongSearchState) {
           return ListView.separated(
             padding: EdgeInsets.only(bottom: 100),
@@ -85,8 +97,8 @@ class SongSearchResult extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("Add to Queue"),
-                        Text("Add to Queue"),
+                        Icon(Icons.wrap_text_sharp),
+                        Icon(Icons.wrap_text_sharp),
                       ],
                     )),
                 child: ListTile(
@@ -139,7 +151,7 @@ class SongSearchResult extends StatelessWidget {
                           }
                           break;
                         case 1:
-                        
+
                           // Handle "Add to Playlist" action
                           break;
                         case 2:
@@ -150,7 +162,12 @@ class SongSearchResult extends StatelessWidget {
                     itemBuilder: (context) => [
                       PopupMenuItem(
                         value: 0,
-                        child: Text('Add to Queue'),
+                        child: Row(
+                          children: [
+                            Icon(Icons.wrap_text),
+                            Text('Add to Queue'),
+                          ],
+                        ),
                       ),
                       PopupMenuItem(
                         value: 1,

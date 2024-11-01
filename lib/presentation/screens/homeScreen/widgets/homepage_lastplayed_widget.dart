@@ -154,7 +154,12 @@ class HomepageLastplayedWidget extends StatelessWidget {
                                   itemBuilder: (context) => [
                                         PopupMenuItem(
                                           value: 0,
-                                          child: Text('Add to Queue'),
+                                          child:  Row(
+                                            children: [
+                                              Icon(Icons.wrap_text),
+                                              Text('Add to Queue'),
+                                            ],
+                                          ),
                                         ),
                                         PopupMenuItem(
                                           value: 1,

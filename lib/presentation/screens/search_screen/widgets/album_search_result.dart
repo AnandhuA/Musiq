@@ -22,7 +22,20 @@ class AlbumSearchResult extends StatelessWidget {
               color: AppColors.colorList[AppGlobals().colorIndex],
             ),
           );
-        } else if (state is AlbumSearchState) {
+        } else if (state is SearchErrorState){
+           return Center(
+            child: emptyScreen(
+              context: context,
+              text1: "show",
+              size1: 15,
+              text2: "Nothing",
+              size2: 20,
+              text3: "${state.error}",
+              size3: 20,
+            ),
+          );
+        }
+        else if (state is AlbumSearchState) {
           return ListView.separated(
             padding: EdgeInsets.only(bottom: 100),
             separatorBuilder: (context, index) => AppSpacing.height20,

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:http/http.dart';
 import 'package:meta/meta.dart';
+import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/data/savan_2.0.dart';
 import 'package:musiq/models/global_search_model/global_search_model.dart';
 import 'package:musiq/models/search_album_model/search_album_model.dart';
@@ -22,6 +23,11 @@ class SearchCubit extends Cubit<SearchState> {
       final data = jsonDecode(response.body);
       final GlobalSearchModel model = GlobalSearchModel.fromJson(data);
       emit(GobalSearchState(model: model));
+    } else if (response != null) {
+      emit(SearchErrorState(
+          error: StatusCodeHandler().getErrorMessage(response.statusCode)));
+    } else {
+      emit(SearchErrorState(error: "Not responding"));
     }
   }
 
@@ -34,6 +40,11 @@ class SearchCubit extends Cubit<SearchState> {
       final SearchSongModel model = SearchSongModel.fromJson(data);
       log("bloc --${model.data?.results?.length}");
       emit(SongSearchState(model: model));
+    } else if (responce != null) {
+      emit(SearchErrorState(
+          error: StatusCodeHandler().getErrorMessage(responce.statusCode)));
+    } else {
+      emit(SearchErrorState(error: "Not responding"));
     }
   }
 
@@ -45,6 +56,11 @@ class SearchCubit extends Cubit<SearchState> {
       final data = jsonDecode(responce.body);
       final SearchAlbumModel model = SearchAlbumModel.fromJson(data);
       emit(AlbumSearchState(model: model));
+    } else if (responce != null) {
+      emit(SearchErrorState(
+          error: StatusCodeHandler().getErrorMessage(responce.statusCode)));
+    } else {
+      emit(SearchErrorState(error: "Not responding"));
     }
   }
 
@@ -56,6 +72,11 @@ class SearchCubit extends Cubit<SearchState> {
       final data = jsonDecode(responce.body);
       final SearchPlayListModel model = SearchPlayListModel.fromJson(data);
       emit(PlayListSearchState(model: model));
+    } else if (responce != null) {
+      emit(SearchErrorState(
+          error: StatusCodeHandler().getErrorMessage(responce.statusCode)));
+    } else {
+      emit(SearchErrorState(error: "Not responding"));
     }
   }
 
@@ -66,6 +87,11 @@ class SearchCubit extends Cubit<SearchState> {
       final data = jsonDecode(responce.body);
       final SearchArtistModel model = SearchArtistModel.fromJson(data);
       emit(ArtistSearchState(model: model));
+    } else if (responce != null) {
+      emit(SearchErrorState(
+          error: StatusCodeHandler().getErrorMessage(responce.statusCode)));
+    } else {
+      emit(SearchErrorState(error: "Not responding"));
     }
   }
 }

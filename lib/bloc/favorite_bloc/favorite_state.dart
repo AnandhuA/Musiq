@@ -7,7 +7,11 @@ final class FavoriteInitial extends FavoriteState {}
 
 final class FavoriteLoading extends FavoriteState {}
 
-final class FavoriteError extends FavoriteState {}
+final class FavoriteError extends FavoriteState {
+  final String error;
+
+  FavoriteError({required this.error});
+}
 
 final class FeatchFavoriteSuccess extends FavoriteState {
   final List<Song> favorites;

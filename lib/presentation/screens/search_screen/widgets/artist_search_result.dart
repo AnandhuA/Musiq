@@ -22,6 +22,18 @@ class ArtistSearchResult extends StatelessWidget {
               color: AppColors.colorList[AppGlobals().colorIndex],
             ),
           );
+        } else if (state is SearchErrorState) {
+          return Center(
+            child: emptyScreen(
+              context: context,
+              text1: "show",
+              size1: 15,
+              text2: "Nothing",
+              size2: 20,
+              text3: "${state.error}",
+              size3: 20,
+            ),
+          );
         } else if (state is ArtistSearchState) {
           return ListView.separated(
              padding: EdgeInsets.only(bottom: 100),

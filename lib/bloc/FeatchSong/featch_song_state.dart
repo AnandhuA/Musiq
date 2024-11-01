@@ -31,4 +31,9 @@ final class FeatchSongByIDLoaded extends FeatchSongState {
   FeatchSongByIDLoaded({required this.songs});
 }
 
-final class FeatchSongError extends FeatchSongState {}
+final class FeatchSongError extends FeatchSongState {
+  final String error;
+
+  FeatchSongError({required this.error});
+  
+}
