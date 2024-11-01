@@ -97,8 +97,8 @@ class SongSearchResult extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("Add to Queue"),
-                        Text("Add to Queue"),
+                        Icon(Icons.wrap_text_sharp),
+                        Icon(Icons.wrap_text_sharp),
                       ],
                     )),
                 child: ListTile(
@@ -151,7 +151,7 @@ class SongSearchResult extends StatelessWidget {
                           }
                           break;
                         case 1:
-                        
+
                           // Handle "Add to Playlist" action
                           break;
                         case 2:

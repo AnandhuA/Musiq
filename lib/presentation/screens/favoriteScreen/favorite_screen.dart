@@ -128,8 +128,8 @@ class FavoriteScreen extends StatelessWidget {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text("Add to Queue"),
-                                    Text("Add to Queue"),
+                                     Icon(Icons.wrap_text_sharp),
+                                    Icon(Icons.wrap_text_sharp),
                                   ],
                                 )),
                             child: ListTile(
