@@ -36,9 +36,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
     AppGlobals().updateTheme(await SharedPreference.getTheme());
     AppGlobals().setColorIndex(await SharedPreference.getColorIndex() ?? 0);
-    AppGlobals().setUserLoggedInStatus(
-      FirebaseAuth.instance.currentUser?.email,
-    );
+    AppGlobals()
+        .setUserLoggedInStatus(FirebaseAuth.instance.currentUser?.email);
 
     if (!mounted) return;
     Navigator.of(context).pushAndRemoveUntil(

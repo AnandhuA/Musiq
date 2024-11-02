@@ -1,6 +1,3 @@
-import 'dart:developer';
-
-import 'package:audio_service/audio_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:musiq/core/colors.dart';
@@ -10,9 +7,9 @@ import 'package:musiq/core/sized.dart';
 import 'package:musiq/models/album_model/album_model.dart';
 import 'package:musiq/models/play_list_model/play_list_model.dart';
 import 'package:musiq/models/song_model/song.dart';
+import 'package:musiq/presentation/commanWidgets/dismissible_funtion.dart';
 import 'package:musiq/presentation/commanWidgets/empty_screen.dart';
 import 'package:musiq/presentation/commanWidgets/popup_menu.dart';
-import 'package:musiq/presentation/commanWidgets/snack_bar.dart';
 import 'package:musiq/presentation/screens/artist/widgets/artist_horizontal_listview.dart';
 import 'package:musiq/presentation/screens/player_screen/bottomPlayer/bottom_player.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
@@ -214,71 +211,26 @@ class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
                           return Dismissible(
                             key: Key(song.id ?? index.toString()),
                             direction: DismissDirection.horizontal,
-                            confirmDismiss: (direction) async {
-                              final audioHandler = AppGlobals().audioHandler;
-                              // Check if the song is not already in the queue
-                              if (AppGlobals()
-                                  .lastPlayedSongNotifier
-                                  .value
-                                  .isEmpty) {
-                                customSnackbar(
-                                    context: context,
-                                    message: "Play a song",
-                                    bgColor: AppColors.red,
-                                    textColor: AppColors.white);
-                                return false;
-                              }
-
-                              if (AppGlobals()
-                                      .lastPlayedSongNotifier
-                                      .value[AppGlobals().currentSongIndex]
-                                      .id !=
-                                  song.id) {
-                                // Create a MediaItem for the song
-                                final mediaItem = MediaItem(
-                                  id: song.downloadUrl?.last.link ?? "",
-                                  album: song.album?.name ?? "No Album",
-                                  title: song.label ?? "No Label",
-                                  displayTitle: song.name ?? "No Name",
-                                  artUri: Uri.parse(song.image?.last.imageUrl ??
-                                      errorImage()),
-                                );
-
-                                // Add the song to the queue
-                                audioHandler.addToQueue(
-                                    mediaItem: mediaItem, song: song);
-                                customSnackbar(
-                                    context: context,
-                                    message: "${song.name} added to queue",
-                                    bgColor: AppColors.white,
-                                    textColor: AppColors.black,
-                                    duration: Duration(seconds: 5));
-                                return true;
-                              } else {
-                                customSnackbar(
-                                    context: context,
-                                    message:
-                                        "${song.name} is already in the queue",
-                                    bgColor: AppColors.red,
-                                    textColor: AppColors.white);
-                                return false;
-                              }
-                            },
+                            confirmDismiss: (direction) =>
+                                reusableConfirmDismiss(
+                              context: context,
+                              song: song,
+                            ),
                             background: Container(
-                                color: AppColors.green,
-                                alignment: Alignment.centerLeft,
-                                padding: EdgeInsets.symmetric(horizontal: 20),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Icon(Icons.wrap_text_sharp),
-                                    Icon(Icons.wrap_text_sharp),
-                                  ],
-                                )),
+                              color: AppColors.green,
+                              alignment: Alignment.centerLeft,
+                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Icon(Icons.wrap_text_sharp),
+                                  Icon(Icons.wrap_text_sharp),
+                                ],
+                              ),
+                            ),
                             child: ListTile(
                               onTap: () {
-                                log("song link ---${songList[index].downloadUrl?.last.link}");
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -315,7 +267,8 @@ class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
                                 song.label ?? "no",
                                 maxLines: 1,
                               ),
-                              trailing: SongPopupMenu(song: song, context: context)
+                              trailing:
+                                  SongPopupMenu(song: song, context: context),
                             ),
                           );
                         },
