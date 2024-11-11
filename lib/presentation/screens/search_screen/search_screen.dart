@@ -46,15 +46,21 @@ class _NewSearchScreenState extends State<NewSearchScreen> {
             ),
           ),
           AppSpacing.height20,
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _buildButton("All", theme),
-              _buildButton("Song", theme),
-              _buildButton("Album", theme),
-              _buildButton("Artist", theme),
-              _buildButton("PlayList", theme),
-            ],
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                _buildButton("All", theme),
+                AppSpacing.width10,
+                _buildButton("Song", theme),
+                AppSpacing.width10,
+                _buildButton("Album", theme),
+                AppSpacing.width10,
+                _buildButton("Artist", theme),
+                AppSpacing.width10,
+                _buildButton("PlayList", theme),
+              ],
+            ),
           ),
           AppSpacing.height20,
           Expanded(

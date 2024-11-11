@@ -11,6 +11,7 @@ class AppColors {
   static const Color pink = Color.fromARGB(255, 255, 0, 85);
   static const Color black = Colors.black;
   static const Color white = Colors.white;
+  static const Color transparent = Colors.transparent;
 
   // app theam color list
   static const List<Color> colorList = [

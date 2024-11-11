@@ -108,6 +108,7 @@ class SearchAppBarState extends State<SearchAppBar> {
           },
         ),
         PopupMenuButton<SortOption>(
+          
           icon: Icon(
             Icons.filter_list_rounded,
           ),
