@@ -8,6 +8,7 @@ class ThemeClass {
       color: AppColors.transparent,
       scrolledUnderElevation: 0,
     ),
+    bottomSheetTheme: BottomSheetThemeData(backgroundColor: AppColors.white),
     scaffoldBackgroundColor: AppColors.white,
     drawerTheme: const DrawerThemeData(
         backgroundColor: Color.fromARGB(200, 255, 255, 255)),
@@ -54,6 +55,7 @@ class ThemeClass {
       scrolledUnderElevation: 0,
     ),
     scaffoldBackgroundColor: AppColors.black,
+    bottomSheetTheme: BottomSheetThemeData(backgroundColor: AppColors.white),
     drawerTheme:
         const DrawerThemeData(backgroundColor: Color.fromARGB(200, 0, 0, 0)),
     bottomNavigationBarTheme:

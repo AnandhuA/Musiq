@@ -10,9 +10,21 @@ class DownloadSongRepo {
     required String fileName,
   }) async {
     try {
+      var status = await Permission.storage.status;
 
-      if (await Permission.storage.request().isGranted) {
+      if (status.isDenied || status.isRestricted) {
+        status = await Permission.storage.request();
+      }
 
+      if (status.isPermanentlyDenied) {
+        Fluttertoast.showToast(
+            msg:
+                "Storage permission permanently denied. Please enable it in settings.");
+        await openAppSettings();
+        return;
+      }
+
+      if (status.isGranted) {
         Directory? directory = await getExternalStorageDirectory();
         String downloadPath = "${directory!.path}/Musiq/";
 
@@ -24,6 +36,7 @@ class DownloadSongRepo {
 
           File file = File(filePath);
           await file.writeAsBytes(response.bodyBytes);
+
           Fluttertoast.showToast(msg: "Download complete: $filePath");
           print("Download complete: $filePath");
         } else {
