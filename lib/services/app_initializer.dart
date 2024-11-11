@@ -13,6 +13,7 @@ import 'package:musiq/models/song_model/primary.dart';
 import 'package:musiq/models/song_model/song.dart';
 import 'package:musiq/presentation/screens/splashScreen/splash_screen.dart';
 import 'package:musiq/services/audio_handler.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:uni_links2/uni_links.dart';
 
 class AppInitializer {
@@ -21,6 +22,7 @@ class AppInitializer {
   Future<void> initializeApp(BuildContext context) async {
     _initDeepLinkListener(context);
     _registerHiveAdapters();
+    await _requestStoragePermission();
     try {
       await Hive.initFlutter();
       await Hive.openBox<Song>('lastPlayedBox');
@@ -73,7 +75,7 @@ class AppInitializer {
     if (!Hive.isAdapterRegistered(PrimaryAdapter().typeId)) {
       Hive.registerAdapter(PrimaryAdapter());
     }
-     if (!Hive.isAdapterRegistered(AllAdapter().typeId)) {
+    if (!Hive.isAdapterRegistered(AllAdapter().typeId)) {
       Hive.registerAdapter(AllAdapter());
     }
   }
@@ -91,5 +93,29 @@ class AppInitializer {
 
   void dispose() {
     _linkSubscription?.cancel();
+  }
+
+  Future<void> _requestStoragePermission() async {
+    PermissionStatus status = await Permission.storage.status;
+    log("Initial permission status: $status");
+
+    if (status.isPermanentlyDenied) {
+      log("Permission permanently denied. Redirecting to settings...");
+      await openAppSettings();
+      return;
+    }
+
+    status = await Permission.storage.request();
+
+    log("Permission status after request: $status");
+
+    if (status.isGranted) {
+      log("Storage permission granted.");
+    } else if (status.isDenied) {
+      log("Storage permission denied.");
+    } else if (status.isPermanentlyDenied) {
+      log("Storage permission permanently denied. Please enable it in settings.");
+      await openAppSettings();
+    }
   }
 }

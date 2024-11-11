@@ -266,14 +266,14 @@ class ArtistScreen extends StatelessWidget {
                   ),
                 GridView.builder(
                   physics:
-                      NeverScrollableScrollPhysics(), // Prevent inner scrolling
+                      NeverScrollableScrollPhysics(), 
                   shrinkWrap:
-                      true, // Allow GridView to take only as much space as needed
+                      true, 
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3, // Number of columns
+                    crossAxisCount: 3,
                     mainAxisSpacing: 10,
                     crossAxisSpacing: 10,
-                    childAspectRatio: 0.9, // Aspect ratio for items
+                    childAspectRatio: 0.9, 
                   ),
                   itemCount: model.data?.singles?.length ?? 0,
                   itemBuilder: (context, index) {
