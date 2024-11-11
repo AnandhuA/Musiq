@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:musiq/models/song_model/song.dart';
 import 'package:musiq/services/audio_handler.dart';
@@ -25,11 +23,8 @@ class AppGlobals {
 
   // Method to update the current song index
   void setCurrentSongIndex(int index) {
-    log("----------updated $index");
     currentSongIndex = index;
   }
-
-
 
   void updateTheme(String? newTheme) {
     theme = newTheme;

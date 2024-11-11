@@ -4,7 +4,10 @@ import 'package:musiq/core/colors.dart';
 class ThemeClass {
   static ThemeData lightTheme = ThemeData.light().copyWith(
     brightness: Brightness.light,
-    appBarTheme: const AppBarTheme(color: AppColors.white),
+    appBarTheme: const AppBarTheme(
+      color: AppColors.transparent,
+      scrolledUnderElevation: 0,
+    ),
     scaffoldBackgroundColor: AppColors.white,
     drawerTheme: const DrawerThemeData(
         backgroundColor: Color.fromARGB(200, 255, 255, 255)),
@@ -46,7 +49,10 @@ class ThemeClass {
 
   static ThemeData darkTheme = ThemeData.dark().copyWith(
     brightness: Brightness.dark,
-    appBarTheme: const AppBarTheme(color: AppColors.black),
+    appBarTheme: const AppBarTheme(
+      color: AppColors.transparent,
+      scrolledUnderElevation: 0,
+    ),
     scaffoldBackgroundColor: AppColors.black,
     drawerTheme:
         const DrawerThemeData(backgroundColor: Color.fromARGB(200, 0, 0, 0)),

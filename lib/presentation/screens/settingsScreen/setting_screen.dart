@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -6,12 +5,34 @@ import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/presentation/commanWidgets/confirmation_diloge.dart';
 import 'package:musiq/presentation/screens/loginScreen/login_screen.dart';
+import 'package:musiq/presentation/screens/settingsScreen/about_screen.dart';
 import 'package:musiq/presentation/screens/settingsScreen/theme_screen.dart';
 import 'package:musiq/presentation/screens/settingsScreen/widgets/list_tile_widget.dart';
+import 'package:musiq/presentation/screens/settingsScreen/widgets/privacy_and_policy.dart';
 import 'package:musiq/presentation/screens/splashScreen/splash_screen.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
+
+  @override
+  State<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+  String version = "";
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  Future<void> getVersion() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    version = packageInfo.version;
+    String buildNumber = packageInfo.buildNumber;
+    print('Version: $version, Build Number: $buildNumber');
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,12 +57,20 @@ class SettingsScreen extends StatelessWidget {
             icon1: const Icon(Icons.info_outline),
             title1: "About",
             onTap1: () {
-              log("about");
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AboutScreen(),
+                  ));
             },
             icon2: const Icon(Icons.privacy_tip_outlined),
             title2: "Privacy and policy",
             onTap2: () {
-              log("privcy");
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PrivacyAndPolicy(),
+                  ));
             },
           ),
           AppSpacing.height20,
@@ -101,7 +130,7 @@ class SettingsScreen extends StatelessWidget {
                 ),
           const Spacer(),
           Text(
-            "v1.0",
+            "v$version",
             style: theme.textTheme.titleMedium,
           ),
           AppSpacing.height50,

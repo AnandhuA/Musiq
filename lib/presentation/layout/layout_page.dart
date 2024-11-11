@@ -69,7 +69,7 @@ class LayOutPageState extends State<LayOutPage> {
       builder: (context, themeState) {
         return BlocListener<FeatchSongCubit, FeatchSongState>(
           listener: (context, state) {
-            // -------------- loading ------------------
+// -------------- loading ------------------
             if (state is FeatchSongLoading) {
               showDialog(
                 context: context,
@@ -125,7 +125,7 @@ class LayOutPageState extends State<LayOutPage> {
           child: LayoutBuilder(
             builder: (context, constraints) {
               if (constraints.maxWidth >= ScreenBreakpoints.tablet) {
-                //---------- Desktop or Tablet Layout ---------------
+//---------- Desktop or Tablet Layout ---------------
                 return Scaffold(
                   appBar: AppBar(
                     title: Text(_titles[_selectedIndex]),
@@ -151,7 +151,7 @@ class LayOutPageState extends State<LayOutPage> {
                               ),
                               NavigationRailDestination(
                                 icon: Icon(Icons.search),
-                                label: Text('Search'), // New Home Tab
+                                label: Text('Search'),
                               ),
                               NavigationRailDestination(
                                 icon: Icon(Icons.library_music_sharp),
@@ -205,7 +205,7 @@ class LayOutPageState extends State<LayOutPage> {
                   ),
                 );
               } else {
-                //--------- Mobile Layout -------------
+//--------- Mobile Layout -------------
                 return Scaffold(
                   appBar: AppBar(
                     title: Text(_titles[_selectedIndex]),
