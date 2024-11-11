@@ -22,7 +22,6 @@ class AppInitializer {
   Future<void> initializeApp(BuildContext context) async {
     _initDeepLinkListener(context);
     _registerHiveAdapters();
-    await _requestStoragePermission();
     try {
       await Hive.initFlutter();
       await Hive.openBox<Song>('lastPlayedBox');
@@ -95,27 +94,40 @@ class AppInitializer {
     _linkSubscription?.cancel();
   }
 
-  Future<void> _requestStoragePermission() async {
-    PermissionStatus status = await Permission.storage.status;
-    log("Initial permission status: $status");
+  Future<void> requestStoragePermission() async {
+    log("------------permission-----------");
 
-    if (status.isPermanentlyDenied) {
-      log("Permission permanently denied. Redirecting to settings...");
-      await openAppSettings();
-      return;
-    }
+    var status = await Permission.storage.status;
 
-    status = await Permission.storage.request();
+    log("status::$status");
 
-    log("Permission status after request: $status");
-
-    if (status.isGranted) {
-      log("Storage permission granted.");
-    } else if (status.isDenied) {
-      log("Storage permission denied.");
+    if (status.isDenied) {
+      await Permission.storage.request();
     } else if (status.isPermanentlyDenied) {
-      log("Storage permission permanently denied. Please enable it in settings.");
-      await openAppSettings();
+    } else if (status.isGranted) {
+      log("Storage permission granted.");
     }
+  }
+
+  void _showPermissionPermanentlyDeniedDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Permission Permanently Denied"),
+          content:
+              const Text("Please enable storage permission from settings."),
+          actions: [
+            TextButton(
+              child: const Text("Open Settings"),
+              onPressed: () {
+                openAppSettings();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
