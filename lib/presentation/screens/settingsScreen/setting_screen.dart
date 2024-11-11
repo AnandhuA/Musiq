@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -29,6 +31,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Future<void> getVersion() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     version = packageInfo.version;
+    log("-------------$version");
     String buildNumber = packageInfo.buildNumber;
     print('Version: $version, Build Number: $buildNumber');
     setState(() {});

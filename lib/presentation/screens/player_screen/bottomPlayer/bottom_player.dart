@@ -124,13 +124,30 @@ class _MiniPlayerState extends State<MiniPlayer> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => PlayerScreen(
-                          songs: AppGlobals().lastPlayedSongNotifier.value,
-                          currentpostion: _currentPosition,
-                          initialIndex: AppGlobals().currentSongIndex,
-                          shuffle: AppGlobals().audioHandler.isShuffleOn(),
-                        ),
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) {
+                          return PlayerScreen(
+                            songs: AppGlobals().lastPlayedSongNotifier.value,
+                            currentpostion: _currentPosition,
+                            initialIndex: AppGlobals().currentSongIndex,
+                            shuffle: AppGlobals().audioHandler.isShuffleOn(),
+                          );
+                        },
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          const begin = Offset(0.0, 1.0);
+                          const end = Offset.zero;
+                          const curve = Curves.easeInOut;
+
+                          var tween = Tween(begin: begin, end: end)
+                              .chain(CurveTween(curve: curve));
+                          var offsetAnimation = animation.drive(tween);
+
+                          return SlideTransition(
+                            position: offsetAnimation,
+                            child: child,
+                          );
+                        },
                       ),
                     );
                   },

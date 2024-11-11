@@ -33,10 +33,11 @@ class LoginScreen extends StatelessWidget {
             context.read<FavoriteBloc>().add(FeatchFavoriteSongEvent());
           } else if (state is LoginError) {
             customSnackbar(
-                context: context,
-                message: state.errorMessage,
-                bgColor: Colors.red,
-                textColor: AppColors.white);
+              context: context,
+              message: state.errorMessage,
+              bgColor: Colors.red,
+              textColor: AppColors.white,
+            );
           }
         },
         child: SafeArea(

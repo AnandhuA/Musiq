@@ -11,6 +11,7 @@ import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/core/sized.dart';
+import 'package:musiq/data/download_song.dart';
 import 'package:musiq/models/song_model/song.dart';
 import 'package:musiq/presentation/commanWidgets/custom_app_bar.dart';
 import 'package:musiq/presentation/commanWidgets/favorite_icon.dart';
@@ -439,7 +440,14 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                 ),
                                 const Spacer(),
                                 IconButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    DownloadSongRepo.downloadSong(
+                                      downloadUrl:
+                                          currentSong.downloadUrl?.last.link ??
+                                              "",
+                                      fileName: currentSong.name ?? "Nothing",
+                                    );
+                                  },
                                   icon: const Icon(
                                     Icons.download,
                                   ),
