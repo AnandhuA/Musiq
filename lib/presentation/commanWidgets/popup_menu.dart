@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/helper_funtions.dart';
+import 'package:musiq/presentation/commanWidgets/favorite_icon.dart';
 import 'package:musiq/presentation/commanWidgets/snack_bar.dart';
 
 
 class SongPopupMenu extends StatelessWidget {
-  final dynamic song; // Use your actual song type here
+  final dynamic song;
   final BuildContext context;
 
   const SongPopupMenu({
@@ -66,7 +67,7 @@ class SongPopupMenu extends StatelessWidget {
           value: 1,
           child: Row(
             children: [
-              Icon(Icons.favorite), // Use your favorite icon
+              FavoriteIcon(song: song), 
               const Text("Favorite"),
             ],
           ),

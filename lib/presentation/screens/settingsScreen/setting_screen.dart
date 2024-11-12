@@ -25,6 +25,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   String version = "";
   @override
   void initState() {
+    getVersion();
     super.initState();
   }
 
