@@ -82,7 +82,7 @@ class HomepageHorizontalListview extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontSize: 12,
-                          color: Colors.grey.withOpacity(0.8),
+                          color: AppColors.grey.withOpacity(0.8),
                         ),
                       ),
                     ],

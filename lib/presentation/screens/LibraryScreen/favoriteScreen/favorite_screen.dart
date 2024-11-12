@@ -144,8 +144,8 @@ class FavoriteScreen extends StatelessWidget {
                             padding: EdgeInsets.all(14),
                             decoration: BoxDecoration(
                               color: theme.brightness == Brightness.dark
-                                  ? Colors.grey.shade900
-                                  : Colors.grey,
+                                  ? AppColors.grey800
+                                  : AppColors.grey,
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Row(

@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/bloc/featchSong/featch_song_cubit.dart';
+import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/helper_funtions.dart';
 
 class ArtistHorizontalListview extends StatelessWidget {
@@ -60,7 +61,7 @@ class ArtistHorizontalListview extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize: 12,
-                      color: Colors.grey.withOpacity(0.8),
+                      color: AppColors.grey.withOpacity(0.8),
                     ),
                   ),
                 ],

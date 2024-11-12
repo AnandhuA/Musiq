@@ -357,10 +357,10 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                       color: theme.brightness == Brightness.dark
                                           ? _shuffle
                                               ? AppColors.white
-                                              : Colors.grey.shade700
+                                              : AppColors.grey800
                                           : _shuffle
                                               ? AppColors.black
-                                              : Colors.grey,
+                                              : AppColors.grey,
                                     )),
                                 const Spacer(),
                                 IconButton(
@@ -369,8 +369,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                     Icons.skip_previous_rounded,
                                     size: fontSize,
                                     color: AppGlobals().currentSongIndex == 0
-                                        ? const Color.fromARGB(
-                                            99, 158, 158, 158)
+                                        ? AppColors.iconDisable
                                         : null,
                                   ),
                                 ),
@@ -433,8 +432,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                     size: fontSize,
                                     color: AppGlobals().currentSongIndex ==
                                             ((widget.songs.length) - 1)
-                                        ? const Color.fromARGB(
-                                            99, 158, 158, 158)
+                                        ? AppColors.iconDisable
                                         : null,
                                   ),
                                 ),
@@ -471,7 +469,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
             if (isDesktop(context))
               Container(
                 width: sidebarWidth,
-                color: Colors.transparent,
+                color: AppColors.transparent,
                 child: _buildSongList(context),
               )
           ],

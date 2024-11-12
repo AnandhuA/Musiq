@@ -235,7 +235,7 @@ class LayOutPageState extends State<LayOutPage> {
                   bottomNavigationBar: GNav(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     backgroundColor: Colors.transparent,
-                    color: Colors.grey[800],
+                    color: AppColors.grey,
                     haptic: true,
                     activeColor: AppColors.colorList[AppGlobals().colorIndex],
                     tabBackgroundColor: AppColors
