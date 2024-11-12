@@ -37,99 +37,100 @@ class MixListView extends StatelessWidget {
                 ),
                 AppSpacing.height10,
                 Expanded(
-                    child: GridView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: mixData?.data?.length ?? 0,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 15,
-                    crossAxisSpacing: 10,
-                    childAspectRatio: 0.45,
-                  ),
-                  itemBuilder: (context, index) {
-                    final tagMix = mixData!.data![index];
-                    return GestureDetector(
-                      onTap: () {
-                        if (mixData?.title != null) {
-                          context
-                              .read<SearchCubit>()
-                              .searchPlayList(query: mixData!.title!);
-                        }
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => TagMix(
-                                imageUrl: tagMix.image?.first.imageUrl ??
-                                    errorImage(),
-                                title: mixData?.title ?? "No",
-                              ),
-                            ));
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Stack(
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  image: DecorationImage(
-                                    image: CachedNetworkImageProvider(
-                                      tagMix.image?.first.imageUrl ??
-                                          errorImage(),
-                                    ),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                child: BackdropFilter(
-                                  filter:
-                                      ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                                  child: Container(),
-                                ),
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.topRight,
-                              child: Container(
-                                margin: EdgeInsets.only(
-                                  top: 10,
-                                  left: 5,
-                                  right: 5,
-                                ),
-                                width: isMobile(context) ? 90 : 150,
-                                child: Text(
-                                  "${tagMix.name} : ${tagMix.type}",
-                                  style: TextStyle(
-                                    color: AppColors.white,
-                                    fontSize: 13,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: CachedNetworkImage(
-                                  imageUrl: tagMix.image?.last.imageUrl ??
+                  child: GridView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: mixData?.data?.length ?? 0,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 15,
+                      crossAxisSpacing: 10,
+                      childAspectRatio: 0.45,
+                    ),
+                    itemBuilder: (context, index) {
+                      final tagMix = mixData!.data![index];
+                      return GestureDetector(
+                        onTap: () {
+                          if (mixData?.title != null) {
+                            context
+                                .read<SearchCubit>()
+                                .searchPlayList(query: mixData!.title!);
+                          }
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TagMix(
+                                  imageUrl: tagMix.image?.first.imageUrl ??
                                       errorImage(),
-                                  placeholder: (context, url) =>
-                                      Image.asset("assets/images/song.png"),
-                                  errorWidget: (context, url, error) =>
-                                      Image.asset("assets/images/song.png"),
-                                  fit: BoxFit.fitHeight,
+                                  title: mixData?.title ?? "No",
+                                ),
+                              ));
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Stack(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    image: DecorationImage(
+                                      image: CachedNetworkImageProvider(
+                                        tagMix.image?.first.imageUrl ??
+                                            errorImage(),
+                                      ),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  child: BackdropFilter(
+                                    filter: ImageFilter.blur(
+                                        sigmaX: 10, sigmaY: 10),
+                                    child: Container(),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                              Align(
+                                alignment: Alignment.topRight,
+                                child: Container(
+                                  margin: EdgeInsets.only(
+                                    top: 10,
+                                    left: 5,
+                                    right: 5,
+                                  ),
+                                  width: isMobile(context) ? 90 : 150,
+                                  child: Text(
+                                    "${tagMix.name} : ${tagMix.type}",
+                                    style: TextStyle(
+                                      color: AppColors.white,
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: CachedNetworkImage(
+                                    imageUrl: tagMix.image?.last.imageUrl ??
+                                        errorImage(),
+                                    placeholder: (context, url) =>
+                                        Image.asset("assets/images/song.png"),
+                                    errorWidget: (context, url, error) =>
+                                        Image.asset("assets/images/song.png"),
+                                    fit: BoxFit.fitHeight,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                ))
+                      );
+                    },
+                  ),
+                )
               ],
             ),
           );

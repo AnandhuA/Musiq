@@ -41,12 +41,13 @@ class HomepageLastplayedWidget extends StatelessWidget {
                   itemBuilder: (context, pageIndex) {
                     return Transform.translate(
                       offset: Offset(
-                          isMobile(context)
-                              ? -22
-                              : isTablet(context)
-                                  ? -38
-                                  : -70,
-                          0),
+                        isMobile(context)
+                            ? -22
+                            : isTablet(context)
+                                ? -38
+                                : -70,
+                        0,
+                      ),
                       child: Column(
                         children: List.generate(3, (itemIndex) {
                           final index = pageIndex * 3 + itemIndex;
@@ -56,57 +57,57 @@ class HomepageLastplayedWidget extends StatelessWidget {
                           final Song song = songList[index];
                           return Container(
                             child: ListTile(
-                              leading: ClipRRect(
-                                borderRadius: BorderRadius.circular(5),
-                                child: CachedNetworkImage(
-                                  imageUrl:
-                                      songList[index].image?.last.imageUrl ??
-                                          errorImage(),
-                                  placeholder: (context, url) {
-                                    // Placeholder logic
-                                    return songList[index].type == "Artist"
-                                        ? Image.asset(
-                                            "assets/images/artist.png")
-                                        : songList[index].type == "album"
-                                            ? Image.asset(
-                                                "assets/images/album.png")
-                                            : Image.asset(
-                                                "assets/images/song.png");
-                                  },
-                                  errorWidget: (context, url, error) {
-                                    // Error widget logic
-                                    return songList[index].type == "Artist"
-                                        ? Image.asset(
-                                            "assets/images/artist.png")
-                                        : songList[index].type == "album"
-                                            ? Image.asset(
-                                                "assets/images/album.png")
-                                            : Image.asset(
-                                                "assets/images/song.png");
-                                  },
-                                ),
-                              ),
-                              title: Text(
-                                songList[index].name ?? "NO",
-                                maxLines: 1,
-                              ),
-                              subtitle: Text(
-                                songList[index].album?.name ?? "No",
-                                maxLines: 1,
-                              ),
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => PlayerScreen(
-                                      songs: songList,
-                                      initialIndex: index,
-                                    ),
+                                leading: ClipRRect(
+                                  borderRadius: BorderRadius.circular(5),
+                                  child: CachedNetworkImage(
+                                    imageUrl:
+                                        songList[index].image?.last.imageUrl ??
+                                            errorImage(),
+                                    placeholder: (context, url) {
+                                      // Placeholder logic
+                                      return songList[index].type == "Artist"
+                                          ? Image.asset(
+                                              "assets/images/artist.png")
+                                          : songList[index].type == "album"
+                                              ? Image.asset(
+                                                  "assets/images/album.png")
+                                              : Image.asset(
+                                                  "assets/images/song.png");
+                                    },
+                                    errorWidget: (context, url, error) {
+                                      // Error widget logic
+                                      return songList[index].type == "Artist"
+                                          ? Image.asset(
+                                              "assets/images/artist.png")
+                                          : songList[index].type == "album"
+                                              ? Image.asset(
+                                                  "assets/images/album.png")
+                                              : Image.asset(
+                                                  "assets/images/song.png");
+                                    },
                                   ),
-                                );
-                              },
-                              trailing:SongPopupMenu(song: song, context: context)
-                            ),
+                                ),
+                                title: Text(
+                                  songList[index].name ?? "NO",
+                                  maxLines: 1,
+                                ),
+                                subtitle: Text(
+                                  songList[index].album?.name ?? "No",
+                                  maxLines: 1,
+                                ),
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => PlayerScreen(
+                                        songs: songList,
+                                        initialIndex: index,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                trailing: SongPopupMenu(
+                                    song: song, context: context)),
                           );
                         }),
                       ),

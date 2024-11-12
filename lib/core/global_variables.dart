@@ -19,7 +19,6 @@ class AppGlobals {
   late AudioPlayerHandler audioHandler;
   int currentSongIndex = 0;
 
-  // You can add methods here to manipulate or retrieve the state if needed
 
   // Method to update the current song index
   void setCurrentSongIndex(int index) {

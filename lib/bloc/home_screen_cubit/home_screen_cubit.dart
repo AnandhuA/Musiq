@@ -25,6 +25,7 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
     final DateTime now = DateTime.now();
     final DateTime today = DateTime(now.year, now.month, now.day);
     final List<Song> lastplayed = await LastPlayedRepo.fetchLastPlayed();
+    NewHomeScreenModel? newHomeScreenModel;
 
     if (lastUpdated != null) {
       final DateTime lastUpdateDate = DateTime.parse(lastUpdated);
@@ -34,20 +35,19 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
           cachedHomeScreenData != null) {
         // Load from cache
 
-        final newHomeScreenModel =
+        newHomeScreenModel =
             NewHomeScreenModel.fromJson(jsonDecode(cachedHomeScreenData));
 
         log("---------load from cache----------");
-        emit(HomeScreenLoaded(
+        return emit(HomeScreenLoaded(
           newHomeScreenModel: newHomeScreenModel,
           lastPlayedSongList: lastplayed,
         ));
-        return;
       }
     }
 
     // If no cache or cache is outdated, fetch new data
-    NewHomeScreenModel? newHomeScreenModel;
+
     final data = await Saavan2.featchHomeScreenModel();
 
     if (data != null && data.statusCode == 200) {
@@ -58,6 +58,9 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
 
       // Cache the newHomeScreenModel
       prefs.setString('homeScreenData', data.body);
+    } else if (cachedHomeScreenData != null) {
+      newHomeScreenModel =
+          NewHomeScreenModel.fromJson(jsonDecode(cachedHomeScreenData));
     }
 
     // Cache the last update date
@@ -65,7 +68,7 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
 
     // Emit the loaded state
     log("---------load from response ----------");
-    emit(HomeScreenLoaded(
+    return emit(HomeScreenLoaded(
       newHomeScreenModel: newHomeScreenModel,
       lastPlayedSongList: lastplayed,
     ));

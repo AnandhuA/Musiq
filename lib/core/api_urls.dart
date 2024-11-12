@@ -7,7 +7,7 @@ class ApiUrls {
   static const String artist = "https://saavn.dev/api/artists?id=";
   static const String song = "https://saavn.dev/api/songs?ids=";
 
-  //------search -------
+  //------by search query-------
   static const String globalSearch = "https://saavn.dev/api/search?query=";
   static const String searchSong = "https://saavn.dev/api/search/songs?query=";
   static const String searchAlbums =

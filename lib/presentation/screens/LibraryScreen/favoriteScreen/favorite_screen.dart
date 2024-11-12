@@ -65,22 +65,21 @@ class FavoriteScreen extends StatelessWidget {
                           final song = state.favorites[index];
                           return Dismissible(
                             key: Key(song.id ?? index.toString()),
-                           direction: DismissDirection.horizontal,
+                            direction: DismissDirection.horizontal,
                             confirmDismiss: (direction) =>
                                 reusableConfirmDismiss(
                               context: context,
                               song: song,
-                              
                             ),
                             background: Container(
                                 color: AppColors.green,
                                 alignment: Alignment.centerLeft,
                                 padding: EdgeInsets.symmetric(horizontal: 20),
-                                child:  Row(
+                                child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                     Icon(Icons.wrap_text_sharp),
+                                    Icon(Icons.wrap_text_sharp),
                                     Icon(Icons.wrap_text_sharp),
                                   ],
                                 )),

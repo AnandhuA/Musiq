@@ -109,25 +109,4 @@ class AppInitializer {
     }
   }
 
-  void _showPermissionPermanentlyDeniedDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Permission Permanently Denied"),
-          content:
-              const Text("Please enable storage permission from settings."),
-          actions: [
-            TextButton(
-              child: const Text("Open Settings"),
-              onPressed: () {
-                openAppSettings();
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
 }
