@@ -4,7 +4,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:musiq/core/global_variables.dart';
-import 'package:musiq/models/playlist_model/playlist_model.dart';
+import 'package:musiq/models/playlist_model_hive/playlist_model.dart';
 import 'package:musiq/models/song_model/album.dart';
 import 'package:musiq/models/song_model/all.dart';
 import 'package:musiq/models/song_model/artists.dart';

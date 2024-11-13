@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/bloc/playlist/play_list_cubit.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/global_variables.dart';
-import 'package:musiq/models/playlist_model/playlist_model.dart';
+import 'package:musiq/models/playlist_model_hive/playlist_model.dart';
 import 'package:musiq/models/song_model/song.dart';
 import 'package:musiq/presentation/commanWidgets/empty_screen.dart';
 import 'package:musiq/presentation/screens/libraryScreen/playlist.dart/view_playlist_screen.dart';

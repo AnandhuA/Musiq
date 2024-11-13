@@ -10,7 +10,7 @@ import 'package:musiq/core/sized.dart';
 import 'package:musiq/models/song_model/song.dart';
 import 'package:musiq/presentation/commanWidgets/dismissible_funtion.dart';
 import 'package:musiq/presentation/commanWidgets/empty_screen.dart';
-import 'package:musiq/presentation/commanWidgets/popup_menu.dart';
+import 'package:musiq/presentation/commanWidgets/bottom_sheet.dart';
 
 class SongSearchResult extends StatelessWidget {
   const SongSearchResult({super.key});
@@ -80,7 +80,8 @@ class SongSearchResult extends StatelessWidget {
                     song.album?.name ?? "no",
                     maxLines: 1,
                   ),
-                  trailing:SongPopupMenu(song: song, context: context)
+                  trailing:
+                        SongOptionsBottomSheet(song: song)
                 ),
               );
             },

@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:musiq/data/hive_funtions/playlist_repo.dart';
-import 'package:musiq/models/playlist_model/playlist_model.dart';
+import 'package:musiq/models/playlist_model_hive/playlist_model.dart';
 import 'package:musiq/models/song_model/song.dart';
 
 part 'play_list_state.dart';
@@ -16,7 +16,6 @@ class PlayListCubit extends Cubit<PlayListState> {
   }
 
   void addPlaylist(PlaylistModelHive playList) async {
-    emit(PlayListLoadingState());
     await PlaylistRepo.addPlaylist(playList);
     featchPlayList();
   }

@@ -5,7 +5,7 @@ import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/models/song_model/song.dart';
-import 'package:musiq/presentation/commanWidgets/popup_menu.dart';
+import 'package:musiq/presentation/commanWidgets/bottom_sheet.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 
 class HomepageLastplayedWidget extends StatelessWidget {
@@ -106,8 +106,8 @@ class HomepageLastplayedWidget extends StatelessWidget {
                                     ),
                                   );
                                 },
-                                trailing: SongPopupMenu(
-                                    song: song, context: context)),
+                                trailing: SongOptionsBottomSheet(
+                                    song: song)),
                           );
                         }),
                       ),

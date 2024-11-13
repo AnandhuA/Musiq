@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:musiq/core/helper_funtions.dart';
-import 'package:musiq/models/playlist_model/playlist_model.dart';
+import 'package:musiq/models/playlist_model_hive/playlist_model.dart';
 import 'package:musiq/presentation/commanWidgets/empty_screen.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 

@@ -9,7 +9,7 @@ import 'package:musiq/models/play_list_model/play_list_model.dart';
 import 'package:musiq/models/song_model/song.dart';
 import 'package:musiq/presentation/commanWidgets/dismissible_funtion.dart';
 import 'package:musiq/presentation/commanWidgets/empty_screen.dart';
-import 'package:musiq/presentation/commanWidgets/popup_menu.dart';
+import 'package:musiq/presentation/commanWidgets/bottom_sheet.dart';
 import 'package:musiq/presentation/screens/artist/widgets/artist_horizontal_listview.dart';
 import 'package:musiq/presentation/screens/player_screen/bottomPlayer/bottom_player.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
@@ -268,7 +268,7 @@ class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
                                 maxLines: 1,
                               ),
                               trailing:
-                                  SongPopupMenu(song: song, context: context),
+                                  SongOptionsBottomSheet(song: song,),
                             ),
                           );
                         },

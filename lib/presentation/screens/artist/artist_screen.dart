@@ -8,7 +8,7 @@ import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/models/artist_model/artist_model.dart';
 import 'package:musiq/models/song_model/song.dart';
-import 'package:musiq/presentation/commanWidgets/popup_menu.dart';
+import 'package:musiq/presentation/commanWidgets/bottom_sheet.dart';
 import 'package:musiq/presentation/screens/artist/widgets/artist_horizontal_listview.dart';
 import 'package:musiq/presentation/screens/player_screen/bottomPlayer/bottom_player.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
@@ -156,7 +156,7 @@ class ArtistScreen extends StatelessWidget {
                                           ),
                                         ));
                                   },
-                                  trailing: SongPopupMenu(song: song, context: context)
+                                  trailing: SongOptionsBottomSheet(song: song)
                                 ),
                               );
                             }),

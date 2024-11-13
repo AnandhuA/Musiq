@@ -6,7 +6,7 @@ import 'package:musiq/data/hive_funtions/last_played_repo.dart';
 import 'package:musiq/models/song_model/song.dart';
 import 'package:musiq/presentation/commanWidgets/empty_screen.dart';
 import 'package:musiq/presentation/commanWidgets/favorite_icon.dart';
-import 'package:musiq/presentation/commanWidgets/popup_menu.dart';
+import 'package:musiq/presentation/commanWidgets/bottom_sheet.dart';
 import 'package:musiq/presentation/screens/player_screen/bottomPlayer/bottom_player.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 
@@ -86,7 +86,7 @@ class _LastPlayedListState extends State<LastPlayedList> {
                           FavoriteIcon(
                             song: lastplayed[index],
                           ),
-                          SongPopupMenu(song: song, context: context)
+                          SongOptionsBottomSheet(song: song)
                         ],
                       ),
                       leading: Container(

@@ -1,18 +1,16 @@
 import 'dart:developer';
 
 import 'package:hive_flutter/adapters.dart';
-import 'package:musiq/models/playlist_model/playlist_model.dart';
+import 'package:musiq/models/playlist_model_hive/playlist_model.dart';
 import 'package:musiq/models/song_model/song.dart';
 
 class PlaylistRepo {
   static const String playlistBoxName = 'playlistBox';
 
-
   static Future<void> addPlaylist(PlaylistModelHive playlist) async {
     try {
       final box = await Hive.openBox<PlaylistModelHive>(playlistBoxName);
 
-   
       if (box.values.any((p) => p.id == playlist.id)) {
         log("Playlist with ID ${playlist.id} already exists.");
       } else {
@@ -24,7 +22,6 @@ class PlaylistRepo {
     }
   }
 
-  
   static Future<List<PlaylistModelHive>> fetchPlaylists() async {
     try {
       final box = await Hive.openBox<PlaylistModelHive>(playlistBoxName);
@@ -41,14 +38,11 @@ class PlaylistRepo {
     try {
       final box = await Hive.openBox<PlaylistModelHive>(playlistBoxName);
 
-
       final playlist = box.values.firstWhere((p) => p.id == playlistId);
-
 
       if (!playlist.songList.any((s) => s.id == song.id)) {
         playlist.songList.add(song);
-        await box.put(
-            playlistId, playlist); 
+        await box.put(playlistId, playlist);
         log("Song added to playlist: ${playlist.name}");
       }
     } catch (e) {
@@ -56,23 +50,19 @@ class PlaylistRepo {
     }
   }
 
-
   static Future<void> removeSongFromPlaylist(int playlistId, Song song) async {
     try {
       final box = await Hive.openBox<PlaylistModelHive>(playlistBoxName);
 
-    
       final playlist = box.values.firstWhere((p) => p.id == playlistId);
 
       playlist.songList.removeWhere((s) => s.id == song.id);
-      await box.put(
-          playlistId, playlist); 
+      await box.put(playlistId, playlist);
       log("Song removed from playlist: ${playlist.name}");
     } catch (e) {
       log("Error removing song from playlist: $e");
     }
   }
-
 
   static Future<void> clearPlaylists() async {
     try {
