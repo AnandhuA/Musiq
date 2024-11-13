@@ -4,7 +4,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/helper_funtions.dart';
-import 'package:musiq/data/hive_funtion.dart';
+import 'package:musiq/data/hive_funtions/last_played_repo.dart';
 import 'package:musiq/models/song_model/song.dart';
 
 class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
@@ -37,8 +37,6 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
     required MediaItem mediaItem,
     required Song song,
   }) async {
-    log("Queue length before: $_queueLength");
-
     String? currentPlayingId;
     if (_mediaItems.isNotEmpty &&
         AppGlobals().currentSongIndex < _mediaItems.length) {

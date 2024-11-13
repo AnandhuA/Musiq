@@ -4,6 +4,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:musiq/core/global_variables.dart';
+import 'package:musiq/models/playlist_model/playlist_model.dart';
 import 'package:musiq/models/song_model/album.dart';
 import 'package:musiq/models/song_model/all.dart';
 import 'package:musiq/models/song_model/artists.dart';
@@ -77,6 +78,9 @@ class AppInitializer {
     if (!Hive.isAdapterRegistered(AllAdapter().typeId)) {
       Hive.registerAdapter(AllAdapter());
     }
+    if (!Hive.isAdapterRegistered(PlaylistModelHiveAdapter().typeId)) {
+      Hive.registerAdapter(PlaylistModelHiveAdapter());
+    }
   }
 
   void _handleDeepLink(BuildContext context, String link) {
@@ -98,15 +102,16 @@ class AppInitializer {
     log("------------permission-----------");
 
     var status = await Permission.storage.status;
+    var videostatus = await Permission.videos.request();
+    log("--Current Permission Status: $status::$videostatus");
 
-    log("status::$status");
-
-    if (status.isDenied) {
+    if (!status.isGranted) {
+      log("--Requesting storage permission...");
       await Permission.storage.request();
-    } else if (status.isPermanentlyDenied) {
-    } else if (status.isGranted) {
-      log("Storage permission granted.");
+      status = await Permission.storage.status;
+      log("--New Permission Status: $status");
+    } else {
+      log("---Storage permission already granted");
     }
   }
-
 }

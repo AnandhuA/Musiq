@@ -3,7 +3,7 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:musiq/data/hive_funtion.dart';
+import 'package:musiq/data/hive_funtions/last_played_repo.dart';
 import 'package:musiq/data/savan_2.0.dart';
 import 'package:musiq/models/home_screen_models/newHomeScreenModel.dart';
 import 'package:musiq/models/song_model/song.dart';
@@ -18,12 +18,12 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
     emit(HomeScreenLoading());
 
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? cachedHomeScreenData = prefs.getString('homeScreenData');
+    final String? cachedHomeScreenData = await prefs.getString('homeScreenData');
 
-    final String? lastUpdated = prefs.getString('lastUpdated');
+    final String? lastUpdated = await prefs.getString('lastUpdated');
 
-    final DateTime now = DateTime.now();
-    final DateTime today = DateTime(now.year, now.month, now.day);
+    final DateTime now = await DateTime.now();
+    final DateTime today = await DateTime(now.year, now.month, now.day);
     final List<Song> lastplayed = await LastPlayedRepo.fetchLastPlayed();
     NewHomeScreenModel? newHomeScreenModel;
 

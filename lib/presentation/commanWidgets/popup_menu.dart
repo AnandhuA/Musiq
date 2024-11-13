@@ -1,11 +1,12 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:musiq/bloc/playlist/play_list_cubit.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/presentation/commanWidgets/favorite_icon.dart';
 import 'package:musiq/presentation/commanWidgets/snack_bar.dart';
-
 
 class SongPopupMenu extends StatelessWidget {
   final dynamic song;
@@ -49,7 +50,7 @@ class SongPopupMenu extends StatelessWidget {
             // Handle "Favorite" action
             break;
           case 2:
-            // Handle "Add to Playlist" action
+            _showPlaylistPopup(context);
             break;
         }
       },
@@ -67,7 +68,7 @@ class SongPopupMenu extends StatelessWidget {
           value: 1,
           child: Row(
             children: [
-              FavoriteIcon(song: song), 
+              FavoriteIcon(song: song),
               const Text("Favorite"),
             ],
           ),
@@ -77,6 +78,58 @@ class SongPopupMenu extends StatelessWidget {
           child: const Text('Add to Playlist'),
         ),
       ],
+    );
+  }
+
+  void _showPlaylistPopup(BuildContext context) {
+    final playListCubit = context.read<PlayListCubit>();
+    playListCubit.featchPlayList();
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return BlocBuilder<PlayListCubit, PlayListState>(
+          builder: (context, state) {
+            if (state is PlayListLoadingState) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is FeatchPlayListSuccessState) {
+              final playlists = state.playlistList;
+
+              return AlertDialog(
+                title: const Text("Choose Playlist"),
+                content: SizedBox(
+                  width: double.maxFinite,
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: playlists.length,
+                    itemBuilder: (context, index) {
+                      final playlist = playlists[index];
+                      return ListTile(
+                        title: Text(playlist.name),
+                        onTap: () {
+                          context.read<PlayListCubit>().addSongToPlayList(
+                                playlistModel: playlist,
+                                songModel: song,
+                              );
+                          Navigator.pop(context);
+                          customSnackbar(
+                            context: context,
+                            message: "${song.name} added to ${playlist.name}",
+                            bgColor: AppColors.white,
+                            textColor: AppColors.black,
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ),
+              );
+            } else {
+              return const Center(child: Text("No playlists available"));
+            }
+          },
+        );
+      },
     );
   }
 }
