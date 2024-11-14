@@ -1,6 +1,8 @@
 import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:musiq/models/playlist_model_hive/playlist_model.dart';
 
 //get random number for Shuffle
 int getRandomSongIndex({required List songList}) {
@@ -47,4 +49,50 @@ class StatusCodeHandler {
       return 'Unknown status code: $statusCode';
     }
   }
+}
+
+
+Widget playlistCover({required PlaylistModelHive playlist}) {
+  return Container(
+    width: 60,
+    height: 60,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(8),
+    ),
+    child: playlist.songList.length >= 4
+        ? GridView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 2,
+              mainAxisSpacing: 2,
+            ),
+            itemCount: 4,
+            itemBuilder: (context, index) {
+              return Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
+                  image: DecorationImage(
+                    image: CachedNetworkImageProvider(
+                      playlist.songList[index].image?.last.imageUrl ??
+                          errorImage(),
+                    ),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              );
+            },
+          )
+        : ClipRRect(
+            borderRadius: BorderRadius.circular(5),
+            child: CachedNetworkImage(
+              imageUrl: playlist.songList.isNotEmpty
+                  ? playlist.songList[0].image?.last.imageUrl ?? errorImage()
+                  : errorImage(),
+              placeholder: (context, url) => albumImagePlaceholder(),
+              errorListener: (value) => albumImagePlaceholder(),
+              fit: BoxFit.cover,
+            ),
+          ),
+  );
 }

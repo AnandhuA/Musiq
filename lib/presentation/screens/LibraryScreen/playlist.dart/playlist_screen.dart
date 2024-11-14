@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -95,7 +94,7 @@ class PlaylistScreen extends StatelessWidget {
                                               radius: 30,
                                               child: Text(playlist.name[0]),
                                             )
-                                          : _playlistCover(playlist: playlist)
+                                          : playlistCover(playlist: playlist)
                                       : SizedBox(),
                                   title: Text(
                                     playlist.name,
@@ -146,52 +145,6 @@ class PlaylistScreen extends StatelessWidget {
     );
   }
 
-  //-------playlist image ----
-  Widget _playlistCover({required PlaylistModelHive playlist}) {
-    return Container(
-      width: 60,
-      height: 60,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: playlist.songList.length >= 4
-          ? GridView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 2,
-                mainAxisSpacing: 2,
-              ),
-              itemCount: 4,
-              itemBuilder: (context, index) {
-                return Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4),
-                    image: DecorationImage(
-                      image: CachedNetworkImageProvider(
-                        playlist.songList[index].image?.last.imageUrl ??
-                            errorImage(),
-                      ),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                );
-              },
-            )
-          : ClipRRect(
-              borderRadius: BorderRadius.circular(5),
-              child: CachedNetworkImage(
-                imageUrl: playlist.songList.isNotEmpty
-                    ? playlist.songList[0].image?.last.imageUrl ?? errorImage()
-                    : errorImage(),
-                placeholder: (context, url) => albumImagePlaceholder(),
-                errorListener: (value) => albumImagePlaceholder(),
-                fit: BoxFit.cover,
-              ),
-            ),
-    );
-  }
-
 //-----------Delete Confirmation Dialog------------
   Future<bool> showDeleteConfirmationDialog(
       BuildContext context, String playlistName) async {
@@ -206,7 +159,7 @@ class PlaylistScreen extends StatelessWidget {
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
-                    Navigator.of(context).pop(false); 
+                    Navigator.of(context).pop(false);
                   },
                   child: Text("Cancel"),
                 ),
@@ -220,7 +173,7 @@ class PlaylistScreen extends StatelessWidget {
             );
           },
         ) ??
-        false; 
+        false;
   }
 
   //-----------create new playlist pop up ------------
