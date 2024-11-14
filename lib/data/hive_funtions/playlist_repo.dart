@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:musiq/models/playlist_model_hive/playlist_model.dart';
 import 'package:musiq/models/song_model/song.dart';
@@ -11,14 +12,17 @@ class PlaylistRepo {
     try {
       final box = await Hive.openBox<PlaylistModelHive>(playlistBoxName);
 
-      if (box.values.any((p) => p.id == playlist.id)) {
+      if (box.values.any((p) => p.name == playlist.name)) {
         log("Playlist with ID ${playlist.id} already exists.");
+        Fluttertoast.showToast(msg: "Playlist ${playlist.name} already exists");
       } else {
         await box.add(playlist);
         log("Playlist added: ${playlist.name}");
+        Fluttertoast.showToast(msg: "Playlist added: ${playlist.name}");
       }
     } catch (e) {
       log("Error adding playlist: $e");
+      Fluttertoast.showToast(msg: "Error adding playlist: $e");
     }
   }
 
@@ -30,6 +34,7 @@ class PlaylistRepo {
       return playlists;
     } catch (e) {
       log("Error fetching playlists: $e");
+      Fluttertoast.showToast(msg: "Error fetching playlists: $e");
       return [];
     }
   }
@@ -47,6 +52,7 @@ class PlaylistRepo {
       }
     } catch (e) {
       log("Error adding song to playlist: $e");
+      Fluttertoast.showToast(msg: "Error adding song to playlist: $e");
     }
   }
 
@@ -61,6 +67,7 @@ class PlaylistRepo {
       log("Song removed from playlist: ${playlist.name}");
     } catch (e) {
       log("Error removing song from playlist: $e");
+      Fluttertoast.showToast(msg: "Error removing song from playlist: $e");
     }
   }
 
