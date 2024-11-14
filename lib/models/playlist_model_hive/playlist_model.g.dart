@@ -17,24 +17,21 @@ class PlaylistModelHiveAdapter extends TypeAdapter<PlaylistModelHive> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return PlaylistModelHive(
-      id: fields[0] as int,
-      name: fields[1] as String,
-      songList: (fields[2] as List).cast<Song>(),
-      imagePath: fields[3] as String?,
+      name: fields[0] as String,
+      songList: (fields[1] as List).cast<Song>(),
+      imagePath: fields[2] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, PlaylistModelHive obj) {
     writer
-      ..writeByte(4)
-      ..writeByte(0)
-      ..write(obj.id)
-      ..writeByte(1)
-      ..write(obj.name)
-      ..writeByte(2)
-      ..write(obj.songList)
       ..writeByte(3)
+      ..writeByte(0)
+      ..write(obj.name)
+      ..writeByte(1)
+      ..write(obj.songList)
+      ..writeByte(2)
       ..write(obj.imagePath);
   }
 

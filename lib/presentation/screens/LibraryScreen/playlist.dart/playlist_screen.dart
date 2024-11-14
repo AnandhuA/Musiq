@@ -142,8 +142,7 @@ class PlaylistScreen extends StatelessWidget {
                 if (playlistName.isNotEmpty) {
                   context.read<PlayListCubit>().addPlaylist(
                         PlaylistModelHive(
-                          id: DateTime.now().microsecondsSinceEpoch,
-                          name: playlistName,
+                          name: playlistName.toLowerCase(),
                           songList: [],
                         ),
                       );

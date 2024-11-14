@@ -12,11 +12,11 @@ class PlaylistRepo {
     try {
       final box = await Hive.openBox<PlaylistModelHive>(playlistBoxName);
 
-      if (box.values.any((p) => p.name == playlist.name)) {
-        log("Playlist with ID ${playlist.id} already exists.");
-        Fluttertoast.showToast(msg: "Playlist ${playlist.name} already exists");
+      if (box.containsKey(playlist.name)) {
+        Fluttertoast.showToast(
+            msg: "Playlist '${playlist.name}' already exists");
       } else {
-        await box.add(playlist);
+        await box.put(playlist.name, playlist);
         log("Playlist added: ${playlist.name}");
         Fluttertoast.showToast(msg: "Playlist added: ${playlist.name}");
       }
@@ -39,16 +39,23 @@ class PlaylistRepo {
     }
   }
 
-  static Future<void> addSongToPlaylist(int playlistId, Song song) async {
+  static Future<void> addSongToPlaylist(String playlistName, Song song) async {
     try {
       final box = await Hive.openBox<PlaylistModelHive>(playlistBoxName);
+      final playlist = box.get(playlistName);
 
-      final playlist = box.values.firstWhere((p) => p.id == playlistId);
-
-      if (!playlist.songList.any((s) => s.id == song.id)) {
-        playlist.songList.add(song);
-        await box.put(playlistId, playlist);
-        log("Song added to playlist: ${playlist.name}");
+      if (playlist != null) {
+        if (!playlist.songList.any((s) => s.id == song.id)) {
+          playlist.songList.add(song);
+          await box.put(playlistName, playlist);
+          log("Song added to playlist: ${playlist.name}");
+          Fluttertoast.showToast(
+              msg: "Song added to playlist: ${playlist.name}");
+        } else {
+          Fluttertoast.showToast(msg: "Song already in playlist");
+        }
+      } else {
+        Fluttertoast.showToast(msg: "Playlist not found");
       }
     } catch (e) {
       log("Error adding song to playlist: $e");
@@ -56,15 +63,21 @@ class PlaylistRepo {
     }
   }
 
-  static Future<void> removeSongFromPlaylist(int playlistId, Song song) async {
+  static Future<void> removeSongFromPlaylist(
+      String playlistName, Song song) async {
     try {
       final box = await Hive.openBox<PlaylistModelHive>(playlistBoxName);
+      final playlist = box.get(playlistName);
 
-      final playlist = box.values.firstWhere((p) => p.id == playlistId);
-
-      playlist.songList.removeWhere((s) => s.id == song.id);
-      await box.put(playlistId, playlist);
-      log("Song removed from playlist: ${playlist.name}");
+      if (playlist != null) {
+        playlist.songList.removeWhere((s) => s.id == song.id);
+        await box.put(playlistName, playlist);
+        log("Song removed from playlist: ${playlist.name}");
+        Fluttertoast.showToast(
+            msg: "Song removed from playlist: ${playlist.name}");
+      } else {
+        Fluttertoast.showToast(msg: "Playlist not found");
+      }
     } catch (e) {
       log("Error removing song from playlist: $e");
       Fluttertoast.showToast(msg: "Error removing song from playlist: $e");
@@ -76,8 +89,10 @@ class PlaylistRepo {
       final box = await Hive.openBox<PlaylistModelHive>(playlistBoxName);
       await box.clear();
       log("All playlists cleared.");
+      Fluttertoast.showToast(msg: "All playlists cleared.");
     } catch (e) {
       log("Error clearing playlists: $e");
+      Fluttertoast.showToast(msg: "Error clearing playlists: $e");
     }
   }
 }

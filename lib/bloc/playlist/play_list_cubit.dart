@@ -24,6 +24,6 @@ class PlayListCubit extends Cubit<PlayListState> {
     required PlaylistModelHive playlistModel,
     required Song songModel,
   }) async {
-    await PlaylistRepo.addSongToPlaylist(playlistModel.id, songModel);
+    await PlaylistRepo.addSongToPlaylist(playlistModel.name, songModel);
   }
 }

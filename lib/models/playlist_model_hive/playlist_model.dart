@@ -5,16 +5,13 @@ part 'playlist_model.g.dart';
 @HiveType(typeId: 7)
 class PlaylistModelHive {
   @HiveField(0)
-  final int id;
-  @HiveField(1)
   final String name;
-  @HiveField(2)
+  @HiveField(1)
   final List<Song> songList;
-  @HiveField(3)
+  @HiveField(2)
   final String? imagePath;
 
   PlaylistModelHive({
-    required this.id,
     required this.name,
     required this.songList,
     this.imagePath,
