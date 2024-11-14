@@ -31,21 +31,22 @@ class LastPlayedRepo {
   }
 
 // ------- featch last played song fron hive data base -------
-  static Future<List<Song>> fetchLastPlayed() async {
-    List<Song> lastPlayedSongs = [];
+  static Future<List<Song>?> fetchLastPlayed() async {
+    List<Song>? lastPlayedSongs;
 
     try {
-      final box = Hive.box<Song>('lastPlayedBox');
+      final box = await Hive.box<Song>('lastPlayedBox');
 
-      lastPlayedSongs = box.values.toList()
+      lastPlayedSongs = await box.values.toList()
         ..sort((a, b) => b.addedAt!.compareTo(a.addedAt!));
 
       log("Fetched ${lastPlayedSongs.length} last played songs.");
+      return lastPlayedSongs;
     } catch (e) {
       log("Error fetching last played songs: $e");
     }
 
-    return lastPlayedSongs;
+    return null;
   }
 
 //---- clear last played section --------

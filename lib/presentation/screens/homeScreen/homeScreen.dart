@@ -39,7 +39,7 @@ class Homescreen extends StatelessWidget {
               child: Column(
                 children: [
                   HomepageLastplayedWidget(
-                    songList: state.lastPlayedSongList,
+                    songList: state.lastPlayedSongList ?? [],
                   ),
                   HomepageHorizontalListview(
                       sectionTitle:

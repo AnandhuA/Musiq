@@ -95,4 +95,21 @@ class PlaylistRepo {
       Fluttertoast.showToast(msg: "Error clearing playlists: $e");
     }
   }
+
+  static Future<void> deletePlaylist(String playlistName) async {
+    try {
+      final box = await Hive.openBox<PlaylistModelHive>(playlistBoxName);
+
+      if (box.containsKey(playlistName)) {
+        await box.delete(playlistName);
+        log("Playlist deleted: $playlistName");
+        Fluttertoast.showToast(msg: "Playlist deleted: $playlistName");
+      } else {
+        Fluttertoast.showToast(msg: "Playlist '$playlistName' not found");
+      }
+    } catch (e) {
+      log("Error deleting playlist: $e");
+      Fluttertoast.showToast(msg: "Error deleting playlist: $e");
+    }
+  }
 }

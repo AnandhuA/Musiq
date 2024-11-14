@@ -1,8 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:musiq/bloc/playlist/play_list_cubit.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/global_variables.dart';
+import 'package:musiq/core/helper_funtions.dart';
+import 'package:musiq/core/sized.dart';
 import 'package:musiq/models/playlist_model_hive/playlist_model.dart';
 import 'package:musiq/models/song_model/song.dart';
 import 'package:musiq/presentation/commanWidgets/empty_screen.dart';
@@ -50,7 +54,9 @@ class PlaylistScreen extends StatelessWidget {
                       );
                     } else if (state is FeatchPlayListSuccessState) {
                       return state.playlistList.isNotEmpty
-                          ? ListView.builder(
+                          ? ListView.separated(
+                              separatorBuilder: (context, index) =>
+                                  AppSpacing.height10,
                               padding: EdgeInsets.only(bottom: 100),
                               itemCount: state.playlistList.length,
                               itemBuilder: (context, index) {
@@ -62,13 +68,41 @@ class PlaylistScreen extends StatelessWidget {
                                         MaterialPageRoute(
                                           builder: (context) =>
                                               ViewPlaylistScreen(
-                                                  model: playlist),
+                                            model: playlist,
+                                          ),
                                         ));
                                   },
-                                  leading: CircleAvatar(
-                                    child: Text(playlist.name[0]),
+                                  onLongPress: () async {
+                                    bool deleteConfirmed =
+                                        await showDeleteConfirmationDialog(
+                                            context, playlist.name);
+
+                                    if (deleteConfirmed) {
+                                      context
+                                          .read<PlayListCubit>()
+                                          .deletePlaylist(playlist: playlist);
+                                      Fluttertoast.showToast(
+                                          msg:
+                                              "Playlist '${playlist.name}' deleted.");
+                                    }
+                                  },
+                                  leading: playlist.imagePath == null
+                                      ? playlist.songList.isEmpty
+                                          ? CircleAvatar(
+                                              backgroundColor:
+                                                  AppColors.colorList[
+                                                      AppGlobals().colorIndex],
+                                              radius: 30,
+                                              child: Text(playlist.name[0]),
+                                            )
+                                          : _playlistCover(playlist: playlist)
+                                      : SizedBox(),
+                                  title: Text(
+                                    playlist.name,
+                                    style: TextStyle(fontSize: 20),
                                   ),
-                                  title: Text(playlist.name),
+                                  subtitle:
+                                      Text("${playlist.songList.length}-Songs"),
                                 );
                               },
                             )
@@ -112,6 +146,84 @@ class PlaylistScreen extends StatelessWidget {
     );
   }
 
+  //-------playlist image ----
+  Widget _playlistCover({required PlaylistModelHive playlist}) {
+    return Container(
+      width: 60,
+      height: 60,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: playlist.songList.length >= 4
+          ? GridView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 2,
+                mainAxisSpacing: 2,
+              ),
+              itemCount: 4,
+              itemBuilder: (context, index) {
+                return Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(4),
+                    image: DecorationImage(
+                      image: CachedNetworkImageProvider(
+                        playlist.songList[index].image?.last.imageUrl ??
+                            errorImage(),
+                      ),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                );
+              },
+            )
+          : ClipRRect(
+              borderRadius: BorderRadius.circular(5),
+              child: CachedNetworkImage(
+                imageUrl: playlist.songList.isNotEmpty
+                    ? playlist.songList[0].image?.last.imageUrl ?? errorImage()
+                    : errorImage(),
+                placeholder: (context, url) => albumImagePlaceholder(),
+                errorListener: (value) => albumImagePlaceholder(),
+                fit: BoxFit.cover,
+              ),
+            ),
+    );
+  }
+
+//-----------Delete Confirmation Dialog------------
+  Future<bool> showDeleteConfirmationDialog(
+      BuildContext context, String playlistName) async {
+    return await showDialog<bool>(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Delete Playlist"),
+              content: Text(
+                "Are you sure you want to delete the playlist '$playlistName'?",
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(false); 
+                  },
+                  child: Text("Cancel"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
+                  child: Text("Delete"),
+                ),
+              ],
+            );
+          },
+        ) ??
+        false; 
+  }
+
+  //-----------create new playlist pop up ------------
   Future<void> _showAddPlaylistDialog(BuildContext context) async {
     TextEditingController playlistNameController = TextEditingController();
 

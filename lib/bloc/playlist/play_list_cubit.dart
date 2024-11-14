@@ -16,6 +16,7 @@ class PlayListCubit extends Cubit<PlayListState> {
   }
 
   void addPlaylist(PlaylistModelHive playList) async {
+    emit(PlayListLoadingState());
     await PlaylistRepo.addPlaylist(playList);
     featchPlayList();
   }
@@ -25,5 +26,11 @@ class PlayListCubit extends Cubit<PlayListState> {
     required Song songModel,
   }) async {
     await PlaylistRepo.addSongToPlaylist(playlistModel.name, songModel);
+  }
+
+  void deletePlaylist({required PlaylistModelHive playlist}) async {
+    emit(PlayListLoadingState());
+    await PlaylistRepo.deletePlaylist(playlist.name);
+    featchPlayList();
   }
 }
