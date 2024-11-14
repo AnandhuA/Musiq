@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,29 +8,15 @@ import 'package:musiq/bloc/ThemeCubit/theme_cubit.dart';
 import 'package:musiq/presentation/screens/splashScreen/splash_screen.dart';
 import 'package:musiq/services/app_initializer.dart';
 import 'package:musiq/services/bloc_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await requestStoragePermission();
+  await AppInitializer().requestStoragePermission();
   runApp(const MyApp());
 }
 
-Future<void> requestStoragePermission() async {
-  log("------------permission-----------");
-
-  var status = await Permission.storage.status;
-
-  log("status::$status");
-
-  if (status.isDenied) {
-    await Permission.storage.request();
-  } else if (status.isPermanentlyDenied) {
-  } else if (status.isGranted) {
-    log("Storage permission granted.");
-  }
-}
+Future<void> requestStoragePermission() async {}
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});

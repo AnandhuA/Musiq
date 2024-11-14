@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/sized.dart';
 
 class ListTileWidget extends StatelessWidget {
@@ -25,7 +26,7 @@ class ListTileWidget extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 15),
       width: double.infinity,
       decoration: BoxDecoration(
-        color: const Color.fromARGB(62, 95, 95, 95),
+        color: AppColors.smokygray,
         borderRadius: BorderRadius.circular(10),
       ),
       child: InkWell(
@@ -39,7 +40,7 @@ class ListTileWidget extends StatelessWidget {
               title,
               style: logout
                   ? theme.textTheme.titleMedium?.copyWith(
-                      color: Colors.red,
+                      color: AppColors.red,
                     )
                   : theme.textTheme.titleMedium,
             ),
@@ -83,7 +84,7 @@ class MultiListTileWidget extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 15),
       width: double.infinity,
       decoration: BoxDecoration(
-        color: const Color.fromARGB(62, 95, 95, 95),
+        color: AppColors.smokygray,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
@@ -107,7 +108,7 @@ class MultiListTileWidget extends StatelessWidget {
           ),
           const Divider(
             height: 20,
-            color: Colors.grey,
+            color: AppColors.grey,
           ),
           InkWell(
             onTap: () => onTap2(),

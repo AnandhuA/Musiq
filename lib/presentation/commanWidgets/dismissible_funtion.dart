@@ -26,7 +26,6 @@ Future<bool?> reusableConfirmDismiss({
           .value[AppGlobals().currentSongIndex]
           .id !=
       song.id) {
-    // Create a MediaItem for the song
     final mediaItem = MediaItem(
       id: song.downloadUrl?.last.link ?? "",
       album: song.album?.name ?? "No Album",

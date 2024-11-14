@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:musiq/core/colors.dart';
 
 class CustomTextFeild extends StatelessWidget {
   final String hintText;
@@ -29,8 +30,8 @@ class CustomTextFeild extends StatelessWidget {
         hintText: hintText,
         filled: true,
         fillColor: Theme.of(context).brightness == Brightness.dark
-            ? Color.fromARGB(100, 32, 32, 32)
-            : Color.fromARGB(132, 196, 196, 196),
+            ? AppColors.textfeildDarkBG
+            : AppColors.textfeildLightBG,
         border: OutlineInputBorder(
           borderSide: BorderSide.none,
           borderRadius: BorderRadius.circular(18),

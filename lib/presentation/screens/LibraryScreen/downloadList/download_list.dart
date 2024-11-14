@@ -17,6 +17,7 @@ class DownloadList extends StatelessWidget {
             Icons.arrow_back_ios_new_sharp,
           ),
         ),
+        title: Text("Downloads"),
       ),
       body: emptyScreen(
         context: context,

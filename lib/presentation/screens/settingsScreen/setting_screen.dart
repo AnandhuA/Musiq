@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/presentation/commanWidgets/confirmation_diloge.dart';
@@ -95,7 +96,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ? ListTileWidget(
                   icon: const Icon(
                     Icons.login_outlined,
-                    color: Colors.red,
+                    color: AppColors.red,
                   ),
                   logout: true,
                   title: "Log out",
@@ -121,7 +122,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               : ListTileWidget(
                   icon: const Icon(
                     Icons.login_outlined,
-                    color: Colors.green,
+                    color: AppColors.green,
                   ),
                   title: "Log In",
                   onTap: () {

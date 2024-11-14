@@ -24,7 +24,7 @@ class ProgressBarWidget extends StatelessWidget {
       barHeight: 3,
       thumbRadius: 7,
       buffered: progressDuration + const Duration(seconds: 30),
-      bufferedBarColor: Colors.grey,
+      bufferedBarColor: AppColors.grey,
       timeLabelType: TimeLabelType.totalTime,
       total: songDuration,
       thumbColor: theme.brightness == Brightness.dark

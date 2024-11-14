@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:permission_handler/permission_handler.dart';
 
 class DownloadSongRepo {
-  static Future<void> downloadSong({
+ static Future<void> downloadSong({
     required String downloadUrl,
     required String fileName,
   }) async {
@@ -20,6 +20,14 @@ class DownloadSongRepo {
         Fluttertoast.showToast(
             msg:
                 "Storage permission permanently denied. Please enable it in settings.");
+        await openAppSettings();
+        return;
+      }
+
+ 
+      if (Platform.isAndroid &&
+          await Permission.manageExternalStorage.isDenied) {
+        Fluttertoast.showToast(msg: "Please enable manage external storage.");
         await openAppSettings();
         return;
       }
@@ -53,4 +61,5 @@ class DownloadSongRepo {
       Fluttertoast.showToast(msg: "Error downloading song: $e");
     }
   }
+
 }

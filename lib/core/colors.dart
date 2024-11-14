@@ -11,8 +11,13 @@ class AppColors {
   static const Color pink = Color.fromARGB(255, 255, 0, 85);
   static const Color black = Colors.black;
   static const Color white = Colors.white;
+  static const Color grey = Colors.grey;
+  static Color grey800 = Colors.grey.shade800;
+  static Color smokygray = Color.fromARGB(62, 95, 95, 95);
   static const Color transparent = Colors.transparent;
-
+  static const Color textfeildLightBG = Color.fromARGB(132, 196, 196, 196);
+  static const Color textfeildDarkBG = Color.fromARGB(100, 32, 32, 32);
+  static const Color iconDisable = Color.fromARGB(99, 158, 158, 158);
   // app theam color list
   static const List<Color> colorList = [
     Color(0xFFD71921),

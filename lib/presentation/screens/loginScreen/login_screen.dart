@@ -35,7 +35,7 @@ class LoginScreen extends StatelessWidget {
             customSnackbar(
               context: context,
               message: state.errorMessage,
-              bgColor: Colors.red,
+              bgColor: AppColors.red,
               textColor: AppColors.white,
             );
           }

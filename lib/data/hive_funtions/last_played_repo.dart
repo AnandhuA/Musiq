@@ -29,6 +29,7 @@ class LastPlayedRepo {
       log("Error: $e");
     }
   }
+
 // ------- featch last played song fron hive data base -------
   static Future<List<Song>> fetchLastPlayed() async {
     List<Song> lastPlayedSongs = [];
@@ -46,6 +47,7 @@ class LastPlayedRepo {
 
     return lastPlayedSongs;
   }
+
 //---- clear last played section --------
   static Future<void> clearLastPlayedSongs() async {
     try {
