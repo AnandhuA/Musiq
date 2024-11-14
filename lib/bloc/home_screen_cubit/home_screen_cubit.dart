@@ -16,15 +16,16 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
 
   Future<void> loadData() async {
     emit(HomeScreenLoading());
-
+    final List<Song>? lastplayed = await LastPlayedRepo.fetchLastPlayed();
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? cachedHomeScreenData = await prefs.getString('homeScreenData');
+    final String? cachedHomeScreenData =
+        await prefs.getString('homeScreenData');
 
     final String? lastUpdated = await prefs.getString('lastUpdated');
 
     final DateTime now = await DateTime.now();
     final DateTime today = await DateTime(now.year, now.month, now.day);
-    final List<Song> lastplayed = await LastPlayedRepo.fetchLastPlayed();
+
     NewHomeScreenModel? newHomeScreenModel;
 
     if (lastUpdated != null) {
@@ -34,11 +35,11 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
       if (lastUpdateDate.isAtSameMomentAs(today) &&
           cachedHomeScreenData != null) {
         // Load from cache
-
         newHomeScreenModel =
             NewHomeScreenModel.fromJson(jsonDecode(cachedHomeScreenData));
 
         log("---------load from cache----------");
+
         return emit(HomeScreenLoaded(
           newHomeScreenModel: newHomeScreenModel,
           lastPlayedSongList: lastplayed,

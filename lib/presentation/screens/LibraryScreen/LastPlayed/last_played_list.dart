@@ -27,7 +27,7 @@ class _LastPlayedListState extends State<LastPlayedList> {
   }
 
   featchLastplayed() async {
-    lastplayed = await LastPlayedRepo.fetchLastPlayed();
+    lastplayed = await LastPlayedRepo.fetchLastPlayed() ?? [];
     setState(() {});
   }
 

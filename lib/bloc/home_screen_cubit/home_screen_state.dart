@@ -9,7 +9,7 @@ final class HomeScreenLoading extends HomeScreenState {}
 
 final class HomeScreenLoaded extends HomeScreenState {
   final NewHomeScreenModel? newHomeScreenModel;
-  final List<Song> lastPlayedSongList;
+  final List<Song>? lastPlayedSongList;
 
   HomeScreenLoaded({
     required this.newHomeScreenModel,

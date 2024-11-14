@@ -57,57 +57,51 @@ class HomepageLastplayedWidget extends StatelessWidget {
                           final Song song = songList[index];
                           return Container(
                             child: ListTile(
-                                leading: ClipRRect(
-                                  borderRadius: BorderRadius.circular(5),
-                                  child: CachedNetworkImage(
-                                    imageUrl:
-                                        songList[index].image?.last.imageUrl ??
-                                            errorImage(),
-                                    placeholder: (context, url) {
-                                      // Placeholder logic
-                                      return songList[index].type == "Artist"
-                                          ? Image.asset(
-                                              "assets/images/artist.png")
-                                          : songList[index].type == "album"
-                                              ? Image.asset(
-                                                  "assets/images/album.png")
-                                              : Image.asset(
-                                                  "assets/images/song.png");
-                                    },
-                                    errorWidget: (context, url, error) {
-                                      // Error widget logic
-                                      return songList[index].type == "Artist"
-                                          ? Image.asset(
-                                              "assets/images/artist.png")
-                                          : songList[index].type == "album"
-                                              ? Image.asset(
-                                                  "assets/images/album.png")
-                                              : Image.asset(
-                                                  "assets/images/song.png");
-                                    },
-                                  ),
+                              leading: ClipRRect(
+                                borderRadius: BorderRadius.circular(5),
+                                child: CachedNetworkImage(
+                                  imageUrl:
+                                      songList[index].image?.last.imageUrl ??
+                                          errorImage(),
+                                  placeholder: (context, url) {
+                                    // Placeholder logic
+                                    return songList[index].type == "Artist"
+                                        ? artistImagePlaceholder()
+                                        : songList[index].type == "album"
+                                            ? albumImagePlaceholder()
+                                            : songImagePlaceholder();
+                                  },
+                                  errorWidget: (context, url, error) {
+                                    // Error widget logic
+                                    return songList[index].type == "Artist"
+                                        ? artistImagePlaceholder()
+                                        : songList[index].type == "album"
+                                            ? albumImagePlaceholder()
+                                            : songImagePlaceholder();
+                                  },
                                 ),
-                                title: Text(
-                                  songList[index].name ?? "NO",
-                                  maxLines: 1,
-                                ),
-                                subtitle: Text(
-                                  songList[index].album?.name ?? "No",
-                                  maxLines: 1,
-                                ),
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => PlayerScreen(
-                                        songs: songList,
-                                        initialIndex: index,
-                                      ),
+                              ),
+                              title: Text(
+                                songList[index].name ?? "NO",
+                                maxLines: 1,
+                              ),
+                              subtitle: Text(
+                                songList[index].album?.name ?? "No",
+                                maxLines: 1,
+                              ),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => PlayerScreen(
+                                      songs: songList,
+                                      initialIndex: index,
                                     ),
-                                  );
-                                },
-                                trailing: SongOptionsBottomSheet(
-                                    song: song)),
+                                  ),
+                                );
+                              },
+                              trailing: SongOptionsBottomSheet(song: song),
+                            ),
                           );
                         }),
                       ),

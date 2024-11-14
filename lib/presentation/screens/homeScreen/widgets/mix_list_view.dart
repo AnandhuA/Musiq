@@ -117,9 +117,9 @@ class MixListView extends StatelessWidget {
                                     imageUrl: tagMix.image?.last.imageUrl ??
                                         errorImage(),
                                     placeholder: (context, url) =>
-                                        Image.asset("assets/images/song.png"),
+                                       songImagePlaceholder(),
                                     errorWidget: (context, url, error) =>
-                                        Image.asset("assets/images/song.png"),
+                                       songImagePlaceholder(),
                                     fit: BoxFit.fitHeight,
                                   ),
                                 ),
