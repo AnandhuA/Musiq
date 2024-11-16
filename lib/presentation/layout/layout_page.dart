@@ -52,9 +52,13 @@ class LayOutPageState extends State<LayOutPage> {
 
   @override
   void initState() {
-    context.read<HomeScreenCubit>().loadData();
-    context.read<FavoriteBloc>().add(FeatchFavoriteSongEvent());
+    loadData();
     super.initState();
+  }
+
+  loadData() async {
+    await context.read<HomeScreenCubit>().loadData();
+    context.read<FavoriteBloc>().add(FeatchFavoriteSongEvent());
   }
 
   Future<void> _refreshData() async {

@@ -2,7 +2,7 @@ name: musiq
 description: "A Music app."
 publish_to: 'none' 
 
-version: 1.5.0
+version: 1.5.6
 
 environment:
   sdk: '>=3.4.3 <4.0.0'

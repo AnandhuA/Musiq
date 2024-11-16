@@ -248,7 +248,10 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                         );
                                         break;
                                       case 2:
-                                        // Handle "Share" action
+                                      showPlaylistSelectionBottomSheet(
+                                      context: context,
+                                      song: currentSong,
+                                    );
                                         break;
                                     }
                                   },

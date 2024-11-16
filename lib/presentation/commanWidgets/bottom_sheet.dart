@@ -1,4 +1,5 @@
 import 'package:audio_service/audio_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/bloc/favorite_bloc/favorite_bloc.dart';
@@ -9,6 +10,7 @@ import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/models/song_model/song.dart';
 import 'package:musiq/presentation/commanWidgets/favorite_icon.dart';
 import 'package:musiq/presentation/commanWidgets/snack_bar.dart';
+import 'package:musiq/presentation/screens/loginScreen/login_screen.dart';
 
 class SongOptionsBottomSheet extends StatelessWidget {
   final dynamic song;
@@ -41,42 +43,88 @@ class SongOptionsBottomSheet extends StatelessWidget {
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (context) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: const Icon(Icons.wrap_text),
-              title: const Text('Add to Queue'),
-              onTap: () {
-                _dismissKeyboard(context);
-                _addToQueue(context, audioHandler);
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: FavoriteIcon(song: song),
-              title: Text("Favorite"),
-              onTap: () {
-                _dismissKeyboard(context);
-                context.read<FavoriteBloc>().add(AddFavoriteEvent(song: song));
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.playlist_add),
-              title: const Text('Add to Playlist'),
-              onTap: () {
-                _dismissKeyboard(context);
-                Navigator.pop(context);
-                showPlaylistSelectionBottomSheet(context: context, song: song);
-              },
-            ),
-          ],
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 50),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.wrap_text),
+                title: const Text('Add to Queue'),
+                onTap: () {
+                  _dismissKeyboard(context);
+                  _addToQueue(context, audioHandler);
+                  Navigator.pop(context);
+                },
+              ),
+              BlocBuilder<FavoriteBloc, FavoriteState>(
+                builder: (context, state) {
+                  if (state is FeatchFavoriteSuccess) {
+                    bool isFav = state.favorites
+                        .any((favorite) => favorite.id == song.id);
+                    return ListTile(
+                      onTap: () {
+                        _dismissKeyboard(context);
+                        if (FirebaseAuth.instance.currentUser?.email == null) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LoginScreen(),
+                              ));
+                        } else {
+                          isFav
+                              ? context
+                                  .read<FavoriteBloc>()
+                                  .add(RemoveFavoriteEvent(song: song))
+                              : context
+                                  .read<FavoriteBloc>()
+                                  .add(AddFavoriteEvent(song: song));
+                        }
+                        Navigator.pop(context);
+                      },
+                      leading: isFav
+                          ? Icon(
+                              Icons.favorite,
+                              color:
+                                  AppColors.colorList[AppGlobals().colorIndex],
+                            )
+                          : Icon(Icons.favorite_border),
+                      title: Text(
+                          isFav ? "Remove from Favorite" : "Add to Favorite"),
+                    );
+                  } else {
+                    return ListTile(
+                      leading: FavoriteIcon(song: song),
+                      title: Text("Favorite"),
+                      onTap: () {
+                        _dismissKeyboard(context);
+                        context
+                            .read<FavoriteBloc>()
+                            .add(AddFavoriteEvent(song: song));
+                        Navigator.pop(context);
+                      },
+                    );
+                  }
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.playlist_add),
+                title: const Text('Add to Playlist'),
+                onTap: () {
+                  _dismissKeyboard(context);
+                  Navigator.pop(context);
+                  showPlaylistSelectionBottomSheet(
+                      context: context, song: song);
+                },
+              ),
+            ],
+          ),
         );
       },
     );
   }
 
+//--------add to queue funtion ------------
   void _addToQueue(BuildContext context, AudioHandler audioHandler) {
     if (AppGlobals().lastPlayedSongNotifier.value.isNotEmpty) {
       final audioHandler = AppGlobals().audioHandler;
@@ -96,6 +144,24 @@ class SongOptionsBottomSheet extends StatelessWidget {
         textColor: AppColors.black,
         duration: const Duration(seconds: 5),
       );
+    } else if (AppGlobals()
+            .lastPlayedSongNotifier
+            .value[AppGlobals().currentSongIndex]
+            .id ==
+        song.id) {
+      customSnackbar(
+        context: context,
+        message: "${song.name} is playing",
+        bgColor: AppColors.red,
+        textColor: AppColors.white,
+      );
+    } else {
+      customSnackbar(
+        context: context,
+        message: "Play a song",
+        bgColor: AppColors.red,
+        textColor: AppColors.white,
+      );
     }
   }
 
@@ -106,6 +172,7 @@ class SongOptionsBottomSheet extends StatelessWidget {
   }
 }
 
+//------play list bottom sheet-----------
 void showPlaylistSelectionBottomSheet({
   required BuildContext context,
   required Song song,
@@ -158,7 +225,7 @@ void showPlaylistSelectionBottomSheet({
                                 : playlistCover(playlist: playlist)
                             : SizedBox(),
                         title: Text(playlist.name),
-                         subtitle: Text("${playlist.songList.length}-Songs"),
+                        subtitle: Text("${playlist.songList.length}-Songs"),
                         onTap: () {
                           context.read<PlayListCubit>().addSongToPlayList(
                                 playlistModel: playlist,
@@ -186,4 +253,3 @@ void showPlaylistSelectionBottomSheet({
     },
   );
 }
-

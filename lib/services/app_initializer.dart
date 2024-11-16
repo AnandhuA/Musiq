@@ -20,17 +20,9 @@ import 'package:uni_links2/uni_links.dart';
 class AppInitializer {
   StreamSubscription? _linkSubscription;
 
-  Future<void> initializeApp(BuildContext context) async {
-    _initDeepLinkListener(context);
-    _registerHiveAdapters();
-    try {
-      await Hive.initFlutter();
-      await Hive.openBox<Song>('lastPlayedBox');
-      log("Hive initialized and box opened successfully.");
-    } catch (e) {
-      log("Initialization Error: $e");
-      return;
-    }
+  Future<void> initializeApp() async {
+    await _registerHiveAdapters();
+
     await _audioPlayerInit();
   }
 
@@ -48,7 +40,7 @@ class AppInitializer {
     );
   }
 
-  void _initDeepLinkListener(BuildContext context) {
+  void initDeepLinkListener(BuildContext context) {
     _linkSubscription = linkStream.listen((String? link) {
       if (link != null) {
         _handleDeepLink(context, link);
@@ -56,7 +48,7 @@ class AppInitializer {
     });
   }
 
-  void _registerHiveAdapters() {
+  _registerHiveAdapters() async {
     if (!Hive.isAdapterRegistered(SongAdapter().typeId)) {
       Hive.registerAdapter(SongAdapter());
     }

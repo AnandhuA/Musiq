@@ -55,7 +55,7 @@ class PlaylistSearchResult extends StatelessWidget {
                   errorWidget: (context, url, error) =>
                      songImagePlaceholder(),
                 ),
-                title: Text(song?.name ?? "No"),
+                title: Text(song?.name ?? "No",maxLines: 1,),
               );
             },
           );

@@ -8,10 +8,10 @@ import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/models/song_model/song.dart';
+import 'package:musiq/presentation/commanWidgets/bottom_sheet.dart';
 import 'package:musiq/presentation/commanWidgets/custom_app_bar.dart';
 import 'package:musiq/presentation/commanWidgets/dismissible_funtion.dart';
 import 'package:musiq/presentation/commanWidgets/empty_screen.dart';
-import 'package:musiq/presentation/commanWidgets/favorite_icon.dart';
 import 'package:musiq/bloc/favorite_bloc/favorite_bloc.dart';
 import 'package:musiq/presentation/screens/player_screen/bottomPlayer/bottom_player.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
@@ -93,9 +93,7 @@ class FavoriteScreen extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              trailing: FavoriteIcon(
-                                song: state.favorites[index],
-                              ),
+                              trailing: SongOptionsBottomSheet(song: song),
                               leading: Container(
                                 width: 50,
                                 height: 50,

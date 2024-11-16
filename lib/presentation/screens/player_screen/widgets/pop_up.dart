@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/bloc/featchSong/featch_song_cubit.dart';
+import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/models/song_model/all.dart';
 
@@ -11,8 +12,11 @@ Future<Widget?> popUpWiget({
   required BuildContext context,
   required List<All> list,
 }) async {
+  final theme = Theme.of(context);
   return showModalBottomSheet(
     context: context,
+    backgroundColor:
+        theme.brightness == Brightness.dark ? AppColors.black : AppColors.white,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),

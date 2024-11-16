@@ -10,36 +10,16 @@ import 'package:musiq/services/app_initializer.dart';
 import 'package:musiq/services/bloc_provider.dart';
 
 void main() async {
+  final AppInitializer _appInitializer = AppInitializer();
+
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await AppInitializer().requestStoragePermission();
+      await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  _appInitializer.initializeApp();
   runApp(const MyApp());
 }
 
-Future<void> requestStoragePermission() async {}
-
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  final AppInitializer _appInitializer = AppInitializer();
-
-  @override
-  void initState() {
-    super.initState();
-    _appInitializer.initializeApp(context);
-  }
-
-  @override
-  void dispose() {
-    _appInitializer.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return AppBlocProviders(
