@@ -7,6 +7,7 @@ import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/core/sized.dart';
+import 'package:musiq/presentation/commanWidgets/bottom_sheet.dart';
 import 'package:musiq/presentation/commanWidgets/empty_screen.dart';
 
 class AlbumSearchResult extends StatelessWidget {
@@ -22,8 +23,8 @@ class AlbumSearchResult extends StatelessWidget {
               color: AppColors.colorList[AppGlobals().colorIndex],
             ),
           );
-        } else if (state is SearchErrorState){
-           return Center(
+        } else if (state is SearchErrorState) {
+          return Center(
             child: emptyScreen(
               context: context,
               text1: "show",
@@ -34,8 +35,7 @@ class AlbumSearchResult extends StatelessWidget {
               size3: 20,
             ),
           );
-        }
-        else if (state is AlbumSearchState) {
+        } else if (state is AlbumSearchState) {
           return ListView.separated(
             padding: EdgeInsets.only(bottom: 100),
             separatorBuilder: (context, index) => AppSpacing.height20,
@@ -51,12 +51,15 @@ class AlbumSearchResult extends StatelessWidget {
                 },
                 leading: CachedNetworkImage(
                   imageUrl: song?.image?.last.imageUrl ?? errorImage(),
-                  placeholder: (context, url) =>
-                     songImagePlaceholder(),
-                  errorWidget: (context, url, error) =>
-                      songImagePlaceholder(),
+                  placeholder: (context, url) => songImagePlaceholder(),
+                  errorWidget: (context, url, error) => songImagePlaceholder(),
                 ),
-                title: Text(song?.name ?? "No"),
+                title: Text(
+                  song?.name ?? "No",
+                  maxLines: 1,
+                ),
+                
+                trailing: song?.type == "song"?SongOptionsBottomSheet(song: song):null,
               );
             },
           );

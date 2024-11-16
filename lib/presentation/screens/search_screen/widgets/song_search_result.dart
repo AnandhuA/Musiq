@@ -63,26 +63,27 @@ class SongSearchResult extends StatelessWidget {
                       ],
                     )),
                 child: ListTile(
-                  onTap: () {
-                    context.read<FeatchSongCubit>().fetchData(
-                        type: song.type ?? "",
-                        id: song.id ?? "",
-                        imageUrl: song.image?.last.imageUrl ?? errorImage());
-                  },
-                  leading: CachedNetworkImage(
-                    imageUrl: song.image?.last.imageUrl ?? errorImage(),
-                    placeholder: (context, url) => songImagePlaceholder(),
-                    errorWidget: (context, url, error) =>
-                        songImagePlaceholder(),
-                  ),
-                  title: Text(song.name ?? "No"),
-                  subtitle: Text(
-                    song.album?.name ?? "no",
-                    maxLines: 1,
-                  ),
-                  trailing:
-                        SongOptionsBottomSheet(song: song)
-                ),
+                    onTap: () {
+                      context.read<FeatchSongCubit>().fetchData(
+                          type: song.type ?? "",
+                          id: song.id ?? "",
+                          imageUrl: song.image?.last.imageUrl ?? errorImage());
+                    },
+                    leading: CachedNetworkImage(
+                      imageUrl: song.image?.last.imageUrl ?? errorImage(),
+                      placeholder: (context, url) => songImagePlaceholder(),
+                      errorWidget: (context, url, error) =>
+                          songImagePlaceholder(),
+                    ),
+                    title: Text(
+                      song.name ?? "No",
+                      maxLines: 1,
+                    ),
+                    subtitle: Text(
+                      song.album?.name ?? "no",
+                      maxLines: 1,
+                    ),
+                    trailing: SongOptionsBottomSheet(song: song)),
               );
             },
           );

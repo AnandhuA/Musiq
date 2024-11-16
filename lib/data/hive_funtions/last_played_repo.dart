@@ -7,7 +7,7 @@ class LastPlayedRepo {
 //-------  add last played song in hive local data base----
   static Future<void> addToLastPlayedSong(Song song) async {
     try {
-      final box = Hive.box<Song>('lastPlayedBox');
+      final box = await Hive.box<Song>('lastPlayedBox');
 
       final existingSongIndex =
           box.values.toList().indexWhere((s) => s.id == song.id);
@@ -30,7 +30,7 @@ class LastPlayedRepo {
     }
   }
 
-// ------- featch last played song fron hive data base -------
+// -------  last played song fron hive data base -------
   static Future<List<Song>?> fetchLastPlayed() async {
     List<Song>? lastPlayedSongs;
 
@@ -52,7 +52,7 @@ class LastPlayedRepo {
 //---- clear last played section --------
   static Future<void> clearLastPlayedSongs() async {
     try {
-      final box = Hive.box<Song>('lastPlayedBox');
+      final box = await Hive.box<Song>('lastPlayedBox');
 
       await box.clear();
       log("All last played songs cleared.");

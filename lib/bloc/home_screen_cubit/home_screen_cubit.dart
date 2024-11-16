@@ -20,7 +20,6 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? cachedHomeScreenData =
         await prefs.getString('homeScreenData');
-
     final String? lastUpdated = await prefs.getString('lastUpdated');
 
     final DateTime now = await DateTime.now();
@@ -55,7 +54,6 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
       final jsonData = jsonDecode(data.body);
 
       newHomeScreenModel = NewHomeScreenModel.fromJson(jsonData);
-      log("-----------${newHomeScreenModel.songdata!.albums!.data!.first.image!.last.imageUrl}");
 
       // Cache the newHomeScreenModel
       prefs.setString('homeScreenData', data.body);

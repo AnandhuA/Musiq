@@ -33,4 +33,11 @@ class PlayListCubit extends Cubit<PlayListState> {
     await PlaylistRepo.deletePlaylist(playlist.name);
     featchPlayList();
   }
+
+  void removeSongFromPlayList(
+      {required PlaylistModelHive playlist, required Song song}) async {
+    emit(PlayListLoadingState());
+    await PlaylistRepo.removeSongFromPlaylist(playlist.name, song);
+    featchPlayList();
+  }
 }

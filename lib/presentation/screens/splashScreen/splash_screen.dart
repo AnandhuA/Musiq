@@ -1,9 +1,15 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:lottie/lottie.dart';
 import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/data/shared_preference.dart';
+import 'package:musiq/models/song_model/song.dart';
 import 'package:musiq/presentation/layout/layout_page.dart';
+import 'package:musiq/services/app_initializer.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -38,7 +44,14 @@ class _SplashScreenState extends State<SplashScreen> {
     AppGlobals().setColorIndex(await SharedPreference.getColorIndex() ?? 0);
     AppGlobals()
         .setUserLoggedInStatus(FirebaseAuth.instance.currentUser?.email);
-
+    await Hive.initFlutter();
+    try {
+      await Hive.openBox<Song>('lastPlayedBox');
+    } catch (e) {
+      log("-------Initialization Error: $e");
+      Fluttertoast.showToast(msg: "Initialization Error: $e");
+    }
+    AppInitializer().requestStoragePermission();
     if (!mounted) return;
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(

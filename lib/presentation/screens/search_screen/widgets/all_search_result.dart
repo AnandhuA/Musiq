@@ -119,8 +119,8 @@ class AllSearchResult extends StatelessWidget {
                 placeholder: (context, url) => songImagePlaceholder(),
                 errorWidget: (context, url, error) => songImagePlaceholder(),
               ),
-              title: Text(result.title ?? "No Title"),
-              subtitle: Text(result.description ?? ""),
+              title: Text(result.title ?? "No Title",maxLines: 1,),
+              subtitle: Text(result.description ?? "",maxLines: 1,),
              
             );
           },
