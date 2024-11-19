@@ -63,9 +63,9 @@ Widget playlistCover({required PlaylistModelHive playlist}) {
         ? GridView.builder(
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 2,
-              mainAxisSpacing: 2,
+              crossAxisCount: 1,
+              crossAxisSpacing: 1,
+              mainAxisSpacing: 1,
             ),
             itemCount: 4,
             itemBuilder: (context, index) {

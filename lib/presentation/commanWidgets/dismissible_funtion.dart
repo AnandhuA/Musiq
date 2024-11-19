@@ -42,7 +42,6 @@ Future<bool?> reusableConfirmDismiss({
       message: "${song.name} added to queue",
       bgColor: AppColors.white,
       textColor: AppColors.black,
-      duration: Duration(seconds: 5),
     );
 
     return true;

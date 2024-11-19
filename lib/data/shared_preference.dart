@@ -28,7 +28,7 @@ class SharedPreference {
     final index = sharedPref.getInt(color);
     return index;
   }
-//-----------// This removes all the stored preferences ----------------
+//----------- This removes all the stored preferences ----------------
   static Future<void> clearAllPreferences() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear(); 

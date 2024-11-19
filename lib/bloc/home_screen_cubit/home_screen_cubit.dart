@@ -6,6 +6,7 @@ import 'package:meta/meta.dart';
 import 'package:musiq/data/hive_funtions/last_played_repo.dart';
 import 'package:musiq/data/hive_funtions/playlist_repo.dart';
 import 'package:musiq/data/savan_2.0.dart';
+import 'package:musiq/data/yt_services/youtube_service.dart';
 import 'package:musiq/models/home_screen_models/newHomeScreenModel.dart';
 import 'package:musiq/models/playlist_model_hive/playlist_model.dart';
 import 'package:musiq/models/song_model/song.dart';
@@ -18,6 +19,8 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
 
   Future<void> loadData() async {
     emit(HomeScreenLoading());
+    final YouTubeServices ytService = YouTubeServices.instance;
+
     final List<Song>? lastplayed = await LastPlayedRepo.fetchLastPlayed();
     final List<PlaylistModelHive>? playlist =
         await PlaylistRepo.fetchPlaylists();
@@ -31,6 +34,8 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
 
     NewHomeScreenModel? newHomeScreenModel;
 
+    final Map<String, List> ytData = await ytService.getMusicHome();
+    log("ytdat ::::::${ytData} :::::::::::::");
     if (lastUpdated != null) {
       final DateTime lastUpdateDate = DateTime.parse(lastUpdated);
 
