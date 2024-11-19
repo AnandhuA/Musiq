@@ -4,8 +4,10 @@ import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:musiq/data/hive_funtions/last_played_repo.dart';
+import 'package:musiq/data/hive_funtions/playlist_repo.dart';
 import 'package:musiq/data/savan_2.0.dart';
 import 'package:musiq/models/home_screen_models/newHomeScreenModel.dart';
+import 'package:musiq/models/playlist_model_hive/playlist_model.dart';
 import 'package:musiq/models/song_model/song.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,6 +19,8 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
   Future<void> loadData() async {
     emit(HomeScreenLoading());
     final List<Song>? lastplayed = await LastPlayedRepo.fetchLastPlayed();
+    final List<PlaylistModelHive>? playlist =
+        await PlaylistRepo.fetchPlaylists();
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? cachedHomeScreenData =
         await prefs.getString('homeScreenData');
@@ -42,6 +46,7 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
         return emit(HomeScreenLoaded(
           newHomeScreenModel: newHomeScreenModel,
           lastPlayedSongList: lastplayed,
+          playList: playlist,
         ));
       }
     }
@@ -70,6 +75,7 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
     return emit(HomeScreenLoaded(
       newHomeScreenModel: newHomeScreenModel,
       lastPlayedSongList: lastplayed,
+      playList: playlist,
     ));
   }
 }

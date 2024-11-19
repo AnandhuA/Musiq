@@ -222,7 +222,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                     filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
                     child: Padding(
                       padding: EdgeInsets.symmetric(
-                          horizontal: isMobile(context) ? 10 : 100),
+                          horizontal: isMobile(context) ? 10 : 50),
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
@@ -248,10 +248,10 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                         );
                                         break;
                                       case 2:
-                                      showPlaylistSelectionBottomSheet(
-                                      context: context,
-                                      song: currentSong,
-                                    );
+                                        showPlaylistSelectionBottomSheet(
+                                          context: context,
+                                          song: currentSong,
+                                        );
                                         break;
                                     }
                                   },
@@ -275,7 +275,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                               height: screenHeight * 0.3,
                               width: imageSize,
                               margin:
-                                  EdgeInsets.all(isMobile(context) ? 20 : 100),
+                                  EdgeInsets.all(isMobile(context) ? 20 : 20),
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                   image: CachedNetworkImageProvider(
@@ -293,7 +293,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                             Text(
                               currentSong.name ?? "NO",
                               style: TextStyle(
-                                fontSize: isMobile(context) ? 35 : 50,
+                                fontSize: isMobile(context) ? 35 : 30,
                               ),
                               maxLines: 1,
                               overflow: TextOverflow.fade,
