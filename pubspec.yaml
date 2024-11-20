@@ -18,10 +18,8 @@ dependencies:
   firebase_storage: ^12.1.1
   http: ^1.2.2
   audio_metadata_reader: ^0.0.6
-  
   bloc: ^8.1.4
   audio_video_progress_bar: ^2.0.3
-  shimmer: ^3.0.0
   shared_preferences: ^2.2.3
   lottie: ^3.1.2
   cloud_firestore: ^5.1.0
@@ -37,18 +35,24 @@ dependencies:
   hive_generator: ^2.0.1
   just_audio: ^0.9.40
   just_audio_windows: ^0.2.2
-  carousel_slider: ^5.0.0
   fluttertoast: ^8.2.8
   package_info_plus: ^8.1.0
   permission_handler: ^11.3.1
   youtube_explode_dart: ^2.3.6
+  flutter_native_splash: ^2.4.1
   
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: "^0.13.1"
+  flutter_launcher_icons: ^0.14.1
   build_runner: ^2.4.11
+
+flutter_native_splash:
+  # color: "#ffffff" # Background color
+  image: assets/logo/music.png
+  android: true
+  ios: true
   
 flutter:
 

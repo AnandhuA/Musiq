@@ -34,9 +34,19 @@ android {
         versionName = flutterVersionName
     }
 
+  signingConfigs {
+        release {
+            keyAlias 'key0'
+            keyPassword 'anandhu'
+            storeFile file('C:/Users/anand/Desktop/My/Musiq/android/app/key/musiq_key.jks')
+            storePassword 'anandhu'
+        }
+    }
+
 
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
