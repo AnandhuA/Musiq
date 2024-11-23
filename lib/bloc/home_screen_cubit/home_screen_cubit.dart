@@ -6,7 +6,6 @@ import 'package:meta/meta.dart';
 import 'package:musiq/data/hive_funtions/last_played_repo.dart';
 import 'package:musiq/data/hive_funtions/playlist_repo.dart';
 import 'package:musiq/data/savan_2.0.dart';
-import 'package:musiq/data/yt_services/youtube_service.dart';
 import 'package:musiq/models/home_screen_models/newHomeScreenModel.dart';
 import 'package:musiq/models/playlist_model_hive/playlist_model.dart';
 import 'package:musiq/models/song_model/song.dart';
@@ -19,7 +18,7 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
 
   Future<void> loadData() async {
     emit(HomeScreenLoading());
-    final YouTubeServices ytService = YouTubeServices.instance;
+    // final YouTubeServices ytService = YouTubeServices.instance;
 
     final List<Song>? lastplayed = await LastPlayedRepo.fetchLastPlayed();
     final List<PlaylistModelHive>? playlist =
@@ -34,8 +33,8 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
 
     NewHomeScreenModel? newHomeScreenModel;
 
-    final Map<String, List> ytData = await ytService.getMusicHome();
-    log("ytdat ::::::${ytData} :::::::::::::");
+    // final Map<String, List> ytData = await ytService.getMusicHome();
+    // log("ytdat ::::::${ytData} :::::::::::::");
     if (lastUpdated != null) {
       final DateTime lastUpdateDate = DateTime.parse(lastUpdated);
 
@@ -64,23 +63,30 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
       final jsonData = jsonDecode(data.body);
 
       newHomeScreenModel = NewHomeScreenModel.fromJson(jsonData);
+      // Cache the last update date
+      prefs.setString('lastUpdated', today.toIso8601String());
+      prefs.setString('homeScreenData', data.body);
+      // Emit the loaded state
+      log("---------load from response ----------");
+      return emit(HomeScreenLoaded(
+        newHomeScreenModel: newHomeScreenModel,
+        lastPlayedSongList: lastplayed,
+        playList: playlist,
+      ));
 
       // Cache the newHomeScreenModel
-      prefs.setString('homeScreenData', data.body);
     } else if (cachedHomeScreenData != null) {
       newHomeScreenModel =
           NewHomeScreenModel.fromJson(jsonDecode(cachedHomeScreenData));
+      return emit(HomeScreenLoaded(
+        newHomeScreenModel: newHomeScreenModel,
+        lastPlayedSongList: lastplayed,
+        playList: playlist,
+      ));
+    } else if (data != null) {
+      emit(HomeScreenError(error: "status code${data.statusCode}"));
+    } else {
+      emit(HomeScreenError(error: "server error"));
     }
-
-    // Cache the last update date
-    prefs.setString('lastUpdated', today.toIso8601String());
-
-    // Emit the loaded state
-    log("---------load from response ----------");
-    return emit(HomeScreenLoaded(
-      newHomeScreenModel: newHomeScreenModel,
-      lastPlayedSongList: lastplayed,
-      playList: playlist,
-    ));
   }
 }

@@ -6,10 +6,13 @@ import 'package:musiq/core/api_urls.dart';
 class Saavan2 {
 //------- ---------- featch home page data -------------
   static Future<http.Response?> featchHomeScreenModel() async {
+    log("message");
     try {
       final responce = await http.get(Uri.parse(ApiUrls.homeData));
+      log("-----------${responce.body}");
       return responce;
     } catch (e) {
+      log("$e");
       return null;
     }
   }
