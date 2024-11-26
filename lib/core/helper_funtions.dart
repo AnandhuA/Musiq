@@ -51,7 +51,6 @@ class StatusCodeHandler {
   }
 }
 
-
 Widget playlistCover({required PlaylistModelHive playlist}) {
   return Container(
     width: 60,
@@ -63,7 +62,7 @@ Widget playlistCover({required PlaylistModelHive playlist}) {
         ? GridView.builder(
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 1,
+              crossAxisCount: 2,
               crossAxisSpacing: 1,
               mainAxisSpacing: 1,
             ),

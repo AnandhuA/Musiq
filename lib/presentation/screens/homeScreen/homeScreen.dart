@@ -4,6 +4,7 @@ import 'package:musiq/bloc/home_screen_cubit/home_screen_cubit.dart';
 import 'package:musiq/presentation/commanWidgets/empty_screen.dart';
 import 'package:musiq/presentation/screens/homeScreen/widgets/homepage_horizontal_listview.dart';
 import 'package:musiq/presentation/screens/homeScreen/widgets/homepage_lastplayed_widget.dart';
+import 'package:musiq/presentation/screens/homeScreen/widgets/homepage_playlist_widget.dart';
 import 'package:musiq/presentation/screens/homeScreen/widgets/mix_list_view.dart';
 
 class Homescreen extends StatelessWidget {
@@ -30,6 +31,7 @@ class Homescreen extends StatelessWidget {
                 HomepageLastplayedWidget(
                   songList: state.lastPlayedSongList ?? [],
                 ),
+                HomepagePlaylistWidget(playlist: state.playList ?? []),
                 Expanded(
                   child: EmptyScreen(
                     text1: "Oops!",
@@ -49,6 +51,7 @@ class Homescreen extends StatelessWidget {
                   HomepageLastplayedWidget(
                     songList: state.lastPlayedSongList ?? [],
                   ),
+                  HomepagePlaylistWidget(playlist: state.playList ?? []),
                   HomepageHorizontalListview(
                       sectionTitle:
                           state.newHomeScreenModel?.songdata?.trending?.title ??
