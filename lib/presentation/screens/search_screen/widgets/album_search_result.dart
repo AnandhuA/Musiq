@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:musiq/bloc/featchSong/featch_song_cubit.dart';
+import 'package:musiq/bloc/FeatchSong/fetch_song_cubit.dart';
 import 'package:musiq/bloc/Search/search_cubit.dart';
 import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/core/sized.dart';
@@ -16,7 +16,7 @@ class AlbumSearchResult extends StatelessWidget {
     return BlocBuilder<SearchCubit, SearchState>(
       builder: (context, state) {
         if (state is SearchLoadingState) {
-          return  EmptyScreen(
+          return EmptyScreen(
             text1: "wait",
             size1: 15,
             text2: "Song",
@@ -28,7 +28,6 @@ class AlbumSearchResult extends StatelessWidget {
         } else if (state is SearchErrorState) {
           return Center(
             child: EmptyScreen(
-          
               text1: "show",
               size1: 15,
               text2: "Nothing",
@@ -46,7 +45,7 @@ class AlbumSearchResult extends StatelessWidget {
               final song = state.model.data?.results?[index];
               return ListTile(
                 onTap: () {
-                  context.read<FeatchSongCubit>().fetchData(
+                  context.read<FetchSongCubit>().fetchData(
                       type: song?.type ?? "",
                       id: song?.id ?? "",
                       imageUrl: song?.image?.last.imageUrl ?? errorImage());
@@ -60,14 +59,14 @@ class AlbumSearchResult extends StatelessWidget {
                   song?.name ?? "No",
                   maxLines: 1,
                 ),
-                
-                trailing: song?.type == "song"?SongOptionsBottomSheet(song: song):null,
+                trailing: song?.type == "song"
+                    ? SongOptionsBottomSheet(song: song)
+                    : null,
               );
             },
           );
         }
         return EmptyScreen(
-          
           text1: "show",
           size1: 15,
           text2: "Nothing",

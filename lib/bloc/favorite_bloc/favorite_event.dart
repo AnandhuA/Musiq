@@ -3,7 +3,7 @@ part of 'favorite_bloc.dart';
 @immutable
 sealed class FavoriteEvent {}
 
-final class FeatchFavoriteSongEvent extends FavoriteEvent {}
+final class FetchFavoriteSongEvent extends FavoriteEvent {}
 
 final class AddFavoriteEvent extends FavoriteEvent {
   final Song song;

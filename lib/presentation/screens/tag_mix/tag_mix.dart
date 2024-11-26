@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:musiq/bloc/FeatchSong/fetch_song_cubit.dart';
 import 'package:musiq/bloc/Search/search_cubit.dart';
-import 'package:musiq/bloc/featchSong/featch_song_cubit.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/helper_funtions.dart';
@@ -132,7 +132,7 @@ class TagMix extends StatelessWidget {
                             final song = state.model.data?.results?[index];
                             return GestureDetector(
                               onTap: () {
-                                context.read<FeatchSongCubit>().fetchData(
+                                context.read<FetchSongCubit>().fetchData(
                                     type: song?.type ?? "",
                                     id: song?.id ?? "",
                                     imageUrl: song?.image?.last.imageUrl ??

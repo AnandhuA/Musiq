@@ -7,8 +7,8 @@ final class PlayListInitial extends PlayListState {}
 
 final class PlayListLoadingState extends PlayListState {}
 
-final class FeatchPlayListSuccessState extends PlayListState {
+final class FetchPlayListSuccessState extends PlayListState {
   final List<PlaylistModelHive> playlistList;
 
-  FeatchPlayListSuccessState({required this.playlistList});
+  FetchPlayListSuccessState({required this.playlistList});
 }

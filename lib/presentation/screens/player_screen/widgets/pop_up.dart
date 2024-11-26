@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:musiq/bloc/featchSong/featch_song_cubit.dart';
+import 'package:musiq/bloc/FeatchSong/fetch_song_cubit.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/models/song_model/all.dart';
@@ -49,7 +49,7 @@ Future<Widget?> popUpWiget({
             return GestureDetector(
               onTap: () {
                 log("Image URL: $imageUrl");
-                context.read<FeatchSongCubit>().featchArtistSongs(
+                context.read<FetchSongCubit>().FetchArtistSongs(
                     id: list[index].id ?? "0",
                     imageUrl: imageUrl ?? errorImage());
               },

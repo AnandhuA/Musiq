@@ -6,7 +6,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
-import 'package:musiq/bloc/featchSong/featch_song_cubit.dart';
+import 'package:musiq/bloc/FeatchSong/fetch_song_cubit.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/helper_funtions.dart';
@@ -234,7 +234,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                     switch (value) {
                                       case 0:
                                         context
-                                            .read<FeatchSongCubit>()
+                                            .read<FetchSongCubit>()
                                             .fetchAlbum(
                                                 id: currentSong.album?.id ?? "",
                                                 imageUrl: currentSong

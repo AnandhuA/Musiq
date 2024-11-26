@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:musiq/bloc/featchSong/featch_song_cubit.dart';
+import 'package:musiq/bloc/FeatchSong/fetch_song_cubit.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/helper_funtions.dart';
 
@@ -23,7 +23,7 @@ class ArtistHorizontalListview extends StatelessWidget {
           log("${data.id}");
           return GestureDetector(
             onTap: () {
-              context.read<FeatchSongCubit>().fetchData(
+              context.read<FetchSongCubit>().fetchData(
                     type: data.type ?? "",
                     id: data.id ?? "0",
                     imageUrl: (data.image != null && data.image!.isNotEmpty)

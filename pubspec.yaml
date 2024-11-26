@@ -62,6 +62,7 @@ flutter:
     - assets/images/
     - assets/animations/
     - assets/logo/
+    - assets/local_data/
 
   fonts:
     - family: LED-Dot-Matrix

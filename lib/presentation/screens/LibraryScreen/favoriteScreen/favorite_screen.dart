@@ -41,7 +41,7 @@ class FavoriteScreen extends StatelessWidget {
       body: BlocBuilder<FavoriteBloc, FavoriteState>(
         builder: (context, state) {
           if (state is FavoriteLoading) {
-            return  EmptyScreen(
+            return EmptyScreen(
               text1: "wait",
               size1: 15,
               text2: "Favorite songs",
@@ -50,10 +50,9 @@ class FavoriteScreen extends StatelessWidget {
               size3: 20,
               isLoading: true,
             );
-          } else if (state is FeatchFavoriteSuccess) {
+          } else if (state is FetchFavoriteSuccess) {
             return state.favorites.isEmpty
                 ? EmptyScreen(
-                 
                     text1: "show",
                     size1: 15,
                     text2: "Nothing",
@@ -176,7 +175,6 @@ class FavoriteScreen extends StatelessWidget {
                   );
           } else {
             return EmptyScreen(
-            
               text1: "show",
               size1: 15,
               text2: "Nothing",

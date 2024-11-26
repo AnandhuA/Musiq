@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:meta/meta.dart';
 import 'package:musiq/data/hive_funtions/last_played_repo.dart';
 import 'package:musiq/data/hive_funtions/playlist_repo.dart';
@@ -19,7 +21,8 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
   Future<void> loadData() async {
     emit(HomeScreenLoading());
     // final YouTubeServices ytService = YouTubeServices.instance;
-
+    String jsonString =
+        await rootBundle.loadString('assets/local_data/sample.json');
     final List<Song>? lastplayed = await LastPlayedRepo.fetchLastPlayed();
     final List<PlaylistModelHive>? playlist =
         await PlaylistRepo.fetchPlaylists();
@@ -57,7 +60,7 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
 
     // If no cache or cache is outdated, fetch new data
 
-    final data = await Saavan2.featchHomeScreenModel();
+    final data = await Saavan2.fetchHomeScreenModel();
 
     if (data != null && data.statusCode == 200) {
       final jsonData = jsonDecode(data.body);
@@ -76,6 +79,7 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
 
       // Cache the newHomeScreenModel
     } else if (cachedHomeScreenData != null) {
+      Fluttertoast.showToast(msg: "Load from cache");
       newHomeScreenModel =
           NewHomeScreenModel.fromJson(jsonDecode(cachedHomeScreenData));
       return emit(HomeScreenLoaded(
@@ -84,16 +88,22 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
         playList: playlist,
       ));
     } else if (data != null) {
-      emit(HomeScreenError(
-        error: "${data.statusCode}",
-        playList: playlist,
+      final Map<String, dynamic> jsonResponse = jsonDecode(jsonString);
+      newHomeScreenModel = NewHomeScreenModel.fromJson(jsonResponse);
+      Fluttertoast.showToast(msg: "error::${data.statusCode}");
+      return emit(HomeScreenLoaded(
+        newHomeScreenModel: newHomeScreenModel,
         lastPlayedSongList: lastplayed,
+        playList: playlist,
       ));
     } else {
-      emit(HomeScreenError(
-        error: "server error",
-        playList: playlist,
+      final Map<String, dynamic> jsonResponse = jsonDecode(jsonString);
+      newHomeScreenModel = NewHomeScreenModel.fromJson(jsonResponse);
+      Fluttertoast.showToast(msg: "Server Error");
+      return emit(HomeScreenLoaded(
+        newHomeScreenModel: newHomeScreenModel,
         lastPlayedSongList: lastplayed,
+        playList: playlist,
       ));
     }
   }

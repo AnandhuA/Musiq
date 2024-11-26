@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:musiq/bloc/featchSong/featch_song_cubit.dart';
+import 'package:musiq/bloc/FeatchSong/fetch_song_cubit.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/helper_funtions.dart';
@@ -122,42 +122,43 @@ class ArtistScreen extends StatelessWidget {
                               if (index >= model.data!.topSongs!.length) {
                                 return SizedBox();
                               }
-                                final Song song = model.data!.topSongs![index];
+                              final Song song = model.data!.topSongs![index];
                               return Container(
                                 child: ListTile(
-                                  leading: ClipRRect(
-                                    borderRadius: BorderRadius.circular(5),
-                                    child: CachedNetworkImage(
-                                      imageUrl: model.data!.topSongs![index]
-                                              .image?.last.imageUrl ??
-                                          errorImage(),
-                                      placeholder: (context, url) =>
-                                          songImagePlaceholder(),
-                                      errorWidget: (context, url, error) =>
-                                          songImagePlaceholder(),
+                                    leading: ClipRRect(
+                                      borderRadius: BorderRadius.circular(5),
+                                      child: CachedNetworkImage(
+                                        imageUrl: model.data!.topSongs![index]
+                                                .image?.last.imageUrl ??
+                                            errorImage(),
+                                        placeholder: (context, url) =>
+                                            songImagePlaceholder(),
+                                        errorWidget: (context, url, error) =>
+                                            songImagePlaceholder(),
+                                      ),
                                     ),
-                                  ),
-                                  title: Text(
-                                    model.data!.topSongs![index].name ?? "No",
-                                    maxLines: 1,
-                                  ),
-                                  subtitle: Text(
-                                    model.data!.topSongs![index].album?.name ??
-                                        "No",
-                                    maxLines: 1,
-                                  ),
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => PlayerScreen(
-                                            songs: model.data!.topSongs!,
-                                            initialIndex: index,
-                                          ),
-                                        ));
-                                  },
-                                  trailing: SongOptionsBottomSheet(song: song)
-                                ),
+                                    title: Text(
+                                      model.data!.topSongs![index].name ?? "No",
+                                      maxLines: 1,
+                                    ),
+                                    subtitle: Text(
+                                      model.data!.topSongs![index].album
+                                              ?.name ??
+                                          "No",
+                                      maxLines: 1,
+                                    ),
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => PlayerScreen(
+                                              songs: model.data!.topSongs!,
+                                              initialIndex: index,
+                                            ),
+                                          ));
+                                    },
+                                    trailing:
+                                        SongOptionsBottomSheet(song: song)),
                               );
                             }),
                           ),
@@ -189,7 +190,7 @@ class ArtistScreen extends StatelessWidget {
 
                         return GestureDetector(
                           onTap: () {
-                            context.read<FeatchSongCubit>().fetchData(
+                            context.read<FetchSongCubit>().fetchData(
                                   type: data.type ?? "",
                                   id: data.id ?? "0",
                                   imageUrl:
@@ -265,22 +266,20 @@ class ArtistScreen extends StatelessWidget {
                     ),
                   ),
                 GridView.builder(
-                  physics:
-                      NeverScrollableScrollPhysics(), 
-                  shrinkWrap:
-                      true, 
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
                     mainAxisSpacing: 10,
                     crossAxisSpacing: 10,
-                    childAspectRatio: 0.9, 
+                    childAspectRatio: 0.9,
                   ),
                   itemCount: model.data?.singles?.length ?? 0,
                   itemBuilder: (context, index) {
                     final song = model.data!.singles![index];
                     return GestureDetector(
                       onTap: () {
-                        context.read<FeatchSongCubit>().fetchData(
+                        context.read<FetchSongCubit>().fetchData(
                               type: song.type ?? "",
                               id: song.id ?? "0",
                               imageUrl:

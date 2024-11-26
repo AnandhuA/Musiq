@@ -11,20 +11,20 @@ part 'favorite_state.dart';
 class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
   List<Song> _favorites = [];
   FavoriteBloc() : super(FavoriteInitial()) {
-    on<FeatchFavoriteSongEvent>(_featchFavorite);
+    on<FetchFavoriteSongEvent>(_FetchFavorite);
     on<AddFavoriteEvent>(_addFavorite);
     on<RemoveFavoriteEvent>(_removeFavorite);
     on<SearchFavoriteEvent>(_searchFavorite);
     on<SortFavoriteEvent>(_sortFavorite);
   }
 
-  FutureOr<void> _featchFavorite(
-    FeatchFavoriteSongEvent event,
+  FutureOr<void> _FetchFavorite(
+    FetchFavoriteSongEvent event,
     Emitter<FavoriteState> emit,
   ) async {
     emit(FavoriteLoading());
     _favorites = await FavoriteSongRepo.fetchFavorites();
-    emit(FeatchFavoriteSuccess(favorites: _favorites));
+    emit(FetchFavoriteSuccess(favorites: _favorites));
   }
 
   FutureOr<void> _addFavorite(
@@ -34,7 +34,7 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
     emit(FavoriteLoading());
     _favorites.add(event.song);
     FavoriteSongRepo.addFavorite(song: event.song);
-    emit(FeatchFavoriteSuccess(favorites: _favorites));
+    emit(FetchFavoriteSuccess(favorites: _favorites));
   }
 
   FutureOr<void> _removeFavorite(
@@ -49,7 +49,7 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
       );
     }
 
-    emit(FeatchFavoriteSuccess(favorites: _favorites));
+    emit(FetchFavoriteSuccess(favorites: _favorites));
   }
 
   FutureOr<void> _searchFavorite(
@@ -63,7 +63,7 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
         .where((song) => song.name!.toLowerCase().contains(query))
         .toList();
 
-    emit(FeatchFavoriteSuccess(favorites: filteredFavorites));
+    emit(FetchFavoriteSuccess(favorites: filteredFavorites));
   }
 
   FutureOr<void> _sortFavorite(
@@ -87,6 +87,6 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
       });
     }
 
-    emit(FeatchFavoriteSuccess(favorites: _favorites));
+    emit(FetchFavoriteSuccess(favorites: _favorites));
   }
 }

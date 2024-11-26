@@ -13,10 +13,10 @@ final class FavoriteError extends FavoriteState {
   FavoriteError({required this.error});
 }
 
-final class FeatchFavoriteSuccess extends FavoriteState {
+final class FetchFavoriteSuccess extends FavoriteState {
   final List<Song> favorites;
 
-  FeatchFavoriteSuccess({required this.favorites});
+  FetchFavoriteSuccess({required this.favorites});
 }
 
 final class AddFavoriteSuccess extends FavoriteState {}

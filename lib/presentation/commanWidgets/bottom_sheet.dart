@@ -60,7 +60,7 @@ class SongOptionsBottomSheet extends StatelessWidget {
               ),
               BlocBuilder<FavoriteBloc, FavoriteState>(
                 builder: (context, state) {
-                  if (state is FeatchFavoriteSuccess) {
+                  if (state is FetchFavoriteSuccess) {
                     bool isFav = state.favorites
                         .any((favorite) => favorite.id == song.id);
                     return ListTile(
@@ -179,7 +179,7 @@ void showPlaylistSelectionBottomSheet({
   required Song song,
 }) {
   final playListCubit = context.read<PlayListCubit>();
-  playListCubit.featchPlayList();
+  playListCubit.FetchPlayList();
   final theme = Theme.of(context);
 
   showModalBottomSheet(
@@ -202,7 +202,7 @@ void showPlaylistSelectionBottomSheet({
               size3: 20,
               isLoading: true,
             );
-          } else if (state is FeatchPlayListSuccessState) {
+          } else if (state is FetchPlayListSuccessState) {
             final playlists = state.playlistList;
 
             return Column(

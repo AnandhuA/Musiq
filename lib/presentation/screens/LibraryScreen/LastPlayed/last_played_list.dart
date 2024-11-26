@@ -23,11 +23,11 @@ class _LastPlayedListState extends State<LastPlayedList> {
   List<Song> lastplayed = [];
   @override
   void initState() {
-    featchLastplayed();
+    FetchLastplayed();
     super.initState();
   }
 
-  featchLastplayed() async {
+  FetchLastplayed() async {
     lastplayed = await LastPlayedRepo.fetchLastPlayed() ?? [];
     setState(() {});
   }
@@ -58,7 +58,6 @@ class _LastPlayedListState extends State<LastPlayedList> {
         children: [
           lastplayed.isEmpty
               ? EmptyScreen(
-                  
                   text1: "show",
                   size1: 15,
                   text2: "Nothing",

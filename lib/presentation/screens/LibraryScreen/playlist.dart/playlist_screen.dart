@@ -48,7 +48,7 @@ class PlaylistScreen extends StatelessWidget {
                 child: BlocBuilder<PlayListCubit, PlayListState>(
                   builder: (context, state) {
                     if (state is PlayListLoadingState) {
-                     EmptyScreen(
+                      EmptyScreen(
                         text1: "wait",
                         size1: 15,
                         text2: "playList",
@@ -57,7 +57,7 @@ class PlaylistScreen extends StatelessWidget {
                         size3: 20,
                         isLoading: true,
                       );
-                    } else if (state is FeatchPlayListSuccessState) {
+                    } else if (state is FetchPlayListSuccessState) {
                       return state.playlistList.isNotEmpty
                           ? ListView.separated(
                               separatorBuilder: (context, index) =>
@@ -112,7 +112,6 @@ class PlaylistScreen extends StatelessWidget {
                               },
                             )
                           : EmptyScreen(
-                           
                               text1: "show",
                               size1: 15,
                               text2: "empty",
@@ -122,7 +121,6 @@ class PlaylistScreen extends StatelessWidget {
                             );
                     }
                     return EmptyScreen(
-                
                       text1: "show",
                       size1: 15,
                       text2: "empty",
