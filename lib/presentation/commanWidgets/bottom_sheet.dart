@@ -193,7 +193,15 @@ void showPlaylistSelectionBottomSheet({
       return BlocBuilder<PlayListCubit, PlayListState>(
         builder: (context, state) {
           if (state is PlayListLoadingState) {
-            return const Center(child: CircularProgressIndicator());
+            return EmptyScreen(
+              text1: "wait",
+              size1: 15,
+              text2: "playList",
+              size2: 20,
+              text3: "loading",
+              size3: 20,
+              isLoading: true,
+            );
           } else if (state is FeatchPlayListSuccessState) {
             final playlists = state.playlistList;
 
@@ -246,8 +254,7 @@ void showPlaylistSelectionBottomSheet({
                             );
                           },
                         )
-                      : emptyScreen(
-                          context: context,
+                      : EmptyScreen(
                           text1: "show",
                           size1: 15,
                           text2: "empty",

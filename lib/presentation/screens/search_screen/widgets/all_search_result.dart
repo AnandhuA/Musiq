@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/bloc/featchSong/featch_song_cubit.dart';
 import 'package:musiq/bloc/Search/search_cubit.dart';
-import 'package:musiq/core/colors.dart';
-import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/models/global_search_model/result.dart';
 import 'package:musiq/presentation/commanWidgets/empty_screen.dart';
@@ -19,15 +17,19 @@ class AllSearchResult extends StatelessWidget {
     return BlocBuilder<SearchCubit, SearchState>(
       builder: (context, state) {
         if (state is SearchLoadingState) {
-          return Center(
-            child: CircularProgressIndicator(
-              color: AppColors.colorList[AppGlobals().colorIndex],
-            ),
+          return  EmptyScreen(
+            text1: "wait",
+            size1: 15,
+            text2: "Song",
+            size2: 20,
+            text3: "loading",
+            size3: 20,
+            isLoading: true,
           );
         } else if (state is SearchErrorState) {
           return Center(
-            child: emptyScreen(
-              context: context,
+            child: EmptyScreen(
+         
               text1: "show",
               size1: 15,
               text2: "Nothing",
@@ -73,8 +75,8 @@ class AllSearchResult extends StatelessWidget {
             ],
           );
         }
-        return emptyScreen(
-          context: context,
+        return EmptyScreen(
+         
           text1: "show",
           size1: 15,
           text2: "Nothing",

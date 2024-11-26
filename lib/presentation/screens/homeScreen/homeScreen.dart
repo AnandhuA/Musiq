@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/bloc/home_screen_cubit/home_screen_cubit.dart';
-import 'package:musiq/core/colors.dart';
-import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/presentation/commanWidgets/empty_screen.dart';
 import 'package:musiq/presentation/screens/homeScreen/widgets/homepage_horizontal_listview.dart';
 import 'package:musiq/presentation/screens/homeScreen/widgets/homepage_lastplayed_widget.dart';
@@ -17,22 +15,32 @@ class Homescreen extends StatelessWidget {
       body: BlocBuilder<HomeScreenCubit, HomeScreenState>(
         builder: (context, state) {
           if (state is HomeScreenLoading) {
-            return Center(
-              child: CircularProgressIndicator(
-                color: AppColors.colorList[AppGlobals().colorIndex],
-              ),
+            return EmptyScreen(
+              text1: "Show",
+              size1: 15,
+              text2: "Music",
+              size2: 20,
+              text3: "loading",
+              size3: 20,
+              isLoading: true,
             );
           } else if (state is HomeScreenError) {
-            return Center(
-              child: emptyScreen(
-                context: context,
-                text1: "show",
-                size1: 15,
-                text2: "Nothing",
-                size2: 20,
-                text3: "${state.error}",
-                size3: 20,
-              ),
+            return Column(
+              children: [
+                HomepageLastplayedWidget(
+                  songList: state.lastPlayedSongList ?? [],
+                ),
+                Expanded(
+                  child: EmptyScreen(
+                    text1: "Oops!",
+                    size1: 15,
+                    text2: "Something Wrong",
+                    size2: 20,
+                    text3: "status:${state.error}",
+                    size3: 20,
+                  ),
+                ),
+              ],
             );
           } else if (state is HomeScreenLoaded) {
             return SingleChildScrollView(
@@ -202,8 +210,7 @@ class Homescreen extends StatelessWidget {
               ),
             );
           }
-          return emptyScreen(
-            context: context,
+          return EmptyScreen(
             text1: "show",
             size1: 15,
             text2: "Nothing",

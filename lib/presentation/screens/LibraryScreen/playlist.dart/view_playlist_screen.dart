@@ -92,8 +92,7 @@ class _ViewPlaylistScreenState extends State<ViewPlaylistScreen> {
                       );
                     },
                   )
-                : emptyScreen(
-                    context: context,
+                : EmptyScreen(
                     text1: "show",
                     size1: 15,
                     text2: "Nothing",

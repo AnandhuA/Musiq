@@ -84,9 +84,17 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
         playList: playlist,
       ));
     } else if (data != null) {
-      emit(HomeScreenError(error: "status code${data.statusCode}"));
+      emit(HomeScreenError(
+        error: "${data.statusCode}",
+        playList: playlist,
+        lastPlayedSongList: lastplayed,
+      ));
     } else {
-      emit(HomeScreenError(error: "server error"));
+      emit(HomeScreenError(
+        error: "server error",
+        playList: playlist,
+        lastPlayedSongList: lastplayed,
+      ));
     }
   }
 }

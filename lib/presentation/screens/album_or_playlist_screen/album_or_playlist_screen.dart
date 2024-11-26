@@ -170,8 +170,8 @@ class _AlbumOrPlaylistScreenState extends State<AlbumOrPlaylistScreen> {
               ),
               AppSpacing.height30,
               songList.isEmpty
-                  ? emptyScreen(
-                      context: context,
+                  ? EmptyScreen(
+              
                       text1: "show",
                       size1: 15,
                       text2: "Nothing",

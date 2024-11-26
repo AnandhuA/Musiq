@@ -57,8 +57,8 @@ class _LastPlayedListState extends State<LastPlayedList> {
       body: Stack(
         children: [
           lastplayed.isEmpty
-              ? emptyScreen(
-                  context: context,
+              ? EmptyScreen(
+                  
                   text1: "show",
                   size1: 15,
                   text2: "Nothing",

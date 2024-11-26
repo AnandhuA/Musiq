@@ -8,6 +8,7 @@ import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/bloc/favorite_bloc/favorite_bloc.dart';
 import 'package:musiq/models/song_model/song.dart';
+import 'package:musiq/presentation/commanWidgets/empty_screen.dart';
 import 'package:musiq/presentation/screens/album_or_playlist_screen/album_or_playlist_screen.dart';
 import 'package:musiq/presentation/screens/artist/artist_screen.dart';
 import 'package:musiq/presentation/screens/homeScreen/homeScreen.dart';
@@ -80,10 +81,14 @@ class LayOutPageState extends State<LayOutPage> {
                 builder: (BuildContext context) {
                   return AlertDialog(
                     backgroundColor: Colors.transparent,
-                    content: Center(
-                      child: CircularProgressIndicator(
-                        color: AppColors.colorList[AppGlobals().colorIndex],
-                      ),
+                    content: EmptyScreen(
+                      text1: "wait",
+                      size1: 15,
+                      text2: "playList",
+                      size2: 20,
+                      text3: "loading",
+                      size3: 20,
+                      isLoading: true,
                     ),
                   );
                 },

@@ -106,10 +106,14 @@ class TagMix extends StatelessWidget {
                 child: BlocBuilder<SearchCubit, SearchState>(
                   builder: (context, state) {
                     if (state is SearchLoadingState) {
-                      return Center(
-                        child: CircularProgressIndicator(
-                          color: AppColors.colorList[AppGlobals().colorIndex],
-                        ),
+                      return EmptyScreen(
+                        text1: "wait",
+                        size1: 15,
+                        text2: "song",
+                        size2: 20,
+                        text3: "loading",
+                        size3: 20,
+                        isLoading: true,
                       );
                     } else if (state is PlayListSearchState) {
                       return Padding(
@@ -149,8 +153,7 @@ class TagMix extends StatelessWidget {
                         ),
                       );
                     }
-                    return emptyScreen(
-                      context: context,
+                    return EmptyScreen(
                       text1: "show",
                       size1: 15,
                       text2: "Nothing",
