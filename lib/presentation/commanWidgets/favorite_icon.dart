@@ -18,10 +18,10 @@ class FavoriteIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<FavoriteBloc, FavoriteState>(
       buildWhen: (previous, current) {
-        return current is FeatchFavoriteSuccess;
+        return current is FetchFavoriteSuccess;
       },
       builder: (context, state) {
-        if (state is FeatchFavoriteSuccess) {
+        if (state is FetchFavoriteSuccess) {
           bool isFav =
               state.favorites.any((favorite) => favorite.id == song.id);
 

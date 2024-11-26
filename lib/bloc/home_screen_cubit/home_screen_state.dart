@@ -10,16 +10,22 @@ final class HomeScreenLoading extends HomeScreenState {}
 final class HomeScreenLoaded extends HomeScreenState {
   final NewHomeScreenModel? newHomeScreenModel;
   final List<Song>? lastPlayedSongList;
+  final List<PlaylistModelHive>? playList;
 
-  HomeScreenLoaded({
-    required this.newHomeScreenModel,
-    required this.lastPlayedSongList,
-  });
+  HomeScreenLoaded(
+      {required this.newHomeScreenModel,
+      required this.lastPlayedSongList,
+      required this.playList});
 }
 
 final class HomeScreenError extends HomeScreenState {
   final String error;
+  final List<Song>? lastPlayedSongList;
+  final List<PlaylistModelHive>? playList;
 
-  HomeScreenError({required this.error});
-
+  HomeScreenError({
+    required this.error,
+    required this.lastPlayedSongList,
+    required this.playList,
+  });
 }

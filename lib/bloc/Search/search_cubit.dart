@@ -18,7 +18,7 @@ class SearchCubit extends Cubit<SearchState> {
 // ----- gobal search -------------
   void searchGobal({required String query}) async {
     emit(SearchLoadingState());
-    final Response? response = await Saavan2.featchglobalSearch(query: query);
+    final Response? response = await Saavan2.fetchglobalSearch(query: query);
     if (response != null && response.statusCode == 200) {
       final data = jsonDecode(response.body);
       final GlobalSearchModel model = GlobalSearchModel.fromJson(data);
@@ -34,7 +34,7 @@ class SearchCubit extends Cubit<SearchState> {
 // --------- search song --------------
   void searchSong({required String query}) async {
     emit(SearchLoadingState());
-    final Response? responce = await Saavan2.featchSearchSong(query: query);
+    final Response? responce = await Saavan2.fetchSearchSong(query: query);
     if (responce != null && responce.statusCode == 200) {
       final data = jsonDecode(responce.body);
       final SearchSongModel model = SearchSongModel.fromJson(data);
@@ -51,7 +51,7 @@ class SearchCubit extends Cubit<SearchState> {
 // ---------- search album -----------
   void searchAlbum({required String query}) async {
     emit(SearchLoadingState());
-    final Response? responce = await Saavan2.featchSearchAlbums(query: query);
+    final Response? responce = await Saavan2.fetchSearchAlbums(query: query);
     if (responce != null && responce.statusCode == 200) {
       final data = jsonDecode(responce.body);
       final SearchAlbumModel model = SearchAlbumModel.fromJson(data);
@@ -67,7 +67,7 @@ class SearchCubit extends Cubit<SearchState> {
 //--------------- search playList ----------
   void searchPlayList({required String query}) async {
     emit(SearchLoadingState());
-    final Response? responce = await Saavan2.featchSearchPlayList(query: query);
+    final Response? responce = await Saavan2.fetchSearchPlayList(query: query);
     if (responce != null && responce.statusCode == 200) {
       final data = jsonDecode(responce.body);
       final SearchPlayListModel model = SearchPlayListModel.fromJson(data);
@@ -82,7 +82,7 @@ class SearchCubit extends Cubit<SearchState> {
 
   void searchArtist({required String query}) async {
     emit(SearchLoadingState());
-    final Response? responce = await Saavan2.featchSearchArtists(query: query);
+    final Response? responce = await Saavan2.fetchSearchArtists(query: query);
     if (responce != null && responce.statusCode == 200) {
       final data = jsonDecode(responce.body);
       final SearchArtistModel model = SearchArtistModel.fromJson(data);

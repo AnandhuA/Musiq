@@ -17,8 +17,8 @@ class PrivacyAndPolicy extends StatelessWidget {
         ),
         title: Text("PrivacyAndPolicy"),
       ),
-      body: emptyScreen(
-        context: context,
+      body: EmptyScreen(
+   
         text1: "show",
         size1: 15,
         text2: "Nothing",

@@ -19,8 +19,8 @@ class AboutScreen extends StatelessWidget {
         ),
         title: Text("About"),
       ),
-      body: emptyScreen(
-        context: context,
+      body: EmptyScreen(
+   
         text1: "show",
         size1: 15,
         text2: "Nothing",

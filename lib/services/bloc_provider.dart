@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:musiq/bloc/featchSong/featch_song_cubit.dart';
+import 'package:musiq/bloc/FeatchSong/fetch_song_cubit.dart';
 import 'package:musiq/bloc/ThemeCubit/theme_cubit.dart';
 import 'package:musiq/bloc/Search/search_cubit.dart';
 import 'package:musiq/bloc/favorite_bloc/favorite_bloc.dart';
@@ -28,7 +28,7 @@ class AppBlocProviders extends StatelessWidget {
         BlocProvider(create: (context) => ProgressBarCubit()),
         BlocProvider(create: (context) => PlayAndPauseCubit()),
         BlocProvider(create: (context) => HomeScreenCubit()),
-        BlocProvider(create: (context) => FeatchSongCubit()),
+        BlocProvider(create: (context) => FetchSongCubit()),
         BlocProvider(create: (context) => SearchCubit()),
         BlocProvider(create: (context) => PlayListCubit()),
       ],

@@ -34,14 +34,15 @@ android {
         versionName = flutterVersionName
     }
 
-    signingConfigs {
+  signingConfigs {
         release {
-            keyAlias 'my-key-alias'
+            keyAlias 'key0'
             keyPassword 'anandhu'
-            storeFile file('C:/Users/anand/Desktop/My/Musiq/android/app/key/my-release-key.jks')
+            storeFile file('C:/Users/anand/Desktop/My/Musiq/android/app/key/musiq_key.jks')
             storePassword 'anandhu'
         }
     }
+
 
     buildTypes {
         release {

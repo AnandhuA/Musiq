@@ -19,8 +19,8 @@ class DownloadList extends StatelessWidget {
         ),
         title: Text("Downloads"),
       ),
-      body: emptyScreen(
-        context: context,
+      body: EmptyScreen(
+        
         text1: "show",
         size1: 15,
         text2: "Nothing",

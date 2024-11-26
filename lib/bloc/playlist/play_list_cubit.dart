@@ -9,16 +9,16 @@ part 'play_list_state.dart';
 class PlayListCubit extends Cubit<PlayListState> {
   PlayListCubit() : super(PlayListInitial());
 
-  void featchPlayList() async {
+  void FetchPlayList() async {
     emit(PlayListLoadingState());
     List<PlaylistModelHive> list = await PlaylistRepo.fetchPlaylists();
-    emit(FeatchPlayListSuccessState(playlistList: list));
+    emit(FetchPlayListSuccessState(playlistList: list));
   }
 
   void addPlaylist(PlaylistModelHive playList) async {
     emit(PlayListLoadingState());
     await PlaylistRepo.addPlaylist(playList);
-    featchPlayList();
+    FetchPlayList();
   }
 
   void addSongToPlayList({
@@ -31,13 +31,13 @@ class PlayListCubit extends Cubit<PlayListState> {
   void deletePlaylist({required PlaylistModelHive playlist}) async {
     emit(PlayListLoadingState());
     await PlaylistRepo.deletePlaylist(playlist.name);
-    featchPlayList();
+    FetchPlayList();
   }
 
   void removeSongFromPlayList(
       {required PlaylistModelHive playlist, required Song song}) async {
     emit(PlayListLoadingState());
     await PlaylistRepo.removeSongFromPlaylist(playlist.name, song);
-    featchPlayList();
+    FetchPlayList();
   }
 }

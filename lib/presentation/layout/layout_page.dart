@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:musiq/bloc/featchSong/featch_song_cubit.dart';
+import 'package:musiq/bloc/FeatchSong/fetch_song_cubit.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/bloc/favorite_bloc/favorite_bloc.dart';
 import 'package:musiq/models/song_model/song.dart';
+import 'package:musiq/presentation/commanWidgets/empty_screen.dart';
 import 'package:musiq/presentation/screens/album_or_playlist_screen/album_or_playlist_screen.dart';
 import 'package:musiq/presentation/screens/artist/artist_screen.dart';
 import 'package:musiq/presentation/screens/homeScreen/homeScreen.dart';
@@ -58,39 +59,43 @@ class LayOutPageState extends State<LayOutPage> {
 
   loadData() async {
     await context.read<HomeScreenCubit>().loadData();
-    context.read<FavoriteBloc>().add(FeatchFavoriteSongEvent());
+    context.read<FavoriteBloc>().add(FetchFavoriteSongEvent());
   }
 
   Future<void> _refreshData() async {
     context.read<HomeScreenCubit>().loadData();
-    context.read<FavoriteBloc>().add(FeatchFavoriteSongEvent());
+    context.read<FavoriteBloc>().add(FetchFavoriteSongEvent());
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ThemeCubit, ThemeState>(
       builder: (context, themeState) {
-        return BlocListener<FeatchSongCubit, FeatchSongState>(
+        return BlocListener<FetchSongCubit, FetchSongState>(
           listener: (context, state) {
 // -------------- loading ------------------
-            if (state is FeatchSongLoading) {
+            if (state is FetchSongLoading) {
               showDialog(
                 context: context,
                 barrierDismissible: false,
                 builder: (BuildContext context) {
                   return AlertDialog(
                     backgroundColor: Colors.transparent,
-                    content: Center(
-                      child: CircularProgressIndicator(
-                        color: AppColors.colorList[AppGlobals().colorIndex],
-                      ),
+                    content: EmptyScreen(
+                      text1: "wait",
+                      size1: 15,
+                      text2: "playList",
+                      size2: 20,
+                      text3: "loading",
+                      size3: 20,
+                      isLoading: true,
                     ),
                   );
                 },
               );
             }
 //------------------- type is album or playlist ----------------
-            else if (state is FeatchAlbumAndPlayListLoaded) {
+            else if (state is FetchAlbumAndPlayListLoaded) {
               Navigator.pop(context); // for closing loading
               Navigator.push(
                   context,
@@ -103,7 +108,7 @@ class LayOutPageState extends State<LayOutPage> {
                   ));
             }
 //------------------type is song ----------------------
-            else if (state is FeatchSongByIDLoaded) {
+            else if (state is FetchSongByIDLoaded) {
               Navigator.pop(context); // for closing loading
               Navigator.push(
                   context,
@@ -114,14 +119,14 @@ class LayOutPageState extends State<LayOutPage> {
                   ));
             }
 //------------------ type is Artist ------------
-            else if (state is FeatchArtistLoadedState) {
+            else if (state is FetchArtistLoadedState) {
               Navigator.pop(context); //for closing loading
               Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => ArtistScreen(model: state.model),
                   ));
-            } else if (state is FeatchSongError) {
+            } else if (state is FetchSongError) {
               Fluttertoast.showToast(msg: "${state.error}");
             }
           },

@@ -38,7 +38,7 @@ class LibraryScreen extends StatelessWidget {
           ),
           ListTile(
             onTap: () {
-              context.read<PlayListCubit>().featchPlayList();
+              context.read<PlayListCubit>().FetchPlayList();
               Navigator.push(
                   context,
                   MaterialPageRoute(

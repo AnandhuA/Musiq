@@ -8,6 +8,7 @@ import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/models/song_model/song.dart';
+import 'package:musiq/presentation/commanWidgets/empty_screen.dart';
 import 'package:musiq/presentation/commanWidgets/favorite_icon.dart';
 import 'package:musiq/presentation/commanWidgets/snack_bar.dart';
 import 'package:musiq/presentation/screens/loginScreen/login_screen.dart';
@@ -59,7 +60,7 @@ class SongOptionsBottomSheet extends StatelessWidget {
               ),
               BlocBuilder<FavoriteBloc, FavoriteState>(
                 builder: (context, state) {
-                  if (state is FeatchFavoriteSuccess) {
+                  if (state is FetchFavoriteSuccess) {
                     bool isFav = state.favorites
                         .any((favorite) => favorite.id == song.id);
                     return ListTile(
@@ -178,7 +179,7 @@ void showPlaylistSelectionBottomSheet({
   required Song song,
 }) {
   final playListCubit = context.read<PlayListCubit>();
-  playListCubit.featchPlayList();
+  playListCubit.FetchPlayList();
   final theme = Theme.of(context);
 
   showModalBottomSheet(
@@ -192,8 +193,16 @@ void showPlaylistSelectionBottomSheet({
       return BlocBuilder<PlayListCubit, PlayListState>(
         builder: (context, state) {
           if (state is PlayListLoadingState) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is FeatchPlayListSuccessState) {
+            return EmptyScreen(
+              text1: "wait",
+              size1: 15,
+              text2: "playList",
+              size2: 20,
+              text3: "loading",
+              size3: 20,
+              isLoading: true,
+            );
+          } else if (state is FetchPlayListSuccessState) {
             final playlists = state.playlistList;
 
             return Column(
@@ -208,40 +217,51 @@ void showPlaylistSelectionBottomSheet({
                 ),
                 Divider(color: AppColors.grey),
                 Expanded(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: playlists.length,
-                    itemBuilder: (context, index) {
-                      final playlist = playlists[index];
-                      return ListTile(
-                        leading: playlist.imagePath == null
-                            ? playlist.songList.isEmpty
-                                ? CircleAvatar(
-                                    backgroundColor: AppColors
-                                        .colorList[AppGlobals().colorIndex],
-                                    radius: 30,
-                                    child: Text(playlist.name[0]),
-                                  )
-                                : playlistCover(playlist: playlist)
-                            : SizedBox(),
-                        title: Text(playlist.name),
-                        subtitle: Text("${playlist.songList.length}-Songs"),
-                        onTap: () {
-                          context.read<PlayListCubit>().addSongToPlayList(
-                                playlistModel: playlist,
-                                songModel: song,
-                              );
-                          Navigator.pop(context);
-                          customSnackbar(
-                            context: context,
-                            message: "${song.name} added to ${playlist.name}",
-                            bgColor: AppColors.white,
-                            textColor: AppColors.black,
-                          );
-                        },
-                      );
-                    },
-                  ),
+                  child: playlists.isNotEmpty
+                      ? ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: playlists.length,
+                          itemBuilder: (context, index) {
+                            final playlist = playlists[index];
+                            return ListTile(
+                              leading: playlist.imagePath == null
+                                  ? playlist.songList.isEmpty
+                                      ? CircleAvatar(
+                                          backgroundColor: AppColors.colorList[
+                                              AppGlobals().colorIndex],
+                                          radius: 30,
+                                          child: Text(playlist.name[0]),
+                                        )
+                                      : playlistCover(playlist: playlist)
+                                  : SizedBox(),
+                              title: Text(playlist.name),
+                              subtitle:
+                                  Text("${playlist.songList.length}-Songs"),
+                              onTap: () {
+                                context.read<PlayListCubit>().addSongToPlayList(
+                                      playlistModel: playlist,
+                                      songModel: song,
+                                    );
+                                Navigator.pop(context);
+                                customSnackbar(
+                                  context: context,
+                                  message:
+                                      "${song.name} added to ${playlist.name}",
+                                  bgColor: AppColors.white,
+                                  textColor: AppColors.black,
+                                );
+                              },
+                            );
+                          },
+                        )
+                      : EmptyScreen(
+                          text1: "show",
+                          size1: 15,
+                          text2: "empty",
+                          size2: 20,
+                          text3: "Empty",
+                          size3: 20,
+                        ),
                 ),
               ],
             );
