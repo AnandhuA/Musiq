@@ -127,6 +127,7 @@ class LayOutPageState extends State<LayOutPage> {
                     builder: (context) => ArtistScreen(model: state.model),
                   ));
             } else if (state is FetchSongError) {
+               Navigator.pop(context); //for closing loading
               Fluttertoast.showToast(msg: "${state.error}");
             }
           },
