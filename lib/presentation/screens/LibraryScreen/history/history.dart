@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/helper_funtions.dart';
-import 'package:musiq/data/hive_funtions/last_played_repo.dart';
+import 'package:musiq/data/hive_funtions/history_repo.dart';
 import 'package:musiq/models/song_model/song.dart';
 import 'package:musiq/presentation/commanWidgets/dismissible_funtion.dart';
 import 'package:musiq/presentation/commanWidgets/empty_screen.dart';
@@ -11,14 +11,14 @@ import 'package:musiq/presentation/commanWidgets/bottom_sheet.dart';
 import 'package:musiq/presentation/screens/player_screen/bottomPlayer/bottom_player.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 
-class LastPlayedList extends StatefulWidget {
-  LastPlayedList({super.key});
+class History extends StatefulWidget {
+  History({super.key});
 
   @override
-  State<LastPlayedList> createState() => _LastPlayedListState();
+  State<History> createState() => _HistoryState();
 }
 
-class _LastPlayedListState extends State<LastPlayedList> {
+class _HistoryState extends State<History> {
   final TextEditingController searchController = TextEditingController();
   List<Song> lastplayed = [];
   @override
@@ -28,7 +28,7 @@ class _LastPlayedListState extends State<LastPlayedList> {
   }
 
   FetchLastplayed() async {
-    lastplayed = await LastPlayedRepo.fetchLastPlayed() ?? [];
+    lastplayed = await HistoryRepo.fetchLastPlayed() ?? [];
     setState(() {});
   }
 
@@ -42,11 +42,11 @@ class _LastPlayedListState extends State<LastPlayedList> {
               Navigator.pop(context);
             },
             icon: Icon(Icons.arrow_back_ios_new_sharp)),
-        title: Text("Last Played"),
+        title: Text("History"),
         actions: [
           IconButton(
               onPressed: () async {
-                await LastPlayedRepo.clearLastPlayedSongs();
+                await HistoryRepo.clearLastPlayedSongs();
                 setState(() {
                   lastplayed = [];
                 });

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/bloc/playlist/play_list_cubit.dart';
-import 'package:musiq/presentation/screens/libraryScreen/LastPlayed/last_played_list.dart';
+import 'package:musiq/presentation/screens/LibraryScreen/history/history.dart';
 import 'package:musiq/presentation/screens/libraryScreen/downloadList/download_list.dart';
 import 'package:musiq/presentation/screens/libraryScreen/favoriteScreen/favorite_screen.dart';
 import 'package:musiq/presentation/screens/libraryScreen/playlist.dart/playlist_screen.dart';
@@ -30,11 +30,11 @@ class LibraryScreen extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => LastPlayedList(),
+                    builder: (context) => History(),
                   ));
             },
             leading: Icon(Icons.history_sharp),
-            title: Text("Last Played"),
+            title: Text("History"),
           ),
           ListTile(
             onTap: () {

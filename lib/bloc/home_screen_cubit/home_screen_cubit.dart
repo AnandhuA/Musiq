@@ -5,8 +5,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:meta/meta.dart';
-import 'package:musiq/data/hive_funtions/last_played_repo.dart';
+import 'package:musiq/data/hive_funtions/history_repo.dart';
 import 'package:musiq/data/hive_funtions/playlist_repo.dart';
 import 'package:musiq/data/savan_2.0.dart';
 import 'package:musiq/models/home_screen_models/newHomeScreenModel.dart';
@@ -24,7 +23,7 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
     // final YouTubeServices ytService = YouTubeServices.instance;
     String jsonString =
         await rootBundle.loadString('assets/local_data/sample.json');
-    final List<Song>? lastplayed = await LastPlayedRepo.fetchLastPlayed();
+    final List<Song>? lastplayed = await HistoryRepo.fetchLastPlayed();
     final List<PlaylistModelHive>? playlist =
         await PlaylistRepo.fetchPlaylists();
     final SharedPreferences prefs = await SharedPreferences.getInstance();

@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:hive_flutter/adapters.dart';
 import 'package:musiq/models/song_model/song.dart';
 
-class LastPlayedRepo {
+class HistoryRepo {
 //-------  add last played song in hive local data base----
   static Future<void> addToLastPlayedSong(Song song) async {
     try {
@@ -21,10 +21,6 @@ class LastPlayedRepo {
 
       await box.add(song);
       log("Song added: ${song.name}");
-      if (box.length > 18) {
-        await box.deleteAt(0);
-        log("Oldest song removed to maintain limit.");
-      }
     } catch (e) {
       log("Error: $e");
     }

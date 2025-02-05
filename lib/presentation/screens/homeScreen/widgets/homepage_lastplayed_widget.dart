@@ -17,7 +17,8 @@ class HomepageLastplayedWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return songList.isNotEmpty
+    final List<Song> limitedSongList = songList.take(18).toList();
+    return limitedSongList.isNotEmpty
         ? Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -33,7 +34,7 @@ class HomepageLastplayedWidget extends StatelessWidget {
               Container(
                 height: 230,
                 child: PageView.builder(
-                  itemCount: ((songList.length + 2) / 3).floor(),
+                  itemCount: ((limitedSongList.length + 2) / 3).floor(),
                   pageSnapping: true,
                   controller: PageController(
                     viewportFraction: 0.9,
@@ -51,42 +52,46 @@ class HomepageLastplayedWidget extends StatelessWidget {
                       child: Column(
                         children: List.generate(3, (itemIndex) {
                           final index = pageIndex * 3 + itemIndex;
-                          if (index >= songList.length) {
+                          if (index >= limitedSongList.length) {
                             return SizedBox();
                           }
-                          final Song song = songList[index];
+                          final Song song = limitedSongList[index];
                           return Container(
                             child: ListTile(
                               leading: ClipRRect(
                                 borderRadius: BorderRadius.circular(5),
                                 child: CachedNetworkImage(
-                                  imageUrl:
-                                      songList[index].image?.last.imageUrl ??
-                                          errorImage(),
+                                  imageUrl: limitedSongList[index]
+                                          .image
+                                          ?.last
+                                          .imageUrl ??
+                                      errorImage(),
                                   placeholder: (context, url) {
                                     // Placeholder logic
-                                    return songList[index].type == "Artist"
+                                    return limitedSongList[index].type ==
+                                            "Artist"
                                         ? artistImagePlaceholder()
-                                        : songList[index].type == "album"
+                                        : limitedSongList[index].type == "album"
                                             ? albumImagePlaceholder()
                                             : songImagePlaceholder();
                                   },
                                   errorWidget: (context, url, error) {
                                     // Error widget logic
-                                    return songList[index].type == "Artist"
+                                    return limitedSongList[index].type ==
+                                            "Artist"
                                         ? artistImagePlaceholder()
-                                        : songList[index].type == "album"
+                                        : limitedSongList[index].type == "album"
                                             ? albumImagePlaceholder()
                                             : songImagePlaceholder();
                                   },
                                 ),
                               ),
                               title: Text(
-                                songList[index].name ?? "NO",
+                                limitedSongList[index].name ?? "NO",
                                 maxLines: 1,
                               ),
                               subtitle: Text(
-                                songList[index].album?.name ?? "No",
+                                limitedSongList[index].album?.name ?? "No",
                                 maxLines: 1,
                               ),
                               onTap: () {
