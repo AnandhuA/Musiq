@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -86,9 +87,12 @@ class PlaylistScreen extends StatelessWidget {
                                       context
                                           .read<PlayListCubit>()
                                           .deletePlaylist(playlist: playlist);
-                                      Fluttertoast.showToast(
-                                          msg:
-                                              "Playlist '${playlist.name}' deleted.");
+                                      if (defaultTargetPlatform !=
+                                          TargetPlatform.windows) {
+                                        Fluttertoast.showToast(
+                                            msg:
+                                                "Playlist '${playlist.name}' deleted.");
+                                      }
                                     }
                                   },
                                   leading: playlist.imagePath == null

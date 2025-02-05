@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -127,8 +128,10 @@ class LayOutPageState extends State<LayOutPage> {
                     builder: (context) => ArtistScreen(model: state.model),
                   ));
             } else if (state is FetchSongError) {
-               Navigator.pop(context); //for closing loading
-              Fluttertoast.showToast(msg: "${state.error}");
+              Navigator.pop(context); //for closing loading
+              if (defaultTargetPlatform != TargetPlatform.windows) {
+                Fluttertoast.showToast(msg: "${state.error}");
+              }
             }
           },
           child: LayoutBuilder(

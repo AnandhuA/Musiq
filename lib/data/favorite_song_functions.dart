@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:musiq/models/song_model/song.dart';
 
@@ -22,12 +23,16 @@ class FavoriteSongRepo {
         await favoriteCollection.add(favoriteData);
         return "true";
       } else {
-        Fluttertoast.showToast(msg: "not login");
+        if (defaultTargetPlatform != TargetPlatform.windows) {
+          Fluttertoast.showToast(msg: "not login");
+        }
         return "not login";
       }
     } catch (e) {
       print('Error adding favorite: $e');
-      Fluttertoast.showToast(msg: "Error adding favorite: $e");
+      if (defaultTargetPlatform != TargetPlatform.windows) {
+        Fluttertoast.showToast(msg: "Error adding favorite: $e");
+      }
       return "false";
     }
   }
@@ -50,7 +55,9 @@ class FavoriteSongRepo {
       return false;
     } catch (e) {
       print('Error removing favorite: $e');
-      Fluttertoast.showToast(msg: "Error removing favorite: $e");
+      if (defaultTargetPlatform != TargetPlatform.windows) {
+        Fluttertoast.showToast(msg: "Error removing favorite: $e");
+      }
       return false;
     }
   }
@@ -71,7 +78,9 @@ class FavoriteSongRepo {
       }
     } catch (e) {
       log('Error fetching favorites: $e');
-      Fluttertoast.showToast(msg: "Error fetching favorites: $e");
+      if (defaultTargetPlatform != TargetPlatform.windows) {
+        Fluttertoast.showToast(msg: "Error fetching favorites: $e");
+      }
     }
     return favoriteSongs;
   }

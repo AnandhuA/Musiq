@@ -12,13 +12,13 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.6
-  flutter_bloc: ^8.1.6
+  flutter_bloc: ^9.0.0
   firebase_core: ^3.2.0
   firebase_auth: ^5.1.2
   firebase_storage: ^12.1.1
   http: ^1.2.2
   audio_metadata_reader: ^0.0.6
-  bloc: ^8.1.4
+  bloc: ^9.0.0
   audio_video_progress_bar: ^2.0.3
   shared_preferences: ^2.2.3
   lottie: ^3.1.2

@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:musiq/models/playlist_model_hive/playlist_model.dart';
@@ -13,16 +14,22 @@ class PlaylistRepo {
       final box = await Hive.openBox<PlaylistModelHive>(playlistBoxName);
 
       if (box.containsKey(playlist.name)) {
-        Fluttertoast.showToast(
-            msg: "Playlist '${playlist.name}' already exists");
+        if (defaultTargetPlatform != TargetPlatform.windows) {
+          Fluttertoast.showToast(
+              msg: "Playlist '${playlist.name}' already exists");
+        }
       } else {
         await box.put(playlist.name, playlist);
         log("Playlist added: ${playlist.name}");
-        Fluttertoast.showToast(msg: "Playlist added: ${playlist.name}");
+        if (defaultTargetPlatform != TargetPlatform.windows) {
+          Fluttertoast.showToast(msg: "Playlist added: ${playlist.name}");
+        }
       }
     } catch (e) {
       log("Error adding playlist: $e");
-      Fluttertoast.showToast(msg: "Error adding playlist: $e");
+      if (defaultTargetPlatform != TargetPlatform.windows) {
+        Fluttertoast.showToast(msg: "Error adding playlist: $e");
+      }
     }
   }
 
@@ -34,7 +41,9 @@ class PlaylistRepo {
       return playlists;
     } catch (e) {
       log("Error fetching playlists: $e");
-      Fluttertoast.showToast(msg: "Error fetching playlists: $e");
+      if (defaultTargetPlatform != TargetPlatform.windows) {
+        Fluttertoast.showToast(msg: "Error fetching playlists: $e");
+      }
       return [];
     }
   }
@@ -49,17 +58,25 @@ class PlaylistRepo {
           playlist.songList.add(song);
           await box.put(playlistName, playlist);
           log("Song added to playlist: ${playlist.name}");
-          Fluttertoast.showToast(
-              msg: "Song added to playlist: ${playlist.name}");
+          if (defaultTargetPlatform != TargetPlatform.windows) {
+            Fluttertoast.showToast(
+                msg: "Song added to playlist: ${playlist.name}");
+          }
         } else {
-          Fluttertoast.showToast(msg: "Song already in playlist");
+          if (defaultTargetPlatform != TargetPlatform.windows) {
+            Fluttertoast.showToast(msg: "Song already in playlist");
+          }
         }
       } else {
-        Fluttertoast.showToast(msg: "Playlist not found");
+        if (defaultTargetPlatform != TargetPlatform.windows) {
+          Fluttertoast.showToast(msg: "Playlist not found");
+        }
       }
     } catch (e) {
       log("Error adding song to playlist: $e");
-      Fluttertoast.showToast(msg: "Error adding song to playlist: $e");
+      if (defaultTargetPlatform != TargetPlatform.windows) {
+        Fluttertoast.showToast(msg: "Error adding song to playlist: $e");
+      }
     }
   }
 
@@ -73,14 +90,20 @@ class PlaylistRepo {
         playlist.songList.removeWhere((s) => s.id == song.id);
         await box.put(playlistName, playlist);
         log("Song removed from playlist: ${playlist.name}");
-        Fluttertoast.showToast(
-            msg: "Song removed from playlist: ${playlist.name}");
+        if (defaultTargetPlatform != TargetPlatform.windows) {
+          Fluttertoast.showToast(
+              msg: "Song removed from playlist: ${playlist.name}");
+        }
       } else {
-        Fluttertoast.showToast(msg: "Playlist not found");
+        if (defaultTargetPlatform != TargetPlatform.windows) {
+          Fluttertoast.showToast(msg: "Playlist not found");
+        }
       }
     } catch (e) {
       log("Error removing song from playlist: $e");
-      Fluttertoast.showToast(msg: "Error removing song from playlist: $e");
+      if (defaultTargetPlatform != TargetPlatform.windows) {
+        Fluttertoast.showToast(msg: "Error removing song from playlist: $e");
+      }
     }
   }
 
@@ -89,10 +112,14 @@ class PlaylistRepo {
       final box = await Hive.openBox<PlaylistModelHive>(playlistBoxName);
       await box.clear();
       log("All playlists cleared.");
-      Fluttertoast.showToast(msg: "All playlists cleared.");
+      if (defaultTargetPlatform != TargetPlatform.windows) {
+        Fluttertoast.showToast(msg: "All playlists cleared.");
+      }
     } catch (e) {
       log("Error clearing playlists: $e");
-      Fluttertoast.showToast(msg: "Error clearing playlists: $e");
+      if (defaultTargetPlatform != TargetPlatform.windows) {
+        Fluttertoast.showToast(msg: "Error clearing playlists: $e");
+      }
     }
   }
 
@@ -103,13 +130,19 @@ class PlaylistRepo {
       if (box.containsKey(playlistName)) {
         await box.delete(playlistName);
         log("Playlist deleted: $playlistName");
-        Fluttertoast.showToast(msg: "Playlist deleted: $playlistName");
+        if (defaultTargetPlatform != TargetPlatform.windows) {
+          Fluttertoast.showToast(msg: "Playlist deleted: $playlistName");
+        }
       } else {
-        Fluttertoast.showToast(msg: "Playlist '$playlistName' not found");
+        if (defaultTargetPlatform != TargetPlatform.windows) {
+          Fluttertoast.showToast(msg: "Playlist '$playlistName' not found");
+        }
       }
     } catch (e) {
       log("Error deleting playlist: $e");
-      Fluttertoast.showToast(msg: "Error deleting playlist: $e");
+      if (defaultTargetPlatform != TargetPlatform.windows) {
+        Fluttertoast.showToast(msg: "Error deleting playlist: $e");
+      }
     }
   }
 }

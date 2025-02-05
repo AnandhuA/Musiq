@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:meta/meta.dart';
@@ -79,7 +80,9 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
 
       // Cache the newHomeScreenModel
     } else if (cachedHomeScreenData != null) {
-      Fluttertoast.showToast(msg: "Load from cache");
+      if (defaultTargetPlatform != TargetPlatform.windows) {
+        Fluttertoast.showToast(msg: "Load from cache");
+      }
       newHomeScreenModel =
           NewHomeScreenModel.fromJson(jsonDecode(cachedHomeScreenData));
       return emit(HomeScreenLoaded(
@@ -90,7 +93,9 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
     } else if (data != null) {
       final Map<String, dynamic> jsonResponse = jsonDecode(jsonString);
       newHomeScreenModel = NewHomeScreenModel.fromJson(jsonResponse);
-      Fluttertoast.showToast(msg: "error::${data.statusCode}");
+      if (defaultTargetPlatform != TargetPlatform.windows) {
+        Fluttertoast.showToast(msg: "error::${data.statusCode}");
+      }
       return emit(HomeScreenLoaded(
         newHomeScreenModel: newHomeScreenModel,
         lastPlayedSongList: lastplayed,
@@ -99,7 +104,9 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
     } else {
       final Map<String, dynamic> jsonResponse = jsonDecode(jsonString);
       newHomeScreenModel = NewHomeScreenModel.fromJson(jsonResponse);
-      Fluttertoast.showToast(msg: "Server Error");
+      if (defaultTargetPlatform != TargetPlatform.windows) {
+        Fluttertoast.showToast(msg: "Server Error");
+      }
       return emit(HomeScreenLoaded(
         newHomeScreenModel: newHomeScreenModel,
         lastPlayedSongList: lastplayed,

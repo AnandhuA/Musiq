@@ -1,11 +1,12 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:permission_handler/permission_handler.dart';
 
 class DownloadSongRepo {
- static Future<void> downloadSong({
+  static Future<void> downloadSong({
     required String downloadUrl,
     required String fileName,
   }) async {
@@ -17,17 +18,20 @@ class DownloadSongRepo {
       }
 
       if (status.isPermanentlyDenied) {
-        Fluttertoast.showToast(
-            msg:
-                "Storage permission permanently denied. Please enable it in settings.");
+        if (defaultTargetPlatform != TargetPlatform.windows) {
+          Fluttertoast.showToast(
+              msg:
+                  "Storage permission permanently denied. Please enable it in settings.");
+        }
         await openAppSettings();
         return;
       }
 
- 
       if (Platform.isAndroid &&
           await Permission.manageExternalStorage.isDenied) {
-        Fluttertoast.showToast(msg: "Please enable manage external storage.");
+        if (defaultTargetPlatform != TargetPlatform.windows) {
+          Fluttertoast.showToast(msg: "Please enable manage external storage.");
+        }
         await openAppSettings();
         return;
       }
@@ -44,22 +48,28 @@ class DownloadSongRepo {
 
           File file = File(filePath);
           await file.writeAsBytes(response.bodyBytes);
-
-          Fluttertoast.showToast(msg: "Download complete: $filePath");
+          if (defaultTargetPlatform != TargetPlatform.windows) {
+            Fluttertoast.showToast(msg: "Download complete: $filePath");
+          }
           print("Download complete: $filePath");
         } else {
           print("Failed to download. Status code: ${response.statusCode}");
-          Fluttertoast.showToast(
-              msg: "Failed to download. Status code: ${response.statusCode}");
+          if (defaultTargetPlatform != TargetPlatform.windows) {
+            Fluttertoast.showToast(
+                msg: "Failed to download. Status code: ${response.statusCode}");
+          }
         }
       } else {
         print("Storage permission denied.");
-        Fluttertoast.showToast(msg: "Storage permission denied.");
+        if (defaultTargetPlatform != TargetPlatform.windows) {
+          Fluttertoast.showToast(msg: "Storage permission denied.");
+        }
       }
     } catch (e) {
       print("Error downloading song: $e");
-      Fluttertoast.showToast(msg: "Error downloading song: $e");
+      if (defaultTargetPlatform != TargetPlatform.windows) {
+        Fluttertoast.showToast(msg: "Error downloading song: $e");
+      }
     }
   }
-
 }

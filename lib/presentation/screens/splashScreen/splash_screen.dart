@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -49,7 +50,9 @@ class _SplashScreenState extends State<SplashScreen> {
       await Hive.openBox<Song>('lastPlayedBox');
     } catch (e) {
       log("-------Initialization Error: $e");
-      Fluttertoast.showToast(msg: "Initialization Error: $e");
+      if (defaultTargetPlatform != TargetPlatform.windows) {
+        Fluttertoast.showToast(msg: "Initialization Error: $e");
+      }
     }
     AppInitializer().requestStoragePermission();
     if (!mounted) return;
