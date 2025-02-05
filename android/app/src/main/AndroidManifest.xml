@@ -18,7 +18,8 @@
         android:label="musiq"
         android:icon="@mipmap/launcher_icon"
         android:enableOnBackInvokedCallback="true"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        android:category="android.intent.category.APP_MUSIC">
         
         <activity
             android:name="com.ryanheise.audioservice.AudioServiceActivity" 
@@ -39,10 +40,18 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
 
+                <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:mimeType="audio/*" /> <!-- Handle all audio types -->
+            </intent-filter>
+
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+                
                 <data
                     android:scheme="music"  
                     android:host="example.com"     
