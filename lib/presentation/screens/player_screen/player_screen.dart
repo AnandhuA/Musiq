@@ -16,6 +16,7 @@ import 'package:musiq/models/song_model/song.dart';
 import 'package:musiq/presentation/commanWidgets/bottom_sheet.dart';
 import 'package:musiq/presentation/commanWidgets/custom_app_bar.dart';
 import 'package:musiq/presentation/commanWidgets/favorite_icon.dart';
+import 'package:musiq/presentation/commanWidgets/like_button.dart';
 import 'package:musiq/presentation/screens/player_screen/cubit/PlayAndPause/play_and_pause_cubit.dart';
 import 'package:musiq/presentation/screens/player_screen/cubit/ProgressBar/progress_bar_cubit.dart';
 import 'package:musiq/presentation/screens/player_screen/widgets/pop_up.dart';
@@ -324,7 +325,9 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                   },
                                   icon: Icon(Icons.add_circle_outline_sharp),
                                 ),
-                                FavoriteIcon(song: currentSong),
+                                LikeButton(song: currentSong),
+                                if (AppGlobals().userIsLoggedIn != null)
+                                  FavoriteIcon(song: currentSong),
                               ],
                             ),
                             AppSpacing.height10,

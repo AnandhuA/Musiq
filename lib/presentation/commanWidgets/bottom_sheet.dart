@@ -58,56 +58,58 @@ class SongOptionsBottomSheet extends StatelessWidget {
                   Navigator.pop(context);
                 },
               ),
-              BlocBuilder<FavoriteBloc, FavoriteState>(
-                builder: (context, state) {
-                  if (state is FetchFavoriteSuccess) {
-                    bool isFav = state.favorites
-                        .any((favorite) => favorite.id == song.id);
-                    return ListTile(
-                      onTap: () {
-                        _dismissKeyboard(context);
-                        if (FirebaseAuth.instance.currentUser?.email == null) {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => LoginScreen(),
-                              ));
-                        } else {
-                          isFav
-                              ? context
-                                  .read<FavoriteBloc>()
-                                  .add(RemoveFavoriteEvent(song: song))
-                              : context
-                                  .read<FavoriteBloc>()
-                                  .add(AddFavoriteEvent(song: song));
-                        }
-                        Navigator.pop(context);
-                      },
-                      leading: isFav
-                          ? Icon(
-                              Icons.favorite,
-                              color:
-                                  AppColors.colorList[AppGlobals().colorIndex],
-                            )
-                          : Icon(Icons.favorite_border),
-                      title: Text(
-                          isFav ? "Remove from Favorite" : "Add to Favorite"),
-                    );
-                  } else {
-                    return ListTile(
-                      leading: FavoriteIcon(song: song),
-                      title: Text("Favorite"),
-                      onTap: () {
-                        _dismissKeyboard(context);
-                        context
-                            .read<FavoriteBloc>()
-                            .add(AddFavoriteEvent(song: song));
-                        Navigator.pop(context);
-                      },
-                    );
-                  }
-                },
-              ),
+              if (AppGlobals().userIsLoggedIn != null)
+                BlocBuilder<FavoriteBloc, FavoriteState>(
+                  builder: (context, state) {
+                    if (state is FetchFavoriteSuccess) {
+                      bool isFav = state.favorites
+                          .any((favorite) => favorite.id == song.id);
+                      return ListTile(
+                        onTap: () {
+                          _dismissKeyboard(context);
+                          if (FirebaseAuth.instance.currentUser?.email ==
+                              null) {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => LoginScreen(),
+                                ));
+                          } else {
+                            isFav
+                                ? context
+                                    .read<FavoriteBloc>()
+                                    .add(RemoveFavoriteEvent(song: song))
+                                : context
+                                    .read<FavoriteBloc>()
+                                    .add(AddFavoriteEvent(song: song));
+                          }
+                          Navigator.pop(context);
+                        },
+                        leading: isFav
+                            ? Icon(
+                                Icons.favorite,
+                                color: AppColors
+                                    .colorList[AppGlobals().colorIndex],
+                              )
+                            : Icon(Icons.favorite_border),
+                        title: Text(
+                            isFav ? "Remove from Favorite" : "Add to Favorite"),
+                      );
+                    } else {
+                      return ListTile(
+                        leading: FavoriteIcon(song: song),
+                        title: Text("Favorite"),
+                        onTap: () {
+                          _dismissKeyboard(context);
+                          context
+                              .read<FavoriteBloc>()
+                              .add(AddFavoriteEvent(song: song));
+                          Navigator.pop(context);
+                        },
+                      );
+                    }
+                  },
+                ),
               ListTile(
                 leading: const Icon(Icons.playlist_add),
                 title: const Text('Add to Playlist'),

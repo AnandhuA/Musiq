@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/bloc/playlist/play_list_cubit.dart';
+import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/presentation/screens/LibraryScreen/history/history.dart';
+import 'package:musiq/presentation/screens/LibraryScreen/liked_songs/liked_songs_list.dart';
 import 'package:musiq/presentation/screens/libraryScreen/downloadList/download_list.dart';
 import 'package:musiq/presentation/screens/libraryScreen/favoriteScreen/favorite_screen.dart';
 import 'package:musiq/presentation/screens/libraryScreen/playlist.dart/playlist_screen.dart';
@@ -14,16 +16,28 @@ class LibraryScreen extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
+          if (AppGlobals().userIsLoggedIn != null)
+            ListTile(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FavoriteScreen(),
+                    ));
+              },
+              leading: Icon(Icons.favorite),
+              title: Text("Favorite"),
+            ),
           ListTile(
             onTap: () {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => FavoriteScreen(),
+                    builder: (context) => LikedSongsList(),
                   ));
             },
-            leading: Icon(Icons.favorite),
-            title: Text("Favorite"),
+            leading: Icon(Icons.thumb_up),
+            title: Text("Liked Songs"),
           ),
           ListTile(
             onTap: () {
