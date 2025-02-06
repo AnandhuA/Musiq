@@ -25,8 +25,8 @@ class FavoriteIcon extends StatelessWidget {
           bool isFav =
               state.favorites.any((favorite) => favorite.id == song.id);
 
-          return IconButton(
-            onPressed: () {
+          return GestureDetector(
+            onTap: () {
               if (FirebaseAuth.instance.currentUser?.email == null) {
                 Navigator.push(
                     context,
@@ -43,33 +43,24 @@ class FavoriteIcon extends StatelessWidget {
                         .add(AddFavoriteEvent(song: song));
               }
             },
-            icon: Icon(
-              isFav ? Icons.favorite : Icons.favorite_border,
-              color:
-                  isFav ? AppColors.colorList[AppGlobals().colorIndex] : null,
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              transitionBuilder: (child, animation) {
+                return ScaleTransition(
+                  scale: animation,
+                  child: child,
+                );
+              },
+              child: Icon(
+                isFav ? Icons.favorite : Icons.favorite_border,
+                key: ValueKey<bool>(isFav), // Ensures icon change animation
+                color:
+                    isFav ? AppColors.colorList[AppGlobals().colorIndex] : null,
+                size: 30, // Adjust the size of the icon if needed
+              ),
             ),
           );
-        }
-        // else if (state is UserNotLoggedIn) {
-        //   return IconButton(
-        //       onPressed: () {
-        //         if (FirebaseAuth.instance.currentUser?.email == null) {
-        //           Navigator.push(
-        //               context,
-        //               MaterialPageRoute(
-        //                 builder: (context) => LoginScreen(),
-        //               ));
-        //         } else {
-        //           context.read<FavoriteBloc>().add(
-        //                 AddFavoriteEvent(song: song),
-        //               );
-        //         }
-        //       },
-        //       icon: const Icon(
-        //         Icons.favorite_border,
-        //       ));
-        // }
-        else {
+        } else {
           return const Icon(
             Icons.favorite_border,
           );

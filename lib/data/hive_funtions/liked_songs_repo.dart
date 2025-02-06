@@ -37,7 +37,7 @@ class LikedSongsRepo {
 
 // ------- -------
   static Future<List<Song>?> fetchLikedSong() async {
-    List<Song>? lastPlayedSongs;
+    List<Song> lastPlayedSongs;
 
     try {
       final box = await Hive.box<Song>('likedSongBox');

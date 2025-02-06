@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/global_variables.dart';
@@ -14,8 +13,10 @@ class LikeButton extends StatefulWidget {
   State<LikeButton> createState() => _LikeButtonState();
 }
 
-class _LikeButtonState extends State<LikeButton> {
+class _LikeButtonState extends State<LikeButton>
+    with SingleTickerProviderStateMixin {
   bool isLiked = false;
+  double scale = 1.0;
 
   @override
   void initState() {
@@ -31,6 +32,8 @@ class _LikeButtonState extends State<LikeButton> {
   }
 
   Future<void> _toggleLike() async {
+    setState(() => scale = 1.2); // Start pop animation
+
     if (isLiked) {
       await LikedSongsRepo.removeFromLikedSongs(widget.song.id ?? "");
       log("Removed from liked: ${widget.song.name}");
@@ -39,17 +42,43 @@ class _LikeButtonState extends State<LikeButton> {
       log("Added to liked: ${widget.song.name}");
     }
 
-    if (mounted) {
-      setState(() => isLiked = !isLiked);
-    }
+    Future.delayed(const Duration(milliseconds: 150), () {
+      if (mounted) {
+        setState(() {
+          isLiked = !isLiked;
+          scale = 1.0; // Reset scale after animation
+        });
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: _toggleLike,
-      icon: Icon(isLiked ? Icons.thumb_up_alt : Icons.thumb_up_alt_outlined),
-      color: isLiked ? AppColors.colorList[AppGlobals().colorIndex] : null,
+    return GestureDetector(
+      onTap: _toggleLike,
+      child: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
+        transitionBuilder: (child, animation) {
+          return ScaleTransition(scale: animation, child: child);
+        },
+        child: TweenAnimationBuilder(
+          key: ValueKey(isLiked),
+          tween: Tween<double>(begin: 1.0, end: scale),
+          duration: const Duration(milliseconds: 150),
+          builder: (context, value, child) {
+            return Transform.scale(
+              scale: value,
+              child: Icon(
+                isLiked ? Icons.thumb_up_alt : Icons.thumb_up_alt_outlined,
+                color: isLiked
+                    ? AppColors.colorList[AppGlobals().colorIndex]
+                    : null,
+                size: 28,
+              ),
+            );
+          },
+        ),
+      ),
     );
   }
 }

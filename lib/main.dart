@@ -11,7 +11,6 @@ import 'package:musiq/services/bloc_provider.dart';
 
 void main() async {
   final AppInitializer _appInitializer = AppInitializer();
-
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   _appInitializer.initializeApp();

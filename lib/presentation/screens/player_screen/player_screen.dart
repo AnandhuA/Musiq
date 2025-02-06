@@ -325,9 +325,11 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                   },
                                   icon: Icon(Icons.add_circle_outline_sharp),
                                 ),
+                                AppSpacing.width10,
                                 LikeButton(song: currentSong),
                                 if (AppGlobals().userIsLoggedIn != null)
-                                  FavoriteIcon(song: currentSong),
+                                  AppSpacing.width10,
+                                FavoriteIcon(song: currentSong),
                               ],
                             ),
                             AppSpacing.height10,
