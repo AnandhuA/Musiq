@@ -1,10 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/presentation/screens/youtube/yt_player.dart';
 import 'package:youtube_data_api/models/video.dart';
 import 'package:youtube_data_api/youtube_data_api.dart';
-
-
 
 class YtHomeScreen extends StatefulWidget {
   const YtHomeScreen({super.key});
@@ -48,9 +48,11 @@ class _HorizontalList extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
+            log("--------${snapshot.error}");
             return Center(child: Text("Error: ${snapshot.error}"));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text("No videos found"));
+            log("===========${snapshot.data}");
+            return const Center(child: Text("No data found"));
           }
 
           final videos = snapshot.data!;
@@ -78,7 +80,7 @@ class _HorizontalList extends StatelessWidget {
                   margin: const EdgeInsets.symmetric(horizontal: 8),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [ 
+                    children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(10),
                         child: Image.network(
