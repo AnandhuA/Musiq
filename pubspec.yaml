@@ -2,7 +2,7 @@ name: musiq
 description: "A Music app."
 publish_to: 'none' 
 
-version: 1.5.6
+version: 1.5.9
 
 environment:
   sdk: '>=3.4.3 <4.0.0'
@@ -10,6 +10,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  youtube_data_api:
+    path: packages/YoutubeDataApi
 
   cupertino_icons: ^1.0.6
   flutter_bloc: ^9.0.0
@@ -38,8 +40,11 @@ dependencies:
   fluttertoast: ^8.2.8
   package_info_plus: ^8.1.0
   permission_handler: ^11.3.1
-  youtube_explode_dart: ^2.3.6
+  youtube_explode_dart: ^2.3.9
   flutter_native_splash: ^2.4.1
+  dart_web_scraper: ^0.1.1
+  audioplayers: ^6.1.2
+  video_player: ^2.9.2
   
 
 dev_dependencies:
