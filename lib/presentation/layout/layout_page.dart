@@ -21,6 +21,7 @@ import 'package:musiq/presentation/screens/homeScreen/widgets/drawer_widget.dart
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 import 'package:musiq/presentation/screens/search_screen/search_screen.dart';
 import 'package:musiq/presentation/screens/settingsScreen/setting_screen.dart';
+import 'package:musiq/presentation/screens/youtube/yt_home_screen.dart';
 
 class LayOutPage extends StatefulWidget {
   const LayOutPage({super.key});
@@ -35,6 +36,7 @@ class LayOutPageState extends State<LayOutPage> {
 //--------widget list -----------
   static final List<Widget> _widgetOptions = <Widget>[
     Homescreen(),
+    YtHomeScreen(),
     NewSearchScreen(),
     LibraryScreen(),
   ];
@@ -42,6 +44,7 @@ class LayOutPageState extends State<LayOutPage> {
 //------ titles list ---------
   final List<String> _titles = [
     "Home",
+    "YouTube",
     "Search",
     "Library",
   ];
@@ -162,6 +165,10 @@ class LayOutPageState extends State<LayOutPage> {
                                 label: Text('Home'),
                               ),
                               NavigationRailDestination(
+                                icon: Icon(Icons.smart_display_rounded),
+                                label: Text('YouTube'),
+                              ),
+                              NavigationRailDestination(
                                 icon: Icon(Icons.search),
                                 label: Text('Search'),
                               ),
@@ -260,6 +267,10 @@ class LayOutPageState extends State<LayOutPage> {
                       GButton(
                         icon: Icons.home,
                         text: 'Home',
+                      ),
+                      GButton(
+                        icon: Icons.smart_display_rounded,
+                        text: 'YouTube',
                       ),
                       GButton(
                         icon: Icons.search,
