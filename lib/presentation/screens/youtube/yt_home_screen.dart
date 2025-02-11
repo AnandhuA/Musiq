@@ -78,7 +78,7 @@ class _HorizontalList extends StatelessWidget {
                   margin: const EdgeInsets.symmetric(horizontal: 8),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: [ 
                       ClipRRect(
                         borderRadius: BorderRadius.circular(10),
                         child: Image.network(
