@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:musiq/core/helper_funtions.dart';
 import 'package:musiq/presentation/screens/youtube/yt_player.dart';
-import 'package:youtube_scrape_api/models/video.dart';
-import 'package:youtube_scrape_api/youtube_scrape_api.dart';
+import 'package:youtube_data_api/models/video.dart';
+import 'package:youtube_data_api/youtube_data_api.dart';
+
+
 
 class YtHomeScreen extends StatefulWidget {
   const YtHomeScreen({super.key});
