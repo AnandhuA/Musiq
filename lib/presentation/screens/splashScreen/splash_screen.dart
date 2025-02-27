@@ -48,6 +48,7 @@ class _SplashScreenState extends State<SplashScreen> {
     try {
       await Hive.openBox<Song>('lastPlayedBox');
       await Hive.openBox<Song>('likedSongBox');
+      await Hive.openBox<String>("search_history");
     } catch (e) {
       log("-------Initialization Error: $e");
       if (defaultTargetPlatform != TargetPlatform.windows) {
