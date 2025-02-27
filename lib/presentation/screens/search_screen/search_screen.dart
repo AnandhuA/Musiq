@@ -5,6 +5,7 @@ import 'package:musiq/bloc/Search/search_cubit.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/sized.dart';
+import 'package:musiq/data/hive_funtions/search_history_repo.dart';
 import 'package:musiq/presentation/screens/search_screen/widgets/album_search_result.dart';
 import 'package:musiq/presentation/screens/search_screen/widgets/all_search_result.dart';
 import 'package:musiq/presentation/screens/search_screen/widgets/artist_search_result.dart';
@@ -43,6 +44,11 @@ class _NewSearchScreenState extends State<NewSearchScreen> {
                 ),
               ),
               onChanged: _onSearchChanged,
+              onSubmitted: (value) {
+                if (value.isNotEmpty) {
+                  SearchHistoryRepo.saveSearchQuery(value);
+                }
+              },
             ),
           ),
           AppSpacing.height20,
@@ -74,6 +80,39 @@ class _NewSearchScreenState extends State<NewSearchScreen> {
   // build widget based on the current value of "_searchValue"  -----
 
   Widget _buildSearchResults() {
+    if (_searchController.text.isEmpty) {
+      return FutureBuilder<List<String>>(
+        future: Future.value(SearchHistoryRepo.getSearchHistory()),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(child: Text("No recent searches"));
+          }
+          final history = snapshot.data!;
+          return ListView.builder(
+            itemCount: history.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                title: Text(history[index]),
+                leading: Icon(Icons.history),
+                onTap: () {
+                  _searchController.text = history[index];
+                  _onSearchChanged(history[index]);
+                },
+                trailing: IconButton(
+                  icon: Icon(Icons.close),
+                  onPressed: () async {
+                    await SearchHistoryRepo.deleteSearchQuery(history[index]);
+                    setState(() {});
+                  },
+                ),
+              );
+            },
+          );
+        },
+      );
+    }
+
+    // Show search results when input is not empty
     switch (_searchValue) {
       case "Song":
         return SongSearchResult();
@@ -147,6 +186,7 @@ class _NewSearchScreenState extends State<NewSearchScreen> {
             context.read<SearchCubit>().searchGobal(query: value);
           break;
       }
+      setState(() {});
     });
   }
 }
