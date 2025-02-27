@@ -80,8 +80,8 @@ class LikedSongsList extends StatelessWidget {
                       child: const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Icon(Icons.delete, color: Colors.white),
-                          Icon(Icons.delete, color: Colors.white),
+                          Icon(Icons.wrap_text_sharp, color: Colors.white),
+                          Icon(Icons.wrap_text_sharp, color: Colors.white),
                         ],
                       ),
                     ),
