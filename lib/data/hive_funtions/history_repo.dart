@@ -9,18 +9,29 @@ class HistoryRepo {
     try {
       final box = await Hive.box<Song>('lastPlayedBox');
 
+     
       final existingSongIndex =
           box.values.toList().indexWhere((s) => s.id == song.id);
 
       if (existingSongIndex != -1) {
-        await box.deleteAt(existingSongIndex);
-        log("Existing song removed: ${song.name}");
+        final existingSong = box.getAt(existingSongIndex);
+
+        if (existingSong != null) {
+          existingSong.localPlayCount += 1; 
+          existingSong.addedAt = DateTime.now(); 
+
+          await box.putAt(existingSongIndex, existingSong);
+          log("Updated local play count: ${existingSong.name}, Count: ${existingSong.localPlayCount}");
+          return;
+        }
       }
 
+
+      song.localPlayCount = 1;
       song.addedAt = DateTime.now();
 
       await box.add(song);
-      log("Song added: ${song.name}");
+      log("New song added: ${song.name}, Local Play Count: ${song.localPlayCount}");
     } catch (e) {
       log("Error: $e");
     }
@@ -56,4 +67,27 @@ class HistoryRepo {
       log("Error clearing last played songs: $e");
     }
   }
+
+
+  static Future<Song?> findMostPlayedSong() async {
+  try {
+    final box = await Hive.box<Song>('lastPlayedBox');
+
+    if (box.isEmpty) {
+      log("No songs in history.");
+      return null;
+    }
+
+    Song? mostPlayedSong = box.values.reduce((a, b) =>
+        (a.localPlayCount) > (b.localPlayCount) ? a : b);
+    
+    log("Most played song: ${mostPlayedSong.name} (Played: ${mostPlayedSong.localPlayCount} times)");
+    return mostPlayedSong;
+  } catch (e) {
+    log("Error finding most played song: $e");
+    return null;
+  }
+}
+
+
 }

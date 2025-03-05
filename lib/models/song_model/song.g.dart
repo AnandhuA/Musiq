@@ -36,13 +36,14 @@ class SongAdapter extends TypeAdapter<Song> {
       image: (fields[16] as List?)?.cast<Image>(),
       downloadUrl: (fields[17] as List?)?.cast<DownloadUrl>(),
       addedAt: fields[18] as DateTime?,
+      localPlayCount: fields[19] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, Song obj) {
     writer
-      ..writeByte(19)
+      ..writeByte(20)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -80,7 +81,9 @@ class SongAdapter extends TypeAdapter<Song> {
       ..writeByte(17)
       ..write(obj.downloadUrl)
       ..writeByte(18)
-      ..write(obj.addedAt);
+      ..write(obj.addedAt)
+      ..writeByte(19)
+      ..write(obj.localPlayCount);
   }
 
   @override

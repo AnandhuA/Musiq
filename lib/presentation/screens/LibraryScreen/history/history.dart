@@ -43,16 +43,16 @@ class _HistoryState extends State<History> {
             },
             icon: Icon(Icons.arrow_back_ios_new_sharp)),
         title: Text("History"),
-        actions: [
-          IconButton(
-              onPressed: () async {
-                await HistoryRepo.clearLastPlayedSongs();
-                setState(() {
-                  lastplayed = [];
-                });
-              },
-              icon: Icon(Icons.clear_all_sharp))
-        ],
+        // actions: [
+        //   IconButton(
+        //       onPressed: () async {
+        //         await HistoryRepo.clearLastPlayedSongs();
+        //         setState(() {
+        //           lastplayed = [];
+        //         });
+        //       },
+        //       icon: Icon(Icons.clear_all_sharp))
+        // ],
       ),
       body: Stack(
         children: [

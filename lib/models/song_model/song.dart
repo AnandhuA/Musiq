@@ -65,6 +65,9 @@ class Song {
   @HiveField(18)
   DateTime? addedAt;
 
+  @HiveField(19)
+  int localPlayCount = 0;
+
   Song({
     this.id,
     this.name,
@@ -85,6 +88,7 @@ class Song {
     this.image,
     this.downloadUrl,
     this.addedAt,
+    this.localPlayCount = 0, // Initialize local count
   });
 
   factory Song.fromJson(Map<String, dynamic> json) {
@@ -119,6 +123,7 @@ class Song {
           ?.map((e) => DownloadUrl.fromJson(e as Map<String, dynamic>))
           .toList(),
       addedAt: json['addedAt'] != null ? DateTime.parse(json['addedAt']) : null,
+      localPlayCount: json['localPlayCount'] as int? ?? 0,
     );
   }
 
@@ -142,5 +147,6 @@ class Song {
         'image': image?.map((e) => e.toJson()).toList(),
         'downloadUrl': downloadUrl?.map((e) => e.toJson()).toList(),
         'addedAt': addedAt?.toIso8601String(),
+        'localPlayCount': localPlayCount,
       };
 }
