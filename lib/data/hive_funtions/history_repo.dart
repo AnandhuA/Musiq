@@ -16,7 +16,7 @@ class HistoryRepo {
         final existingSong = box.getAt(existingSongIndex);
 
         if (existingSong != null) {
-          existingSong.localPlayCount = existingSong.localPlayCount ?? 0 + 1;
+          existingSong.localPlayCount = (existingSong.localPlayCount ?? 0) + 1;
           existingSong.addedAt = DateTime.now();
 
           await box.putAt(existingSongIndex, existingSong);

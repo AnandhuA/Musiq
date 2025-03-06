@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/helper_funtions.dart';
+import 'package:musiq/core/sized.dart';
 import 'package:musiq/data/hive_funtions/history_repo.dart';
 import 'package:musiq/models/song_model/song.dart';
 import 'package:musiq/presentation/commanWidgets/dismissible_funtion.dart';
@@ -98,7 +99,14 @@ class _HistoryState extends State<History> {
                             ),
                           ),
                         ),
-                        trailing: SongOptionsBottomSheet(song: song),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text("(${lastplayed[index].localPlayCount})"),
+                            AppSpacing.width5,
+                            SongOptionsBottomSheet(song: song),
+                          ],
+                        ),
                         leading: Container(
                           width: 50,
                           height: 50,
