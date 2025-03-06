@@ -46,9 +46,13 @@ class _SplashScreenState extends State<SplashScreen> {
         .setUserLoggedInStatus(FirebaseAuth.instance.currentUser?.email);
     await Hive.initFlutter();
     try {
-      await Hive.openBox<Song>('lastPlayedBox');
-      await Hive.openBox<Song>('likedSongBox');
-      await Hive.openBox<String>("search_history");
+      // await Hive.openBox<Song>('lastPlayedBox');
+      // await Hive.openBox<Song>('likedSongBox');
+      // await Hive.openBox<String>("search_history");
+
+      await _safeOpenBox<Song>('lastPlayedBox');
+      await _safeOpenBox<Song>('likedSongBox');
+      await _safeOpenBox<String>('search_history');
     } catch (e) {
       log("-------Initialization Error: $e");
       if (defaultTargetPlatform != TargetPlatform.windows) {
@@ -75,5 +79,15 @@ class _SplashScreenState extends State<SplashScreen> {
     //     ),
     //   );
     // }
+  }
+
+  Future<void> _safeOpenBox<T>(String boxName) async {
+    try {
+      await Hive.openBox<T>(boxName);
+    } catch (e) {
+      log("Error opening $boxName: $e");
+      await Hive.deleteBoxFromDisk(boxName); // Delete corrupted data
+      await Hive.openBox<T>(boxName); // Reopen the box
+    }
   }
 }

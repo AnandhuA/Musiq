@@ -66,7 +66,7 @@ class Song {
   DateTime? addedAt;
 
   @HiveField(19)
-  int localPlayCount = 0;
+  int? localPlayCount = 0;
 
   Song({
     this.id,

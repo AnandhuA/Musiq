@@ -36,7 +36,7 @@ class SongAdapter extends TypeAdapter<Song> {
       image: (fields[16] as List?)?.cast<Image>(),
       downloadUrl: (fields[17] as List?)?.cast<DownloadUrl>(),
       addedAt: fields[18] as DateTime?,
-      localPlayCount: fields[19] as int,
+      localPlayCount: fields[19] as int?,
     );
   }
 

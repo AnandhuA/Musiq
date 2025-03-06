@@ -78,23 +78,29 @@ class MostPlayedSong extends StatelessWidget {
                   ),
                 ),
                 AppSpacing.width10,
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      mostPlayedSong.name ?? "Nothing",
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    Text(
-                      mostPlayedSong.album?.name ?? "Nothing",
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    Text(
-                      "Count : ${mostPlayedSong.localPlayCount}",
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ],
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        overflow: TextOverflow.fade,
+                        mostPlayedSong.name ?? "Nothing",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      AppSpacing.height10,
+                      Text(
+                        overflow: TextOverflow.ellipsis,
+                        mostPlayedSong.album?.name ?? "Nothing",
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      AppSpacing.height10,
+                      Text(
+                        "Count : ${mostPlayedSong.localPlayCount}",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ],
+                  ),
                 )
               ],
             ),
