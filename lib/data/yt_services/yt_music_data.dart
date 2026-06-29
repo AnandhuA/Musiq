@@ -60,7 +60,6 @@ class YtMusicService {
       'accept': '*/*',
       'accept-encoding': 'gzip, deflate',
       'content-type': 'application/json',
-      'content-encoding': 'gzip',
       'origin': httpsYtmDomain,
       'cookie': 'CONSENT=YES+1',
     };
@@ -342,11 +341,12 @@ class YtMusicService {
       );
       final List<Song> songs = [];
       for (final section in searchResults) {
-        if (section['title'] != 'Songs') {
-          continue;
-        }
         for (final item in section['items'] as List) {
-          item['permaUrl'] = 'https://youtube.com/watch?v=${item["id"]}';
+          final type = item['type']?.toString().toLowerCase();
+          if (type != 'song' && type != 'video') {
+            continue;
+          }
+          item['perma_url'] = 'https://youtube.com/watch?v=${item["id"]}';
           final songItem = Song.fromJson(item);
           songs.add(songItem);
         }
@@ -514,6 +514,7 @@ class YtMusicService {
         'contentPlaybackContext': {'signatureTimestamp': signatureTimestamp},
       };
       body['video_id'] = videoId;
+      body['videoId'] = videoId;
       final Map response =
           await sendRequest(endpoints['get_song']!, body, headers);
       final videoDetails =
@@ -523,7 +524,10 @@ class YtMusicService {
       String finalUrl = '';
       String expireAt = '0';
       if (getUrl) {
-        urlsData = await YouTubeServices.instance.getYtStreamUrls(videoId);
+        urlsData = getAudioStreamsFromPlayerResponse(response);
+        if (urlsData.isEmpty) {
+          urlsData = await YouTubeServices.instance.getYtStreamUrls(videoId);
+        }
         if (urlsData.isNotEmpty) {
           final Map finalUrlData =
               quality == 'High' ? urlsData.last : urlsData.first;
@@ -532,6 +536,15 @@ class YtMusicService {
           urls = urlsData.map((e) => e['url'].toString()).toList();
         }
       }
+      final thumbnails =
+          NavClass.nav(videoDetails, ['thumbnail', 'thumbnails']) as List? ??
+              [];
+      final thumbnailUrls = thumbnails
+          .whereType<Map>()
+          .map((thumbnail) => thumbnail['url']?.toString())
+          .whereType<String>()
+          .where((url) => url.isNotEmpty)
+          .toList();
 
       return {
         'id': videoDetails['videoId'],
@@ -544,8 +557,9 @@ class YtMusicService {
             : videoDetails['author'].replaceAll('- Topic', '').trim(),
         'duration': videoDetails['lengthSeconds'],
         'views': videoDetails['viewCount'],
-        'image': videoDetails['thumbnail']['thumbnails'].last['url'],
-        'images': videoDetails['thumbnail']['thumbnails'].map((e) => e['url']),
+        'image':
+            thumbnailUrls.isEmpty ? (data == null ? null : data['image']) : thumbnailUrls.last,
+        'images': thumbnailUrls,
         'language': 'YouTube',
         'genre': 'YouTube',
         'channelId': videoDetails['channelId'],
@@ -564,6 +578,42 @@ class YtMusicService {
     } catch (e) {
       Logger.root.severe('Error in yt get song data', e);
       return {};
+    }
+  }
+
+  List<Map> getAudioStreamsFromPlayerResponse(Map response) {
+    try {
+      final formats = NavClass.nav(
+            response,
+            ['streamingData', 'adaptiveFormats'],
+          ) as List? ??
+          [];
+      final streams = <Map>[];
+      for (final format in formats) {
+        if (format is! Map) continue;
+        final mimeType = format['mimeType']?.toString() ?? '';
+        final url = format['url']?.toString();
+        if (!mimeType.startsWith('audio/') || url == null || url.isEmpty) {
+          continue;
+        }
+        streams.add({
+          'bitrate': format['bitrate']?.toString() ?? '0',
+          'codec': mimeType,
+          'qualityLabel': format['audioQuality']?.toString() ?? 'audio',
+          'size': format['contentLength']?.toString() ?? '0',
+          'url': url,
+          'expireAt': YouTubeServices.instance.getExpireAt(url),
+        });
+      }
+      streams.sort((a, b) {
+        final aBitrate = int.tryParse(a['bitrate'].toString()) ?? 0;
+        final bBitrate = int.tryParse(b['bitrate'].toString()) ?? 0;
+        return aBitrate.compareTo(bBitrate);
+      });
+      return streams;
+    } catch (e) {
+      Logger.root.severe('Error parsing YT Music audio streams', e);
+      return [];
     }
   }
 

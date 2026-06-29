@@ -18,12 +18,13 @@ class DownloadUrl {
 
   // Factory constructor to create an instance from JSON
   factory DownloadUrl.fromJson(Map<String, dynamic> json) {
-    // Check if JSON contains 'url' or 'link' and 'quality'
-    if ((json.containsKey('url') || json.containsKey('link')) &&
-        json.containsKey('quality')) {
+    if (json.containsKey('url') || json.containsKey('link')) {
       return DownloadUrl(
         link: json['url'] ?? json['link'], // Handle both 'url' and 'link'.
-        quality: json['quality'], // Extract the 'quality' value
+        quality: json['quality'] ??
+            json['qualityLabel'] ??
+            json['bitrate']?.toString() ??
+            'audio',
       );
     } else {
       throw UnimplementedError('DownloadUrl: Invalid JSON structure');

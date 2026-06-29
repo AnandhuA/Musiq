@@ -1,10 +1,10 @@
-import 'dart:developer';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:musiq/bloc/FeatchSong/fetch_song_cubit.dart';
 import 'package:musiq/core/helper_funtions.dart';
-import 'package:musiq/presentation/screens/youtube/yt_player.dart';
-import 'package:youtube_data_api/models/video.dart';
-import 'package:youtube_data_api/youtube_data_api.dart';
+import 'package:musiq/data/yt_services/youtube_scraper_service.dart';
+import 'package:musiq/models/song_model/song.dart';
 
 class YtHomeScreen extends StatefulWidget {
   const YtHomeScreen({super.key});
@@ -14,100 +14,137 @@ class YtHomeScreen extends StatefulWidget {
 }
 
 class _YtHomeScreenState extends State<YtHomeScreen> {
-  final YoutubeDataApi youtubeDataApi = YoutubeDataApi();
+  late Future<List<YouTubeMusicSection>> _sectionsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _sectionsFuture = YouTubeScraperService.instance.fetchHomeSections();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _HorizontalList(futureFun: youtubeDataApi.fetchTrendingMusic()),
-            _HorizontalList(futureFun: youtubeDataApi.fetchTrendingVideo()),
-            _HorizontalList(futureFun: youtubeDataApi.fetchTrendingMovies()),
-            _HorizontalList(futureFun: youtubeDataApi.fetchTrendingGaming()),
-          ],
-        ),
+      body: FutureBuilder<List<YouTubeMusicSection>>(
+        future: _sectionsFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return Center(child: Text("Error: ${snapshot.error}"));
+          }
+
+          final sections = snapshot.data ?? [];
+          if (sections.isEmpty) {
+            return const Center(child: Text("No music found"));
+          }
+
+          return RefreshIndicator(
+            onRefresh: () async {
+              setState(() {
+                _sectionsFuture =
+                    YouTubeScraperService.instance.fetchHomeSections();
+              });
+              await _sectionsFuture;
+            },
+            child: ListView.builder(
+              padding: const EdgeInsets.only(bottom: 110),
+              itemCount: sections.length,
+              itemBuilder: (context, index) {
+                final section = sections[index];
+                return _HorizontalList(section: section);
+              },
+            ),
+          );
+        },
       ),
     );
   }
 }
 
 class _HorizontalList extends StatelessWidget {
-  final Future<List<Video>>? futureFun;
-  const _HorizontalList({required this.futureFun});
+  final YouTubeMusicSection section;
+
+  const _HorizontalList({required this.section});
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 200,
-      child: FutureBuilder<List<Video>>(
-        future: futureFun,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            log("--------${snapshot.error}");
-            return Center(child: Text("Error: ${snapshot.error}"));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            log("===========${snapshot.data}");
-            return const Center(child: Text("No data found"));
-          }
-
-          final videos = snapshot.data!;
-          return ListView.builder(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(12, 16, 12, 8),
+          child: Text(
+            section.title,
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+          ),
+        ),
+        SizedBox(
+          height: 215,
+          child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: videos.length,
+            itemCount: section.songs.length,
             itemBuilder: (context, index) {
-              final video = videos[index];
+              final song = section.songs[index];
               return GestureDetector(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => YtMusicPlayerScreen(
-                        videoId: video.videoId ?? "Non",
-                        title: video.title ?? "Unknown",
-                        thumbnailUrl: video.thumbnails?.first.url ?? "",
-                        channelName: video.channelName ?? "Unknown",
-                      ),
-                    ),
-                  );
+                  context.read<FetchSongCubit>().fetchData(
+                        type: "song",
+                        id: song.id ?? "",
+                        imageUrl: song.image?.first.imageUrl ?? errorImage(),
+                        song: song,
+                      );
                 },
-                child: Container(
-                  width: 160,
-                  margin: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image.network(
-                          video.thumbnails?.first.url ?? errorImage(),
-                          width: 160,
-                          height: 90,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      const SizedBox(height: 5),
-                      Text(
-                        video.title ?? "Nothing",
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        video.channelName ?? "Unknown",
-                        style: const TextStyle(color: Colors.grey),
-                      ),
-                    ],
-                  ),
-                ),
+                child: _SongCard(song: song),
               );
             },
-          );
-        },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _SongCard extends StatelessWidget {
+  final Song song;
+
+  const _SongCard({required this.song});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 165,
+      margin: const EdgeInsets.symmetric(horizontal: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: CachedNetworkImage(
+              imageUrl: song.image?.first.imageUrl ?? errorImage(),
+              width: 165,
+              height: 110,
+              fit: BoxFit.cover,
+              placeholder: (context, url) => songImagePlaceholder(),
+              errorWidget: (context, url, error) => songImagePlaceholder(),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            song.name ?? "Unknown",
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(fontWeight: FontWeight.w600),
+          ),
+          const SizedBox(height: 3),
+          Text(
+            song.label ?? "YouTube",
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(color: Colors.grey),
+          ),
+        ],
       ),
     );
   }

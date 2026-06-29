@@ -21,13 +21,13 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = '1.8.0'
+    ext.kotlin_version = '1.9.24'
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:8.0.0" // Update to the latest stable version if needed
+        classpath "com.android.tools.build:gradle:8.5.2"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         // Other dependencies can be added here
     }
@@ -47,6 +47,29 @@ rootProject.buildDir = "../build"
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
     project.evaluationDependsOn(":app") // This ensures that :app is evaluated before others
+
+    project.plugins.withId("com.android.library") {
+        def androidExtension = project.extensions.findByName("android")
+        if (androidExtension != null && androidExtension.namespace == null) {
+            def manifestFile = project.file("src/main/AndroidManifest.xml")
+            def manifestPackage = null
+            if (manifestFile.exists()) {
+                manifestPackage = new XmlSlurper(false, false)
+                        .parse(manifestFile)
+                        .@package
+                        .text()
+            }
+            androidExtension.namespace = manifestPackage ?: "com.example.${project.name.replace('-', '_')}"
+        }
+    }
+}
+
+gradle.projectsEvaluated {
+    subprojects {
+        tasks.withType(JavaCompile).configureEach {
+            options.compilerArgs.removeAll { it == "-Werror" }
+        }
+    }
 }
 
 // Register the clean task to delete the build directory

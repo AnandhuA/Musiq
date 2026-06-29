@@ -88,35 +88,60 @@ class Song {
   });
 
   factory Song.fromJson(Map<String, dynamic> json) {
-    final dynamic downloadData = json['downloadUrl'] ?? json['download_url'];
+    final dynamic downloadData =
+        json['downloadUrl'] ?? json['download_url'] ?? json['urlsData'];
+    final dynamic imageData = json['image'] ?? json['images'];
+    final String? artistName =
+        json['artist']?.toString() ?? json['channelName']?.toString();
+    final String? albumName =
+        json['album']?.toString() ?? json['subtitle']?.toString();
+    final int? duration = json['duration'] is int
+        ? json['duration'] as int?
+        : int.tryParse(json['duration']?.toString() ?? '');
     return Song(
       id: json['id']?.toString(),
-      name: json['name']?.toString(),
-      type: json['type']?.toString(),
+      name: json['name']?.toString() ?? json['title']?.toString(),
+      type: json['type']?.toString().toLowerCase(),
       year: json['year']?.toString(),
       releaseDate: json['releaseDate']?.toString(),
-      duration: json['duration'] as int?,
-      label: json['label']?.toString(),
+      duration: duration,
+      label: json['label']?.toString() ?? artistName,
       explicitContent: json['explicitContent'] as bool?,
       playCount: json['playCount'] as int?,
       language: json['language']?.toString(),
       hasLyrics: json['hasLyrics'] as bool?,
       lyricsId: json['lyricsId'],
-      url: json['url']?.toString(),
+      url: json['url']?.toString() ?? json['perma_url']?.toString(),
       copyright: json['copyright']?.toString(),
       album: json['album'] is Map<String, dynamic>
           ? Album.fromJson(json['album'])
           : json['album'] is String
               ? Album(name: json['album'])
-              : null,
+              : albumName != null
+                  ? Album(name: albumName)
+                  : null,
       artists: (json['artists'] is Map<String, dynamic>)
           ? Artists.fromJson(json['artists'])
-          : Artists.fromJson(json['artistMap']),
-      image: (json['image'] as List<dynamic>?)
-          ?.map((e) => Image.fromJson(e as Map<String, dynamic>))
-          .toList(),
+          : (json['artistMap'] is Map<String, dynamic>)
+              ? Artists.fromJson(json['artistMap'])
+              : artistName != null
+                  ? Artists.fromJson({
+                      'all': [
+                        {
+                          'id': json['channelId']?.toString(),
+                          'name': artistName,
+                        }
+                      ]
+                    })
+                  : null,
+      image: imageData is List
+          ? imageData.map((e) => Image.fromJson(e)).toList()
+          : imageData != null
+              ? [Image.fromJson(imageData)]
+              : null,
       downloadUrl: (downloadData as List<dynamic>?)
-          ?.map((e) => DownloadUrl.fromJson(e as Map<String, dynamic>))
+          ?.whereType<Map>()
+          .map((e) => DownloadUrl.fromJson(Map<String, dynamic>.from(e)))
           .toList(),
       addedAt: json['addedAt'] != null ? DateTime.parse(json['addedAt']) : null,
     );

@@ -12,10 +12,8 @@ import 'package:musiq/models/song_model/song.dart';
 import 'package:musiq/presentation/commanWidgets/empty_screen.dart';
 import 'package:musiq/presentation/screens/album_or_playlist_screen/album_or_playlist_screen.dart';
 import 'package:musiq/presentation/screens/artist/artist_screen.dart';
-import 'package:musiq/presentation/screens/homeScreen/homeScreen.dart';
 import 'package:musiq/presentation/screens/player_screen/bottomPlayer/bottom_player.dart';
 import 'package:musiq/presentation/screens/libraryScreen/library_screen.dart';
-import 'package:musiq/bloc/home_screen_cubit/home_screen_cubit.dart';
 import 'package:musiq/bloc/ThemeCubit/theme_cubit.dart';
 import 'package:musiq/presentation/screens/homeScreen/widgets/drawer_widget.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
@@ -32,10 +30,10 @@ class LayOutPage extends StatefulWidget {
 
 class LayOutPageState extends State<LayOutPage> {
   int _selectedIndex = 0;
+  bool _isShowingFetchDialog = false;
 
 //--------widget list -----------
   static final List<Widget> _widgetOptions = <Widget>[
-    Homescreen(),
     YtHomeScreen(),
     NewSearchScreen(),
     LibraryScreen(),
@@ -43,7 +41,6 @@ class LayOutPageState extends State<LayOutPage> {
 
 //------ titles list ---------
   final List<String> _titles = [
-    "Home",
     "YouTube",
     "Search",
     "Library",
@@ -62,12 +59,10 @@ class LayOutPageState extends State<LayOutPage> {
   }
 
   loadData() async {
-    await context.read<HomeScreenCubit>().loadData();
     context.read<FavoriteBloc>().add(FetchFavoriteSongEvent());
   }
 
   Future<void> _refreshData() async {
-    context.read<HomeScreenCubit>().loadData();
     context.read<FavoriteBloc>().add(FetchFavoriteSongEvent());
   }
 
@@ -79,6 +74,7 @@ class LayOutPageState extends State<LayOutPage> {
           listener: (context, state) {
 // -------------- loading ------------------
             if (state is FetchSongLoading) {
+              _isShowingFetchDialog = true;
               showDialog(
                 context: context,
                 barrierDismissible: false,
@@ -100,7 +96,7 @@ class LayOutPageState extends State<LayOutPage> {
             }
 //------------------- type is album or playlist ----------------
             else if (state is FetchAlbumAndPlayListLoaded) {
-              Navigator.pop(context); // for closing loading
+              _closeFetchDialog();
               Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -113,7 +109,7 @@ class LayOutPageState extends State<LayOutPage> {
             }
 //------------------type is song ----------------------
             else if (state is FetchSongByIDLoaded) {
-              Navigator.pop(context); // for closing loading
+              _closeFetchDialog();
               Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -124,14 +120,14 @@ class LayOutPageState extends State<LayOutPage> {
             }
 //------------------ type is Artist ------------
             else if (state is FetchArtistLoadedState) {
-              Navigator.pop(context); //for closing loading
+              _closeFetchDialog();
               Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => ArtistScreen(model: state.model),
                   ));
             } else if (state is FetchSongError) {
-              Navigator.pop(context); //for closing loading
+              _closeFetchDialog();
               if (defaultTargetPlatform != TargetPlatform.windows) {
                 Fluttertoast.showToast(msg: "${state.error}");
               }
@@ -161,10 +157,6 @@ class LayOutPageState extends State<LayOutPage> {
                               NavigationRailDestination(
                                 indicatorColor: AppColors
                                     .colorList[AppGlobals().colorIndex],
-                                icon: Icon(Icons.home),
-                                label: Text('Home'),
-                              ),
-                              NavigationRailDestination(
                                 icon: Icon(Icons.smart_display_rounded),
                                 label: Text('YouTube'),
                               ),
@@ -265,10 +257,6 @@ class LayOutPageState extends State<LayOutPage> {
                     tabMargin: const EdgeInsets.all(14),
                     tabs: const [
                       GButton(
-                        icon: Icons.home,
-                        text: 'Home',
-                      ),
-                      GButton(
                         icon: Icons.smart_display_rounded,
                         text: 'YouTube',
                       ),
@@ -291,5 +279,12 @@ class LayOutPageState extends State<LayOutPage> {
         );
       },
     );
+  }
+
+  void _closeFetchDialog() {
+    if (_isShowingFetchDialog && Navigator.canPop(context)) {
+      Navigator.pop(context);
+      _isShowingFetchDialog = false;
+    }
   }
 }

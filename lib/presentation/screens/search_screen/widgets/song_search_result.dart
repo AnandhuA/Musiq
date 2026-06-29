@@ -67,9 +67,10 @@ class SongSearchResult extends StatelessWidget {
                 child: ListTile(
                     onTap: () {
                       context.read<FetchSongCubit>().fetchData(
-                          type: song.type ?? "",
+                          type: "song",
                           id: song.id ?? "",
-                          imageUrl: song.image?.last.imageUrl ?? errorImage());
+                          imageUrl: song.image?.last.imageUrl ?? errorImage(),
+                          song: song);
                     },
                     leading: CachedNetworkImage(
                       imageUrl: song.image?.last.imageUrl ?? errorImage(),

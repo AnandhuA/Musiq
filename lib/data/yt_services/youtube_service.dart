@@ -6,6 +6,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart';
 import 'package:logging/logging.dart';
 import 'package:musiq/data/yt_services/yt_music_data.dart';
+import 'package:musiq/models/song_model/song.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 class YouTubeServices {
@@ -67,6 +68,48 @@ class YouTubeServices {
       getUrl: getUrl ?? true,
     );
     return response;
+  }
+
+  Future<Map?> formatSongFromStreams({
+    required String id,
+    required Song song,
+    required String quality,
+  }) async {
+    final urlsData = await getYtStreamUrls(id);
+    if (urlsData.isEmpty) return null;
+
+    final finalUrlData = quality == 'High' ? urlsData.last : urlsData.first;
+    final images = song.image ?? [];
+    final imageUrl = images.isEmpty ? null : images.last.imageUrl;
+    final artistNames = song.artists?.all
+            ?.map((artist) => artist.name)
+            .whereType<String>()
+            .where((name) => name.trim().isNotEmpty)
+            .join(', ') ??
+        '';
+    final artist = artistNames.isNotEmpty
+        ? artistNames
+        : song.label ?? 'YouTube Music';
+
+    return {
+      'id': id,
+      'title': song.name ?? 'YouTube Music',
+      'album': song.album?.name ?? 'YouTube Music',
+      'artist': artist,
+      'duration': song.duration?.toString() ?? '0',
+      'image': imageUrl,
+      'images': imageUrl == null ? [] : [imageUrl],
+      'language': 'YouTube',
+      'genre': 'YouTube',
+      'expire_at': finalUrlData['expireAt'].toString(),
+      'url': finalUrlData['url'].toString(),
+      'urls': urlsData.map((e) => e['url'].toString()).toList(),
+      'urlsData': urlsData,
+      '320kbps': 'false',
+      'has_lyrics': 'false',
+      'subtitle': song.label ?? artist,
+      'perma_url': 'https://youtube.com/watch?v=$id',
+    };
   }
 
   Future<Map?> refreshLink(String id, {bool useYTM = true}) async {
@@ -350,6 +393,7 @@ class YouTubeServices {
     String expireAt = '0';
     if (getUrl) {
       urlsData = await getYtStreamUrls(video.id.value);
+      if (urlsData.isEmpty) return null;
       final Map finalUrlData =
           quality == 'High' ? urlsData.last : urlsData.first;
       finalUrl = finalUrlData['url'].toString();
@@ -403,8 +447,11 @@ class YouTubeServices {
   }
 
   String getExpireAt(String url) {
-    return RegExp('expire=(.*?)&').firstMatch(url)!.group(1) ??
-        (DateTime.now().millisecondsSinceEpoch ~/ 1000 + 3600 * 5.5).toString();
+    final match = RegExp(r'expire=([^&]+)').firstMatch(url);
+    return match?.group(1) ??
+        (DateTime.now().millisecondsSinceEpoch ~/ 1000 + 3600 * 5.5)
+            .round()
+            .toString();
   }
 
   Future<List<Map>> getYtStreamUrls(String videoId) async {

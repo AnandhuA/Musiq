@@ -6,10 +6,6 @@ import 'package:musiq/core/colors.dart';
 import 'package:musiq/core/global_variables.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/data/hive_funtions/search_history_repo.dart';
-import 'package:musiq/presentation/screens/search_screen/widgets/album_search_result.dart';
-import 'package:musiq/presentation/screens/search_screen/widgets/all_search_result.dart';
-import 'package:musiq/presentation/screens/search_screen/widgets/artist_search_result.dart';
-import 'package:musiq/presentation/screens/search_screen/widgets/playlist_search_result.dart';
 import 'package:musiq/presentation/screens/search_screen/widgets/song_search_result.dart';
 
 class NewSearchScreen extends StatefulWidget {
@@ -22,7 +18,14 @@ class NewSearchScreen extends StatefulWidget {
 class _NewSearchScreenState extends State<NewSearchScreen> {
   final TextEditingController _searchController = TextEditingController();
   Timer? _debounce;
-  String _searchValue = "All";
+  String _searchValue = "Song";
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,15 +59,7 @@ class _NewSearchScreenState extends State<NewSearchScreen> {
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
-                _buildButton("All", theme),
-                AppSpacing.width10,
                 _buildButton("Song", theme),
-                AppSpacing.width10,
-                _buildButton("Album", theme),
-                AppSpacing.width10,
-                _buildButton("Artist", theme),
-                AppSpacing.width10,
-                _buildButton("PlayList", theme),
               ],
             ),
           ),
@@ -112,19 +107,7 @@ class _NewSearchScreenState extends State<NewSearchScreen> {
       );
     }
 
-    // Show search results when input is not empty
-    switch (_searchValue) {
-      case "Song":
-        return SongSearchResult();
-      case "Album":
-        return AlbumSearchResult();
-      case "Artist":
-        return ArtistSearchResult();
-      case "PlayList":
-        return PlaylistSearchResult();
-      default:
-        return AllSearchResult();
-    }
+    return SongSearchResult();
   }
 
 //--------  button  --------
@@ -163,28 +146,8 @@ class _NewSearchScreenState extends State<NewSearchScreen> {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
 
     _debounce = Timer(const Duration(milliseconds: 500), () {
-      switch (_searchValue) {
-        case "Song":
-          if (value.isNotEmpty)
-            context.read<SearchCubit>().searchSong(query: value);
-          break;
-        case "Album":
-          if (value.isNotEmpty)
-            context.read<SearchCubit>().searchAlbum(query: value);
-          break;
-        case "Artist":
-          if (value.isNotEmpty)
-            context.read<SearchCubit>().searchArtist(query: value);
-          break;
-        case "PlayList":
-          if (value.isNotEmpty)
-            context.read<SearchCubit>().searchPlayList(query: value);
-          break;
-        case "All":
-        default:
-          if (value.isNotEmpty)
-            context.read<SearchCubit>().searchGobal(query: value);
-          break;
+      if (value.isNotEmpty) {
+        context.read<SearchCubit>().searchSong(query: value);
       }
       setState(() {});
     });
